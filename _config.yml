@@ -1,6 +1,6 @@
 name: Herring Cove
 author: Herring Cove
-baseurl: /herring-cove
+baseurl: naffan2014.github.io
 description: theme for jekyll
 github: http://www.github.com/arnp
 twitter: http://www.twitter.com/
@@ -28,4 +28,4 @@ defaults:
       path: ""
       type: "posts"
     values:
-      layout: "post"
+    layout: "post"
