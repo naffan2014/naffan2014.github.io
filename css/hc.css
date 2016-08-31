@@ -313,6 +313,10 @@ pre
   line-height:140%
 }
 
+#welcome-greeting h2 p{
+   text-indent:2em;
+}
+
 #welcome-greeting h2 a
 {
   font-weight:100;
