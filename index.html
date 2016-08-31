@@ -1,5 +1,5 @@
 ---
-title: yifan's homepage
+title: naffan
 ---
 {% include showcase.html %}
 {% include greeting.html %}
@@ -18,7 +18,7 @@ title: yifan's homepage
       <li>
         <span>
           <h4>
-            <a href="{{ site.baseurl }}/{{ post.url }}">
+            <a href="{{ post.url }}">
               {{ post.title }}
             </a>
             {{ fresh_tag }}
@@ -33,7 +33,7 @@ title: yifan's homepage
     {% assign fresh_tag = '' %}
   {% endfor %}
   <ul>
-    <a href="{{ site.baseurl }}/list.html">View More...</a>
+    <a href="list.html">View More...</a>
   </ul>
 </div>
 {% endif %}

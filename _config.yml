@@ -1,12 +1,12 @@
-name: 张一帆
+name: naffan
 author: 张一帆
-baseurl: 
+baseurl: http://naffan2014.github.io
 description: 给力技术打太极
 github: http://www.github.com/naffan2014
 twitter: http://www.twitter.com/naffan2011
 facebook: http://www.facebook.com
 linkedin: http://www.linkedin.com
-email: rnpatel[at]me.com
+email: naffan2012[at]icloud.com
 location: beijing beijing
 disqus: diqus-username
 
@@ -15,8 +15,21 @@ disqus: diqus-username
 
 highlighter: pygments
 markdown: kramdown 
-redcarpet:
-  extensions: ["tables"]
+kramdown:
+  auto_ids:       true
+  footnote_nr:    1
+  entity_output:  as_char
+  toc_levels:     1..6
+  smart_quotes:   lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+
+  coderay:
+    coderay_wrap:              div
+    coderay_line_numbers:      inline
+    coderay_line_number_start: 1
+    coderay_tab_width:         4
+    coderay_bold_every:        10
+    coderay_css:               style
 
 defaults:
   - scope:
