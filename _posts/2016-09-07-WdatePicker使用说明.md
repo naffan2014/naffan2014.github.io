@@ -6,7 +6,7 @@ excerpt_separator: 由于经常会在页面构建中使用到时间控件，所�
 
 官方的帮助文档地址：[http://www.my97.net/dp/demo/index.htm](http://www.my97.net/dp/demo/index.htm)
 
-##以下是可以尽快让你进入开发状态的文档。
+## 以下是可以尽快让你进入开发状态的文档。
 
 * 日期范围限制
 
