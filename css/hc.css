@@ -271,7 +271,12 @@ pre
   font-weight:bolder;
   color:#fff;
   text-align:center;
-  padding-top:20%
+
+  position: relative;
+  top: 35%;
+  height: 200px;
+  background-color:#000000;
+  opacity: 0.5;
 }
 
 .wide

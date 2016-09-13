@@ -1,6 +1,7 @@
 ---
 title: FromNowOn
 permalink: /fromnowon
+category: 垃圾
 ---
 # From Now ON
 
@@ -9,3 +10,4 @@ permalink: /fromnowon
 '''
 我并不怀疑我所在做的事情，希望能够获得良好的体验。
 '''
+
