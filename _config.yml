@@ -42,3 +42,6 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+
+paginate: 2
+paginate_path: "list/page:num"
