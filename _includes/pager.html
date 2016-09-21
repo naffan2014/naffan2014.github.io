@@ -1,8 +1,13 @@
 <ul class="pager">
 {% if page.previous %}
-  <li class="previous"><a href="{{ page.previous.url }}">&larr; Older</a></li>
+ 	<li class="previous"><a href="{{ page.previous.url }}">&larr; 前一篇</a></li>
+{% else %}
+	<li class="previous disabled"><a href="javascript:void(0);">&larr; 前一篇</a></li>
 {% endif %}
+
 {% if page.next %}
-  <li class="next"><a href="{{ page.next.url }}">Newer &rarr;</a></li>
+	<li class="next"><a href="{{ page.next.url }}">后一篇 &rarr;</a></li>
+{% else %}
+	<li class="next disabled"><a href="javascript:void(0);">后一篇 &rarr;</a></li>
 {% endif %}
 </ul>

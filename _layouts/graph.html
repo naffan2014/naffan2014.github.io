@@ -48,6 +48,11 @@ $(function(){
 	<div class="article-title">{{ page.title }}</div>
 	<p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> {{ page.date | date_to_string}}</small></p> 
 	<hr/>
-	<div class="post">{{ content }}</div>
+  <div class="post">
+    {{ content }}
+    <hr>
+    <div>
+      {% include pager.html %}
+    </div>
+  </div>
 {% include comment.html%}
-{% include pager.html %}
