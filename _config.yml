@@ -14,7 +14,7 @@ disqus: diqus-username
 
 
 highlighter: pygments
-markdown: kramdown 
+markdown: kramdown
 kramdown:
   auto_ids:       true
   footnote_nr:    1
