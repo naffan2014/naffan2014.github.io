@@ -1,6 +1,5 @@
 module Jekyll
   class RenderTimeTag < Liquid::Tag
-puts 'in the plugin' 
     def initialize(tag_name, text, tokens)
       super
       @text = text

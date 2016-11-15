@@ -1,6 +1,6 @@
 name: naffan
 author: 张一帆
-baseurl: 
+baseurl: /
 description: 有情不必终老，暗香浮动恰好
 github: http://www.github.com/naffan2014
 twitter: http://www.twitter.com/naffan2011
@@ -11,15 +11,6 @@ location: beijing beijing
 disqus: diqus-username
 
 ##Make sure to edit the above fields, especially for disqus.
-safe: false
-source: .
-destination: ./_site
-plugins_dir: ./_plugins
-layouts_dir: ./_layouts
-timezone: China/Shanghai
-encoding: UTF-8
-
-
 highlighter: pygments
 markdown: kramdown
 kramdown:
@@ -52,3 +43,4 @@ defaults:
 
 paginate: 10
 paginate_path: "/list/page:num"
+gems: [jekyll-paginate]
