@@ -11,6 +11,13 @@ location: beijing beijing
 disqus: diqus-username
 
 ##Make sure to edit the above fields, especially for disqus.
+safe: false
+source: .
+destination: ./_site
+plugins_dir: ./_plugins
+layouts_dir: ./_layouts
+timezone: China/Shanghai
+encoding: UTF-8
 
 
 highlighter: pygments
@@ -23,7 +30,7 @@ kramdown:
   smart_quotes:   lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
 
-  coderay:
+  syntax_highlighter_opts:
     coderay_wrap:              div
     coderay_line_numbers:      inline
     coderay_line_number_start: 1
