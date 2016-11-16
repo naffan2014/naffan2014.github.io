@@ -22,10 +22,14 @@ var _hmt = _hmt || [];
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif] d-->
-
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
   </head>
   <body>
-    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> Herring Cove </div>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
     <div id = "wrapper">
       <div class="navbar navbar-default" role="navigation">
   <div class="container">
@@ -66,7 +70,12 @@ var _hmt = _hmt || [];
 </div>
 
       <div class="container">
-        <div id="article">
+        <script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+<div id="article">
 	<div class="article-title">WdatePicker手册</div>
 	<p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> 09/07/16</small></p> 
 	<hr/>
@@ -456,9 +465,5 @@ window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="tex
 </div>
 
     </div>
-    <!-- Bootstrap core JavaScript-->
-<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/hc.js"></script>
   </body>
 </html>

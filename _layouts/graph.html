@@ -44,6 +44,13 @@ $(function(){
   mermaid.init({noteMargin: 10}, ".mermaid");
 });
 </script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+
 <div id="article">
 	<div class="article-title">{{ page.title }}</div>
 	<p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> {{ page.date | date: "%D"}}</small></p> 
