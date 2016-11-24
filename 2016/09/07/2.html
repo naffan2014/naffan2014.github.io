@@ -70,24 +70,22 @@ var _hmt = _hmt || [];
 </div>
 
       <div class="container">
-        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-<link href="//cdn.bootcss.com/mermaid/0.5.7/mermaid.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" >
+<link rel="stylesheet" href="//cdn.bootcss.com/mermaid/0.5.7/mermaid.min.css" >
+<link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
 
-<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="/js/jquery_plantuml/rawdeflate.js"></script>
 <script type="text/javascript" src="/js/jquery_plantuml/encode64.js"></script>
-<link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
-<script src="/js/jquery.tocLight.js"></script>
+<script type="text/javascript" src="/js/jquery.tocLight.js"></script>
 
 
-<script src="//cdn.bootcss.com/mermaid/6.0.0/mermaid.min.js"></script>
-<script src="//cdn.bootcss.com/echarts/3.2.3/echarts.common.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/mermaid/6.0.0/mermaid.min.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/echarts/3.2.3/echarts.common.js"></script>
 
 <script type="text/javascript">
 $(function(){    
-  $("img.lazy").lazyload({effect: "fadeIn"});
   $.toc.clickHideButton();
-  
   var mwebii=0;    
   var mwebChartEleId = 'mweb-chart-ele-';    
   $('pre>code').each(function(){        
@@ -114,7 +112,6 @@ $(function(){
       }catch(exception) {}
     }    
   });
-
   mermaid.init({noteMargin: 10}, ".mermaid");
 });
 </script>
