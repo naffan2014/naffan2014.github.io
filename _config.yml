@@ -44,4 +44,5 @@ defaults:
 
 paginate: 10
 paginate_path: "/list/page:num"
-gems: [jekyll-paginate]
+
+showToggleButton: true

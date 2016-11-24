@@ -1,17 +1,22 @@
 ---
 layout: default
 ---
+<link rel="stylesheet" href="{{ site.baseurl }}/css/toc.css" type="text/css" media="screen">
+<script src="{{ site.baseurl }}/js/jquery.tocLight.js"></script>
 <script type="text/javascript" charset="utf-8">
   $(function() {
       $("img.lazy").lazyload({effect: "fadeIn"});
+      $.toc.clickHideButton();
   });
 </script>
+
+
 <div id="article">
 	<div class="article-title">{{ page.title }}</div>
 	<p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> {{ page.date | date: "%D"}}</small></p> 
 	<hr/>
 	<div class="post">
-		{{ content }}
+		{{ content | toc_generate}}
 		<hr>
 		<div>
 			{% include pager.html %}
