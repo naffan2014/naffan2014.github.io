@@ -37,4 +37,6 @@ if [ $error_code != 0 ];then
 else
     exe_cmd "git filter-branch --subdirectory-filter _site/ -f"
     exe_cmd "git push --all --force origin"
+    exe_cmd "rm -Rf _site/"
+    exe_cmd "git checkout docs"
 fi
