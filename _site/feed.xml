@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-11-24T17:05:47+08:00</updated><id>//</id><title type="html">naffan</title><subtitle>有情不必终老，暗香浮动恰好</subtitle><author><name>张一帆</name></author><entry><title type="html">西班牙之旅(下)</title><link href="/life/2016/10/01/1.html" rel="alternate" type="text/html" title="西班牙之旅(下)" /><published>2016-10-01T00:00:00+08:00</published><updated>2016-10-01T00:00:00+08:00</updated><id>/life/2016/10/01/1</id><content type="html" xml:base="/life/2016/10/01/1.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-11-24T17:07:48+08:00</updated><id>//</id><title type="html">naffan</title><subtitle>有情不必终老，暗香浮动恰好</subtitle><author><name>张一帆</name></author><entry><title type="html">西班牙之旅(下)</title><link href="/life/2016/10/01/1.html" rel="alternate" type="text/html" title="西班牙之旅(下)" /><published>2016-10-01T00:00:00+08:00</published><updated>2016-10-01T00:00:00+08:00</updated><id>/life/2016/10/01/1</id><content type="html" xml:base="/life/2016/10/01/1.html">&lt;blockquote&gt;
   &lt;p&gt;　　多多少少，或早或晚，我们都被生命的冲动、被莫名的精神和情绪的汹涌潮水推动过。在看不到意义的时候寻求人生的意义，在不同的时候，因不同的位置，出现不同的幻想。有时，我们给自己的人生以理由。这些理由是我们希望自己相信，也希望别人信服的。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -237,12 +237,7 @@
         Future task in critical line        :crit, 5d
         Create tests for renderer           :2d
         Add to mermaid                      :1d
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><summary type="html">开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说</summary></entry><entry><title type="html">WdatePicker手册</title><link href="/2016/09/07/1.html" rel="alternate" type="text/html" title="WdatePicker手册" /><published>2016-09-07T00:00:00+08:00</published><updated>2016-09-07T00:00:00+08:00</updated><id>/2016/09/07/1</id><content type="html" xml:base="/2016/09/07/1.html">&lt;h1 id=&quot;heading-1&quot;&gt;heading 1&lt;/h1&gt;
-
-&lt;p&gt;blah blah&lt;/p&gt;
-
-&lt;h2 id=&quot;heading-11&quot;&gt;heading 1.1&lt;/h2&gt;
-&lt;p&gt;这里是这款js插件的官网地址：&lt;a href=&quot;http://www.my97.net&quot;&gt;http://www.my97.net&lt;/a&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><summary type="html">开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说</summary></entry><entry><title type="html">WdatePicker手册</title><link href="/2016/09/07/1.html" rel="alternate" type="text/html" title="WdatePicker手册" /><published>2016-09-07T00:00:00+08:00</published><updated>2016-09-07T00:00:00+08:00</updated><id>/2016/09/07/1</id><content type="html" xml:base="/2016/09/07/1.html">&lt;p&gt;这里是这款js插件的官网地址：&lt;a href=&quot;http://www.my97.net&quot;&gt;http://www.my97.net&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;官方的帮助文档地址：&lt;a href=&quot;http://www.my97.net/dp/demo/index.htm&quot;&gt;http://www.my97.net/dp/demo/index.htm&lt;/a&gt;&lt;/p&gt;
 
@@ -588,12 +583,7 @@ return '^'+H;
 &lt;p&gt;高亮每月 1号 15号&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;&amp;lt;input id=&quot;d472&quot; type=&quot;text&quot; class=&quot;Wdate&quot; onFocus=&quot;WdatePicker({specialDates: ['....-..-01','....-..-15'] })&quot;/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><summary type="html">heading 1
-
-blah blah
-
-heading 1.1
-这里是这款js插件的官网地址：http://www.my97.net
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><summary type="html">这里是这款js插件的官网地址：http://www.my97.net
 
 官方的帮助文档地址：http://www.my97.net/dp/demo/index.htm
 
