@@ -46,4 +46,3 @@ paginate: 10
 paginate_path: "/list/page:num"
 
 showToggleButton: true
-keep_files: ['css','js']
