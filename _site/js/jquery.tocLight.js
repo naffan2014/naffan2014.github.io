@@ -17,8 +17,8 @@
     $.toc.clickHideButton = function(settings) {
         var config = {
             saveShowStatus: false,
-            hideText: 'hide',
-            showText: 'show'};
+            hideText: '隐藏',
+            showText: '展开'};
 
         if (settings) {
             $.extend(config, settings);

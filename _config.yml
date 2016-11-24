@@ -44,5 +44,8 @@ defaults:
 
 paginate: 10
 paginate_path: "/list/page:num"
-
+#TOC(目录)参数
+minItemsToShowToc: 0
+tocTopTag: h1
+anchorPrefix: tocAnchor-
 showToggleButton: true
