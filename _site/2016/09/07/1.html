@@ -72,6 +72,10 @@ var _hmt = _hmt || [];
       <div class="container">
         <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
 <script src="/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
 <script type="text/javascript" charset="utf-8">
   $(function() {
       $("img.lazy").lazyload({effect: "fadeIn"});
@@ -79,20 +83,55 @@ var _hmt = _hmt || [];
   });
 </script>
 
-
 <div id="article">
 	<div class="article-title">WdatePicker手册</div>
 	<p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> 09/07/16</small></p> 
 	<hr/>
 	<div class="post">
-		<p>这里是这款js插件的官网地址：<a href="http://www.my97.net">http://www.my97.net</a></p>
+		<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>目录</h2>
+            <span class="toctoggle">[<a id="toctogglelink" class="internal" href="#">隐藏</a>]</span>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">日期范围限制</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">动态限制</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">脚本自定义限制</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">无效天</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-5">
+              <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">无效日期</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-6">
+              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">有效天与有效日期</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-7">
+              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">特殊天和特殊日期</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><p>这里是这款js插件的官网地址：<a href="http://www.my97.net">http://www.my97.net</a></p>
 
 <p>官方的帮助文档地址：<a href="http://www.my97.net/dp/demo/index.htm">http://www.my97.net/dp/demo/index.htm</a></p>
 
-<h2 id="section">以下是可以尽快让你进入开发状态的文档。</h2>
-
 <ul>
-  <li>日期范围限制</li>
+  <li>
+    <h1 id="tocAnchor-1-1">日期范围限制</h1>
+  </li>
 </ul>
 
 <p>静态限制
@@ -102,26 +141,36 @@ var _hmt = _hmt || [];
 
 <p>限制日期的范围是 2006-09-10到2008-12-20</p>
 
-<pre><code>&lt;input id="d411" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',minDate: '2006-09-10', maxDate: '2008-12-20' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d411" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',minDate: '2006-09-10', maxDate: '2008-12-20' })"/&gt;
+</code>
+</pre>
 
 <p>限制日期的范围是 2008-3-8 11:30:00 到 2008-3-10 20:59:30</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '2008-03-08 11:30:00', maxDate: '2008-03-10 20:59:30' })" value="2008-03-09 11:00:00"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '2008-03-08 11:30:00', maxDate: '2008-03-10 20:59:30' })" value="2008-03-09 11:00:00"/&gt;
+</code>
+</pre>
 
 <p>限制日期的范围是 2008年2月 到 2008年10月</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d413" onfocus="WdatePicker({dateFmt: 'yyyy年M月', minDate: '2008-2', maxDate: '2008-10' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d413" onfocus="WdatePicker({dateFmt: 'yyyy年M月', minDate: '2008-2', maxDate: '2008-10' })"/&gt;
+</code>
+</pre>
 
 <p>限制日期的范围是 8:00:00 到 11:30:00</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d414" onfocus="WdatePicker({dateFmt: 'H:mm:ss', minDate: '8:00:00', maxDate: '11:30:00' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d414" onfocus="WdatePicker({dateFmt: 'H:mm:ss', minDate: '8:00:00', maxDate: '11:30:00' })"/&gt;
+</code>
+</pre>
 
 <ul>
-  <li>动态限制</li>
+  <li>
+    <h1 id="tocAnchor-1-2">动态限制</h1>
+  </li>
 </ul>
 
 <p>注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致</p>
@@ -152,32 +201,44 @@ var _hmt = _hmt || [];
 
 <p>只能选择今天以前的日期(包括今天)</p>
 
-<pre><code>&lt;input id="d421" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',maxDate: '%y-%M-%d' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d421" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',maxDate: '%y-%M-%d' })"/&gt;
+</code>
+</pre>
 
 <p>使用了运算表达式 只能选择今天以后的日期(不包括今天)</p>
 
-<pre><code>&lt;input id="d422" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-#{%d+1}' })"/&gt;
+<pre>
+  <code>&lt;input id="d422" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-#{%d+1}' })"/&gt;
 
-</code></pre>
+</code>
+</pre>
 
 <p>只能选择本月的日期1号至本月最后一天</p>
 
-<pre><code>&lt;input id="d423" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-01', maxDate: '%y-%M-%ld' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d423" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-01', maxDate: '%y-%M-%ld' })"/&gt;
+</code>
+</pre>
 
 <p>只能选择今天7:00:00至明天21:00:00的日期</p>
 
-<pre><code>&lt;input id="d424" class="Wdate" type="text" onfocus="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',minDate: '%y-%M-%d 7:00:00', maxDate: '%y-%M-#{%d+1} 21:00:00' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d424" class="Wdate" type="text" onfocus="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',minDate: '%y-%M-%d 7:00:00', maxDate: '%y-%M-#{%d+1} 21:00:00' })"/&gt;
+</code>
+</pre>
 
 <p>使用了运算表达式 只能选择 20小时前 至 30小时后 的日期</p>
 
-<pre><code>&lt;input id="d425" class="Wdate" type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate: '%y-%M-%d #{%H-20}:%m:%s' ,maxDate: '%y-%M-%d #{%H+30}:%m:%s' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d425" class="Wdate" type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate: '%y-%M-%d #{%H-20}:%m:%s' ,maxDate: '%y-%M-%d #{%H+30}:%m:%s' })"/&gt;
+</code>
+</pre>
 
 <ul>
-  <li>脚本自定义限制</li>
+  <li>
+    <h1 id="tocAnchor-1-3">脚本自定义限制</h1>
+  </li>
 </ul>
 
 <p>注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致</p>
@@ -188,14 +249,18 @@ var _hmt = _hmt || [];
 
 <p>合同有效期从</p>
 
-<pre><code>&lt;input id="d4311" class="Wdate" type="text" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4312\')||\'2020-10-01\'}' })"/&gt; 
-</code></pre>
+<pre>
+  <code>&lt;input id="d4311" class="Wdate" type="text" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4312\')||\'2020-10-01\'}' })"/&gt; 
+</code>
+</pre>
 
 <p>到</p>
 
-<pre><code>&lt;input id="d4312" class="Wdate" type="text" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4311\')}' ,maxDate:'2020-10-01' })"/&gt;
+<pre>
+  <code>&lt;input id="d4312" class="Wdate" type="text" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4311\')}' ,maxDate:'2020-10-01' })"/&gt;
 
-</code></pre>
+</code>
+</pre>
 
 <p>注意: 两个日期的日期格式必须相同</p>
 
@@ -219,13 +284,17 @@ var _hmt = _hmt || [];
 
 <p>日期从</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d4321" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4322\',{d:-3});}' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d4321" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4322\',{d:-3});}' })"/&gt;
+</code>
+</pre>
 
 <p>到</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d4322" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4321\',{d:3});}' })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d4322" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4321\',{d:3});}' })"/&gt;
+</code>
+</pre>
 
 <p>使用 $dp.$D 函数 可以将日期框中的值,加上定义的日期差量:</p>
 
@@ -249,13 +318,17 @@ var _hmt = _hmt || [];
 
 <p>住店日期从</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d4331" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4332\',{M:-3,d:-2})||$dp.$DV(\'2020-4-3\',{M:-3,d:-2})} '})"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d4331" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4332\',{M:-3,d:-2})||$dp.$DV(\'2020-4-3\',{M:-3,d:-2})} '})"/&gt;
+</code>
+</pre>
 
 <p>到</p>
 
-<pre><code>&lt;input type="text" class="Wdate" id="d4332" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4331\',{M:3,d:2});} ',maxDate: '2020-4-3 '})"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input type="text" class="Wdate" id="d4332" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4331\',{M:3,d:2});} ',maxDate: '2020-4-3 '})"/&gt;
+</code>
+</pre>
 
 <p>注意:</p>
 
@@ -279,7 +352,8 @@ var _hmt = _hmt || [];
 
 <p>自动转到随机生成的一天,当然,此示例没有实际的用途,只是为演示目的</p>
 
-<pre><code>&lt;script&gt;
+<pre>
+  <code>&lt;script&gt;
 //返回一个随机的日期
 function randomDate(){
 var Y = 2000 + Math.round(Math.random() * 10);
@@ -289,26 +363,35 @@ return Y+'-'+M+'-'+D;
 }
 &lt;/script&gt;
 &lt;input type="text" class="Wdate" id="d434" onFocus="var date=randomDate();WdatePicker({minDate:date,maxDate:date}) "/&gt;
-</code></pre>
+</code>
+</pre>
 
 <ul>
-  <li>无效天</li>
+  <li>
+    <h1 id="tocAnchor-1-4">无效天</h1>
+  </li>
 </ul>
 
 <p>可以使用此功能禁用周日至周六所对应的日期,相关属性:disabledDays (0至6 分别代表 周日至周六)</p>
 
 <p>禁用 周六 所对应的日期</p>
 
-<pre><code>&lt;input id="d441" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [6] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d441" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [6] })"/&gt;
+</code>
+</pre>
 
 <p>通过position属性,自定义弹出位置</p>
 
-<pre><code>&lt;input id="d442" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [0,6] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d442" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [0,6] })"/&gt;
+</code>
+</pre>
 
 <ul>
-  <li>无效日期</li>
+  <li>
+    <h1 id="tocAnchor-1-5">无效日期</h1>
+  </li>
 </ul>
 
 <p>注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致</p>
@@ -343,15 +426,19 @@ return Y+'-'+M+'-'+D;
 
 <p>禁用 每个月份的 5日 15日 25日</p>
 
-<pre><code>&lt;input id="d451" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['5$'] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d451" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['5$'] })"/&gt;
+</code>
+</pre>
 
 <p>注意 : ‘5$’ 表示以 5 结尾 注意 $ 的用法</p>
 
 <p>禁用 所有早于2000-01-01的日期</p>
 
-<pre><code>&lt;input id="d452" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['^19'] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d452" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['^19'] })"/&gt;
+</code>
+</pre>
 
 <p>注意: ‘^19’ 表示以 19 开头 注意 ^ 的用法</p>
 
@@ -361,20 +448,26 @@ return Y+'-'+M+'-'+D;
 
 <p>本示例本月可用日期分隔成五段 分别是: 1-3 8-10 16-24 26,27 29-月末</p>
 
-<pre><code>&lt;input id="d453" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d453" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] })"/&gt;
+</code>
+</pre>
 
 <p>min/maxDate disabledDays disabledDates 配合使用 即使在要求非常苛刻的情况下也能满足需求</p>
 
-<pre><code>&lt;input id="d454" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] ,disabledDays: [1,3,6] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d454" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] ,disabledDays: [1,3,6] })"/&gt;
+</code>
+</pre>
 
 <p>禁用前一个小时和后一个小时内所有时间 使用 %y %M %d %H %m %s 等变量</p>
 
 <p>鼠标点击 小时输入框时,你会发现当然时间对应的前一个小时和后一个小时是灰色的</p>
 
-<pre><code>&lt;input id="d2a25" type="text" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',disabledDates: ['%y-%M-%d #{%H-1}\:..\:..','%y-%M-%d #{%H+1}\:..\:..'] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d2a25" type="text" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',disabledDates: ['%y-%M-%d #{%H-1}\:..\:..','%y-%M-%d #{%H+1}\:..\:..'] })"/&gt;
+</code>
+</pre>
 
 <p>注意: %y %M %d等详见动态变量表</p>
 
@@ -384,7 +477,8 @@ return Y+'-'+M+'-'+D;
 
 <p>打开小时选择框,你会发现有一个小时被禁用的,而且每次禁用的小时都不同</p>
 
-<pre><code>&lt;script&gt;
+<pre>
+  <code>&lt;script&gt;
 function randomH(){
 //产生一个随机的数字 0-23 
 var H = Math.round(Math.random() * 23);
@@ -394,10 +488,13 @@ return '^'+H;
 }
 &lt;/script&gt;
 &lt;input type="text" class="Wdate" id="d456" onFocus="WdatePicker({dateFmt:'HH:mm:ss',disabledDates: ['#F{randomH()}'] })"/&gt;
-</code></pre>
+</code>
+</pre>
 
 <ul>
-  <li>有效天与有效日期</li>
+  <li>
+    <h1 id="tocAnchor-1-6">有效天与有效日期</h1>
+  </li>
 </ul>
 
 <p>使用无效天和无效日期可以很方便的禁用不可用的日期,但是在只需要启用少部分日期的情况下,有效天和有效日期的功能就非常适合了.</p>
@@ -406,13 +503,17 @@ return '^'+H;
 
 <p>只启用 每个月份的 5日 15日 25日</p>
 
-<pre><code>&lt;input id="d46" type="text" class="Wdate" onFocus="WdatePicker({opposite: true ,disabledDates: ['5$'] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d46" type="text" class="Wdate" onFocus="WdatePicker({opposite: true ,disabledDates: ['5$'] })"/&gt;
+</code>
+</pre>
 
 <p>注意 : ‘5$’ 表示以 5 结尾 注意 $ 的用法</p>
 
 <ul>
-  <li>特殊天和特殊日期</li>
+  <li>
+    <h1 id="tocAnchor-1-7">特殊天和特殊日期</h1>
+  </li>
 </ul>
 
 <p>特殊天和特殊日期的用法跟完全无效天和无效日期完全相同,但是opposite属性对其无效</p>
@@ -425,13 +526,17 @@ return '^'+H;
 
 <p>高亮每周 周一 周五</p>
 
-<pre><code>&lt;input id="d471" type="text" class="Wdate" onFocus="WdatePicker({specialDays: [1,5] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d471" type="text" class="Wdate" onFocus="WdatePicker({specialDays: [1,5] })"/&gt;
+</code>
+</pre>
 
 <p>高亮每月 1号 15号</p>
 
-<pre><code>&lt;input id="d472" type="text" class="Wdate" onFocus="WdatePicker({specialDates: ['....-..-01','....-..-15'] })"/&gt;
-</code></pre>
+<pre>
+  <code>&lt;input id="d472" type="text" class="Wdate" onFocus="WdatePicker({specialDates: ['....-..-01','....-..-15'] })"/&gt;
+</code>
+</pre>
 
 
 		<hr>

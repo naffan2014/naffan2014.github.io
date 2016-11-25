@@ -3,13 +3,16 @@ layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/css/toc.css" type="text/css" media="screen">
 <script src="{{ site.baseurl }}/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
 <script type="text/javascript" charset="utf-8">
   $(function() {
       $("img.lazy").lazyload({effect: "fadeIn"});
       $.toc.clickHideButton();
   });
 </script>
-
 
 <div id="article">
 	<div class="article-title">{{ page.title }}</div>

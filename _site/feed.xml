@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-11-24T17:15:02+08:00</updated><id>//</id><title type="html">naffan</title><subtitle>有情不必终老，暗香浮动恰好</subtitle><author><name>张一帆</name></author><entry><title type="html">西班牙之旅(下)</title><link href="/life/2016/10/01/1.html" rel="alternate" type="text/html" title="西班牙之旅(下)" /><published>2016-10-01T00:00:00+08:00</published><updated>2016-10-01T00:00:00+08:00</updated><id>/life/2016/10/01/1</id><content type="html" xml:base="/life/2016/10/01/1.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-11-25T11:26:41+08:00</updated><id>//</id><title type="html">naffan</title><subtitle>有情不必终老，暗香浮动恰好</subtitle><author><name>张一帆</name></author><entry><title type="html">西班牙之旅(下)</title><link href="/life/2016/10/01/1.html" rel="alternate" type="text/html" title="西班牙之旅(下)" /><published>2016-10-01T00:00:00+08:00</published><updated>2016-10-01T00:00:00+08:00</updated><id>/life/2016/10/01/1</id><content type="html" xml:base="/life/2016/10/01/1.html">&lt;blockquote&gt;
   &lt;p&gt;　　多多少少，或早或晚，我们都被生命的冲动、被莫名的精神和情绪的汹涌潮水推动过。在看不到意义的时候寻求人生的意义，在不同的时候，因不同的位置，出现不同的幻想。有时，我们给自己的人生以理由。这些理由是我们希望自己相信，也希望别人信服的。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -241,10 +241,10 @@
 
 &lt;p&gt;官方的帮助文档地址：&lt;a href=&quot;http://www.my97.net/dp/demo/index.htm&quot;&gt;http://www.my97.net/dp/demo/index.htm&lt;/a&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;以下是可以尽快让你进入开发状态的文档。&lt;/h2&gt;
-
 &lt;ul&gt;
-  &lt;li&gt;日期范围限制&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section&quot;&gt;日期范围限制&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;静态限制
@@ -273,7 +273,9 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;动态限制&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section-1&quot;&gt;动态限制&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致&lt;/p&gt;
@@ -329,7 +331,9 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;脚本自定义限制&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section-2&quot;&gt;脚本自定义限制&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致&lt;/p&gt;
@@ -444,7 +448,9 @@ return Y+'-'+M+'-'+D;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;无效天&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section-3&quot;&gt;无效天&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;可以使用此功能禁用周日至周六所对应的日期,相关属性:disabledDays (0至6 分别代表 周日至周六)&lt;/p&gt;
@@ -460,7 +466,9 @@ return Y+'-'+M+'-'+D;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;无效日期&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section-4&quot;&gt;无效日期&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致&lt;/p&gt;
@@ -549,7 +557,9 @@ return '^'+H;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;有效天与有效日期&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section-5&quot;&gt;有效天与有效日期&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;使用无效天和无效日期可以很方便的禁用不可用的日期,但是在只需要启用少部分日期的情况下,有效天和有效日期的功能就非常适合了.&lt;/p&gt;
@@ -564,7 +574,9 @@ return '^'+H;
 &lt;p&gt;注意 : ‘5$’ 表示以 5 结尾 注意 $ 的用法&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;特殊天和特殊日期&lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;section-6&quot;&gt;特殊天和特殊日期&lt;/h1&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;特殊天和特殊日期的用法跟完全无效天和无效日期完全相同,但是opposite属性对其无效&lt;/p&gt;
@@ -587,10 +599,10 @@ return '^'+H;
 
 官方的帮助文档地址：http://www.my97.net/dp/demo/index.htm
 
-以下是可以尽快让你进入开发状态的文档。
 
-
-  日期范围限制
+  
+    日期范围限制
+  
 
 
 静态限制
@@ -619,7 +631,9 @@ return '^'+H;
 
 
 
-  动态限制
+  
+    动态限制
+  
 
 
 注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致
@@ -675,7 +689,9 @@ return '^'+H;
 
 
 
-  脚本自定义限制
+  
+    脚本自定义限制
+  
 
 
 注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致
@@ -790,7 +806,9 @@ return Y+'-'+M+'-'+D;
 
 
 
-  无效天
+  
+    无效天
+  
 
 
 可以使用此功能禁用周日至周六所对应的日期,相关属性:disabledDays (0至6 分别代表 周日至周六)
@@ -806,7 +824,9 @@ return Y+'-'+M+'-'+D;
 
 
 
-  无效日期
+  
+    无效日期
+  
 
 
 注意:日期格式必须与 realDateFmt 和 realTimeFmt 一致
@@ -895,7 +915,9 @@ return '^'+H;
 
 
 
-  有效天与有效日期
+  
+    有效天与有效日期
+  
 
 
 使用无效天和无效日期可以很方便的禁用不可用的日期,但是在只需要启用少部分日期的情况下,有效天和有效日期的功能就非常适合了.
@@ -910,7 +932,9 @@ return '^'+H;
 注意 : ‘5$’ 表示以 5 结尾 注意 $ 的用法
 
 
-  特殊天和特殊日期
+  
+    特殊天和特殊日期
+  
 
 
 特殊天和特殊日期的用法跟完全无效天和无效日期完全相同,但是opposite属性对其无效
