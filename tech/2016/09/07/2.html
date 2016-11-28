@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>让MWeb支持甘特图的办法（2.0以上版本</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="有情不必终老，暗香浮动恰好">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">naffan</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/list">文章列表</a></li>
+      <li><a href="/life">生活闲杂</a></li>
+      <li><a href="/links">精彩链接</a></li>
+      <li><a href="/books">阅读书籍</a></li>
+      <li><a href="/about">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">naffan</h1></a><h3>有情不必终老，暗香浮动恰好</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <li><a href="/list">文章列表</a></li>
+    <li><a href="/life">生活闲杂</a></li>
+    <li><a href="/links">精彩链接</a></li>
+    <li><a href="/books">阅读书籍</a></li>
+    <li><a href="/about">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" >
+<link rel="stylesheet" href="//cdn.bootcss.com/mermaid/0.5.7/mermaid.min.css" >
+<link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery_plantuml/rawdeflate.js"></script>
+<script type="text/javascript" src="/js/jquery_plantuml/encode64.js"></script>
+<script type="text/javascript" src="/js/jquery.tocLight.js"></script>
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/mermaid/6.0.0/mermaid.min.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/echarts/3.2.3/echarts.common.js"></script>
+
+<script type="text/javascript">
+$(function(){    
+  $.toc.clickHideButton();
+  var mwebii=0;    
+  var mwebChartEleId = 'mweb-chart-ele-';    
+  $('pre>code').each(function(){        
+    mwebii++;        
+    var eleiid = mwebChartEleId+mwebii;        
+    if($(this).hasClass('language-mermaid')){            
+      var ele = $(this).addClass('nohighlight').parent();  
+      ele.hide();           
+      $('<div id="'+eleiid+'"></div>').addClass('mermaid').html($(this).text()).insertAfter(ele);                
+    }else if($(this).hasClass('language-plantuml')){            
+      var ele = $(this).addClass('nohighlight').parent(); 
+      ele.hide(); 
+      var str = unescape(encodeURIComponent($(this).text()));
+      var imgURL = "http://www.plantuml.com/plantuml/svg/"+encode64(deflate(str,9));
+      var newEle = $('<div id="'+eleiid+'"><img src="'+imgURL+'" /></div>').insertAfter(ele);
+    }else if($(this).hasClass('language-js-echarts')){  
+      var ele = $(this).addClass('nohighlight').parent();  
+      ele.hide();           
+      $('<div style="width: 100%;height:400px;" id="'+eleiid+'"></div>').insertAfter(ele);                
+      var myChart = echarts.init(document.getElementById(eleiid));
+      try  {
+        eval($(this).text());
+        myChart.setOption(option);
+      }catch(exception) {}
+    }    
+  });
+  mermaid.init({noteMargin: 10}, ".mermaid");
+});
+</script>
+<div id="article">
+	<div class="article-title">让MWeb支持甘特图的办法（2.0以上版本</div>
+	<p class="meta"><small>&nbsp;<i class="fa fa-calendar-o"></i> 09/07/16</small></p> 
+	<hr/>
+  <div class="post">
+    <p><code>开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说</code></p>
+
+<h3 id="mwebmacmarkdownhttpzhmwebim">Mweb是区禄海（开发者）开发的一款适用于MAC系统的MARKDOWN编辑软件，官网地址在这里<a href="http://zh.mweb.im">官网地址</a>。</h3>
+
+<p>这款软件在APP store上还是有一定的热度的，我也用了这款软件用来编写自己的博客和工作中应用的各种文案。身为程序员我深表感激，这款软件在我大部分应用情况中都基本上可以解决任何问题。</p>
+
+<p>在工作过程中，我有时候会碰到需要画图的情况。比如，在组织公司项目的时候，需要跟进每一个人的工作进度。这个时候就需要用一种图表的方式进行表达，因为这种表达能够让开发人员以及领导迅速的了解各员工的工作状态。因为我想写gantt图的用法，所以这里就简单讲一下如何应用Mweb来画出gantt图来。</p>
+
+<p>虽然，现在有很多软件都可以用来画图。比如omniPlan。这款软件就可以画出漂亮的gantt图，而且对于整个项目可以涉及到资源的分配，让大型项目进行的有条不紊。但是，如果有小型的需求那么动辄使用omniPlan这些软件就有点大炮打蚊子，大材小用的感觉。</p>
+
+<p>身为IT行业的从业人员，很多时候能用代码解决就不用工具解决，能用手写就不用插件。所以，本着没事找事的态度。想要自己画出甘特图的需求也应运而出。我也属于这一类人，没事就喜欢钻研，碰巧遇到画gantt图的时候在APP store上看到了这款软件，他有个lite版，免费的。可以让你简单感受一下这款软件的魅力。作为想用jekyll做静态博客的我来说，良好的支持了我的需求。所以，我就对这款软件进行了研究。</p>
+
+<p>起先我用的是1.9的版本，这个版本里再偏好设置中是可以进行自定义预览样式的。但是，也许是程序有bug导致按照软件开发者的<a href="http://zh.mweb.im/14689205256580.html">文章</a>做，是做不出来的。后来，升级到了2.0.9功能才可以实现。我们只需要将这个<a href="http://zh.mweb.im/media/14689205256580/sample-custom-html-charts.zip">连接</a>下载以后，打开偏好设置，选择Themes，点击Preview CSS行尾的Edit按钮，在弹出来的finder中将下好的文件夹放入Preview Css文件夹中。点击确定后，再点击Reload，这个时候下来框中就有了刚才你下的文件夹的名称了，选中后关闭偏好设计即可。</p>
+
+<p>下载的文件夹是作者整合了mermaid，echarts，PlantUML功能的样式集合。原理就是用css来渲染gantt的标示。而主要的功劳应该归功于mermaid。我们知道，mermaid是可以支持gantt的渲染的。所以，我们只要在编辑中如此编辑</p>
+
+<pre><code>gantt
+        dateFormat  YYYY-MM-DD
+        title Adding GANTT diagram functionality to mermaid
+        section A section
+        Completed task            :done,    des1, 2014-01-06,2014-01-08
+        Active task               :active,  des2, 2014-01-09, 3d
+        Future task               :         des3, after des2, 5d
+        Future task2               :         des4, after des3, 5d
+        section Critical tasks
+        Completed task in the critical line :crit, done, 2014-01-06,24h
+        Implement parser and jison          :crit, done, after des1, 2d
+        Create tests for parser             :crit, active, 3d
+        Future task in critical line        :crit, 5d
+        Create tests for renderer           :2d
+        Add to mermaid                      :1d
+</code></pre>
+
+<p>这样就能形成甘特图了</p>
+
+<pre><code class="language-mermaid">gantt
+        dateFormat  YYYY-MM-DD
+        title Adding GANTT diagram functionality to mermaid
+        section A section
+        Completed task            :done,    des1, 2014-01-06,2014-01-08
+        Active task               :active,  des2, 2014-01-09, 3d
+        Future task               :         des3, after des2, 5d
+        Future task2               :         des4, after des3, 5d
+        section Critical tasks
+        Completed task in the critical line :crit, done, 2014-01-06,24h
+        Implement parser and jison          :crit, done, after des1, 2d
+        Create tests for parser             :crit, active, 3d
+        Future task in critical line        :crit, 5d
+        Create tests for renderer           :2d
+        Add to mermaid                      :1d
+</code></pre>
+
+
+    <hr>
+    <div>
+      <ul class="pager">
+
+ 	<li class="previous"><a href="/2016/09/07/1.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2016/09/09/1.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+    </div>
+  </div>
+<!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+      </div>
+      <div class="container">
+  <footer>
+    <p class="text-muted credit">
+      &copy; 2016 naffan &middot;
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>
