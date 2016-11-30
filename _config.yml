@@ -65,3 +65,4 @@ showToggleButton: true
 #插件
 gems:
   - jekyll-seo-tag
+  - jekyll-sitemap
