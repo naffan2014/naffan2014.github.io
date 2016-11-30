@@ -12,7 +12,11 @@
 * 阅读书籍，分享自己阅读书籍后的观后感。
 * 关于本人，向大家介绍一下自己。
 
-### 站点截图
+### 站点截图 version 1.1
+
+![screenshot](http://p1.bqimg.com/4851/b1b2015678579f4e.png)
+
+### 站点截图 version 1.0
 
 ![screenshot](http://ww4.sinaimg.cn/large/73b41ab2jw1f8724mnmuej20yx1jqtsg.jpg)
 
