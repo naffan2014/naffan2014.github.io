@@ -1,15 +1,29 @@
+#基础信息（site全局变量）
 name: naffan
-author: 张一帆
 baseurl: 
-description: 有情不必终老，暗香浮动恰好
-github: http://www.github.com/naffan2014
-twitter: http://www.twitter.com/naffan2011
-facebook: http://www.facebook.com
+motto: 有情不必终老，暗香浮动恰好
 linkedin: http://www.linkedin.com
 email: naffan2012[at]icloud.com
 location: beijing beijing
-disqus: diqus-username
-
+#seo信息
+title: 拿饭网
+description: 拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。
+url: naffan.cn
+author: 张一帆
+twitter:
+  username: naffan2011
+facebook:
+  app_id: 100002835701051
+  publisher: 张一帆
+  admins: 张一帆
+social:
+  name: 张一帆
+  links:
+    - http://www.twitter.com/naffan2011
+    - http://www.facebook.com
+    - https:http://www.github.com/naffan2014
+    - http://weibo.com/208125151
+    - https://plus.google.com/113953531946938254396
 ##Make sure to edit the above fields, especially for disqus.
 highlighter: pygments
 markdown: kramdown
@@ -21,7 +35,6 @@ kramdown:
   toc_levels:     1..6
   smart_quotes:   lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
-
   syntax_highlighter_opts:
     coderay_wrap:              div
     coderay_line_numbers:      inline
@@ -29,7 +42,7 @@ kramdown:
     coderay_tab_width:         4
     coderay_bold_every:        10
     coderay_css:               style
-
+#模板适用范围
 defaults:
   - scope:
       path: ""
@@ -41,7 +54,7 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-
+#分页设置
 paginate: 10
 paginate_path: "/list/page:num"
 #TOC(目录)参数
@@ -49,3 +62,6 @@ minItemsToShowToc: 0
 tocTopTag: h1
 anchorPrefix: tocAnchor-
 showToggleButton: true
+#插件
+gems:
+  - jekyll-seo-tag
