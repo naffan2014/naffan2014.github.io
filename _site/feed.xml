@@ -1,4 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://naffan.cn/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2017-01-25T14:31:51+08:00</updated><id>http://naffan.cn//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">仙本那潜水之诗巴丹最终站</title><link href="http://naffan.cn/life/2017/01/07/1.html" rel="alternate" type="text/html" title="仙本那潜水之诗巴丹最终站" /><published>2017-01-07T00:00:00+08:00</published><updated>2017-01-07T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/07/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/07/1.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-26T21:39:20+08:00</updated><id>http://localhost:4000//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">通过nodejs搭建客服系统还有闲谈</title><link href="http://localhost:4000/tech/2017/01/26/1.html" rel="alternate" type="text/html" title="通过nodejs搭建客服系统还有闲谈" /><published>2017-01-26T00:00:00+08:00</published><updated>2017-01-26T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/01/26/1</id><content type="html" xml:base="http://localhost:4000/tech/2017/01/26/1.html">&lt;blockquote&gt;
+  &lt;p&gt;本文所述的游云客服系统，网址为&lt;a href=&quot;http://cs.17youyun.com&quot;&gt;cs.17youyun.com&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　从12月开始，公司要我们为宝库搭建一套客服系统。本来是做通讯的我们，因为自身业务单一，技术经验少，推广比不过竞品，再加上本身通讯行业的技术壁垒较高，导致我们的产品战略从年初计划的对外产品慢慢转向了对内的支持服务。后来，公司专一重点项目后，我们也即将成为一个转型部门。在这一节骨眼上我们渴望获得一次机会进行证明，同时也期望能够在2016年底给我们自己做一个收官。经过看起来不是很顺利的沟通后，宝库同意将对客服的需求交托于我们部门做，所以这也是我们能够称的上是救命稻草的一线希望。&lt;/p&gt;
+
+&lt;p&gt;　　在年中我们在运营着自己的sdk，这个sdk是给开发人员对接移动端push需求而开发的。除了push功能以外，我们也开发着voip以及聊天室等项目。&lt;a href=&quot;www.17youyun.com&quot;&gt;游云网站&lt;/a&gt;是我们呈现给开发者的接入网站，开发者在接入的时候可以在这个网站中看到各种定制化的推送服务。游云网站是由我一人开发起来的，虽然与竞品网站比起来有些小巫见大巫，但是也是充满着对通讯行业的一些窥视。后因工作需要，我们需要给游云接入一个web版的demo，望借以此呈现个开发者用户一个更加直观的体验，所以后来就有了&lt;a href=&quot;web.17youyun.com&quot;&gt;web游云&lt;/a&gt;这个功能，这个网站是利用cometd技术做的，因为公司前身是当年在新浪红极一时的项目-微米。到现在我还记得，当年在新浪的时候上级压下来的任务就是每天都要登录微米发信息，而且那年年会上还专门有个项目奖颁发给了微米，可谁又能够想到微米团队内部出现分歧，技术团队叛变，造成彭极其尴尬，最终死的很惨。话说回来，自从工作以来已经两次接触了cometd这个玩意了。记得第一次接触这玩意的时候自己还是个初出茅庐的小伙子，那个时候正好要对&lt;a href=&quot;kan.sina.com&quot;&gt;看游戏&lt;/a&gt;进行大改版。后来，研究了半天最终也没搞清楚个大概，只能沿着老人们的代码一点一点调试，现在回忆起来那个时候的调试方法极其笨拙，再加上自己对项目的理解很差，所以虽然顺利改完版了，但是对自己的成长真的没有太多，只能说自己知道这个是什么玩意了。现在时间已经过去了4年了，再来看cometd多少还是有些抵触的。可是，项目压下来自己也没有办法，而且这次后端的网关还是用java写的，这让我又整了套java环境，两套环境在同一台电脑上跑，真是太费劲了。最终，还是搭起来了这个网站，也能够实现一些基本的简单功能了，可是后来由于本部门的java团队忙于应付宝库的需求，最终不能提供给我及时的响应，所以也就暂时搁浅了。&lt;/p&gt;
+
+&lt;p&gt;　　随着公司大战略的转移，慢慢的我们通讯部门就慢慢的变的越来越不重要了。再加上一年来项目给外面项目对接的缓慢并且总是不能正常使用让决策层变得越发的艰难了。最终，公司要求我们部门从产品线转化为支持性部门，将功能给上海总公司提供支持。也就是说领导们不期望这个项目可以去赚钱了，但是又不干做了那么久了，那么就公司内部的产品谁需要通信功能，那么我们部门就跟他们进行对接。可想而知，这样做的时间越长项目的立锥之地就越少。由于我是部门的一个开发工程师，抱着不在其位不谋其政的态度静观其变。后来，大概是16年的11月份，部门争取到了宝库的客服需求。我们就做起客服系统来了。&lt;/p&gt;
+
+&lt;p&gt;　　起先，我们人员安排上比较薄弱。几个java负责服务端，想要将原来cometd转变成websocket。另外，我们部门的C老大也一直在帮助java们整理开发服务功能，所以必定会偏向java。而作为客服是需要一套前端框架的，这个框架是需要js的，而我从事于php，对js当然要比他们多，索性就安排我来开发js了。&lt;/p&gt;
+
+&lt;p&gt;　　起初，在选择方案上我就非常头疼。js的页面级应用对我来说并不是很难，我一个人完全应付的来。但是，对已一套客服系统来说，我开始是不知所措的。于是，我就一边去研究websocket功能的同时一边去github上找客服功能的源代码。在github上更多的是聊天室功能，我费了半天劲将github上的一个个开源程序clone到本机并运行起来却发现功能要不是很简单，要不就是从需求上就不能满足。这两我很头疼，但是最终我还是找到了一个带着聊天框且支持多聊天窗口的&lt;a href=&quot;https://github.com/xunull/socketio-chat&quot;&gt;开源程序&lt;/a&gt;。搭建起来是这个样子的：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/25/58885a9ec28b4.png&quot; alt=&quot;chatPi&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　通过阅读作者的代码发现这个程序是通过redis来进行聊天内容的同步的。也就是redis为每一个接入的用户增加一个id为键的堆栈，内容就是用户的聊天内容，说话的对象以及时间。页面渲染的数据是通过nodejs服务端的逻辑发送到websocket上，再由页面的js渲染出来。这样其实已经满足了我的基本功能了，只是实现方式不太一样。我需要做的就是将redis的功能去除，而发送消息的地方改成向nodejs中的socket.io发送即可。至于后续逻辑就在nodejs服务端中去补充即可。但是，后来java也直接找到了一个开源的websocket框架并且搭起来了，与其让我一个人写前端+后端还不如我把后端撇给java做，毕竟java是两个人负责。于是，我这里只需要做前端的html+js即可。虽然我只负责了html+js，但是我还是留着nodejs服务端的功能，运行这个项目还是需要启动nodejs服务的，原因当然是为了今后的数据我自己也可以处理，这样更加安全且方便。&lt;/p&gt;
+
+&lt;p&gt;　　慢慢地，产品设计的需求也一步一步的满足。比如，上传图片、获取历史消息等。然而，页面还停留在这种乱乱的界面呢。为了达到更进一步，我利用bootstrap重新做了一套页面，套上以后确实感觉很nice。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/25/58885a9e24473.png&quot; alt=&quot;chatafte&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　好了，基础的页面也有了，剩下的就是完成各种需求了。websocket有几种基础行为：onopen，onclose，onmessage，onerror。当websocket连接成功的时候会进入onopen，断开进入onclose，有消息发送过来进入onmessage。具体收到消息是什么消息以及之后的逻辑是什么都需要在onmessage中完成。我和java约定数据格式大概是这样子的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-json&quot;&gt;{
+    &quot;type&quot;: &quot;action&quot;, //可触发事件的，param中参数原样返回
+    &quot;content&quot;: &quot;是什么材质的？&quot;,
+    &quot;params&quot;: {
+        &quot;to&quot;: &quot;robot&quot;
+        &quot;id&quot;: 1,
+        &quot;groupId&quot;: 1,
+        &quot;prio&quot;: 1, // 排序 priority
+        &quot;level&quot;: 1,
+        &quot;createTime&quot;: 1480931117000
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;　　我们可以通过type来区分服务端发过来的是何种消息，也就可以实现比如聊天消息，通知消息，心跳消息等的区分了。至于onmessage中是怎么写完全可以凭自己公司的需求去写了。&lt;/p&gt;
+
+&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/1jtdf5hk/embed/&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;　　onmessage中我是通过obj（是java传给我的数据）中的type值（需要json解析出数据）来区分消息的类型，比如用户进入（entercs）、用户推出（leavecs）、消息（message，其中具体是图片消息还是文字消息之类的可以通过content中的type字段来区分）、剔除用户（kill_user，这个就是我们产品要求的逻辑了，也是个性化的消息类型了）等等。可以看到我在接收到message的时候调用了directive.receive(data)方法，这个方法最终的执行逻辑是这样的：&lt;/p&gt;
+
+&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/w1sdx95m/embed/&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;　　首先，响提示音。然后需要判断当前发送过来消息的人是不是我打开当前窗口的人，如果不是就需要将用户列表增加一条未读消息的提示数字，之后不论是否都将信息添加到发送人的窗口中。那什么叫做发送人的窗口呢？我们可以这样理解，每个发送人都要有个存储聊天内容的页面，因为你现在聊天中的用户时可以直接看到他的消息。然而，那些已经接入了但是又不是你当前聊天的对象的信息也需要记录下来的，当我们切换聊天窗口时我们是需要看到他之前留下的信息的。这个功能起初git上的开源程序没有考虑到，所以我需要增加这块功能。大体思想是这样的，我用html写一个div的聊天窗口框架出来，每当一个用户接入的时候，我都将这个div里面的内容clone给一个变量，然后再声明一个MAP（其实就是在内存中开辟一个空间用来做hash存储），用这个用户的id为键，clone的变量作为值保存在其中。这样我就能够随时通过map键的方法将用户聊天窗口存起来了，当用户有信息过来的时候我将这个变量取出来，再往html中的最底部的dom标签前增加信息内容，最后再存入map中。这样我们就可以实现页面级的切换窗口查看消息内容的需求。哦对，忘了说了，那怎么记录当前聊天的用户id呢？当然，是声明个全局的js变量喽，每次切换聊天的用户id时，就将这个id替换到这个变量中。除了这个当前聊天用户的id的变量以外，还需要两个全局变量：一个是用来存储我们登录的客服id的变量，一个是用来存储已经接入用户的id的变量，这个变量可以作为记录未读数，当你切换到这个用户聊天时将未读数清零。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/26/5889fac0d3001.png&quot; alt=&quot;QQ20170126-130958@2x&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　当用户接入进来的时候，页面上就应该有响应的动作，那就是用户列表中就会增加这个新接入用户的提示，就如同上图中的用户2，用户3所示。在js上我们可以采取用jquery来写的方法，比如在发现有用户接入时我们append到用户1的html下方。但是，这样比较麻烦，因为我们需要去专门写这个方法。就因为我觉得麻烦所以我想找一个能不能有个能够相对动态的方法呢？最终我找到angularJs。angularJS是一个能够进行双向绑定的js框架，只要你在js中声明了哪个html需要进行监听，angularJS就会自动的帮你完成双向绑定功能，也即是说他会自动的添加新用户接入的提示。下面这段代码就是将用户列表这一块的html作为angularJs的侦听对象，之后再绑定一个click的方法，用来更新js中变量记录的数值以及将用户对应的聊天框显示出来。&lt;/p&gt;
+
+&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/w5bexygj/embed/&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;　　在上面的代码中还有一些更新localstorage的代码，这块代码的用途我也需要说明一下啊。由于业务产品的需求，当用户退出时不会自动在客服系统中退出，只有客服人员能够关闭客户的接入（现在的客服产品，商家都是要求客服不能主动停止会话的，但是我们的产品说是因为我们的需求方的特殊需求，所以只能这样了）。那么问题来了，js是页面的语言，一旦刷新以前存在页面js中的信息皆会不复存在，那么我们如何存储曾经接入又没有被客服关闭的会话呢？因为html5出现以后，现在的浏览器也都支持了本地存储功能，也就是localstorage。localstorage是根据域名来保存的键值对，value只支持字符串。这正好可以帮我们实现数据的存储，于是我将用户的信息都通过key来存储到了这里。只是，在保存和查询的动作上需要进行json字符串的字符化和对象化。&lt;/p&gt;
+
+&lt;p&gt;　　很多功能我们不光需要自己写，更多的可以去git上去搜索已经很有价值的插件。比如上传文件的组件，查看图片的缩略图的功能。我就是用的&lt;a href=&quot;https://github.com/jfeldstein/jQuery.AjaxFileUpload.js&quot;&gt;https://github.com/jfeldstein/jQuery.AjaxFileUpload.js&lt;/a&gt;用来做文件上传，&lt;a href=&quot;https://github.com/fengyuanchen/viewer&quot;&gt;viewer&lt;/a&gt;用来做图片的缩略图。后来，我们又添加了获取历史记录的功能，我们想要实现qq这样的当滚动条到达最顶部的时候会拉出历史记录并且滚动条还原到按照增加的记录长度的比例的位置。我也在git上找了一些这样的下拉触发事件的插件，但是没有满意的，于是我就自己写了这段代码。&lt;/p&gt;
+
+&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/5xceoywu/embed/&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;　　当然，我们的系统设计的还不是很好。随着代码越写越多，我越发的觉得当时设计的架构非常差，我要是想改一地方，有很多地方都会牵扯到，所以就不是改一个地方这么简单了。我现在需要的是提高自己的js能力，去学习js的框架知识，应该马上对这个系统进行代码重构。&lt;/p&gt;
+
+&lt;p&gt;　　另外，我刚开始说过，我采用的是nodejs，但是服务端我并没有用。这就造成了一个问题，当我需要调用java接口的时候，由于java接口的域名和客服系统的域名不一样，这样就遇到了跨域问题。跨域是现在的浏览器都会禁止的操作，所以我需要java在出接口的时候，返回给我的json串外还需要帮我增加一个嵌套，如jsoncallback[‘java返回的json’]。这个设计是不好的，虽然能够暂时符合目前的需求，但是终归还是需要经过nodejs的服务层一趟的，因为安全，以为敏捷。&lt;/p&gt;
+
+&lt;p&gt;　　最后，我还要说一下。我这个项目用到了2个方便开发和管理的工具。一个是pm2，一个是webpack。具体两个是干吗用的，我大概说一下。pm2是一个可视化的nodejs进程管理工具，他可以帮助你实时的更新应用服务，这就给你省去了每次更改nodejs代码时总需要频繁的重启node服务（–watch）。由于我们的项目是运行在线上的，所以环境也有几套。当我更改代码的时候我关心的是代码如何书写，并不关心环境。所以，我还需要动态的去区分代码所处的服务器环境，哪个是测试环境，哪个是生产环境。那么，我通过官网的手册，找到了pm2是可以通过参数来区分服务器环境的。我们只需要声明一个配置文件ecosystem.config.js。在这里面定义参数所对应的环境，那么在我们启动pm2的时候我们只需要将代表当前环境的参数输入即可，这些小工具能够帮助自己更加方便的进行开发以及维护。webpack是一个js代码整合器，它主要的功能就是通过js的互相引用，他可以只能的侦测到所用到的js并且可以将所有的js整合到一个文件中，便于开发者管理。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs,websocket,angular,webpack,客服" /><summary type="html">本文所述的游云客服系统，网址为cs.17youyun.com</summary></entry><entry><title type="html">仙本那潜水之诗巴丹最终站</title><link href="http://localhost:4000/life/2017/01/07/1.html" rel="alternate" type="text/html" title="仙本那潜水之诗巴丹最终站" /><published>2017-01-07T00:00:00+08:00</published><updated>2017-01-07T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/07/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/07/1.html">&lt;blockquote&gt;
   &lt;p&gt;诗巴丹坐落于东马来西亚西南，5米的浅滩之后就是垂直落下600至700米深的湛蓝深海，被誉为世界上“海滨潜水”之最&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -32,7 +95,7 @@
 
 &lt;p&gt;　　下午，我们去了珍珠岛登上了这里的600米的山，眺望了一下很多来旅游必照的景色。我也忍不住拍下了这张照片，作为来到这里的纪念哈哈。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/25/588837c02ce4c.jpg&quot; alt=&quot;IMG_0374&quot; /&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">诗巴丹坐落于东马来西亚西南，5米的浅滩之后就是垂直落下600至700米深的湛蓝深海，被誉为世界上“海滨潜水”之最</summary></entry><entry><title type="html">仙本那潜水之ow和aow学习</title><link href="http://naffan.cn/life/2017/01/06/1.html" rel="alternate" type="text/html" title="仙本那潜水之ow和aow学习" /><published>2017-01-06T00:00:00+08:00</published><updated>2017-01-06T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/06/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/06/1.html">&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/25/588837c02ce4c.jpg&quot; alt=&quot;IMG_0374&quot; /&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">诗巴丹坐落于东马来西亚西南，5米的浅滩之后就是垂直落下600至700米深的湛蓝深海，被誉为世界上“海滨潜水”之最</summary></entry><entry><title type="html">仙本那潜水之ow和aow学习</title><link href="http://localhost:4000/life/2017/01/06/1.html" rel="alternate" type="text/html" title="仙本那潜水之ow和aow学习" /><published>2017-01-06T00:00:00+08:00</published><updated>2017-01-06T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/06/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/06/1.html">&lt;blockquote&gt;
   &lt;p&gt;每天都是一次新的旅行，每一个和我们走过一段的人都值得感激。“生命，不长不短，刚好够用来好好看看这个世界。”&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -60,7 +123,7 @@
 
 &lt;p&gt;　　我们队第二天就出现了险情，因为我们队里有个女孩子在教练旁边游，而教练突然发现其他学员的面镜无特别大，所以就转过头去帮助她排除面镜里的雾。然而，这就导致教练没有顾及到旁边的女孩子，而女孩子也没发现，径直的向前游去了。我在队尾看的特别的真切，然而当时我的技术还不好，根本游不到那个女孩子旁边，只能眼睁睁的看着那个女孩消失在深蓝的海底。等教练发现我们少了一个人的时候，用手势问那个女孩子去哪里，我们只能回给她一个前面的手势。这个时候，教练的无助我能够真切的体会到，看着教练着急的动作我也做不出任何事情。教练曾教我们当我们找不到伙伴的时候就在原地寻找1分钟，如果找不到就要升到水面上去寻找。我们迅速升到了水面上，并在接下来的1分钟之内，看到500米开外那个女孩子也升上来了，我们大叫做手势。但是，那个女孩子估计正在惊吓中然而并没有看到我们。所以，她又下潜了想去寻找我们。当我们看到她再次下潜的时候都慌了，这个情况什么事情都有可能发生，我们并不希望悲剧。所以，我们立刻做了决定。由教练带着一个人去寻找，剩下来的2个人游到船上去寻求帮助。这个时候，我不愿再潜下去了，因为在这种地域万一再发生什么情况这就太危险了。所以，我和另一个潜伴游向了船去寻求帮助了。船上的人听到了我们的呼救马上就做出了反映，船长首先叫我们让开，等看到我们离出了与船的螺旋桨安全距离外船长就把船开到了我们所指的方向。接下来的情景我不在船上面了，所以并不知情。幸好，女孩子顺利的找到了。也许她听到了船开过的声音，话说在海底下听船的声音挺恐怖的，那种声音有种朦胧的感觉，那声音用周遭地震的声音来形容一点都不过分。试想如果在海底下要上升的过程中听到了船的声音，你根本就分不清楚声音是从哪个方向传过来的。之后，等我们上船的时候，我看到我们的教练和那个走散的女孩子眼泪就在她们眼睛中打转。这种感觉真的很不好，索性没有发生什么可怕的事情。&lt;/p&gt;
 
-&lt;p&gt;　　接下来的几天，我们都是这么度过的。由于自己慢慢的也适应了潜水，所以入水以后世界变的其妙起来，周遭的世界也有时间去细细体会了。ow就这么顺利的通过了，接下来的aow也就是在不同的岛屿之间来回下潜，也体会了洋流的速度，也在水底下喝了可乐，看了打碎的鸡蛋是什么形状。后来，慢慢发现海底下的世界越来越单调了，除了奇形怪状的珊瑚以外就是自己分不清楚的鱼类，这些鱼类大体都是小型鱼，颜色倒是很鲜艳要比只有深红，蓝，绿的珊瑚好看得多。但是，时间长了人就会审美疲劳，从而对海底下的感觉就一般般了。这段练习的过程我也没啥可以写的了。我们最终期待的只剩下了这段旅程最后的地点-诗巴丹。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">每天都是一次新的旅行，每一个和我们走过一段的人都值得感激。“生命，不长不短，刚好够用来好好看看这个世界。”</summary></entry><entry><title type="html">仙本那潜水之上课无聊篇</title><link href="http://naffan.cn/life/2017/01/04/1.html" rel="alternate" type="text/html" title="仙本那潜水之上课无聊篇" /><published>2017-01-04T00:00:00+08:00</published><updated>2017-01-04T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/04/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/04/1.html">&lt;blockquote&gt;
+&lt;p&gt;　　接下来的几天，我们都是这么度过的。由于自己慢慢的也适应了潜水，所以入水以后世界变的其妙起来，周遭的世界也有时间去细细体会了。ow就这么顺利的通过了，接下来的aow也就是在不同的岛屿之间来回下潜，也体会了洋流的速度，也在水底下喝了可乐，看了打碎的鸡蛋是什么形状。后来，慢慢发现海底下的世界越来越单调了，除了奇形怪状的珊瑚以外就是自己分不清楚的鱼类，这些鱼类大体都是小型鱼，颜色倒是很鲜艳要比只有深红，蓝，绿的珊瑚好看得多。但是，时间长了人就会审美疲劳，从而对海底下的感觉就一般般了。这段练习的过程我也没啥可以写的了。我们最终期待的只剩下了这段旅程最后的地点-诗巴丹。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">每天都是一次新的旅行，每一个和我们走过一段的人都值得感激。“生命，不长不短，刚好够用来好好看看这个世界。”</summary></entry><entry><title type="html">仙本那潜水之上课无聊篇</title><link href="http://localhost:4000/life/2017/01/04/1.html" rel="alternate" type="text/html" title="仙本那潜水之上课无聊篇" /><published>2017-01-04T00:00:00+08:00</published><updated>2017-01-04T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/04/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/04/1.html">&lt;blockquote&gt;
   &lt;p&gt;旅行虽破费钱财，却使你懂得社会。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -99,7 +162,7 @@
 
 &lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/06/586fa69ca9e78.jpg&quot; alt=&quot;IMG_1624&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　等吃完了晚饭后，肚子很满足。等待我们的是接下来几天的潜水课程，ow需要2天6潜，aow需要2天6潜。而刚开始学ow的时候，对我来说简直就是噩梦，从水底下上来以后我缺氧的厉害，疼痛感都让我对此行的意义产生了怀疑，不过这是后话，我会在下一篇中我是如何生不如死的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅行虽破费钱财，却使你懂得社会。</summary></entry><entry><title type="html">仙本那潜水之开启旅程篇</title><link href="http://naffan.cn/life/2017/01/03/1.html" rel="alternate" type="text/html" title="仙本那潜水之开启旅程篇" /><published>2017-01-03T00:00:00+08:00</published><updated>2017-01-03T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/03/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/03/1.html">&lt;blockquote&gt;
+&lt;p&gt;　　等吃完了晚饭后，肚子很满足。等待我们的是接下来几天的潜水课程，ow需要2天6潜，aow需要2天6潜。而刚开始学ow的时候，对我来说简直就是噩梦，从水底下上来以后我缺氧的厉害，疼痛感都让我对此行的意义产生了怀疑，不过这是后话，我会在下一篇中我是如何生不如死的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅行虽破费钱财，却使你懂得社会。</summary></entry><entry><title type="html">仙本那潜水之开启旅程篇</title><link href="http://localhost:4000/life/2017/01/03/1.html" rel="alternate" type="text/html" title="仙本那潜水之开启旅程篇" /><published>2017-01-03T00:00:00+08:00</published><updated>2017-01-03T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/03/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/03/1.html">&lt;blockquote&gt;
   &lt;p&gt;旅游的作用就是用现实来约束想象：不是去想事情会是怎样的，而是去看它们实际上是怎样的。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -137,7 +200,7 @@
 &lt;img src=&quot;https://ooo.0o0.ooo/2017/01/03/586bb0f0b7453.jpg&quot; alt=&quot;&quot; /&gt;
 &lt;img src=&quot;https://ooo.0o0.ooo/2017/01/03/586bb105053b0.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　至此，我们在仙本那的第一天算是告一段落了。这一天过的很是平淡并且劳累，但是每一次旅行开端都会是辛苦的。毕竟不像在家门口开个车就能够到达，然而我们得跨过十万八千里。话虽这么说，后来的日子就相当难过了，大太阳底下穿着紧身衣，在盐劲十足的大海里潜下几十米，小脑不断适应不同的重力情况且不停地调整作息时间让这次旅行，其实也不能说是旅行，我们就是为了考潜水来的，应该叫学下吧，变得越发困难了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅游的作用就是用现实来约束想象：不是去想事情会是怎样的，而是去看它们实际上是怎样的。</summary></entry><entry><title type="html">思考一下nodejs的exports和module.exports</title><link href="http://naffan.cn/tech/2016/12/12/1.html" rel="alternate" type="text/html" title="思考一下nodejs的exports和module.exports" /><published>2016-12-12T00:00:00+08:00</published><updated>2016-12-12T00:00:00+08:00</updated><id>http://naffan.cn/tech/2016/12/12/1</id><content type="html" xml:base="http://naffan.cn/tech/2016/12/12/1.html">&lt;p&gt;之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？&lt;/p&gt;
+&lt;p&gt;　　至此，我们在仙本那的第一天算是告一段落了。这一天过的很是平淡并且劳累，但是每一次旅行开端都会是辛苦的。毕竟不像在家门口开个车就能够到达，然而我们得跨过十万八千里。话虽这么说，后来的日子就相当难过了，大太阳底下穿着紧身衣，在盐劲十足的大海里潜下几十米，小脑不断适应不同的重力情况且不停地调整作息时间让这次旅行，其实也不能说是旅行，我们就是为了考潜水来的，应该叫学下吧，变得越发困难了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅游的作用就是用现实来约束想象：不是去想事情会是怎样的，而是去看它们实际上是怎样的。</summary></entry><entry><title type="html">思考一下nodejs的exports和module.exports</title><link href="http://localhost:4000/tech/2016/12/12/1.html" rel="alternate" type="text/html" title="思考一下nodejs的exports和module.exports" /><published>2016-12-12T00:00:00+08:00</published><updated>2016-12-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2016/12/12/1</id><content type="html" xml:base="http://localhost:4000/tech/2016/12/12/1.html">&lt;p&gt;之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？&lt;/p&gt;
 
 &lt;p&gt;后来，查阅了一下&lt;a href=&quot;https://nodejs.org/api/modules.html#modules_module_exports&quot;&gt;nodejs的官方参考手册&lt;/a&gt;，其中里面就有讲到:&lt;/p&gt;
 
@@ -150,7 +213,7 @@ exports = { hello: false };  // Not exported, only available in the module
 
 &lt;p&gt;也就是说，在起初module.exports和exports是一样的，很多人都归结为exports是module.exports的引用。如果你不清楚引用是什么概念，请你看看那这篇&lt;a href=&quot;https://cnodejs.org/topic/5231a630101e574521e45ef8&quot;&gt;文章&lt;/a&gt;，这篇文章用一个例子给你举出了他们俩的区别。但是，我对这位作者的回答不算太满意。于是我又追到了这篇&lt;a href=&quot;http://www.jb51.net/article/33269.htm&quot;&gt;文章&lt;/a&gt;。但是，我又对作者给出的结论感到迷茫。作者说“如果你想你的模块是一个特定的类型就用Module.exports。如果你想的模块是一个典型的“实例化对象”就用exports。”，我就不是很懂他说的这两种情况。&lt;/p&gt;
 
-&lt;p&gt;对于目前我的理解来说，我就是认为exports是module.exports的简写。但是这是有条件的，条件就是module.exports定义之后不能对exports操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs" /><summary type="html">之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？</summary></entry><entry><title type="html">西班牙之旅（后记）</title><link href="http://naffan.cn/life/2016/12/10/2.html" rel="alternate" type="text/html" title="西班牙之旅（后记）" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://naffan.cn/life/2016/12/10/2</id><content type="html" xml:base="http://naffan.cn/life/2016/12/10/2.html">&lt;blockquote&gt;
+&lt;p&gt;对于目前我的理解来说，我就是认为exports是module.exports的简写。但是这是有条件的，条件就是module.exports定义之后不能对exports操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs" /><summary type="html">之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？</summary></entry><entry><title type="html">西班牙之旅（后记）</title><link href="http://localhost:4000/life/2016/12/10/2.html" rel="alternate" type="text/html" title="西班牙之旅（后记）" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://localhost:4000/life/2016/12/10/2</id><content type="html" xml:base="http://localhost:4000/life/2016/12/10/2.html">&lt;blockquote&gt;
   &lt;p&gt;生活是一段奇妙的旅行，就在那一去无返的火车上。与那些新人和旧人们共同经历吧！也许这就是一个人无法抗拒的命运，有你、有我、也有他。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -204,7 +267,7 @@ exports = { hello: false };  // Not exported, only available in the module
 
 &lt;p&gt;&lt;img src=&quot;http://ooo.0o0.ooo/2016/12/10/584c41ec49c59.jpg&quot; alt=&quot;西班牙新_46&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　好了，我们的旅程已经结束了。这是我在2016年12月11日凌晨1：55写完的。距离这次的西班牙之旅已经过去了1年2个月15天了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,西班牙,自由行" /><summary type="html">生活是一段奇妙的旅行，就在那一去无返的火车上。与那些新人和旧人们共同经历吧！也许这就是一个人无法抗拒的命运，有你、有我、也有他。</summary></entry><entry><title type="html">今天研究一下Javascript的冒泡机制</title><link href="http://naffan.cn/tech/2016/12/10/1.html" rel="alternate" type="text/html" title="今天研究一下Javascript的冒泡机制" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://naffan.cn/tech/2016/12/10/1</id><content type="html" xml:base="http://naffan.cn/tech/2016/12/10/1.html">&lt;p&gt;　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。&lt;/p&gt;
+&lt;p&gt;　　好了，我们的旅程已经结束了。这是我在2016年12月11日凌晨1：55写完的。距离这次的西班牙之旅已经过去了1年2个月15天了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,西班牙,自由行" /><summary type="html">生活是一段奇妙的旅行，就在那一去无返的火车上。与那些新人和旧人们共同经历吧！也许这就是一个人无法抗拒的命运，有你、有我、也有他。</summary></entry><entry><title type="html">今天研究一下Javascript的冒泡机制</title><link href="http://localhost:4000/tech/2016/12/10/1.html" rel="alternate" type="text/html" title="今天研究一下Javascript的冒泡机制" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://localhost:4000/tech/2016/12/10/1</id><content type="html" xml:base="http://localhost:4000/tech/2016/12/10/1.html">&lt;p&gt;　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。&lt;/p&gt;
 
 &lt;p&gt;　　我们知道一个网页是由DOM（文档对象模型）控制着结构的。在HTML中很多地方都是一个标签套着另一个标签。这样的结构渲染在页面上的时候你是发现不出层级关系的。当你在页面上操作一个元素的时候，这个元素很可能不是唯一一个在一个嵌套体内有监听事件的元素。也就是说在他的上级或者下级都有可能一直在监听着同一种事件，那这个时候谁先谁后的问题就产生了。&lt;/p&gt;
 
@@ -252,7 +315,7 @@ function abc(x){
   &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/webflash/archive/2009/08/23/1552462.html&quot;&gt;http://www.cnblogs.com/webflash/archive/2009/08/23/1552462.html&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.quirksmode.org/js/events_order.html&quot;&gt;http://www.quirksmode.org/js/events_order.html&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/fangshidaima/p/Fangfang_chengzhang.html&quot;&gt;http://www.cnblogs.com/fangshidaima/p/Fangfang_chengzhang.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js" /><summary type="html">　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。</summary></entry><entry><title type="html">对于新经济形势下北京房市的观点</title><link href="http://naffan.cn/economy/2016/11/29/1.html" rel="alternate" type="text/html" title="对于新经济形势下北京房市的观点" /><published>2016-11-29T00:00:00+08:00</published><updated>2016-11-29T00:00:00+08:00</updated><id>http://naffan.cn/economy/2016/11/29/1</id><content type="html" xml:base="http://naffan.cn/economy/2016/11/29/1.html">&lt;p&gt;　　北京楼市短期观点：不看好未来一年内的北京楼市，但有值得购买的地区和房子。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js" /><summary type="html">　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。</summary></entry><entry><title type="html">对于新经济形势下北京房市的观点</title><link href="http://localhost:4000/economy/2016/11/29/1.html" rel="alternate" type="text/html" title="对于新经济形势下北京房市的观点" /><published>2016-11-29T00:00:00+08:00</published><updated>2016-11-29T00:00:00+08:00</updated><id>http://localhost:4000/economy/2016/11/29/1</id><content type="html" xml:base="http://localhost:4000/economy/2016/11/29/1.html">&lt;p&gt;　　北京楼市短期观点：不看好未来一年内的北京楼市，但有值得购买的地区和房子。&lt;/p&gt;
 
 &lt;p&gt;　　全国楼市观点：不看好未来一年的全国楼市，非精选地区风险高。全国楼市两级分化将更为严重，三四线去库存压力加大，二线城市在释放完本轮需求后也将继续分化，看好杭州、厦门、武汉等。一线楼市在细化区分下螺旋上升。有几率出现地产崩盘情况，但概率不大。&lt;/p&gt;
 
@@ -288,7 +351,7 @@ function abc(x){
 
 &lt;p&gt;　　由于通州出现无房可售的情况，考虑到饥饿营销和需求释放至少到17年底市政实际入住，现有增量资金进入的情况下，采用第一种策略，首选通州。&lt;/p&gt;
 
-&lt;p&gt;本文出处：&lt;a href=&quot;http://user.qzone.qq.com/229759693/2&quot;&gt;对于新经济形势下北京房市的观点&lt;/a&gt;&lt;/p&gt;</content><author><name>胡承楠</name></author><category term="economy" /><category term="经济,房价,观点" /><summary type="html">　　北京楼市短期观点：不看好未来一年内的北京楼市，但有值得购买的地区和房子。</summary></entry><entry><title type="html">在Github-Pages上应用jekyll博客插件</title><link href="http://naffan.cn/tech/2016/11/28/1.html" rel="alternate" type="text/html" title="在Github-Pages上应用jekyll博客插件" /><published>2016-11-28T00:00:00+08:00</published><updated>2016-11-28T00:00:00+08:00</updated><id>http://naffan.cn/tech/2016/11/28/1</id><content type="html" xml:base="http://naffan.cn/tech/2016/11/28/1.html">&lt;p&gt;　　经过很长的一段时间对&lt;a href=&quot;http://jekyllcn.com&quot;&gt;jekyll&lt;/a&gt;的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在&lt;a href=&quot;http://pages.github.com/&quot;&gt;Gh-Pages&lt;/a&gt;（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。&lt;/p&gt;
+&lt;p&gt;本文出处：&lt;a href=&quot;http://user.qzone.qq.com/229759693/2&quot;&gt;对于新经济形势下北京房市的观点&lt;/a&gt;&lt;/p&gt;</content><author><name>胡承楠</name></author><category term="economy" /><category term="经济,房价,观点" /><summary type="html">　　北京楼市短期观点：不看好未来一年内的北京楼市，但有值得购买的地区和房子。</summary></entry><entry><title type="html">在Github-Pages上应用jekyll博客插件</title><link href="http://localhost:4000/tech/2016/11/28/1.html" rel="alternate" type="text/html" title="在Github-Pages上应用jekyll博客插件" /><published>2016-11-28T00:00:00+08:00</published><updated>2016-11-28T00:00:00+08:00</updated><id>http://localhost:4000/tech/2016/11/28/1</id><content type="html" xml:base="http://localhost:4000/tech/2016/11/28/1.html">&lt;p&gt;　　经过很长的一段时间对&lt;a href=&quot;http://jekyllcn.com&quot;&gt;jekyll&lt;/a&gt;的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在&lt;a href=&quot;http://pages.github.com/&quot;&gt;Gh-Pages&lt;/a&gt;（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。&lt;/p&gt;
 
 &lt;p&gt;　　首先，大家需要理解一下gh是如何呈现出jekyll网站样子的。很简单，就是他会在两个分支（gh-pages 和 master）中读取网站信息然后展示_site文件夹中生成好的网站页面。具体哪个分支无所谓，你选择其一就成，我就是用master的。我们在本地用jekyll serve生成的网站可以原封不动的直接push到远端master，可是在你本地的_plugins文件夹内的插件到了gh上就失效了，想必你在看我的博客之前就已经知道是为什么了（–safe）。那么，我们需要将_site文件夹内的所有内容push到master上，也就是说master上只有_site文件夹内的数据。这样，gh就会直接读取网站了而插件也会变的好使了。至于为什么，我是这么理解的。master是整个jekyll代码，那么gh会多做一步就是编译master分支上的代码，然后你网站就能够读取编译后的内容了。这种方法显然不成，gh是不负责编译插件的，所以插件就不好使了。它不像在本地编译，因为本地就是我们自己操作，肯定是安全的。那另一种方法就是我们本地编译然后将编译好的数据（_site中的页面）直接push到master上，这样gh上存在的页面就是已经被编译好的页面（很多插件都是在做html转换再加上和js配合），而且插件实现的效果也能完美展现。不知道你们明白了没有？如果没明白那在留言区直接留言吧，我会回复你的。&lt;/p&gt;
 
@@ -298,67 +361,4 @@ function abc(x){
 
 &lt;p&gt;　　我相信，在看到这块的时候你应该已经顺着刚才的连接爬到了新的方法那个页面了，如果你按照他那么做成功了，那么我祝福你。但是，希望你也看到了这行。因为，那个作者最后说要写个脚本，但是他没有提供。我写了，所以你可以直接copy我的到你的项目里。这个文件叫做&lt;a href=&quot;https://github.com/naffan2014/naffan2014.github.io/blob/master/publish-gh-pages.sh&quot;&gt;publish-gh-pages.sh&lt;/a&gt;。怎么用呢？你只需要在你的写作的分支上先commit所有的更改，然后直接在命令行中输入（我的是mac）”./publish-gh-pages.sh master”，剩下的工作你就等待吧。它会将master发送到远端上，并且最后切回专用来书写的分支（我的分支叫docs，如果你想改成什么稀奇古怪的名字的分支的话，请把这个脚本中的docs替换成你的名字）&lt;/p&gt;
 
-&lt;p&gt;　　好了，我想问题都已经解决了。你的解决了么？如果没有请留言，有的话直接点右上角的关闭即可。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="jekyll,Github" /><summary type="html">　　经过很长的一段时间对jekyll的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在Gh-Pages（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。</summary></entry><entry><title type="html">西班牙之旅(下)</title><link href="http://naffan.cn/life/2016/10/01/1.html" rel="alternate" type="text/html" title="西班牙之旅(下)" /><published>2016-10-01T00:00:00+08:00</published><updated>2016-10-01T00:00:00+08:00</updated><id>http://naffan.cn/life/2016/10/01/1</id><content type="html" xml:base="http://naffan.cn/life/2016/10/01/1.html">&lt;blockquote&gt;
-  &lt;p&gt;　　多多少少，或早或晚，我们都被生命的冲动、被莫名的精神和情绪的汹涌潮水推动过。在看不到意义的时候寻求人生的意义，在不同的时候，因不同的位置，出现不同的幻想。有时，我们给自己的人生以理由。这些理由是我们希望自己相信，也希望别人信服的。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　今天将开启我们在马德里的第二天的旅途，之前在马德里逛了几个大广场，可以说是广场一日游，那么今天就是公园和博物馆一日游啦。因为这一整天都是在马德里度过，所以不用那么赶了。慢悠悠的起床，慢悠悠的洗漱，慢悠悠的找家餐馆吃早点。不得不说马德里的作息时间比北京慢太多了，我们9点从家里出发饭馆都还没有营业，只有零星几个勤快的小店在那慵懒的招揽这生意，这个时候我多想吃一顿馄钝配小笼包子啊，可是在西班牙只有面包配肉配蔬菜配果汁或者酒，西方的粮食咱真是吃不惯，所以说今天也得去个能过换伙食的餐厅，那就是拥有美冠的米其林三星餐厅，位置就在圣米盖尔广场的西边一点。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/01/5818b987cdc42.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_25&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　首先，我们来到了丽池公园。这个公园是马德里最著名的由菲利普四世在十七世纪下令兴建的，这里种植着超过一万五千株美丽的植物，而且公园内部还有很多重要的纪念碑。我们是从公园的南门进去的，进入南门以后有一条特别长的甬道，甬道旁边种植着一排有一排的枫树，因为十月的西班牙已经入秋了，早晚凉，所以枫树的叶子有的已经变黄，有的已经变红。这个时候吹来一阵微风，风中夹杂着花草的香气，沁人心脾，周围的枫叶哗哗哗的止不住地摇曳，四下里空无一人烘托出一种入秋后的清爽感觉。不远处有这一片湖水，这篇湖水坐落在公园中心。在湖水的岸边能看到熙熙攘攘的游客，有的边坐在那里遍欣赏着风景边做着油画，有的拿起相机三五成群的照相，有的围绕着湖周围跑步，这时忽然感觉到生活在这里的人们是多么的幸福，悠闲的早上配以美丽的风景真的让人沉浸其中。公园里面还有两座宫殿：玻璃宫和委拉斯盖兹宫。如今这两个宫殿都已经成为展览馆，我们也一一进行了参观。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/01/5818b987d99b2.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_26&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　围绕着公园中心的人造湖，周围都是老旧的砖瓦铺成的砖瓦路面，时不时有个高耸的人造石碑配以英雄骏马雕像，营造出一种强烈的时代感。湖中随处可见的鸭子和金鱼又为这个公园点缀了一些生动的气息。走在这个公园里，你会情不自禁的为这儿的美好感觉驻足欣赏。就在歇息的时候，有个当地的家庭托我们帮他们照个家庭照，照相的过程中和我们攀谈起我们是哪里人。在西班牙其实有很多亚洲人，但是多以日韩为主。一般他们第一个问题就是你们是不是来自于日本，而我们回以不是，是中国人的时候，一般他们就会回一句哦。这个家庭也不例外，但是这并没有影响到我们交谈的兴趣，我们简单问了问他们当地的生活如何之类的，对方也很爽快的回答了我们的一切问题。有了这段比较舒服的交谈后，我们准备离开这座公园。后来，我发现这个公园中有很多水龙头一样的设施，给我的第一感觉这个和日本一样，直接就可以饮用。这说明这个地方的环境没有污染，即接即饮，不像中国自来水都是需要煮沸以后才能够饮用。&lt;/p&gt;
-
-&lt;p&gt;　　这个时候已经到了中午饭的点了，我们终于可以奔向早已垂涎三尺的米其林餐馆了。我们打的去的餐馆，我记得开车的是个黑人的姐，这位大姐就像打网球的小威一样，反正我对黑色皮肤女人的面貌特征都是一样的-牛头马面。这位大姐就好像是长在主驾驶位置一样，那一坨坨粗肉让我看的直起腻。因为，我们第一次到马德里的那天就路过了这家餐馆，但是发现那个时间正好是不接待的休息时间，幸好这次时间赶的正，实现了我们能在有着悠久历史的餐馆用餐的愿望。其实，当我进到这家餐馆里面的时候，确实和我原先想的有一定的反差。由于历史原因，这家老店一直在维持着原始的风格，风格虽然特殊，但是怎么看都觉得自己是在厨房里吃饭一样。不过，这里的装潢还是挺讲究的，各种花里胡哨，看不懂风格的装饰到处抱着墙面，就怕墙面还有空余的地方抱不到。说到这里，其实该说到吃的味道如何了。但是，真的对不起大家了，我真忘了味道是什么样子了。但是，我记得吃完了以后当时的感觉。感觉就是饱是饱了，但是挺油腻的。这就是我的感觉，如果用同样的价钱去吃麦当劳，我觉得我会吃的更high。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/01/5818b98642792.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_27&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　吃也吃完了，我们下一个行程就是逛逛马德里的街道，然后去普拉多博物馆提高一下我们这次旅游的逼格。在行走当中，过街时抓拍了一张当地警察骑摩托车的样子，煞是威风，而且警察也很给面子，知道我在拍他还特意往我这边看。由于马德里一共有三个足球队，所以到处都有足球的影子。不用我说，这个城市最为著名的球员就是C罗了。在闹市区闲转的时候，经常会路过运动品牌店，大大小小的C罗海波张贴的到处都是。不过，除了足球给我留下了很深的印象之外，还有一个建筑引起了我的注意，那就是难民庇护所。在不远处好像教堂一样的建筑物正面飘着一个偌大的旗子，旗子上面写着“欢迎难民”。其实，我们身在中国对欧洲国家的难民潮并不知道太多，但是在欧洲非常普遍，平常的市民都要响应政府的号召为难民捐物捐钱。对于这点来说，中国真的没有这种现象，这也不得不说，在这方面中国做出了好的榜样。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/01/5818b985c4b15.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_28&quot; /&gt;
-　　继续向前走，我们就来到了马德里三大著名博物馆其中之一：普拉多博物馆。这个博物馆建于18世纪，被认为是世界上最伟大的博物馆之一，也是收藏西班牙绘画作品最全、最权威的美术馆。如果想要一幅一幅画的浏览，想必半天你都得花在博物馆里面。可是，我神奇的在一小时之内逛完并且陶醉于其中。现在回忆起当时在里面逛的情景，就好像走马观花一样。给我印象最深的就是这里的画耶稣特别的多，而且以挖心脏最为频繁。对了，还有一副给我印象最深，就是一张骷髅大军屠杀人类的画作，我感觉这幅画里藏的信息特别大，如果我要还是个孩子，我肯定会把这张画当做寻找杰克船长一样细细观察一番。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/01/5818b9860ddd8.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_29&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　好了，又在马德里溜溜溜了一天。感觉这种城市已经全部被我们逛遍了一样，有可能是因为这个城市是西班牙的首都吧，所以特点不是很鲜明，给人一种死板的感觉，在这里留存的更多的是历史文化的遗迹。我们第二天就要开始新的一段旅途了，真正的外国自驾就要开始了。&lt;/p&gt;
-
-&lt;p&gt;　　为了在西班牙开车不会遇到问题，就在旅行之前特意去方圆认证中心做了200块的驾照西班牙翻译证明。但是，后来这个证明根本没有起到任何作用，还白白花了200块钱进去，真是浪费。第二天早上，我很早就起来了，沿着google地图去找Herts公司。之前在国内查朋友家旁边的herts公司的位置一共有两个地方，一个在正北，一个在正东。我根据图文介绍有一些疑惑，但是现在真的想不起来疑惑什么了。我只记得我首选的正北那个地址，结果到了那里发现是个死胡同。那个时候天还刚蒙蒙亮，路上跟本没有人。这一下让我犯了难。索性，后来有家餐馆来了辆货车，经过简单的询问人家告诉我最快到达第二个地点需要乘坐地铁。后来，我按照人家给我指的路顺利的找到了herts公司。然而，这个已经延误了我们将近一个小时的行程时间了。我订的是一个红色四座的手动挡minicooper，当拿到这个车的时候我竟然发现我都不知道怎么点火。。。我还从没有开过不用钥匙锁的车呢，现问的工作人员。不得不说中国的租租车网站做的就是好，herts的车租租车代理，而且价钱不贵，服务也很周到，说明文档也很齐全。以后再去国外自驾的话我肯定还是选租租车这个代理平台。另外，minicooper这辆车也非常的好开，油门离合的切点非常舒服，根本就不会给你熄火的机会。当我从地库中开出来的时候，我忘记了记位置了，这也成为了后来我还车时最难的一道坎。没想到我们回马德里的时间比原计划晚了整整6个小时，因为我们租车是按照天收费的，本来说好第二天下午4点回来换车。结果，实际还车时间却是第三天的凌晨1点。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/01/5818b986bc6ea.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_30&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　嘟嘟嘟，开始我们的西班牙自驾之旅喽。可以说，自己之旅是我们西班牙行程的一大亮点。在两天的时间里我们要经过两个城市，他们分别是托雷多和塞戈维亚。在西班牙开车的感觉非常的好，虽然这个国家的道路歪七扭八。但是，车很少还讲文明。他们的行车道不像北京一样没过多少公里就有个立交桥，如果你想调头你就照直往前开，前面总会有个环岛在等待你的。城市中很少能够碰到立交桥，有立交桥的地方都是城市和乡村的交界处。西班牙的交通给我印象最为深刻的就是行人与机动车的关系，比如你在人行横道前，每辆车都会停下来等待路人的。即便路上没有行人，车都会在人行横道减速下来停一会看看周围确实没人方才继续前行。另外，过环岛的时候，入环岛的都会首先停下车来看看直行的车道有无车辆即将驶入，如果有就会等待人家过去自己再开动跟上去。这样的大环境让一个身为北京抢并蹭的老司机大为不习惯，突然失去了在北京的那种穿梭于各种由突发奇想的司机们给予的高度神经紧张感以及不道德行为后对对方一通乱骂再加大油门快速驶离的快感。说真的，一时半会的不适应让自己有种想要违反交通规则的冲动。还好，深知违章后的罚款对于旅游人员无外乎是一种最高的惩罚，所以没有敢肆意妄为一番。行驶在城市间的高速公路上，一边看沿途的风景一边和朋友聊聊天之类的也是一种趣事。可是，突然我发现身后有一辆车正在距0.1公分的距离尾随于我们。这个时候，心底的小魔鬼又蹦出来了，来让我们急刹给他个颜色瞧瞧。我的天，等我刚缓过闷儿来，刚才追我的那个小钢炮已经跑到我的前面去了。而且丫还来了个急刹，我的擦。在我和小魔鬼作斗争的时候，这位仁兄竟然直接挑衅我了。但是，在我的理智下我放过了他。就这样，一路上我放过了三四个这样的兔崽子。到后来，我才发现。西班牙的高速公路上只有两个车道，一个车道是快速车道，一个车道是匀速车道。而我占用了人家快速车道，人家想超我只能走匀速车道。后来再开车我就注意这个问题了，到人家国家交规不一样，中国的老司机到了这里就变成菜鸟了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff0744278.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_31&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　第一站我到达了托雷多，这个小城市的建筑有着阿拉伯和罗马风格的穆德哈尔式或哥特式教堂、清真寺、西哥特或古罗马时代的房屋、犹太教堂或是文艺复兴风格的宫殿。这个城市距离马德里70公里，建立在一个山丘上。塔霍河逶迤流经古城的东、南、西三面，河水湍急，形成天然屏障。说这里是兵家必争之地，因为地理位置险峻，能攻易守。首先，我们需要找地方停车，在景区大门前没有地方停车，所以我们只好向前开，在曲了拐弯的巷尾才找到一个能够停车的车位，而在这个车位旁边的收费机让我们犯了难。看着上面的西班牙文介绍，让我们晕头转向。还好，有一些过路的人教会了我们如何计算时长。后来才发现他们的规矩很简单，就是根据停车时间投币购买凭证，再将机器的停车证明放在挡风玻璃内侧，这样巡逻的警察就能够知道你这个车是否交了费了或者是否越时了。感觉好先进啊，一时半会也想不到在这上面投机取巧的办法，也只能苦了那些巡逻的警察了，挨个车辆检查是你们的工作职责~我们往里面走，其实就是一个大上坡，坡上有几个教堂，在街道的两旁有各式各样的零售商品，我记得我给继华买的西班牙火枪模型就是在这个地方呢，而且那个火枪价值不菲。后来，我们终于到了最顶。但是却发现人家那天不知道哪个家族在做礼拜，偌大的教堂我们不能进去简直是扫兴。但是也没有办法，谁让我们赶在了当地有权有势的家族搞礼拜呢。怎么着托雷多也算去过了，有些许的遗憾，但是旅程中留下一些遗憾是好事，让我们收拾行囊继续踏上去塞戈维亚的旅程。&lt;/p&gt;
-
-&lt;p&gt;　　伴随着一路上的山峦起伏，心旷神怡的开在几乎没有车的高速公路上，时间仿佛静止在那一刹那。我们欣赏着沿途的美景就如同掉进了大海一样，可能今后再也没有机会重走在这一段路上，可能我们的回忆就凝结在这一条悠长的公路之上。岁月就如同前方的路，越走越长越走越不能回头看到来时的路。现在依稀还记得那个时候的心情，我确信我们每一个人的心底都将那个时候的结伴而行之感深藏在记忆之隅。从托雷多开车到塞戈维亚路程很短，大概经过了40分钟左右的车程，我们终于到达了这一西班牙古老的城镇。塞戈维亚是塞戈维亚省省会，是一座精致的古城，举世闻名的高架渠也和古城一起被列为了世界文化遗产。很多人都向往这里，因为这个地方适合那些爱历史，爱建筑，爱徒步，爱慢生活的人们。我们跟随者谷歌地图经过弯曲向前的城镇小道一直开上了阿尔卡萨城堡所在的山坡。城堡外面几乎没有停车位，我们很幸运的找到了一个刚开走车的空场上。下车之后就是各种拍照和买票，我们顺利的进入了城堡。这座城堡里面的装潢很是古味古香，但是对于我们来说也是有些审美疲劳了。因为，我们每到一个城市都会逛逛城市中的教堂啊城堡啥的，所以对于他们那种风格的建筑也是见多不怪了但留下的只有赞叹之声。城堡有个最高的塔，爬上这座塔你就可以看到周围的景观，因为这个城堡地处高势，所以站得高看得远。往南看去是连绵的断崖，往北看去是一片的麦田。这种空间的美感很暴力的展现在你的眼前，如果你经常去长城玩的话，你一定会爬到最高点，当你在最高点远眺的时候你就会体会到这种感觉，这种感觉给你的冲击简单说来就是雄伟壮丽的美。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff036e366.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_32&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　还记得在去西班牙之前做了些景点的攻略，其中有个攻略就提到了这座古堡，现而今终于来到了这里，这种空间的撕裂感和位置的重合感让我很着迷。记得攻略里有张照片是作者拍的，他从古堡上往远处拍，照片中有个谷仓。他说他徒步从古堡上走过去花了40分钟，而我也在他拍照片的位置看到了那个谷仓，而后我就想也尝试跟随着那个作者的路线走一遍，可是后来我们是开车过去的，花了十分钟而已并且在谷仓那个地方调了个头，哈哈因为走错路了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff0605cc8.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_33&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　我记得这个城堡上有个广场，广场上有个井，很多旅客都争先恐后的跟这个井合影。我到现在都不知道他们为什么会这样，难道这个井有典故？我后来也没有专门去查询他们为什么这样，不过他们照咱也跟着一起照一下呗。其实，这座古堡里面很多地方是很适合拍照的。我们这帮女孩在这里照照、那里照照，足足照了得有2个小时。我在感叹女孩子照相不顾时间的同时，也深深的被她们的举动所感动。因为她们永远会在我身旁，她们需要我，而且像我这样的免费衣架还有gps功能，可以随时定位他们的位置保证随时都会出现在恰当的位置并完美的躲过她们各种的自拍视野。城堡的营业结束时间到了，广播里有人用熟练的英文广播着劝我们早些离开的提醒，然而她们竟然视而不见，最终让我们成功的成为了这个城堡当天最后离开的旅客。我了个天。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff0815af1.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_34&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　好了，这个古堡我们玩完了，天已经慢慢黑了下来。古镇的黄昏是迷人的，原先是蓝宝石一样的天空被落日的侵染，一半已经成为了红宝石颜色，而另一半也不再那么蓝那么晶莹剔透。一片片云彩带着一点点乌云慢慢的从头上掠过，周遭的森林里不时传来乌鸦的嘎嘎声，四下中已经没有一些人烟，整个小镇寂静了，只剩下我们。看着路灯影射在地上的影子是那么的熟悉，然而影子们已经伴随着我们跑到了地球的这一边。&lt;/p&gt;
-
-&lt;p&gt;　　开着车从上坡上下来，一路灯光的保驾护航，我们来到了水道桥。夜晚中的水道桥很热闹，然而驻足的地方缺很少。我们顶着违章停在了客车的停车位，不一会客车来了又催促我们赶紧走。我只好让姑娘们先去拍照，然后我再去找空位。想法是好的，现实是残酷的。水道桥的路段早就被各种车辆占满了，我来回绕了2趟都没有找到位置。当我回到水道桥底下的时候，我们商量了一下，第二天还有些时间可以再过来一趟。到现在还空着肚子，所以先去不远处的酒店，吃完饭早点睡觉，第二天再过来就是。到了酒店我们吃完饭，让晨试了下这个minicooper。虽然，我之前说的这个车非常好，油门和离合根本不会给你熄火的机会。但是，到她手里还真不是这个样子。走一下熄一下，感觉好像跟我正好反过来。幸好她们家开的是自动挡，要不根本没办法做滴滴司机。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff070f608.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_35&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　依然是清晨，依然是小鸟的叫声把我们吵醒。我们来到了塞戈维亚大教堂。这个大教堂可不一般，它享有“大教堂中的贵妇”的美誉。那天还伴随着点小雨，所以清晨、小雨、教堂，当这三个名词凑在一起时尤为让人记忆深刻。我还记得教堂门口有个男人，他就静静的站在那里，不偏不倚，看起来像个绅士。在他注意到我在看他的时候，他也同时注意到了我嘴中的香烟。他操着一口西班牙味道的英语向我伸出手。我立刻明白了，他是没有烟想从我这里奢跟烟抽。我迅速掏出烟递给了他，他没火，我又递给了他火。他的脸上顿时燃起了微笑，当他吸了一口后，脸上的表情舒缓了，好像得到了解脱一样，我也报以微笑。等我们从大教堂出来以后，他又注意到了我。然而，这次他不光注意到了我还注意到了我们身旁的另一个旅客。他又伸出了他的双手，这次是向着那位旅客。那位旅客明显明白了他的意思，于是我就想他烟瘾够大。然而，这位旅客掏出了欧元。什么情况。。。于是，清晨、小雨、教堂、伸手的男人，当这四个名词碰撞到一块的时候，我就会会心一笑。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff06d4509.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_36&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　离开塞戈维亚大教堂之后，我们又驱车感到了水道桥下，这回车明显比前一天的少了。女孩们发了疯一样一哄而散，留下了不知所措的我。我只好将车停到了水道桥底下，这块其实有块牌子写着禁止停车的。我看旁边也有人这样停着，我就鼓起勇气问了一下那些西班牙司机。他们告诉我停一会是没问题的，一会会有警察过来，他们哄你的时候你开车走就行，之后你再回来就行。有了这个经验后，我就放心大胆了。后来，还真有个警察过来了，他开始哄桥底下的车，当他哄我的时候，女孩子们也回来了。我向这位警察做了个写东西的手势，意思是你有没有记录我的车牌号做违章处理。这个手势并不是通用的，然而我想我这么做他应该明白吧。果不其然，他向我挥挥手表示没有记，吓我这一大跳。还好，我们是歪果仁。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://ooo.0o0.ooo/2016/11/02/5819ff0781746.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;西班牙新_37&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　塞戈维亚之旅到此就结束了，我们开着车要返回马德里了。在马德里附近有个购物村，我们需要开启在西班牙的代购行动了。下午四点，我们抵达了这个购物村，貌似这个购物村还挺有名。网上很多文章都介绍了如何在这里买东西。当我们到达这里的时候我们发现连购物村门口的只是牌子上都有用中文写的欢迎购物之类的标识。这里确实很大，人也很多。招商银行在这里也有活动。购物的过程是艰辛的，我没有太多精力去描述我们是怎么在这里大包小包的买东西以及精打细算凑折扣的。反正最后就是买了很多很多，我只记得我在给大家看东西的时候就如同摆地摊，2平米的地方全是我们买的东西，路过的外国人无不侧目观看。当时就用中土豪来购物的感觉，这种感觉有好有坏，反正最后我们顺利地把所有东西塞进了这辆小minicooper中，这也算是奇迹。最后，今晚重头戏就要上演，晚7点在马竞主场会迎来一场国家德比马竞vs.皇马的足球比赛。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,西班牙,自由行" /><summary type="html">　　多多少少，或早或晚，我们都被生命的冲动、被莫名的精神和情绪的汹涌潮水推动过。在看不到意义的时候寻求人生的意义，在不同的时候，因不同的位置，出现不同的幻想。有时，我们给自己的人生以理由。这些理由是我们希望自己相信，也希望别人信服的。</summary></entry></feed>
+&lt;p&gt;　　好了，我想问题都已经解决了。你的解决了么？如果没有请留言，有的话直接点右上角的关闭即可。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="jekyll,Github" /><summary type="html">　　经过很长的一段时间对jekyll的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在Gh-Pages（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。</summary></entry></feed>
