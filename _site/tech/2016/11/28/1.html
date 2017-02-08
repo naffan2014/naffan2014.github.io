@@ -7,8 +7,8 @@
 <meta property="og:title" content="在Github-Pages上应用jekyll博客插件" />
 <meta name="description" content="　　经过很长的一段时间对jekyll的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在Gh-Pages（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。" />
 <meta property="og:description" content="　　经过很长的一段时间对jekyll的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在Gh-Pages（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。" />
-<link rel="canonical" href="http://naffan.cn/tech/2016/11/28/1.html" />
-<meta property="og:url" content="http://naffan.cn/tech/2016/11/28/1.html" />
+<link rel="canonical" href="http://localhost:4000/tech/2016/11/28/1.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2016/11/28/1.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2016-11-28T00:00:00+08:00" />
@@ -24,7 +24,7 @@
 "headline": "在Github-Pages上应用jekyll博客插件",
 "datePublished": "2016-11-28T00:00:00+08:00",
 "description": "　　经过很长的一段时间对jekyll的适应，深刻的感觉到了jekyll为什么说是适合程序员的博客系统，因为jekyll根本不适合那些只想专注于写作的人们。我所谓的“只想专注于”这个字眼意思是我就是上来写文章然后发布就完事的意思，而对于程序员来说“只想专注于”意思是经过折腾，搭建好一个看起来有那么点高大上的但是又不是唾手而得服务的那种。那么，jekyll就应运而生了。大家通过关键词搜索进来其实是想解决jekyll在Gh-Pages（下用gh代替，有很多文章直接就用gh来表示，也不说明一下这个替代的意思，根本就不在乎小白的心里）能够应用起插件的。我在这里告诉大家通过我的方法一定能够实现你的需求，而且我敢保证能够帮你理清你很多不懂的地方。我为什么这么自信呢？都因为我也是从小白起来的，科学上网（翻墙）查阅了很多的相关资料，而且阅读了大量的文献才终于慢慢试出了效果。在这里，我把我所遇到的和了解到的分享给大家。",
-"url": "http://naffan.cn/tech/2016/11/28/1.html"}</script>
+"url": "http://localhost:4000/tech/2016/11/28/1.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,15 +64,16 @@ var _hmt = _hmt || [];
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <p class="navbar-brand">naffan</p>
+      <p class="navbar-brand">拿饭网</p>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
       <li><a href="/list">文章列表</a></li>
       <li><a href="/life">生活闲杂</a></li>
+      <li><a href="/thinking">沈思默想</a></li>
       <li><a href="/economy">经济杂谈</a></li>
-      <li><a href="/links">精彩链接</a></li>
       <li><a href="/books">阅读书籍</a></li>
+      <li><a href="/links">精彩链接</a></li>
       <li><a href="/about">关于本人</a></li> 
       </ul>
     </div><!--/.nav-collapse -->
@@ -82,14 +83,15 @@ var _hmt = _hmt || [];
 <!-- Sidebar -->
 <div id="sidebar-wrapper">
   <ul class="sidebar-nav">
-    <li class="sidebar-brand"><a href="/"><h1 class="brand">naffan</h1></a><h3>有情不必终老，暗香浮动恰好</h3></li>
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
     <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
     <hr />
     <li><a href="/list">文章列表</a></li>
     <li><a href="/life">生活闲杂</a></li>
+    <li><a href="/thinking">沈思默想</a></li>
     <li><a href="/economy">经济杂谈</a></li>
-    <li><a href="/links">精彩链接</a></li>
     <li><a href="/books">阅读书籍</a></li>
+    <li><a href="/links">精彩链接</a></li>
     <li><a href="/about">关于本人</a></li> 
     <hr>
   </ul>
@@ -195,7 +197,7 @@ window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="tex
       <div class="container">
   <footer>
     <p class="text-muted credit">
-      &copy; 2017 naffan &middot;
+      &copy; 2017 拿饭网 &middot;
     </p>
   </footer>
 </div>
