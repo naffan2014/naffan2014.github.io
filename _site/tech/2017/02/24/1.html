@@ -3,15 +3,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <!-- Begin Jekyll SEO tag v2.1.0 -->
-<title>让MWeb支持甘特图的办法（2.0以上版本 - 拿饭网</title>
-<meta property="og:title" content="让MWeb支持甘特图的办法（2.0以上版本" />
-<meta name="description" content="开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说" />
-<meta property="og:description" content="开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说" />
-<link rel="canonical" href="http://localhost:4000/tech/2016/09/07/2.html" />
-<meta property="og:url" content="http://localhost:4000/tech/2016/09/07/2.html" />
+<title>在centos下升级php的经历 - 拿饭网</title>
+<meta property="og:title" content="在centos下升级php的经历" />
+<meta name="description" content="公司的服务器很多很杂，php的版本也不尽相同。今天，遇到本来项目是php5.6的。但是，上到测试机上就报错，说是中括号作为数组定义不能够解析。后来查了一下发现这个是php版本的问题，紧接着赶紧到服务器上看了一下，果然是服务器上的php版本是php5.3.3的。那么，接下来就是准备升级服务器上的php了。由于这个服务器之前人家是用yum安装的，我通过" />
+<meta property="og:description" content="公司的服务器很多很杂，php的版本也不尽相同。今天，遇到本来项目是php5.6的。但是，上到测试机上就报错，说是中括号作为数组定义不能够解析。后来查了一下发现这个是php版本的问题，紧接着赶紧到服务器上看了一下，果然是服务器上的php版本是php5.3.3的。那么，接下来就是准备升级服务器上的php了。由于这个服务器之前人家是用yum安装的，我通过" />
+<link rel="canonical" href="http://localhost:4000/tech/2017/02/24/1.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2017/02/24/1.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2016-09-07T00:00:00+08:00" />
+<meta property="article:published_time" content="2017-02-24T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
@@ -21,10 +21,10 @@
 <script type="application/ld+json">
 {"@context": "http://schema.org",
 "@type": "BlogPosting",
-"headline": "让MWeb支持甘特图的办法（2.0以上版本",
-"datePublished": "2016-09-07T00:00:00+08:00",
-"description": "开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说",
-"url": "http://localhost:4000/tech/2016/09/07/2.html"}</script>
+"headline": "在centos下升级php的经历",
+"datePublished": "2017-02-24T00:00:00+08:00",
+"description": "公司的服务器很多很杂，php的版本也不尽相同。今天，遇到本来项目是php5.6的。但是，上到测试机上就报错，说是中括号作为数组定义不能够解析。后来查了一下发现这个是php版本的问题，紧接着赶紧到服务器上看了一下，果然是服务器上的php版本是php5.3.3的。那么，接下来就是准备升级服务器上的php了。由于这个服务器之前人家是用yum安装的，我通过",
+"url": "http://localhost:4000/tech/2017/02/24/1.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -144,67 +144,62 @@ $(function(){
 });
 </script>
 <div id="article">
-	<div class="article-title">让MWeb支持甘特图的办法（2.0以上版本</div>
+	<div class="article-title">在centos下升级php的经历</div>
 	<p class="meta">
     <small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
         
         张一帆
        
     </small>
-    <small>&nbsp;<i class="fa fa-calendar-o"></i> 09/07/16</small>
+    <small>&nbsp;<i class="fa fa-calendar-o"></i> 02/24/17</small>
   </p> 
 	<hr/>
   <div class="post">
-    <p><code>开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说</code></p>
+    <p>公司的服务器很多很杂，php的版本也不尽相同。今天，遇到本来项目是php5.6的。但是，上到测试机上就报错，说是中括号作为数组定义不能够解析。后来查了一下发现这个是php版本的问题，紧接着赶紧到服务器上看了一下，果然是服务器上的php版本是php5.3.3的。那么，接下来就是准备升级服务器上的php了。由于这个服务器之前人家是用yum安装的，我通过</p>
 
-<h3 id="mwebmacmarkdownhttpzhmwebim">Mweb是区禄海（开发者）开发的一款适用于MAC系统的MARKDOWN编辑软件，官网地址在这里<a href="http://zh.mweb.im">官网地址</a>。</h3>
+<pre><code>yum list installed | grep php
+</code></pre>
+<p>查看到了服务器上的php版本。于是，将所有查到有关于php’的全部删除了。紧接着就要下php56的安装包了。通过</p>
 
-<p>这款软件在APP store上还是有一定的热度的，我也用了这款软件用来编写自己的博客和工作中应用的各种文案。身为程序员我深表感激，这款软件在我大部分应用情况中都基本上可以解决任何问题。</p>
+<pre><code>yum install php56
+</code></pre>
+<p>发现，yum找不到php56的安装包。这是yum源的问题，我们需要将新源添加给yum。
+首先，我需要确定centos的版本。<a href="http://www.cnblogs.com/YangJieCheng/p/5907166.html">阅读更多</a></p>
 
-<p>在工作过程中，我有时候会碰到需要画图的情况。比如，在组织公司项目的时候，需要跟进每一个人的工作进度。这个时候就需要用一种图表的方式进行表达，因为这种表达能够让开发人员以及领导迅速的了解各员工的工作状态。因为我想写gantt图的用法，所以这里就简单讲一下如何应用Mweb来画出gantt图来。</p>
+<pre><code>cat /etc/issue
+</code></pre>
+<p>发现我们的服务器是centos6的。<a href="http://blog.csdn.net/ysydao/article/details/51388397">阅读更多</a></p>
 
-<p>虽然，现在有很多软件都可以用来画图。比如omniPlan。这款软件就可以画出漂亮的gantt图，而且对于整个项目可以涉及到资源的分配，让大型项目进行的有条不紊。但是，如果有小型的需求那么动辄使用omniPlan这些软件就有点大炮打蚊子，大材小用的感觉。</p>
-
-<p>身为IT行业的从业人员，很多时候能用代码解决就不用工具解决，能用手写就不用插件。所以，本着没事找事的态度。想要自己画出甘特图的需求也应运而出。我也属于这一类人，没事就喜欢钻研，碰巧遇到画gantt图的时候在APP store上看到了这款软件，他有个lite版，免费的。可以让你简单感受一下这款软件的魅力。作为想用jekyll做静态博客的我来说，良好的支持了我的需求。所以，我就对这款软件进行了研究。</p>
-
-<p>起先我用的是1.9的版本，这个版本里再偏好设置中是可以进行自定义预览样式的。但是，也许是程序有bug导致按照软件开发者的<a href="http://zh.mweb.im/14689205256580.html">文章</a>做，是做不出来的。后来，升级到了2.0.9功能才可以实现。我们只需要将这个<a href="http://zh.mweb.im/media/14689205256580/sample-custom-html-charts.zip">连接</a>下载以后，打开偏好设置，选择Themes，点击Preview CSS行尾的Edit按钮，在弹出来的finder中将下好的文件夹放入Preview Css文件夹中。点击确定后，再点击Reload，这个时候下来框中就有了刚才你下的文件夹的名称了，选中后关闭偏好设计即可。</p>
-
-<p>下载的文件夹是作者整合了mermaid，echarts，PlantUML功能的样式集合。原理就是用css来渲染gantt的标示。而主要的功劳应该归功于mermaid。我们知道，mermaid是可以支持gantt的渲染的。所以，我们只要在编辑中如此编辑</p>
-
-<pre><code>gantt
-        dateFormat  YYYY-MM-DD
-        title Adding GANTT diagram functionality to mermaid
-        section A section
-        Completed task            :done,    des1, 2014-01-06,2014-01-08
-        Active task               :active,  des2, 2014-01-09, 3d
-        Future task               :         des3, after des2, 5d
-        Future task2               :         des4, after des3, 5d
-        section Critical tasks
-        Completed task in the critical line :crit, done, 2014-01-06,24h
-        Implement parser and jison          :crit, done, after des1, 2d
-        Create tests for parser             :crit, active, 3d
-        Future task in critical line        :crit, 5d
-        Create tests for renderer           :2d
-        Add to mermaid                      :1d
+<pre><code>Centos 5.x
+rpm -Uvh http://mirror.webtatic.com/yum/el5/latest.rpm
+CentOs 6.x
+rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+CentOs 7.X
+rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm
+rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 </code></pre>
 
-<p>这样就能形成甘特图了</p>
+<p>将源添加成功以后，开始安装php56。安装成功。</p>
 
-<pre><code class="language-mermaid">gantt
-        dateFormat  YYYY-MM-DD
-        title Adding GANTT diagram functionality to mermaid
-        section A section
-        Completed task            :done,    des1, 2014-01-06,2014-01-08
-        Active task               :active,  des2, 2014-01-09, 3d
-        Future task               :         des3, after des2, 5d
-        Future task2               :         des4, after des3, 5d
-        section Critical tasks
-        Completed task in the critical line :crit, done, 2014-01-06,24h
-        Implement parser and jison          :crit, done, after des1, 2d
-        Create tests for parser             :crit, active, 3d
-        Future task in critical line        :crit, 5d
-        Create tests for renderer           :2d
-        Add to mermaid                      :1d
+<pre><code>yum install php56
+</code></pre>
+
+<p>重启php-fpm后，发现php的版本仍然停留在php5.3.3上。这是因为php-fpm是管理php进程的容器。它相当于承载php的虚拟机一样。我们需要重启它才能够重新加载php的各项配置。但是目前我的php版本是5.6，php-fpm版本是5.3.3。所以，重启起来照样php的版本还是5.3.3 。<a href="http://www.cnblogs.com/blackpuppy/p/upgrade_php_from_54_to_55_on_centos.html">阅读更多</a></p>
+
+<pre><code>yum install php56w-fpm 
+</code></pre>
+<p>这样，就完成了php-fpm的安装。重启php-fpm后，php版本升级到php5.6。<a href="http://www.cnblogs.com/zdz8207/p/3765579.html">阅读更多</a></p>
+
+<pre><code>service php-fpm restart
+</code></pre>
+
+<p>后发现php缺少mysqli的扩展。而php5.6的扩展又不像以前那样只把extension前面的分号去除就行。现在都需要自己安装了。但是在安装的过程中出现冲突情况：</p>
+
+<p><img src="media/14879074113087.jpg" alt="" /></p>
+
+<p>我们可以采用</p>
+
+<pre><code>yum install php56w-mysql
 </code></pre>
 
 
@@ -243,11 +238,11 @@ $(function(){
     <div>
       <ul class="pager">
 
- 	<li class="previous"><a href="/2016/09/07/1.html">&larr; 前一篇</a></li>
+ 	<li class="previous"><a href="/thinking/2017/02/08/01.html">&larr; 前一篇</a></li>
 
 
 
-	<li class="next"><a href="/tech/2016/09/09/1.html">后一篇 &rarr;</a></li>
+	<li class="next disabled"><a href="javascript:void(0);">后一篇 &rarr;</a></li>
 
 </ul>
 
