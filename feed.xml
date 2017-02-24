@@ -1,10 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://naffan.cn/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2017-02-08T14:57:56+08:00</updated><id>http://naffan.cn//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">开通这个专栏的意义</title><link href="http://naffan.cn/thinking/2017/02/08/01.html" rel="alternate" type="text/html" title="开通这个专栏的意义" /><published>2017-02-08T00:00:00+08:00</published><updated>2017-02-08T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/02/08/01</id><content type="html" xml:base="http://naffan.cn/thinking/2017/02/08/01.html">&lt;p&gt;　　近些年一直在想着多读点能够提升自己思维的书籍并且自己也做了一些尝试。因为，我觉得人越来越大思维就不能对所有的事凭借着还是稚嫩的逻辑去理解，社会上的事情往往不那么简单，再简单的事情背后都会有着为什么会这样发生的各种原因。最近，也是遇到了一些事情让自己对思考的需求最大化。所以，我就开通了这个栏目。希望借着在自己生活中的点点滴滴都能够引起我足够的重视，再通过自己的思考得出真正经过加工的结果。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-02-24T12:43:23+08:00</updated><id>http://localhost:4000//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">在centos下升级php的经历</title><link href="http://localhost:4000/tech/2017/02/24/1.html" rel="alternate" type="text/html" title="在centos下升级php的经历" /><published>2017-02-24T00:00:00+08:00</published><updated>2017-02-24T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/02/24/1</id><content type="html" xml:base="http://localhost:4000/tech/2017/02/24/1.html">&lt;p&gt;公司的服务器很多很杂，php的版本也不尽相同。今天，遇到本来项目是php5.6的。但是，上到测试机上就报错，说是中括号作为数组定义不能够解析。后来查了一下发现这个是php版本的问题，紧接着赶紧到服务器上看了一下，果然是服务器上的php版本是php5.3.3的。那么，接下来就是准备升级服务器上的php了。由于这个服务器之前人家是用yum安装的，我通过&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum list installed | grep php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;查看到了服务器上的php版本。于是，将所有查到有关于php’的全部删除了。紧接着就要下php56的安装包了。通过&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install php56
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;发现，yum找不到php56的安装包。这是yum源的问题，我们需要将新源添加给yum。
+首先，我需要确定centos的版本。&lt;a href=&quot;http://www.cnblogs.com/YangJieCheng/p/5907166.html&quot;&gt;阅读更多&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat /etc/issue
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;发现我们的服务器是centos6的。&lt;a href=&quot;http://blog.csdn.net/ysydao/article/details/51388397&quot;&gt;阅读更多&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Centos 5.x
+rpm -Uvh http://mirror.webtatic.com/yum/el5/latest.rpm
+CentOs 6.x
+rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+CentOs 7.X
+rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm
+rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将源添加成功以后，开始安装php56。安装成功。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install php56
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;重启php-fpm后，发现php的版本仍然停留在php5.3.3上。这是因为php-fpm是管理php进程的容器。它相当于承载php的虚拟机一样。我们需要重启它才能够重新加载php的各项配置。但是目前我的php版本是5.6，php-fpm版本是5.3.3。所以，重启起来照样php的版本还是5.3.3 。&lt;a href=&quot;http://www.cnblogs.com/blackpuppy/p/upgrade_php_from_54_to_55_on_centos.html&quot;&gt;阅读更多&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install php56w-fpm 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样，就完成了php-fpm的安装。重启php-fpm后，php版本升级到php5.6。&lt;a href=&quot;http://www.cnblogs.com/zdz8207/p/3765579.html&quot;&gt;阅读更多&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;service php-fpm restart
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;后发现php缺少mysqli的扩展。而php5.6的扩展又不像以前那样只把extension前面的分号去除就行。现在都需要自己安装了。但是在安装的过程中出现冲突情况：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;media/14879074113087.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们可以采用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install php56w-mysql
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="linux,centos,php" /><summary type="html">公司的服务器很多很杂，php的版本也不尽相同。今天，遇到本来项目是php5.6的。但是，上到测试机上就报错，说是中括号作为数组定义不能够解析。后来查了一下发现这个是php版本的问题，紧接着赶紧到服务器上看了一下，果然是服务器上的php版本是php5.3.3的。那么，接下来就是准备升级服务器上的php了。由于这个服务器之前人家是用yum安装的，我通过</summary></entry><entry><title type="html">开通这个专栏的意义</title><link href="http://localhost:4000/thinking/2017/02/08/01.html" rel="alternate" type="text/html" title="开通这个专栏的意义" /><published>2017-02-08T00:00:00+08:00</published><updated>2017-02-08T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2017/02/08/01</id><content type="html" xml:base="http://localhost:4000/thinking/2017/02/08/01.html">&lt;p&gt;　　近些年一直在想着多读点能够提升自己思维的书籍并且自己也做了一些尝试。因为，我觉得人越来越大思维就不能对所有的事凭借着还是稚嫩的逻辑去理解，社会上的事情往往不那么简单，再简单的事情背后都会有着为什么会这样发生的各种原因。最近，也是遇到了一些事情让自己对思考的需求最大化。所以，我就开通了这个栏目。希望借着在自己生活中的点点滴滴都能够引起我足够的重视，再通过自己的思考得出真正经过加工的结果。&lt;/p&gt;
 
 &lt;p&gt;　　开通这个专栏的第一件事情就是要为它取个名字，取名字这种事也很让人伤脑筋的，各种关于思考的词汇仿佛怕被你找到一样，刚刚还在你眼前晃荡，这一下子就消失的无影无踪，任凭你怎么去找它，它就是不让你找到。后来，终于找到了沈思默想这个词组，沈思默想意既静静地深思，我想思考是需要静下心来慢慢琢磨出所以然，所以此词最好。并且沈思通深思，对我来说有特别的纪念意义。最终，我将这个词组当做了这个栏目的栏目名称。&lt;/p&gt;
 
 &lt;p&gt;　　有的时候在你想到一些东西的时候想要立刻将其记录下来，然而当你提起笔来的时候却发现之前的想法早已飘散了。这其实是一种问题，这说明自己的思维不具有连贯性。这样的事情发生的越多就越说明这种能力越弱，对于那些编辑或者文工的公众来说这个能力就相当的强，所以他们能言善辩，能够说出更加有说服力的句子来。那么，像我们有这方面弱势的人就需要勤加练习。只有这样，我们才能够让自己的思维更加连贯，让自己的思考更加深刻。这也就是我想开通这个专栏的真正意义所在。&lt;/p&gt;
 
-&lt;p&gt;　　望自己能够在今后的生活中不断的填充起这个栏目的内容，可以写出一些让大家都愿意读且能够激发读者们自己思考的文章来。虽然知道这件事情很难，但是难也要坚持住，前期会是痛苦的，但是习惯了以后就会变得越加轻松且游刃有余起来，给自己的收获也会是大大的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考" /><summary type="html">　　近些年一直在想着多读点能够提升自己思维的书籍并且自己也做了一些尝试。因为，我觉得人越来越大思维就不能对所有的事凭借着还是稚嫩的逻辑去理解，社会上的事情往往不那么简单，再简单的事情背后都会有着为什么会这样发生的各种原因。最近，也是遇到了一些事情让自己对思考的需求最大化。所以，我就开通了这个栏目。希望借着在自己生活中的点点滴滴都能够引起我足够的重视，再通过自己的思考得出真正经过加工的结果。</summary></entry><entry><title type="html">通过nodejs搭建客服系统还有闲谈</title><link href="http://naffan.cn/tech/2017/01/25/1.html" rel="alternate" type="text/html" title="通过nodejs搭建客服系统还有闲谈" /><published>2017-01-25T00:00:00+08:00</published><updated>2017-01-25T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/01/25/1</id><content type="html" xml:base="http://naffan.cn/tech/2017/01/25/1.html">&lt;blockquote&gt;
+&lt;p&gt;　　望自己能够在今后的生活中不断的填充起这个栏目的内容，可以写出一些让大家都愿意读且能够激发读者们自己思考的文章来。虽然知道这件事情很难，但是难也要坚持住，前期会是痛苦的，但是习惯了以后就会变得越加轻松且游刃有余起来，给自己的收获也会是大大的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考" /><summary type="html">　　近些年一直在想着多读点能够提升自己思维的书籍并且自己也做了一些尝试。因为，我觉得人越来越大思维就不能对所有的事凭借着还是稚嫩的逻辑去理解，社会上的事情往往不那么简单，再简单的事情背后都会有着为什么会这样发生的各种原因。最近，也是遇到了一些事情让自己对思考的需求最大化。所以，我就开通了这个栏目。希望借着在自己生活中的点点滴滴都能够引起我足够的重视，再通过自己的思考得出真正经过加工的结果。</summary></entry><entry><title type="html">通过nodejs搭建客服系统还有闲谈</title><link href="http://localhost:4000/tech/2017/01/25/1.html" rel="alternate" type="text/html" title="通过nodejs搭建客服系统还有闲谈" /><published>2017-01-25T00:00:00+08:00</published><updated>2017-01-25T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/01/25/1</id><content type="html" xml:base="http://localhost:4000/tech/2017/01/25/1.html">&lt;blockquote&gt;
   &lt;p&gt;本文所述的游云客服系统，网址为&lt;a href=&quot;http://cs.17youyun.com&quot;&gt;cs.17youyun.com&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -67,7 +112,7 @@
 
 &lt;p&gt;　　另外，我刚开始说过，我采用的是nodejs，但是服务端我并没有用。这就造成了一个问题，当我需要调用java接口的时候，由于java接口的域名和客服系统的域名不一样，这样就遇到了跨域问题。跨域是现在的浏览器都会禁止的操作，所以我需要java在出接口的时候，返回给我的json串外还需要帮我增加一个嵌套，如jsoncallback[‘java返回的json’]。这个设计是不好的，虽然能够暂时符合目前的需求，但是终归还是需要经过nodejs的服务层一趟的，因为安全，以为敏捷。&lt;/p&gt;
 
-&lt;p&gt;　　最后，我还要说一下。我这个项目用到了2个方便开发和管理的工具。一个是pm2，一个是webpack。具体两个是干吗用的，我大概说一下。pm2是一个可视化的nodejs进程管理工具，他可以帮助你实时的更新应用服务，这就给你省去了每次更改nodejs代码时总需要频繁的重启node服务（–watch）。由于我们的项目是运行在线上的，所以环境也有几套。当我更改代码的时候我关心的是代码如何书写，并不关心环境。所以，我还需要动态的去区分代码所处的服务器环境，哪个是测试环境，哪个是生产环境。那么，我通过官网的手册，找到了pm2是可以通过参数来区分服务器环境的。我们只需要声明一个配置文件ecosystem.config.js。在这里面定义参数所对应的环境，那么在我们启动pm2的时候我们只需要将代表当前环境的参数输入即可，这些小工具能够帮助自己更加方便的进行开发以及维护。webpack是一个js代码整合器，它主要的功能就是通过js的互相引用，他可以只能的侦测到所用到的js并且可以将所有的js整合到一个文件中，便于开发者管理。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs,websocket,angular,webpack,客服" /><summary type="html">本文所述的游云客服系统，网址为cs.17youyun.com</summary></entry><entry><title type="html">仙本那潜水之诗巴丹最终站</title><link href="http://naffan.cn/life/2017/01/07/1.html" rel="alternate" type="text/html" title="仙本那潜水之诗巴丹最终站" /><published>2017-01-07T00:00:00+08:00</published><updated>2017-01-07T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/07/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/07/1.html">&lt;blockquote&gt;
+&lt;p&gt;　　最后，我还要说一下。我这个项目用到了2个方便开发和管理的工具。一个是pm2，一个是webpack。具体两个是干吗用的，我大概说一下。pm2是一个可视化的nodejs进程管理工具，他可以帮助你实时的更新应用服务，这就给你省去了每次更改nodejs代码时总需要频繁的重启node服务（–watch）。由于我们的项目是运行在线上的，所以环境也有几套。当我更改代码的时候我关心的是代码如何书写，并不关心环境。所以，我还需要动态的去区分代码所处的服务器环境，哪个是测试环境，哪个是生产环境。那么，我通过官网的手册，找到了pm2是可以通过参数来区分服务器环境的。我们只需要声明一个配置文件ecosystem.config.js。在这里面定义参数所对应的环境，那么在我们启动pm2的时候我们只需要将代表当前环境的参数输入即可，这些小工具能够帮助自己更加方便的进行开发以及维护。webpack是一个js代码整合器，它主要的功能就是通过js的互相引用，他可以只能的侦测到所用到的js并且可以将所有的js整合到一个文件中，便于开发者管理。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs,websocket,angular,webpack,客服" /><summary type="html">本文所述的游云客服系统，网址为cs.17youyun.com</summary></entry><entry><title type="html">仙本那潜水之诗巴丹最终站</title><link href="http://localhost:4000/life/2017/01/07/1.html" rel="alternate" type="text/html" title="仙本那潜水之诗巴丹最终站" /><published>2017-01-07T00:00:00+08:00</published><updated>2017-01-07T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/07/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/07/1.html">&lt;blockquote&gt;
   &lt;p&gt;诗巴丹坐落于东马来西亚西南，5米的浅滩之后就是垂直落下600至700米深的湛蓝深海，被誉为世界上“海滨潜水”之最&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -101,7 +146,7 @@
 
 &lt;p&gt;　　下午，我们去了珍珠岛登上了这里的600米的山，眺望了一下很多来旅游必照的景色。我也忍不住拍下了这张照片，作为来到这里的纪念哈哈。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/25/588837c02ce4c.jpg&quot; alt=&quot;IMG_0374&quot; /&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">诗巴丹坐落于东马来西亚西南，5米的浅滩之后就是垂直落下600至700米深的湛蓝深海，被誉为世界上“海滨潜水”之最</summary></entry><entry><title type="html">仙本那潜水之ow和aow学习</title><link href="http://naffan.cn/life/2017/01/06/1.html" rel="alternate" type="text/html" title="仙本那潜水之ow和aow学习" /><published>2017-01-06T00:00:00+08:00</published><updated>2017-01-06T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/06/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/06/1.html">&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/25/588837c02ce4c.jpg&quot; alt=&quot;IMG_0374&quot; /&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">诗巴丹坐落于东马来西亚西南，5米的浅滩之后就是垂直落下600至700米深的湛蓝深海，被誉为世界上“海滨潜水”之最</summary></entry><entry><title type="html">仙本那潜水之ow和aow学习</title><link href="http://localhost:4000/life/2017/01/06/1.html" rel="alternate" type="text/html" title="仙本那潜水之ow和aow学习" /><published>2017-01-06T00:00:00+08:00</published><updated>2017-01-06T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/06/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/06/1.html">&lt;blockquote&gt;
   &lt;p&gt;每天都是一次新的旅行，每一个和我们走过一段的人都值得感激。“生命，不长不短，刚好够用来好好看看这个世界。”&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -129,7 +174,7 @@
 
 &lt;p&gt;　　我们队第二天就出现了险情，因为我们队里有个女孩子在教练旁边游，而教练突然发现其他学员的面镜无特别大，所以就转过头去帮助她排除面镜里的雾。然而，这就导致教练没有顾及到旁边的女孩子，而女孩子也没发现，径直的向前游去了。我在队尾看的特别的真切，然而当时我的技术还不好，根本游不到那个女孩子旁边，只能眼睁睁的看着那个女孩消失在深蓝的海底。等教练发现我们少了一个人的时候，用手势问那个女孩子去哪里，我们只能回给她一个前面的手势。这个时候，教练的无助我能够真切的体会到，看着教练着急的动作我也做不出任何事情。教练曾教我们当我们找不到伙伴的时候就在原地寻找1分钟，如果找不到就要升到水面上去寻找。我们迅速升到了水面上，并在接下来的1分钟之内，看到500米开外那个女孩子也升上来了，我们大叫做手势。但是，那个女孩子估计正在惊吓中然而并没有看到我们。所以，她又下潜了想去寻找我们。当我们看到她再次下潜的时候都慌了，这个情况什么事情都有可能发生，我们并不希望悲剧。所以，我们立刻做了决定。由教练带着一个人去寻找，剩下来的2个人游到船上去寻求帮助。这个时候，我不愿再潜下去了，因为在这种地域万一再发生什么情况这就太危险了。所以，我和另一个潜伴游向了船去寻求帮助了。船上的人听到了我们的呼救马上就做出了反映，船长首先叫我们让开，等看到我们离出了与船的螺旋桨安全距离外船长就把船开到了我们所指的方向。接下来的情景我不在船上面了，所以并不知情。幸好，女孩子顺利的找到了。也许她听到了船开过的声音，话说在海底下听船的声音挺恐怖的，那种声音有种朦胧的感觉，那声音用周遭地震的声音来形容一点都不过分。试想如果在海底下要上升的过程中听到了船的声音，你根本就分不清楚声音是从哪个方向传过来的。之后，等我们上船的时候，我看到我们的教练和那个走散的女孩子眼泪就在她们眼睛中打转。这种感觉真的很不好，索性没有发生什么可怕的事情。&lt;/p&gt;
 
-&lt;p&gt;　　接下来的几天，我们都是这么度过的。由于自己慢慢的也适应了潜水，所以入水以后世界变的其妙起来，周遭的世界也有时间去细细体会了。ow就这么顺利的通过了，接下来的aow也就是在不同的岛屿之间来回下潜，也体会了洋流的速度，也在水底下喝了可乐，看了打碎的鸡蛋是什么形状。后来，慢慢发现海底下的世界越来越单调了，除了奇形怪状的珊瑚以外就是自己分不清楚的鱼类，这些鱼类大体都是小型鱼，颜色倒是很鲜艳要比只有深红，蓝，绿的珊瑚好看得多。但是，时间长了人就会审美疲劳，从而对海底下的感觉就一般般了。这段练习的过程我也没啥可以写的了。我们最终期待的只剩下了这段旅程最后的地点-诗巴丹。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">每天都是一次新的旅行，每一个和我们走过一段的人都值得感激。“生命，不长不短，刚好够用来好好看看这个世界。”</summary></entry><entry><title type="html">仙本那潜水之上课无聊篇</title><link href="http://naffan.cn/life/2017/01/04/1.html" rel="alternate" type="text/html" title="仙本那潜水之上课无聊篇" /><published>2017-01-04T00:00:00+08:00</published><updated>2017-01-04T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/04/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/04/1.html">&lt;blockquote&gt;
+&lt;p&gt;　　接下来的几天，我们都是这么度过的。由于自己慢慢的也适应了潜水，所以入水以后世界变的其妙起来，周遭的世界也有时间去细细体会了。ow就这么顺利的通过了，接下来的aow也就是在不同的岛屿之间来回下潜，也体会了洋流的速度，也在水底下喝了可乐，看了打碎的鸡蛋是什么形状。后来，慢慢发现海底下的世界越来越单调了，除了奇形怪状的珊瑚以外就是自己分不清楚的鱼类，这些鱼类大体都是小型鱼，颜色倒是很鲜艳要比只有深红，蓝，绿的珊瑚好看得多。但是，时间长了人就会审美疲劳，从而对海底下的感觉就一般般了。这段练习的过程我也没啥可以写的了。我们最终期待的只剩下了这段旅程最后的地点-诗巴丹。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">每天都是一次新的旅行，每一个和我们走过一段的人都值得感激。“生命，不长不短，刚好够用来好好看看这个世界。”</summary></entry><entry><title type="html">仙本那潜水之上课无聊篇</title><link href="http://localhost:4000/life/2017/01/04/1.html" rel="alternate" type="text/html" title="仙本那潜水之上课无聊篇" /><published>2017-01-04T00:00:00+08:00</published><updated>2017-01-04T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/04/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/04/1.html">&lt;blockquote&gt;
   &lt;p&gt;旅行虽破费钱财，却使你懂得社会。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -168,7 +213,7 @@
 
 &lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/01/06/586fa69ca9e78.jpg&quot; alt=&quot;IMG_1624&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　等吃完了晚饭后，肚子很满足。等待我们的是接下来几天的潜水课程，ow需要2天6潜，aow需要2天6潜。而刚开始学ow的时候，对我来说简直就是噩梦，从水底下上来以后我缺氧的厉害，疼痛感都让我对此行的意义产生了怀疑，不过这是后话，我会在下一篇中我是如何生不如死的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅行虽破费钱财，却使你懂得社会。</summary></entry><entry><title type="html">仙本那潜水之开启旅程篇</title><link href="http://naffan.cn/life/2017/01/03/1.html" rel="alternate" type="text/html" title="仙本那潜水之开启旅程篇" /><published>2017-01-03T00:00:00+08:00</published><updated>2017-01-03T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/01/03/1</id><content type="html" xml:base="http://naffan.cn/life/2017/01/03/1.html">&lt;blockquote&gt;
+&lt;p&gt;　　等吃完了晚饭后，肚子很满足。等待我们的是接下来几天的潜水课程，ow需要2天6潜，aow需要2天6潜。而刚开始学ow的时候，对我来说简直就是噩梦，从水底下上来以后我缺氧的厉害，疼痛感都让我对此行的意义产生了怀疑，不过这是后话，我会在下一篇中我是如何生不如死的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅行虽破费钱财，却使你懂得社会。</summary></entry><entry><title type="html">仙本那潜水之开启旅程篇</title><link href="http://localhost:4000/life/2017/01/03/1.html" rel="alternate" type="text/html" title="仙本那潜水之开启旅程篇" /><published>2017-01-03T00:00:00+08:00</published><updated>2017-01-03T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/01/03/1</id><content type="html" xml:base="http://localhost:4000/life/2017/01/03/1.html">&lt;blockquote&gt;
   &lt;p&gt;旅游的作用就是用现实来约束想象：不是去想事情会是怎样的，而是去看它们实际上是怎样的。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -206,7 +251,7 @@
 &lt;img src=&quot;https://ooo.0o0.ooo/2017/01/03/586bb0f0b7453.jpg&quot; alt=&quot;&quot; /&gt;
 &lt;img src=&quot;https://ooo.0o0.ooo/2017/01/03/586bb105053b0.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　至此，我们在仙本那的第一天算是告一段落了。这一天过的很是平淡并且劳累，但是每一次旅行开端都会是辛苦的。毕竟不像在家门口开个车就能够到达，然而我们得跨过十万八千里。话虽这么说，后来的日子就相当难过了，大太阳底下穿着紧身衣，在盐劲十足的大海里潜下几十米，小脑不断适应不同的重力情况且不停地调整作息时间让这次旅行，其实也不能说是旅行，我们就是为了考潜水来的，应该叫学下吧，变得越发困难了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅游的作用就是用现实来约束想象：不是去想事情会是怎样的，而是去看它们实际上是怎样的。</summary></entry><entry><title type="html">思考一下nodejs的exports和module.exports</title><link href="http://naffan.cn/tech/2016/12/12/1.html" rel="alternate" type="text/html" title="思考一下nodejs的exports和module.exports" /><published>2016-12-12T00:00:00+08:00</published><updated>2016-12-12T00:00:00+08:00</updated><id>http://naffan.cn/tech/2016/12/12/1</id><content type="html" xml:base="http://naffan.cn/tech/2016/12/12/1.html">&lt;p&gt;之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？&lt;/p&gt;
+&lt;p&gt;　　至此，我们在仙本那的第一天算是告一段落了。这一天过的很是平淡并且劳累，但是每一次旅行开端都会是辛苦的。毕竟不像在家门口开个车就能够到达，然而我们得跨过十万八千里。话虽这么说，后来的日子就相当难过了，大太阳底下穿着紧身衣，在盐劲十足的大海里潜下几十米，小脑不断适应不同的重力情况且不停地调整作息时间让这次旅行，其实也不能说是旅行，我们就是为了考潜水来的，应该叫学下吧，变得越发困难了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,马来西亚,自由行,潜水" /><summary type="html">旅游的作用就是用现实来约束想象：不是去想事情会是怎样的，而是去看它们实际上是怎样的。</summary></entry><entry><title type="html">思考一下nodejs的exports和module.exports</title><link href="http://localhost:4000/tech/2016/12/12/1.html" rel="alternate" type="text/html" title="思考一下nodejs的exports和module.exports" /><published>2016-12-12T00:00:00+08:00</published><updated>2016-12-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2016/12/12/1</id><content type="html" xml:base="http://localhost:4000/tech/2016/12/12/1.html">&lt;p&gt;之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？&lt;/p&gt;
 
 &lt;p&gt;后来，查阅了一下&lt;a href=&quot;https://nodejs.org/api/modules.html#modules_module_exports&quot;&gt;nodejs的官方参考手册&lt;/a&gt;，其中里面就有讲到:&lt;/p&gt;
 
@@ -219,7 +264,7 @@ exports = { hello: false };  // Not exported, only available in the module
 
 &lt;p&gt;也就是说，在起初module.exports和exports是一样的，很多人都归结为exports是module.exports的引用。如果你不清楚引用是什么概念，请你看看那这篇&lt;a href=&quot;https://cnodejs.org/topic/5231a630101e574521e45ef8&quot;&gt;文章&lt;/a&gt;，这篇文章用一个例子给你举出了他们俩的区别。但是，我对这位作者的回答不算太满意。于是我又追到了这篇&lt;a href=&quot;http://www.jb51.net/article/33269.htm&quot;&gt;文章&lt;/a&gt;。但是，我又对作者给出的结论感到迷茫。作者说“如果你想你的模块是一个特定的类型就用Module.exports。如果你想的模块是一个典型的“实例化对象”就用exports。”，我就不是很懂他说的这两种情况。&lt;/p&gt;
 
-&lt;p&gt;对于目前我的理解来说，我就是认为exports是module.exports的简写。但是这是有条件的，条件就是module.exports定义之后不能对exports操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs" /><summary type="html">之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？</summary></entry><entry><title type="html">西班牙之旅（后记）</title><link href="http://naffan.cn/life/2016/12/10/2.html" rel="alternate" type="text/html" title="西班牙之旅（后记）" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://naffan.cn/life/2016/12/10/2</id><content type="html" xml:base="http://naffan.cn/life/2016/12/10/2.html">&lt;blockquote&gt;
+&lt;p&gt;对于目前我的理解来说，我就是认为exports是module.exports的简写。但是这是有条件的，条件就是module.exports定义之后不能对exports操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js,nodejs" /><summary type="html">之前看nodejs的书籍的时候，书上来就会讲nodejs的结构同时也会带出exports和module.exports这两个词语。起初，知识想快速学习nodejs开发技巧并且能够达到上手的效果。但是，在写代码和研究代码的时候我发现有的js文件后面使用exports，而有的却用的是module.exports。经过，代码的测试发现这两个词语效果是一样的。那么我就会想既然他们俩的效果是一样的话，那为什么还要出两种方案呢？</summary></entry><entry><title type="html">西班牙之旅（后记）</title><link href="http://localhost:4000/life/2016/12/10/2.html" rel="alternate" type="text/html" title="西班牙之旅（后记）" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://localhost:4000/life/2016/12/10/2</id><content type="html" xml:base="http://localhost:4000/life/2016/12/10/2.html">&lt;blockquote&gt;
   &lt;p&gt;生活是一段奇妙的旅行，就在那一去无返的火车上。与那些新人和旧人们共同经历吧！也许这就是一个人无法抗拒的命运，有你、有我、也有他。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -273,7 +318,7 @@ exports = { hello: false };  // Not exported, only available in the module
 
 &lt;p&gt;&lt;img src=&quot;http://ooo.0o0.ooo/2016/12/10/584c41ec49c59.jpg&quot; alt=&quot;西班牙新_46&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　好了，我们的旅程已经结束了。这是我在2016年12月11日凌晨1：55写完的。距离这次的西班牙之旅已经过去了1年2个月15天了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,西班牙,自由行" /><summary type="html">生活是一段奇妙的旅行，就在那一去无返的火车上。与那些新人和旧人们共同经历吧！也许这就是一个人无法抗拒的命运，有你、有我、也有他。</summary></entry><entry><title type="html">今天研究一下Javascript的冒泡机制</title><link href="http://naffan.cn/tech/2016/12/10/1.html" rel="alternate" type="text/html" title="今天研究一下Javascript的冒泡机制" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://naffan.cn/tech/2016/12/10/1</id><content type="html" xml:base="http://naffan.cn/tech/2016/12/10/1.html">&lt;p&gt;　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。&lt;/p&gt;
+&lt;p&gt;　　好了，我们的旅程已经结束了。这是我在2016年12月11日凌晨1：55写完的。距离这次的西班牙之旅已经过去了1年2个月15天了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,西班牙,自由行" /><summary type="html">生活是一段奇妙的旅行，就在那一去无返的火车上。与那些新人和旧人们共同经历吧！也许这就是一个人无法抗拒的命运，有你、有我、也有他。</summary></entry><entry><title type="html">今天研究一下Javascript的冒泡机制</title><link href="http://localhost:4000/tech/2016/12/10/1.html" rel="alternate" type="text/html" title="今天研究一下Javascript的冒泡机制" /><published>2016-12-10T00:00:00+08:00</published><updated>2016-12-10T00:00:00+08:00</updated><id>http://localhost:4000/tech/2016/12/10/1</id><content type="html" xml:base="http://localhost:4000/tech/2016/12/10/1.html">&lt;p&gt;　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。&lt;/p&gt;
 
 &lt;p&gt;　　我们知道一个网页是由DOM（文档对象模型）控制着结构的。在HTML中很多地方都是一个标签套着另一个标签。这样的结构渲染在页面上的时候你是发现不出层级关系的。当你在页面上操作一个元素的时候，这个元素很可能不是唯一一个在一个嵌套体内有监听事件的元素。也就是说在他的上级或者下级都有可能一直在监听着同一种事件，那这个时候谁先谁后的问题就产生了。&lt;/p&gt;
 
@@ -321,40 +366,4 @@ function abc(x){
   &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/webflash/archive/2009/08/23/1552462.html&quot;&gt;http://www.cnblogs.com/webflash/archive/2009/08/23/1552462.html&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.quirksmode.org/js/events_order.html&quot;&gt;http://www.quirksmode.org/js/events_order.html&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/fangshidaima/p/Fangfang_chengzhang.html&quot;&gt;http://www.cnblogs.com/fangshidaima/p/Fangfang_chengzhang.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js" /><summary type="html">　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。</summary></entry><entry><title type="html">对于新经济形势下北京房市的观点</title><link href="http://naffan.cn/economy/2016/11/29/1.html" rel="alternate" type="text/html" title="对于新经济形势下北京房市的观点" /><published>2016-11-29T00:00:00+08:00</published><updated>2016-11-29T00:00:00+08:00</updated><id>http://naffan.cn/economy/2016/11/29/1</id><content type="html" xml:base="http://naffan.cn/economy/2016/11/29/1.html">&lt;p&gt;　　北京楼市短期观点：不看好未来一年内的北京楼市，但有值得购买的地区和房子。&lt;/p&gt;
-
-&lt;p&gt;　　全国楼市观点：不看好未来一年的全国楼市，非精选地区风险高。全国楼市两级分化将更为严重，三四线去库存压力加大，二线城市在释放完本轮需求后也将继续分化，看好杭州、厦门、武汉等。一线楼市在细化区分下螺旋上升。有几率出现地产崩盘情况，但概率不大。&lt;/p&gt;
-
-&lt;p&gt;分析：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;当下货币政策中性，显效需要时间；&lt;/li&gt;
-  &lt;li&gt;部分地区上涨过快，g20上习大大明确表示要治理楼市，在国际会议上态度不再暧昧，政策正在改变；&lt;/li&gt;
-  &lt;li&gt;银行贷款上半年超额发放，随着业绩完成和政策收紧，放款也在收紧。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　本轮楼市上升周期为2014年下半年至2016下半年，根源为大规模货币宽松刺激，并且在暴涨过程中政府仍有推波助澜的作用，并非出现管不住的情况。预计房价在未来半年内趋于平稳，明年上半年甚至有可能出现短暂下跌。但暴涨暴跌不利于国民经济和政府稳定，所以通过调控缓慢上涨概率高。个人来说，有通过杠杆取得超额收益的机会。&lt;/p&gt;
-
-&lt;p&gt;　　未来预判：对于具体房价涨跌，主要关注GDP数据，如果高于6.7，为了去除过剩产能、改革结构并为美元加息留出余地，货币政策将更为收紧，房地产将出现拐点；6.5～6.7继续维持中性货币政策，运用各种规则条文控制房价，房价小幅上涨概率大；低于6.5，国民经济可能有失速风险，就业不保，可能重新放开货币政策，房价将进入新一轮飙升计划。&lt;/p&gt;
-
-&lt;p&gt;　　应对策略：最大化利用杠杆在可以忍受的亏损范围内尽量少地投入资金，&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;购买城市核心资源区域和公共资源翘楚区域，有前景低单价高性价比的房子；&lt;/li&gt;
-  &lt;li&gt;购买一些特殊的房产；&lt;/li&gt;
-  &lt;li&gt;手握资金关注GDP情况，明年再决定买点。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;实际操作的参考与建议：首选第一种，但由于近期房价变化较大，在本人可忍受亏损的范围内房子很少了，现在正考虑第2和第3策略。但如果有增量资金合买，可选范围扩大，现在仍有适合的标的。&lt;/p&gt;
-
-&lt;p&gt;　　第一种策略，可以买北五环，东五环，南三环，西四环内或附近，和通州及新机场的房子。主要考虑城八区核心资源和北京副中心。从3月至今考虑购入房产位置为：双井、劲松、西坝河、老国展、三元桥、北新桥、石景山永乐小区、通州、三里屯、工体
-第二种策略，共发现三种：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;宽街商住两用酒店公寓，租售比1:200，总价低；&lt;/li&gt;
-  &lt;li&gt;工体财产分割公房；&lt;/li&gt;
-  &lt;li&gt;石景山永乐小区天然气爆炸后急降的房产。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　由于通州出现无房可售的情况，考虑到饥饿营销和需求释放至少到17年底市政实际入住，现有增量资金进入的情况下，采用第一种策略，首选通州。&lt;/p&gt;
-
-&lt;p&gt;本文出处：&lt;a href=&quot;http://user.qzone.qq.com/229759693/2&quot;&gt;对于新经济形势下北京房市的观点&lt;/a&gt;&lt;/p&gt;</content><author><name>胡承楠</name></author><category term="economy" /><category term="经济,房价,观点" /><summary type="html">　　北京楼市短期观点：不看好未来一年内的北京楼市，但有值得购买的地区和房子。</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="js" /><summary type="html">　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。</summary></entry></feed>
