@@ -15,7 +15,7 @@ if [ -z "$branch" ]; then
     branch='master'
 fi
 
-exe_cmd "bundle exec jekyll build"
+exe_cmd "jekyll build"
 if [ ! -d '_site' ];then
     echo "not content to be published"
     exit
