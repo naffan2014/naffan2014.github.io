@@ -276,9 +276,9 @@ pre
 
   position: relative;
   top: 35%;
-  height: 200px;
   background-color:#000000;
   opacity: 0.5;
+  padding-bottom: 30px;
 }
 
 .wide
@@ -394,7 +394,7 @@ pre
 
 img
 {
-  max-width:100%;
+  width:100%;
 }
 
 #article
@@ -407,7 +407,8 @@ img
 
 .post
 {
-  padding-bottom:30px
+  padding-bottom:30px;
+  padding: 0 30px 30px 30px;
 }
 
 .user-social
@@ -511,14 +512,14 @@ time
 {
   background-color:#f9f9f9;
   box-shadow:1px 1px 0 1px #e8e8e8;
-  min-height:200px
+  #min-height:200px
 }
 
 .project-box:hover
 {
   background-color:#fff;
   box-shadow:1px 1px 0 1px #e8e8e8;
-  min-height:200px
+  #min-height:200px
 }
 
 .project-title
@@ -576,7 +577,8 @@ time
 .card
 {
   margin-left:-40px;
-  margin-top:-10px
+  margin-top:-10px;
+  width:34%;
 }
 
 .letter p
@@ -737,6 +739,37 @@ time
 }
 
 @media screen and (max-width: 500px) {
+  .posts li{
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .posts a{
+    display: block;
+
+      width: 60% !important;
+      line-height: 25px;
+
+  }
+  .pull-right{
+    position: absolute;
+    top: 12%;
+    right: 0;
+
+  }
+  .project-post > h1{
+    font-size: 30px;
+    text-align: center;
+  }
+  .project-post > h4, .project-post > .meta{
+    padding-left: 30px;
+  }
+
+
+  .card{
+    margin: 0 !important;
+    width: 101% !important;
+  }
+
   #welcome-greeting h2 {
    font-size: 15px; 
    transition: all 0.2s ease 0s;
