@@ -1,11 +1,14 @@
 ---
 title: 拿饭-经济杂谈
+pagination: 
+  enabled: true
+  category: economy
 ---
 <div class="container" style="width:95%;">
   <div id="article">
     <center><h1>经济杂谈</h1></center>
     <ul class="posts">
-      {% for post in site.categories.economy %}
+      {% for post in paginator.posts %}
       	<li>
           <span>
             <a href="{{ post.url }}">{{ post.title }}</a>

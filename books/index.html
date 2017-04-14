@@ -1,5 +1,8 @@
 ---
 title: 拿饭-阅读书籍
+pagination: 
+  enabled: true
+  category: books
 ---
   <div class="container">
   </div>
@@ -14,7 +17,7 @@ title: 拿饭-阅读书籍
     -->
   </div>
 
-  {% for post in site.categories.books %}
+  {% for post in paginator.posts %}
     <div class="container">
       <div class="project-box">
         <div class="row">
@@ -37,4 +40,25 @@ title: 拿饭-阅读书籍
       </div>
     </div>
   {% endfor %}
+
+  <center>
+    <ul class="pagination">
+      {% if paginator.previous_page %}
+        <li><a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">上一页</a></li>
+      {% endif %}
+      {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}    
+          <li class="active"><span>{{ page }}</span></li>
+        {% elsif page == 1 %}
+          <li><a href="{{ '/list' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a></li>
+        {% else %}
+          <li><a href="{{ site.paginate_path | prepend: site.baseurl | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if paginator.next_page %}
+        <li><a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">下一页</a></li>
+      {% endif %}
+    </ul>
+  </center>
+  
 </div>
