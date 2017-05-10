@@ -5,10 +5,10 @@
 <!-- Begin Jekyll SEO tag v2.1.0 -->
 <title>MYSQL性能优化 - 拿饭网</title>
 <meta property="og:title" content="MYSQL性能优化" />
-<meta name="description" content="##优化简介 　　我们可以通过show status语句查询mysql数据库的性能。" />
-<meta property="og:description" content="##优化简介 　　我们可以通过show status语句查询mysql数据库的性能。" />
-<link rel="canonical" href="http://naffan.cn/tech/2017/05/10/01.html" />
-<meta property="og:url" content="http://naffan.cn/tech/2017/05/10/01.html" />
+<meta name="description" content="优化简介" />
+<meta property="og:description" content="优化简介" />
+<link rel="canonical" href="http://localhost:4000/tech/2017/05/10/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2017/05/10/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2017-05-10T00:00:00+08:00" />
@@ -23,8 +23,8 @@
 "@type": "BlogPosting",
 "headline": "MYSQL性能优化",
 "datePublished": "2017-05-10T00:00:00+08:00",
-"description": "##优化简介 　　我们可以通过show status语句查询mysql数据库的性能。",
-"url": "http://naffan.cn/tech/2017/05/10/01.html"}</script>
+"description": "优化简介",
+"url": "http://localhost:4000/tech/2017/05/10/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,8 +123,9 @@ var _hmt = _hmt || [];
 	</p> 
 	<hr/>
 	<div class="post">
-		<p>##优化简介
-　　我们可以通过show status语句查询mysql数据库的性能。</p>
+		<h2 id="section">优化简介</h2>
+
+<p>　　我们可以通过show status语句查询mysql数据库的性能。</p>
 
 <pre><code class="language-mysql">show status like 'value';
 </code></pre>
@@ -151,8 +152,9 @@ var _hmt = _hmt || [];
 
 <p>　　通过这些参数可以分析mysql的性能，根据分析结果，进行相应的性能优化。</p>
 
-<p>##优化查询
-　　通过对查询语句的分析，可以了解查询语句的执行情况，我们可以通过EXPLAIN和DESCRIBE来分析查询语句</p>
+<h2 id="section-1">优化查询</h2>
+
+<p>　　通过对查询语句的分析，可以了解查询语句的执行情况，我们可以通过EXPLAIN和DESCRIBE来分析查询语句</p>
 
 <pre><code class="language-mysql">explain select 语句
 </code></pre>
@@ -184,7 +186,7 @@ var _hmt = _hmt || [];
   <li>如果查询语句只有OR关键字时，如果OR前后的两个条件都是索引时，查询中将使用索引。如果前后有一个条件的列不是索引，那么查询中将不使用索引</li>
 </ul>
 
-<h2 id="section">优化插入记录的速度</h2>
+<h2 id="section-2">优化插入记录的速度</h2>
 
 <p>1.禁用索引
 　　插入记录时，mysql会根据表的索引对插入的记录进行排序。如果插入大量数据时，这些排序会降低插入记录的速度。为了解决这个情况，再插入记录之前应该先禁用索引。</p>
@@ -213,7 +215,7 @@ var _hmt = _hmt || [];
 
 <p>　　一般在批量插入数据的时候，会优先想到用多个insert语句去插入数据。但是，其实如果将所有的数据汇聚成一条insert语句，将会减少与数据库的连接等操作。</p>
 
-<h2 id="section-1">分析表、检查表和优化表</h2>
+<h2 id="section-3">分析表、检查表和优化表</h2>
 <p>　　分析表主要作用是分析关键字的分布。</p>
 
 <pre><code class="language-mysql">analyze table 表名1[,表名2...];
