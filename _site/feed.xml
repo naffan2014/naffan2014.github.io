@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-11T01:05:07+08:00</updated><id>http://localhost:4000//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">MYSQL性能优化</title><link href="http://localhost:4000/tech/2017/05/10/01.html" rel="alternate" type="text/html" title="MYSQL性能优化" /><published>2017-05-10T00:00:00+08:00</published><updated>2017-05-10T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/05/10/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/05/10/01.html">&lt;h2 id=&quot;section&quot;&gt;优化简介&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-11T01:06:40+08:00</updated><id>http://localhost:4000//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">MYSQL性能优化</title><link href="http://localhost:4000/tech/2017/05/10/01.html" rel="alternate" type="text/html" title="MYSQL性能优化" /><published>2017-05-10T00:00:00+08:00</published><updated>2017-05-10T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/05/10/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/05/10/01.html">&lt;h2 id=&quot;section&quot;&gt;优化简介&lt;/h2&gt;
 
 &lt;p&gt;　　我们可以通过show status语句查询mysql数据库的性能。&lt;/p&gt;
 
@@ -63,8 +63,9 @@
 
 &lt;h2 id=&quot;section-2&quot;&gt;优化插入记录的速度&lt;/h2&gt;
 
-&lt;p&gt;1.禁用索引
-　　插入记录时，mysql会根据表的索引对插入的记录进行排序。如果插入大量数据时，这些排序会降低插入记录的速度。为了解决这个情况，再插入记录之前应该先禁用索引。&lt;/p&gt;
+&lt;p&gt;1.禁用索引&lt;/p&gt;
+
+&lt;p&gt;　　插入记录时，mysql会根据表的索引对插入的记录进行排序。如果插入大量数据时，这些排序会降低插入记录的速度。为了解决这个情况，再插入记录之前应该先禁用索引。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;alter table 表名 disable keys;
 &lt;/code&gt;&lt;/pre&gt;
@@ -76,8 +77,9 @@
 
 &lt;p&gt;　　这块知识的应用，我已经在前边的文章有了对这块知识的应用：&lt;a href=&quot;http://naffan.cn/tech/2017/05/09/01.html&quot;&gt;《如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能》&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;2.禁用唯一性检查
-　　插入数据时，mysql会对插入的记录进行唯一性校验。这种校验也会降低插入记录的速度。可以在插入记录之前禁用唯一性检验。等到记录插入完毕后再开启。&lt;/p&gt;
+&lt;p&gt;2.禁用唯一性检查&lt;/p&gt;
+
+&lt;p&gt;　　插入数据时，mysql会对插入的记录进行唯一性校验。这种校验也会降低插入记录的速度。可以在插入记录之前禁用唯一性检验。等到记录插入完毕后再开启。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;set unique_checks=0;
 &lt;/code&gt;&lt;/pre&gt;
