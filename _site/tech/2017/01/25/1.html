@@ -5,10 +5,10 @@
 <!-- Begin Jekyll SEO tag v2.1.0 -->
 <title>通过nodejs搭建客服系统还有闲谈 - 拿饭网</title>
 <meta property="og:title" content="通过nodejs搭建客服系统还有闲谈" />
-<meta name="description" content="«««&lt; HEAD 本文所述的游云客服系统，网址为cs.17youyun.com,前端代码在https://github.com/naffan2014/customService，java端代码在https://github.com/naffan2014/customWeb 本文所述的游云客服系统，网址为cs.17youyun.com 前端程序代码customService 后端程序代码customWeb b04f639e10fb21a1a1032a7e4a1b3add00a6b3a5" />
-<meta property="og:description" content="«««&lt; HEAD 本文所述的游云客服系统，网址为cs.17youyun.com,前端代码在https://github.com/naffan2014/customService，java端代码在https://github.com/naffan2014/customWeb 本文所述的游云客服系统，网址为cs.17youyun.com 前端程序代码customService 后端程序代码customWeb b04f639e10fb21a1a1032a7e4a1b3add00a6b3a5" />
-<link rel="canonical" href="http://naffan.cn/tech/2017/01/25/1.html" />
-<meta property="og:url" content="http://naffan.cn/tech/2017/01/25/1.html" />
+<meta name="description" content="本文所述的游云客服系统，网址为cs.17youyun.com 前端程序代码customService 后端程序代码customWeb" />
+<meta property="og:description" content="本文所述的游云客服系统，网址为cs.17youyun.com 前端程序代码customService 后端程序代码customWeb" />
+<link rel="canonical" href="http://localhost:4000/tech/2017/01/25/1.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2017/01/25/1.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2017-01-25T00:00:00+08:00" />
@@ -23,8 +23,8 @@
 "@type": "BlogPosting",
 "headline": "通过nodejs搭建客服系统还有闲谈",
 "datePublished": "2017-01-25T00:00:00+08:00",
-"description": "«««&lt; HEAD 本文所述的游云客服系统，网址为cs.17youyun.com,前端代码在https://github.com/naffan2014/customService，java端代码在https://github.com/naffan2014/customWeb 本文所述的游云客服系统，网址为cs.17youyun.com 前端程序代码customService 后端程序代码customWeb b04f639e10fb21a1a1032a7e4a1b3add00a6b3a5",
-"url": "http://naffan.cn/tech/2017/01/25/1.html"}</script>
+"description": "本文所述的游云客服系统，网址为cs.17youyun.com 前端程序代码customService 后端程序代码customWeb",
+"url": "http://localhost:4000/tech/2017/01/25/1.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,43 +123,10 @@ var _hmt = _hmt || [];
 	</p> 
 	<hr/>
 	<div class="post">
-		<div id="toc-container">
-  <table class="toc" id="toc">
-    <tbody>
-      <tr>
-        <td>
-          <div id="toctitle">
-            <h2>目录</h2>
-            <span class="toctoggle">[<a id="toctogglelink" class="internal" href="#">隐藏</a>]</span>
-          </div>
-          <ul>
-            <li class="toc_level-1 toc_section-1">
-              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">本文所述的游云客服系统，网址为cs.17youyun.com,前端代码在https://github.com/naffan2014/customService，java端代码在https://github.com/naffan2014/customWeb</span></a>
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div><p>«««&lt; HEAD</p>
-<blockquote>
-  <h1 id="tocAnchor-1-1">本文所述的游云客服系统，网址为<a href="http://cs.17youyun.com">cs.17youyun.com</a>,前端代码在<a href="https://github.com/naffan2014/customService">https://github.com/naffan2014/customService</a>，java端代码在<a href="https://github.com/naffan2014/customWeb">https://github.com/naffan2014/customWeb</a></h1>
+		<blockquote>
   <p>本文所述的游云客服系统，网址为<a href="http://cs.17youyun.com">cs.17youyun.com</a><br />
 前端程序代码<a href="https://github.com/naffan2014/customService">customService</a><br />
 后端程序代码<a href="https://github.com/naffan2014/customWeb">customWeb</a></p>
-  <blockquote>
-    <blockquote>
-      <blockquote>
-        <blockquote>
-          <blockquote>
-            <blockquote>
-              <p>b04f639e10fb21a1a1032a7e4a1b3add00a6b3a5</p>
-            </blockquote>
-          </blockquote>
-        </blockquote>
-      </blockquote>
-    </blockquote>
-  </blockquote>
 </blockquote>
 
 <p>　　从12月开始，公司要我们为宝库搭建一套客服系统。本来是做通讯的我们，因为自身业务单一，技术经验少，推广比不过竞品，再加上本身通讯行业的技术壁垒较高，导致我们的产品战略从年初计划的对外产品慢慢转向了对内的支持服务。后来，公司专一重点项目后，我们也即将成为一个转型部门。在这一节骨眼上我们渴望获得一次机会进行证明，同时也期望能够在2016年底给我们自己做一个收官。经过看起来不是很顺利的沟通后，宝库同意将对客服的需求交托于我们部门做，所以这也是我们能够称的上是救命稻草的一线希望。</p>
@@ -172,22 +139,17 @@ var _hmt = _hmt || [];
 
 <p>　　起初，在选择方案上我就非常头疼。js的页面级应用对我来说并不是很难，我一个人完全应付的来。但是，对已一套客服系统来说，我开始是不知所措的。于是，我就一边去研究websocket功能的同时一边去github上找客服功能的源代码。在github上更多的是聊天室功能，我费了半天劲将github上的一个个开源程序clone到本机并运行起来却发现功能要不是很简单，要不就是从需求上就不能满足。这两我很头疼，但是最终我还是找到了一个带着聊天框且支持多聊天窗口的<a href="https://github.com/xunull/socketio-chat">开源程序</a>。搭建起来是这个样子的：</p>
 
-<p>
-  <img src="https://ooo.0o0.ooo/2017/01/25/58885a9ec28b4.png" alt="chatPi" />
-</p>
+<p><img src="https://ooo.0o0.ooo/2017/01/25/58885a9ec28b4.png" alt="chatPi" /></p>
 
 <p>　　通过阅读作者的代码发现这个程序是通过redis来进行聊天内容的同步的。也就是redis为每一个接入的用户增加一个id为键的堆栈，内容就是用户的聊天内容，说话的对象以及时间。页面渲染的数据是通过nodejs服务端的逻辑发送到websocket上，再由页面的js渲染出来。这样其实已经满足了我的基本功能了，只是实现方式不太一样。我需要做的就是将redis的功能去除，而发送消息的地方改成向nodejs中的socket.io发送即可。至于后续逻辑就在nodejs服务端中去补充即可。但是，后来java也直接找到了一个开源的websocket框架并且搭起来了，与其让我一个人写前端+后端还不如我把后端撇给java做，毕竟java是两个人负责。于是，我这里只需要做前端的html+js即可。虽然我只负责了html+js，但是我还是留着nodejs服务端的功能，运行这个项目还是需要启动nodejs服务的，原因当然是为了今后的数据我自己也可以处理，这样更加安全且方便。</p>
 
 <p>　　慢慢地，产品设计的需求也一步一步的满足。比如，上传图片、获取历史消息等。然而，页面还停留在这种乱乱的界面呢。为了达到更进一步，我利用bootstrap重新做了一套页面，套上以后确实感觉很nice。</p>
 
-<p>
-  <img src="https://ooo.0o0.ooo/2017/01/25/58885a9e24473.png" alt="chatafte" />
-</p>
+<p><img src="https://ooo.0o0.ooo/2017/01/25/58885a9e24473.png" alt="chatafte" /></p>
 
 <p>　　好了，基础的页面也有了，剩下的就是完成各种需求了。websocket有几种基础行为：onopen，onclose，onmessage，onerror。当websocket连接成功的时候会进入onopen，断开进入onclose，有消息发送过来进入onmessage。具体收到消息是什么消息以及之后的逻辑是什么都需要在onmessage中完成。我和java约定数据格式大概是这样子的:</p>
 
-<pre>
-  <code class="language-json">{
+<pre><code class="language-json">{
     "type": "action", //可触发事件的，param中参数原样返回
     "content": "是什么材质的？",
     "params": {
@@ -199,8 +161,7 @@ var _hmt = _hmt || [];
         "createTime": 1480931117000
     }
 }
-</code>
-</pre>
+</code></pre>
 <p>　　我们可以通过type来区分服务端发过来的是何种消息，也就可以实现比如聊天消息，通知消息，心跳消息等的区分了。至于onmessage中是怎么写完全可以凭自己公司的需求去写了。</p>
 
 <script async="" src="//jsfiddle.net/naffan/1jtdf5hk/embed/"></script>
@@ -211,9 +172,7 @@ var _hmt = _hmt || [];
 
 <p>　　首先，响提示音。然后需要判断当前发送过来消息的人是不是我打开当前窗口的人，如果不是就需要将用户列表增加一条未读消息的提示数字，之后不论是否都将信息添加到发送人的窗口中。那什么叫做发送人的窗口呢？我们可以这样理解，每个发送人都要有个存储聊天内容的页面，因为你现在聊天中的用户时可以直接看到他的消息。然而，那些已经接入了但是又不是你当前聊天的对象的信息也需要记录下来的，当我们切换聊天窗口时我们是需要看到他之前留下的信息的。这个功能起初git上的开源程序没有考虑到，所以我需要增加这块功能。大体思想是这样的，我用html写一个div的聊天窗口框架出来，每当一个用户接入的时候，我都将这个div里面的内容clone给一个变量，然后再声明一个MAP（其实就是在内存中开辟一个空间用来做hash存储），用这个用户的id为键，clone的变量作为值保存在其中。这样我就能够随时通过map键的方法将用户聊天窗口存起来了，当用户有信息过来的时候我将这个变量取出来，再往html中的最底部的dom标签前增加信息内容，最后再存入map中。这样我们就可以实现页面级的切换窗口查看消息内容的需求。哦对，忘了说了，那怎么记录当前聊天的用户id呢？当然，是声明个全局的js变量喽，每次切换聊天的用户id时，就将这个id替换到这个变量中。除了这个当前聊天用户的id的变量以外，还需要两个全局变量：一个是用来存储我们登录的客服id的变量，一个是用来存储已经接入用户的id的变量，这个变量可以作为记录未读数，当你切换到这个用户聊天时将未读数清零。</p>
 
-<p>
-  <img src="https://ooo.0o0.ooo/2017/01/26/5889fac0d3001.png" alt="QQ20170126-130958@2x" />
-</p>
+<p><img src="https://ooo.0o0.ooo/2017/01/26/5889fac0d3001.png" alt="QQ20170126-130958@2x" /></p>
 
 <p>　　当用户接入进来的时候，页面上就应该有响应的动作，那就是用户列表中就会增加这个新接入用户的提示，就如同上图中的用户2，用户3所示。在js上我们可以采取用jquery来写的方法，比如在发现有用户接入时我们append到用户1的html下方。但是，这样比较麻烦，因为我们需要去专门写这个方法。就因为我觉得麻烦所以我想找一个能不能有个能够相对动态的方法呢？最终我找到angularJs。angularJS是一个能够进行双向绑定的js框架，只要你在js中声明了哪个html需要进行监听，angularJS就会自动的帮你完成双向绑定功能，也即是说他会自动的添加新用户接入的提示。下面这段代码就是将用户列表这一块的html作为angularJs的侦听对象，之后再绑定一个click的方法，用来更新js中变量记录的数值以及将用户对应的聊天框显示出来。</p>
 
