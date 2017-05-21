@@ -1,4 +1,136 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://naffan.cn/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2017-05-11T15:13:30+08:00</updated><id>http://naffan.cn//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">MYSQL性能优化</title><link href="http://naffan.cn/tech/2017/05/10/01.html" rel="alternate" type="text/html" title="MYSQL性能优化" /><published>2017-05-10T00:00:00+08:00</published><updated>2017-05-10T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/10/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/10/01.html">&lt;h2 id=&quot;section&quot;&gt;优化简介&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-22T00:40:39+08:00</updated><id>http://localhost:4000//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">MYSQL中tinyint(1)的正确理解</title><link href="http://localhost:4000/tech/2017/05/21/01.html" rel="alternate" type="text/html" title="MYSQL中tinyint(1)的正确理解" /><published>2017-05-21T00:00:00+08:00</published><updated>2017-05-21T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/05/21/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/05/21/01.html">&lt;p&gt;&lt;img src=&quot;https://timgsa.baidu.com/timg?image&amp;amp;quality=80&amp;amp;size=b9999_10000&amp;amp;sec=1495385716534&amp;amp;di=ed94757005ca2587cec41c926a1ee8eb&amp;amp;imgtype=0&amp;amp;src=http%3A%2F%2Fa1.jikexueyuan.com%2Fhome%2F201506%2F15%2F3604%2F557e2e270a34e.jpg&quot; alt=&quot;mysql头图&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　今天，想起了一个关于mysql中类型长度的问题。一切的起源就是两年前和同事聊天时讨论状态位的字段用什么字段类型来存储，我还依稀记得刚进新浪工作的时候开发项目时总是将数字类型设置为int并且在长度栏填写10。程序在应用的时候没有任何问题而且也从没有关注过mysql存储类型相关细节。&lt;/p&gt;
+
+&lt;p&gt;　　可是，有的时候在和同事聊天的过程中会突然谈论起mysql的存储类型相关问题，而我也没觉得有什么可以拿出来侃侃而谈的知识。后来，有一天新浪基础架构部门发了一封关于调整所有部门数据库用户id字段类型的邮件，邮件中要求所有用到uid的地方需要改成bigint类型。&lt;/p&gt;
+
+&lt;p&gt;　　当时我正在负责新浪游戏的微坛项目，项目中的uid当然就是用int(10)来设定的。为了响应公司的要求，我就简简单单的将uid摄为了bigint(11)。在做出这一改变的过程中，我也询问了部门技术主管关于为什么要更改这个字段类型的原因，主管跟我们说因为起初新浪微博的用户id设置的就是int(10)，后来随着微博的业务发展壮大，用户量也急剧增长，原先10位的用户id已经不能够存储大于10位数了，所以让我们进行修改。比如以前用户id为10个9，后来有一个人注册了新浪微博账号，账号本应该加一位，可是因为只能够存十位所以数据库将这新进的人id覆盖了原先的id，这样就导致了问题的发生。&lt;/p&gt;
+
+&lt;p&gt;　　当时的我一听觉得很有道理啊，10个9加1则进一位就成了1和10个0 。那么我改成bigint以后将长度写为11就能够满足正常的逻辑了，而且变成了11位，不论后面进再多少个人我也完全不怵啊。于是，这个问题就这样“完美”的解决了，而之后的运行也没有发生相关的问题。直到后来的某一天在翻看mysql数据类型所占字节长度的文章时，才发现当年的我真是兔羊兔森破。直到再后来又和同事聊状态位字段应该用什么字段类型及长度存储的时候，我说用tinyint(1)来存储，有符号tinyint可以存储数值最大是127，然而后边的长度1就是限定只能存储1位，也就是0-9 。而且，当年说这番话的时候我是很坚定的回答的。我都能想到当时我的样子是多么的胸有成竹啊，然而事实并不是这个样子的。。。我对问题的理解真是有够知其一不知其二的，如果那个同事能够反问我，如果1就只能存0-9，那么int(1)不和tinyint(1)一样了吗？我想我就不会认为自己很有道理了。&lt;/p&gt;
+
+&lt;p&gt;　　好了，闲话就扯到这里。今天，我闲来有功夫就想将真正对的理解落于书面，这样的好处自然是如果接下来有理解错误的地方，我可以在未来的某个时间再接着此篇文章来进行知识的更新。那么，接下来我就以tinyint(1)这个概念进行阐述。&lt;/p&gt;
+
+&lt;p&gt;　　在mysql中不同的字段类型有着不同的长度。tinyint就被设置为1字节。在计算机中规定8位为1字节。1字节为最小单位，字节的值就代表着高电平或者低电平，用数值来表示就是1和0 。那么，8位的话存储的大小就是00000000 - 11111111(无符号二进制)，转化为十进制的话就是0-255 。所以，1字节在没有符号的时候能够存储的值可以用十进制的0-255来表示。也就是说tinyint类型可以存储256个十进制的数字。而如果有符号的话8位存储的二进制值就是10000000-01111111(-128~127)，在计算机中涉及到负数的时候都是用补码的形式存储的，具体为什么可以参看&lt;a href=&quot;http://www.ruanyifeng.com/blog/2009/08/twos_complement.html&quot;&gt;《关于2的补码》&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;　　话题扯远了，赶紧拽回来。。。&lt;/p&gt;
+
+&lt;p&gt;　　我们知道了tinyint中在有无符号时分别可以存储什么范围的十进制数以后，那么后边的括号中的1又代表的是什么呢？其实我们可以理解为&lt;strong&gt;用多长的长度来读出这个数字&lt;/strong&gt;。通过字面的意思我们可以理解为tinyint(1)就是用1位字符的长度读出tinyint值。我觉得tinyint(1)并不是很好的列子，我打算先用tinyint(2)作为例子来进行演示，之后再回头来说1的情况。那我们有两种情况：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;当我的值的长度超过2字符长度，结果会如何？&lt;/li&gt;
+  &lt;li&gt;当我的值的长度不超过2字节的长度，结果会如何？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　首先，让我们先创建一张表出来。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE TABLE `a` (
+  `id` int(11) NOT NULL,
+  `c` tinyint(2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;　　我往表中插入几个数据，&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;INSERT INTO `a` VALUES ('1','3');
+INSERT INTO `a` VALUES ('2,'33');
+INSERT INTO `a` VALUES ('3','0');
+INSERT INTO `a` VALUES ('4','111');
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　我们分别执行select操作，看看会有什么结果。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; select c from a where id =1;
++------+
+| c    |
++------+
+|    3 |
++------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; select c from a where id =2;
++------+
+| c    |
++------+
+|   33 |
++------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; select c from a where id =3;
++------+
+| c    |
++------+
+|    0 |
++------+
+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; select c from a where id =4;
++------+
+| c    |
++------+
+|  111 |
++------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　结果显示即使我设置了tinyint(2)以后查询出来的结果还是可以显示出所有位数的数据，这个(2)根本没起任何作用啊。即使我的数据的长度超过了2或者没有超过2结果都是可以正常被显示出来的。&lt;/p&gt;
+
+&lt;p&gt;　　那么，我再重新创建一次这张表，不同的是我给c增加了0填充。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE TABLE `a` (
+  `id` int(11) NOT NULL,
+  `c` tinyint(2) unsigned zerofill DEFAULT NULL,
+  PRIMARY KEY (`id`),
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　我同样插入一样的数据，然后再对他们执行查询操作。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; select c from a where id =1;
++------+
+| c    |
++------+
+|   03 |
++------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; select c from a where id =2;
++------+
+| c    |
++------+
+|   33 |
++------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; select c from a where id =3;
++------+
+| c    |
++------+
+|   00 |
++------+
+1 row in set (0.00 sec)
+
+mysql&amp;gt; select c from a where id =4;
++------+
+| c    |
++------+
+|  111 |
++------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　可以看到区别了吧，如果我设置了0填充的话。那么，数据会按照不足2位的前补0，多于2位的完全展示出来。这也就是我前面提到的“用多长的长度来读出这个数字”。&lt;/p&gt;
+
+&lt;p&gt;　　好了，到这里我们发现，不论长度取什么值，光设置他是没有任何作用的，我们还需要指定当前数据长度小于这个值时用什么来填充它。于是，tinyint(4),tinyint(16)这样的设置我们就知道在读出的时候他们会长什么样子来了吧？&lt;/p&gt;
+
+&lt;p&gt;　　这里有个mysql自己的设置细节，如果我要将c这个字段设置为0填充，那么也还需将此字段同时设置为unsigned。如果你没有作此操作，mysql会自动为你加上。mysql的官方文档&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/numeric-type-overview.html&quot;&gt;《Numeric Type Overview》&lt;/a&gt;有提到。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;if you specify ZEROFILL for a numeric column, MySQL automatically adds the UNSIGNED attribute to the column.&lt;br /&gt;
+如果你指定了ZEROFILL，MYSQL会自动的将UNSIGNED属性一并添加上。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　我想这样设置有可能是跟补码有关的。我们知道正数存放的时候前面都是0，而负数的话高位那里必须是1，所以用零填充的话一定会出问题。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry><entry><title type="html">MYSQL性能优化</title><link href="http://localhost:4000/tech/2017/05/10/01.html" rel="alternate" type="text/html" title="MYSQL性能优化" /><published>2017-05-10T00:00:00+08:00</published><updated>2017-05-10T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/05/10/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/05/10/01.html">&lt;h2 id=&quot;section&quot;&gt;优化简介&lt;/h2&gt;
 
 &lt;p&gt;　　我们可以通过show status语句查询mysql数据库的性能。&lt;/p&gt;
 
@@ -44,9 +176,18 @@
   &lt;li&gt;key:表示查询使用到的索引；&lt;/li&gt;
   &lt;li&gt;key_len:表示索引字段的长度；&lt;/li&gt;
   &lt;li&gt;ref:表示使用哪个列或常数于索引一起来查询记录；&lt;/li&gt;
-  &lt;li&gt;rows:表示查询的函数；&lt;/li&gt;
-  &lt;li&gt;extra:表示查询过程的附件信息。&lt;/li&gt;
+  &lt;li&gt;rows:表示查询的元组个数；&lt;/li&gt;
+  &lt;li&gt;filtered:表示按照条件过滤的元组个数	的百分比；&lt;/li&gt;
+  &lt;li&gt;extra:表示查询过程的附件信息。这个参数有几个常用的取值，using where表示查询使用了where语句来处理的；using temporary表示使用了内部临时（基于内存）表；using filesort表示这是order by语句的结果；using index表示使用到了索引，没有直接访问整个表数据；using join buffer表示在连接查询时没有使用索引，并且需要连接缓冲区来存储中间的结果；impossible where表示where条件时没有找到符合的数据；select tables optimized away表示仅通过使用索引从聚合函数中返回一行数据；distinct表示找到一行数据后就停止了搜索；index merges表示使用了超过一个的索引时候，并以以下格式中的一个展现出来：
+    &lt;ul&gt;
+      &lt;li&gt;using sort_union(…)&lt;/li&gt;
+      &lt;li&gt;using union(…)&lt;/li&gt;
+      &lt;li&gt;using intersect(…)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;以上三个的区别我会在以后的测试中展现出来。&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;　　DESCRIBE语句（DESC）的使用方法与EXPLAIN语句是一样的。这两者的分析结果也是一样的。DESCRIBE语句的形式如：&lt;/p&gt;
 
@@ -144,7 +285,7 @@
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://book.douban.com/subject/5450806/&quot;&gt;《mysql入门很简单》&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">优化简介</summary></entry><entry><title type="html">如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能</title><link href="http://naffan.cn/tech/2017/05/09/01.html" rel="alternate" type="text/html" title="如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能" /><published>2017-05-09T00:00:00+08:00</published><updated>2017-05-09T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/09/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/09/01.html">&lt;p&gt;&lt;img src=&quot;https://timgsa.baidu.com/timg?image&amp;amp;quality=80&amp;amp;size=b9999_10000&amp;amp;sec=1494359970180&amp;amp;di=b0128a39c2341bf21bdb2a64ce7afe0b&amp;amp;imgtype=0&amp;amp;src=http%3A%2F%2Fa1.jikexueyuan.com%2Fhome%2F201506%2F26%2Fae91%2F558cca408efa6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">优化简介</summary></entry><entry><title type="html">如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能</title><link href="http://localhost:4000/tech/2017/05/09/01.html" rel="alternate" type="text/html" title="如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能" /><published>2017-05-09T00:00:00+08:00</published><updated>2017-05-09T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/05/09/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/05/09/01.html">&lt;p&gt;&lt;img src=&quot;https://timgsa.baidu.com/timg?image&amp;amp;quality=80&amp;amp;size=b9999_10000&amp;amp;sec=1494359970180&amp;amp;di=b0128a39c2341bf21bdb2a64ce7afe0b&amp;amp;imgtype=0&amp;amp;src=http%3A%2F%2Fa1.jikexueyuan.com%2Fhome%2F201506%2F26%2Fae91%2F558cca408efa6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　在操作mysql的时候，为了理解mysql的特性我们往往需要构造出一张承载很大数据量的数据表。那么如何创建出大数据量的表呢？&lt;/p&gt;
 
@@ -409,7 +550,7 @@ Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 12000000
 
 &lt;p&gt;　　通过测试，我们可以看到用load data的方式插入数据，在数据表没有索引以及有索引的情况下，性能都要比之前的每一种方法快很多。只是，这种方法你需要导入的数据文本以及打开相关配置。在什么时候使用哪种情况，完全取决于你所处的环境之下。&lt;/p&gt;
 
-&lt;p&gt;　　PS:拥有一千万数据量的millionData.txt总大小为146.2MB，在数据库中包括三个索引的容量为41MB。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry><entry><title type="html">实现jekyll分类目录</title><link href="http://naffan.cn/tech/2017/04/15/01.html" rel="alternate" type="text/html" title="实现jekyll分类目录" /><published>2017-04-15T00:00:00+08:00</published><updated>2017-04-15T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/04/15/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/04/15/01.html">&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/15/58f1026a213b8.png&quot; alt=&quot;jekyllserve&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;　　PS:拥有一千万数据量的millionData.txt总大小为146.2MB，在数据库中包括三个索引的容量为41MB。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry><entry><title type="html">实现jekyll分类目录</title><link href="http://localhost:4000/tech/2017/04/15/01.html" rel="alternate" type="text/html" title="实现jekyll分类目录" /><published>2017-04-15T00:00:00+08:00</published><updated>2017-04-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/04/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/04/15/01.html">&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/15/58f1026a213b8.png&quot; alt=&quot;jekyllserve&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　首先，感谢作者sverrirs的开源项目&lt;a href=&quot;https://github.com/sverrirs/jekyll-paginate-v2&quot;&gt;jekyll-paginate-v2&lt;/a&gt;&lt;/p&gt;
 
@@ -437,7 +578,7 @@ pagination:
   enabled: true
   category: thinking
 ---
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="jekyll,jekyll-paginate-v2" /><summary type="html"></summary></entry><entry><title type="html">如何培养自己结构化思维的能力</title><link href="http://naffan.cn/thinking/2017/04/09/1.html" rel="alternate" type="text/html" title="如何培养自己结构化思维的能力" /><published>2017-04-09T00:00:00+08:00</published><updated>2017-04-09T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/04/09/1</id><content type="html" xml:base="http://naffan.cn/thinking/2017/04/09/1.html">&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="jekyll,jekyll-paginate-v2" /><summary type="html"></summary></entry><entry><title type="html">如何培养自己结构化思维的能力</title><link href="http://localhost:4000/thinking/2017/04/09/1.html" rel="alternate" type="text/html" title="如何培养自己结构化思维的能力" /><published>2017-04-09T00:00:00+08:00</published><updated>2017-04-09T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2017/04/09/1</id><content type="html" xml:base="http://localhost:4000/thinking/2017/04/09/1.html">&lt;blockquote&gt;
   &lt;p&gt;谈话开始的最初30秒决定一切，所以你需要一下子就抓住对方的注意力。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -507,7 +648,7 @@ pagination:
 
 &lt;p&gt;　　从表中我们可以看到。相比之下投资性价比最高的还是别墅这一款。但是，由于宣传单上缺少了太多的必要信息了，所以只能实打实的去咨询为好。另外，香江公馆和酒店公寓就稍微差点了，首先房屋是商住两用的，那就意味着房子的质量以及物业费会比住宅不划算很多。但是，价格上确实有很大优势，而这些优势也大都是建立在离城区相对较远上。另外，香江公馆周围的配套设施要比其他的房型都要齐全一些。所以，如果是真正的选择居住的话肯定会选香江公馆。至于艺术农庄这个项目来说，由于农庄的产权是又村子划拨的，他并不受政府的重视，也就是说政府是任由村子自有处置土地的，同样我们可以看出来这个35年使用权有一些问题。我们知道普通住宅使用权是70年，商用是45年。然而这个却是35年。也就是说这种农家院都是由村子管理的，好坏那就要看这个村子的知名度如何了。如果村子还没有发展起来呢，那买这种农场的意义就不存在了。毕竟风险太大，政府说啥就是啥，如果有一天政府要收回征地了，那么房子具体是不是你的也会说不清的。&lt;/p&gt;
 
-&lt;p&gt;　　好了，经过以上的分析都是出自本人思考以后得出的结论。通过这个方法起初肯定是比价生疏的，但只要勤加练习，就像别人文章中所提到的一样。刻意的这样联系，3个月后，你就刻意融会贯通了。以后再遇见类似的事情，你都可以用这种结构化的思维去解决了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思维,能力" /><summary type="html">谈话开始的最初30秒决定一切，所以你需要一下子就抓住对方的注意力。</summary></entry><entry><title type="html">《跟任何人都聊得来》</title><link href="http://naffan.cn/books/2017/04/04/2.html" rel="alternate" type="text/html" title="《跟任何人都聊得来》" /><published>2017-04-04T00:00:00+08:00</published><updated>2017-04-04T00:00:00+08:00</updated><id>http://naffan.cn/books/2017/04/04/2</id><content type="html" xml:base="http://naffan.cn/books/2017/04/04/2.html">&lt;p&gt;　　今天要分享一本书了，其实一直想做这个栏目。但是，很长时间都没有下定决心去开始做起。另外，这个页面其实已经挂在本博客上已经有半年的时间了，因为jekyll框架没有对分类的文档做分页功能，所以有可能这个分类里面的文章会慢慢的变多变长，在几年时间内这个list页不会太难以忍受，但是如果我写很多的读后感的话，想必加载起来就会费劲起来了。不过还好，现在是刚开始，这些问题不是很急，而且页面展现的样子还是不错的。所以，我打算先这么凑合用着XD&lt;/p&gt;
+&lt;p&gt;　　好了，经过以上的分析都是出自本人思考以后得出的结论。通过这个方法起初肯定是比价生疏的，但只要勤加练习，就像别人文章中所提到的一样。刻意的这样联系，3个月后，你就刻意融会贯通了。以后再遇见类似的事情，你都可以用这种结构化的思维去解决了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思维,能力" /><summary type="html">谈话开始的最初30秒决定一切，所以你需要一下子就抓住对方的注意力。</summary></entry><entry><title type="html">《跟任何人都聊得来》</title><link href="http://localhost:4000/books/2017/04/04/2.html" rel="alternate" type="text/html" title="《跟任何人都聊得来》" /><published>2017-04-04T00:00:00+08:00</published><updated>2017-04-04T00:00:00+08:00</updated><id>http://localhost:4000/books/2017/04/04/2</id><content type="html" xml:base="http://localhost:4000/books/2017/04/04/2.html">&lt;p&gt;　　今天要分享一本书了，其实一直想做这个栏目。但是，很长时间都没有下定决心去开始做起。另外，这个页面其实已经挂在本博客上已经有半年的时间了，因为jekyll框架没有对分类的文档做分页功能，所以有可能这个分类里面的文章会慢慢的变多变长，在几年时间内这个list页不会太难以忍受，但是如果我写很多的读后感的话，想必加载起来就会费劲起来了。不过还好，现在是刚开始，这些问题不是很急，而且页面展现的样子还是不错的。所以，我打算先这么凑合用着XD&lt;/p&gt;
 
 &lt;p&gt;　　其实这本书很早就读完了，大概是在2016年6月份吧。起因是部门刚刚组建，招了一批心人。你知道刚建立的部门都跟打鸡血一样，分享什么的不可能差的。所以，大家有分享工作经验的，有分享帮助工具的，居然后来还有人分享看过的电影的，而且别人还特么的听的挺带劲。由于，我是第一个做分享的人。所以，我自然有很大的主动权，就这样我选择了给大家分享一篇我的读后感，主要就是讲人与人之间的沟通的。&lt;/p&gt;
 
@@ -564,7 +705,7 @@ pagination:
 
 &lt;p&gt;　　“外向型”是指那些通过群体交流获得能量的人。他们倾向于通过交谈来思考。人越多，他们越是活跃。交谈中，他们通常都能够最好地表达自己的观点。他们反应敏捷，不会因为人多势众而恐慌。可能一开始的结论略显浅薄，不过，他们会意识到这不过是整个过程的一部分，最后会有更好的结论。&lt;/p&gt;
 
-&lt;p&gt;　　那么如何分辨你是内向型还是外向型的呢？书中也给出了一套题，做完根据所得分数就能够算出你是属于哪一类的。其实我觉得这个题没太大必要，谁不了解自己的性格啊？我们关心的是不管我们是啥性格，在遇见事儿的时候，用哪种解决方法更为合适罢了。或者说，哪种性格可以在社会上混的更开而已。另外，我们需要的是沟通技巧，比如当一个人表达了他自己的意见以后，你应该如何回复才能够让事情向着你更愿意看到的结果为导向。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="沟通,书籍" /><summary type="html">　　迈克·贝克特尔（Mike Bechtle），亚利桑那州立大学教育学博士，有多年的大学及政府部门的从业经验，现任富兰克林科威公司(Franklin Covey---由《高效能人士的七个习惯》作者Stephen R. Covey博士创建)高级培训顾问，先后为世界500强企业进行过2500多场研讨会形式的讲座，是名副其实的金牌培训师。　　著有《跟任何人都聊得来》《自信谈话第一书》《疯狂行为学》等畅销书，曾在《企业家》（Entrepreneur）杂志上发表多篇文章。</summary></entry><entry><title type="html">为什么倒热水的和倒冷水的声音不一样？</title><link href="http://naffan.cn/thinking/2017/04/04/1.html" rel="alternate" type="text/html" title="为什么倒热水的和倒冷水的声音不一样？" /><published>2017-04-04T00:00:00+08:00</published><updated>2017-04-04T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/04/04/1</id><content type="html" xml:base="http://naffan.cn/thinking/2017/04/04/1.html">&lt;p&gt;　　前几天在公司接水的时候，接了一瓶热水。热水发出的声音突然抓住了我的注意力，倒热水的声音明显比倒凉水的声音高且闷，这让我感到了浓厚的兴趣，于是本文的题目这个问题就产生在了我的脑子里。我打算过几天研究一下看看这个是为什么，不过正好我的工作有了较大的变化，拖了我一个星期之久，现在就来看看是什么原因导致的倒热水合倒凉水的声音不相同呢？&lt;/p&gt;
+&lt;p&gt;　　那么如何分辨你是内向型还是外向型的呢？书中也给出了一套题，做完根据所得分数就能够算出你是属于哪一类的。其实我觉得这个题没太大必要，谁不了解自己的性格啊？我们关心的是不管我们是啥性格，在遇见事儿的时候，用哪种解决方法更为合适罢了。或者说，哪种性格可以在社会上混的更开而已。另外，我们需要的是沟通技巧，比如当一个人表达了他自己的意见以后，你应该如何回复才能够让事情向着你更愿意看到的结果为导向。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="沟通,书籍" /><summary type="html">　　迈克·贝克特尔（Mike Bechtle），亚利桑那州立大学教育学博士，有多年的大学及政府部门的从业经验，现任富兰克林科威公司(Franklin Covey---由《高效能人士的七个习惯》作者Stephen R. Covey博士创建)高级培训顾问，先后为世界500强企业进行过2500多场研讨会形式的讲座，是名副其实的金牌培训师。　　著有《跟任何人都聊得来》《自信谈话第一书》《疯狂行为学》等畅销书，曾在《企业家》（Entrepreneur）杂志上发表多篇文章。</summary></entry><entry><title type="html">为什么倒热水的和倒冷水的声音不一样？</title><link href="http://localhost:4000/thinking/2017/04/04/1.html" rel="alternate" type="text/html" title="为什么倒热水的和倒冷水的声音不一样？" /><published>2017-04-04T00:00:00+08:00</published><updated>2017-04-04T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2017/04/04/1</id><content type="html" xml:base="http://localhost:4000/thinking/2017/04/04/1.html">&lt;p&gt;　　前几天在公司接水的时候，接了一瓶热水。热水发出的声音突然抓住了我的注意力，倒热水的声音明显比倒凉水的声音高且闷，这让我感到了浓厚的兴趣，于是本文的题目这个问题就产生在了我的脑子里。我打算过几天研究一下看看这个是为什么，不过正好我的工作有了较大的变化，拖了我一个星期之久，现在就来看看是什么原因导致的倒热水合倒凉水的声音不相同呢？&lt;/p&gt;
 
 &lt;p&gt;　　首先，从问题中就能想到，肯定是温度导致这个显现的。那么为什么热的水声音就高呢？带着这个问题首先查了下知乎的文章，从&lt;a href=&quot;https://www.zhihu.com/question/38401210&quot;&gt;《开水和冷水倒在地上的声音为什么不一样》&lt;/a&gt;看到很多的答案，还真有个相当专业的回答者从物理学的角度回答了此问题。通篇看下来，答者跳过的步骤还真是多，如何求证的推到也没有写具体，只是列举了他自己认为的关键公式而已。而最后的他给出答案是&lt;strong&gt;温度越高，声音的频率越低&lt;/strong&gt;。再让我查一下声音频率越低，声调会怎样后发现，是越低沉。好了，这样我们有了理论基础就可以打遍天下无敌手啦。其实这个是用科学公式的方法去证明这个问题现象的。那么我们要是在跟人家聊天的时候，也搬出这个公式来，那试想谁会有空跟你掰扯这个呢？&lt;/p&gt;
 
@@ -574,7 +715,7 @@ pagination:
 
 &lt;p&gt;　　最后，让我们看看&lt;a href=&quot;http://www.1010jiajiao.com/czwl/shiti_id_9a1fd2b0fe8237e085782c5d94051758&quot;&gt;初中物理&lt;/a&gt;中是怎么阐述这个问题的吧。当然，这道题是初中物理的习题，说明问题的深度不高，只是一个概念而已。&lt;/p&gt;
 
-&lt;p&gt;　　&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="自然" /><summary type="html">　　前几天在公司接水的时候，接了一瓶热水。热水发出的声音突然抓住了我的注意力，倒热水的声音明显比倒凉水的声音高且闷，这让我感到了浓厚的兴趣，于是本文的题目这个问题就产生在了我的脑子里。我打算过几天研究一下看看这个是为什么，不过正好我的工作有了较大的变化，拖了我一个星期之久，现在就来看看是什么原因导致的倒热水合倒凉水的声音不相同呢？</summary></entry><entry><title type="html">通过命令行获取NAS 320L权限</title><link href="http://naffan.cn/tech/2017/03/24/01.html" rel="alternate" type="text/html" title="通过命令行获取NAS 320L权限" /><published>2017-03-24T00:00:00+08:00</published><updated>2017-03-24T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/03/24/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/03/24/01.html">&lt;p&gt;　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。&lt;/p&gt;
+&lt;p&gt;　　&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="自然" /><summary type="html">　　前几天在公司接水的时候，接了一瓶热水。热水发出的声音突然抓住了我的注意力，倒热水的声音明显比倒凉水的声音高且闷，这让我感到了浓厚的兴趣，于是本文的题目这个问题就产生在了我的脑子里。我打算过几天研究一下看看这个是为什么，不过正好我的工作有了较大的变化，拖了我一个星期之久，现在就来看看是什么原因导致的倒热水合倒凉水的声音不相同呢？</summary></entry><entry><title type="html">通过命令行获取NAS 320L权限</title><link href="http://localhost:4000/tech/2017/03/24/01.html" rel="alternate" type="text/html" title="通过命令行获取NAS 320L权限" /><published>2017-03-24T00:00:00+08:00</published><updated>2017-03-24T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/03/24/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/03/24/01.html">&lt;p&gt;　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。&lt;/p&gt;
 
 &lt;p&gt;　　就因为这个问题刚开始我还以为是人家客服给我换回来的是一个残次品而我又亲自找他们去了一趟，后来不成我还给他们总部的客服打电话，最后给我转到了他们的高级技术人员才真正证实了这件事不是DLINK的问题，而是迅雷在安装到NAS上的脚本做了些文章。&lt;/p&gt;
 
@@ -604,7 +745,7 @@ pagination:
 
 &lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/03/24/58d40118855b1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　之后，就是要找到迅雷的脚本了，我想这个脚本应该不难找也不难改，无非就是一个.sh的文件而已。等到下次我研究出来，再发一篇文章上来。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="nas" /><summary type="html">　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。</summary></entry><entry><title type="html">说一说我理解的商业模式</title><link href="http://naffan.cn/thinking/2017/03/22/1.html" rel="alternate" type="text/html" title="说一说我理解的商业模式" /><published>2017-03-22T00:00:00+08:00</published><updated>2017-03-22T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/03/22/1</id><content type="html" xml:base="http://naffan.cn/thinking/2017/03/22/1.html">&lt;p&gt;　　今天，我在路上翻阅我在微信上关注的公众号时突然看到一篇文章是讲产品经理的文章，这篇的作者就以他个人的观点阐述了一下他理解的商业模式的概念，通读他的文章后突然就想抒发一下我自己理解的商业模式了。商业模式这个词近几年我是频频看到过，但每次都对这个词有各种的不懂，今天正好又再一次看到了这个词汇，所以就想逼着自己去整理下自己对商业模式这个词的理解，我不能说我对这个词有什么高谈论阔或者深入的了解，只是觉得我应该自己去真正意义上的思考一下了。&lt;/p&gt;
+&lt;p&gt;　　之后，就是要找到迅雷的脚本了，我想这个脚本应该不难找也不难改，无非就是一个.sh的文件而已。等到下次我研究出来，再发一篇文章上来。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="nas" /><summary type="html">　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。</summary></entry><entry><title type="html">说一说我理解的商业模式</title><link href="http://localhost:4000/thinking/2017/03/22/1.html" rel="alternate" type="text/html" title="说一说我理解的商业模式" /><published>2017-03-22T00:00:00+08:00</published><updated>2017-03-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2017/03/22/1</id><content type="html" xml:base="http://localhost:4000/thinking/2017/03/22/1.html">&lt;p&gt;　　今天，我在路上翻阅我在微信上关注的公众号时突然看到一篇文章是讲产品经理的文章，这篇的作者就以他个人的观点阐述了一下他理解的商业模式的概念，通读他的文章后突然就想抒发一下我自己理解的商业模式了。商业模式这个词近几年我是频频看到过，但每次都对这个词有各种的不懂，今天正好又再一次看到了这个词汇，所以就想逼着自己去整理下自己对商业模式这个词的理解，我不能说我对这个词有什么高谈论阔或者深入的了解，只是觉得我应该自己去真正意义上的思考一下了。&lt;/p&gt;
 
 &lt;p&gt;　　最近也同时在读一本书，书的名字叫&lt;a href=&quot;https://item.jd.com/11435655.html&quot;&gt;《如何阅读一本书》&lt;/a&gt;，书中就阐述了一些关于自己是否真正吸纳到了真正属于自己的知识。书中大概的意思就是说，作者写出的文字你是否理解是可以通过读者用自己的话语重新表达一番作者的意思，如果用自己的话阐述出来的意思和作者基本一致，那么就算读者真真正正的理解了作者所写所想，然而如果读者不能完成而总是借用作者的词语的话那么就是所谓的不懂。我深深的信服这句话，之前也看过一篇文章讲到知识和信息的关系，那篇文章说网络上的信息很多，任何人都可以获取到同样的信息，然而要使这个信息为己所用就要通过自身的理解去消化信息，从而让信息变成自己的知识。所以说，这篇网络上的文章和这本书中所讲是不谋而合的。所以，我才试图逼着自己去消化我看到过的信息。而这篇文章就是我在实践这个道理，不论我所写的是多么的词不达意。只要我尝试着去做，一次两次写不出深意，然而百八十次自然就会融会贯通。&lt;/p&gt;
 
@@ -627,7 +768,7 @@ pagination:
 
 &lt;p&gt;　　现在，很多人都解释过商业模式一词。可是，一个企业最看重的就是自己的挣钱诀窍的涉密性。人家不可能平白无故的就让外人通过几句话的分析就能够摸透其中的奥秘吧。所以，也就是说我们所能够分析到的商业模式是人家的皮毛而已，这些书面上的东西拿到真实的场景里，哪个能够快速并且正确的起效呢？想必是没有吧。但是，我想说商业模式必定是经过当事人很长尝试出来的结果，这里面包括成功与失败。所以，这个模式就是人家的血泪史的见证。他们在慢慢的重构自己的思想和方向，从而达到了适合他们自己的商业模式。而我们完全可以窥探到他们用的方法。即使得不到与他们完全一致的方法，至少这也是自己来迭代出来的一套思想。&lt;/p&gt;
 
-&lt;p&gt;　　你们会不会感觉我写这篇文章来讲商业模式很空虚乏味呀？我真心认为如果你读到这肯定会说这写的是什么玩意啊。但是，我确实想说一下，现在在网上找到的讲商业模式的文章哪个不是说的云里雾里的呢？有那几个能够接地气的呢？如果真的接地气的话，我相信商业模式早就能有个标准答案公布在网上了。我只是将我的个人不成熟的思想记录在这里，等将来有了更加深刻的理解以后再重新修改本篇文章呗。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考,商业模式" /><summary type="html">　　今天，我在路上翻阅我在微信上关注的公众号时突然看到一篇文章是讲产品经理的文章，这篇的作者就以他个人的观点阐述了一下他理解的商业模式的概念，通读他的文章后突然就想抒发一下我自己理解的商业模式了。商业模式这个词近几年我是频频看到过，但每次都对这个词有各种的不懂，今天正好又再一次看到了这个词汇，所以就想逼着自己去整理下自己对商业模式这个词的理解，我不能说我对这个词有什么高谈论阔或者深入的了解，只是觉得我应该自己去真正意义上的思考一下了。</summary></entry><entry><title type="html">看《大秦帝国之崛起》有感</title><link href="http://naffan.cn/thinking/2017/03/08/01.html" rel="alternate" type="text/html" title="看《大秦帝国之崛起》有感" /><published>2017-03-08T00:00:00+08:00</published><updated>2017-03-08T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/03/08/01</id><content type="html" xml:base="http://naffan.cn/thinking/2017/03/08/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　你们会不会感觉我写这篇文章来讲商业模式很空虚乏味呀？我真心认为如果你读到这肯定会说这写的是什么玩意啊。但是，我确实想说一下，现在在网上找到的讲商业模式的文章哪个不是说的云里雾里的呢？有那几个能够接地气的呢？如果真的接地气的话，我相信商业模式早就能有个标准答案公布在网上了。我只是将我的个人不成熟的思想记录在这里，等将来有了更加深刻的理解以后再重新修改本篇文章呗。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考,商业模式" /><summary type="html">　　今天，我在路上翻阅我在微信上关注的公众号时突然看到一篇文章是讲产品经理的文章，这篇的作者就以他个人的观点阐述了一下他理解的商业模式的概念，通读他的文章后突然就想抒发一下我自己理解的商业模式了。商业模式这个词近几年我是频频看到过，但每次都对这个词有各种的不懂，今天正好又再一次看到了这个词汇，所以就想逼着自己去整理下自己对商业模式这个词的理解，我不能说我对这个词有什么高谈论阔或者深入的了解，只是觉得我应该自己去真正意义上的思考一下了。</summary></entry><entry><title type="html">看《大秦帝国之崛起》有感</title><link href="http://localhost:4000/thinking/2017/03/08/01.html" rel="alternate" type="text/html" title="看《大秦帝国之崛起》有感" /><published>2017-03-08T00:00:00+08:00</published><updated>2017-03-08T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2017/03/08/01</id><content type="html" xml:base="http://localhost:4000/thinking/2017/03/08/01.html">&lt;blockquote&gt;
   &lt;p&gt;人生据说是一部大书。假使人生真是这样，那么，我们一大半作者只能算是书评家，具有书评家的本领，无须看得几页书，议论早已发了一大堆，书评一篇写完交卷。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -645,23 +786,4 @@ pagination:
 
 &lt;p&gt;在战国时期，七个国家都受制于其他国家，如果一个国家过于强盛其他六国均会想尽一切办法来削弱之。所以，在这个年代国家之间的勾心斗角屡见不鲜，比如田文的联合齐魏韩伐楚，合纵韩魏伐秦，六国合纵伐齐等等层出不穷，其实位的都是一个利字。这也跟现如今的国家与国家之间的关系一样，此消彼长，互相制约。目前，“萨德”一事就因朝韩关系紧张所致，而美国则是韩国的依靠在韩国意欲建立反导弹系统，而防御范围却涉及我国大陆安全，现在闹得沸沸扬扬，中国已经对韩国采取了经济上的制裁，比如关闭韩企乐天超市，禁止韩国旅游团等等。我们生活在这个风云跌宕的时代，时时刻刻都会感受到国际上的压力。所以，国与国之间的斗争是从未停止的，也不会停止。最终只会有两种结果，要不就是自己灭亡，要不就是灭亡他国，最终走向统一。而说回秦国，秦国也是从一个弱小国家开始，经过商鞅变法后才慢慢恢复元气从而变得越来越强大，而后经过秦人几代人的努力，才在天时地利人和的条件下统一了中国。论能力嬴稷的才能是知人善任，而又能攻于人心。他很好的利用了苏秦的反间计，重用了小人之心的范雎，这是一般的人很难做到的。我想嬴稷之所以这样是跟他继位时的经历有关的。嬴稷在他22岁的时候加冠亲政，但是一直就是王权旁落，而宣太后掌握政权，穰侯掌握军权，自己俨然是个傀儡，这个问题他自己也是意识的到的。就因为人都有种想被别人认可的心态，所以他才自作主张以协商之由哄楚王前来而后扣押楚王，信任田文而后田文受排挤不被重用又回到齐国后合纵攻秦。这两件事情皆说明了他想摆脱母亲的掌权去做自己认为合适的决策，但是最后还是由于自己的决定过于草率引来了意想不到的结果，最终还是要让宣太后和穰侯替他擦屁股。他是希望自己来管理国家大事的，所以他一直想找一些能够读懂他心思的人来辅佐他，而到了后期在他思想已经形成体系的时候碰到了范雎，在大家皆反对认范雎为丞相时，嬴稷毅然决然的启用了范雎。而范雎在王稽府上跟王稽说要想让王上启用他的时候，他说出了要想让王启用他就要了解嬴稷的喜怒哀乐，爱恨情仇。真因为范雎深深的赢得了嬴稷的内心，同时也赢得了这个丞相。在秦国的发展中我们可以看到嬴稷并没有选错人，而这更佐证了嬴稷会用人。&lt;/p&gt;
 
-&lt;p&gt;让我们再来说说白起，论战法白起算是门道高手，他被但是的人成为战神，都说只要战争拥有他就是必胜的标示，以至于当时的人不知秦王都不会不知白起。就这样白起的名声很大，以致于盖过了君王。中国有句古话“功高盖主”，一旦这样的话难免会让王上对他起猜疑，何况嬴稷旁边还有个范雎呢。在&lt;a href=&quot;http://baike.baidu.com/item/长平之战/66472?sefr=cr&quot;&gt;长平之战&lt;/a&gt;中，白起担起了统帅一职，经过自己对兵书的研读和久经沙场的经验最终打败了赵军。然而，军粮不够用，赵国的降兵如何处置让他没有办法。于是，他奏请了一封信给秦王，想让秦王拿主意。然而，嬴稷准备发诏的时候被范雎拦住了。最终，写了一纸空诏寄回给了白起，榆次同时又把白起的媳妇带到了白起身边。白起当然明白空诏就是让自己自行处理，而让老婆过来就是让自己做一道选择题，是选家还是选国。最终，白起还是在黑夜中趁着40万赵军熟睡的情况下杀死了这40万的降兵。而后，白起准备一举拿下邯郸时，嬴稷听信范雎意见命白起收兵回城，白起听到后叹气时机已过。后来，白起以病为由不再领兵打仗，任由嬴稷跑来几趟，皆是拒绝带兵出征。而后，嬴稷认为白起有可能造反就赐给他宝剑让他自问。其实，比起说白起不带兵是怕输掉这场战争，不如说是白起对范雎的一种抗拒。白起肯定会知道，自己的谗言肯定是范雎这小子闹得，所以他用这种态度来保持无作为。然而，当嬴稷最终认为白起忠的是国家，而非自己。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考,观后感" /><summary type="html">人生据说是一部大书。假使人生真是这样，那么，我们一大半作者只能算是书评家，具有书评家的本领，无须看得几页书，议论早已发了一大堆，书评一篇写完交卷。</summary></entry><entry><title type="html">看《大明王朝1566嘉靖与海瑞》有感</title><link href="http://naffan.cn/thinking/2017/02/26/1.html" rel="alternate" type="text/html" title="看《大明王朝1566嘉靖与海瑞》有感" /><published>2017-02-26T00:00:00+08:00</published><updated>2017-02-26T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/02/26/1</id><content type="html" xml:base="http://naffan.cn/thinking/2017/02/26/1.html">&lt;blockquote&gt;
-  &lt;p&gt;有了门，我们可以出去;有了窗，我们可以不必出去。 –钱钟书&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　最近，机缘巧合在优酷看到了这部电视剧。因为家里有人在看所以顺便打开来就是随便地看一看，心想如果没什么意思或者拍的都是小鲜肉之类的就不继续看下去了，如果拍的是历史题材那么正好可以补一下我对中国古代的历史知识的匮乏。于是，就打开了这个视频。记得刚打开的时候演的是冯宝在午门之外杖打周云逸，直接就给观众一个大大的悬念，之后镜头一转就出现了&lt;a href=&quot;http://baike.baidu.com/item/朱厚熜/2412426&quot;&gt;嘉靖皇帝&lt;/a&gt;，一看原来是&lt;a href=&quot;http://baike.baidu.com/subview/27898/5991996.htm&quot;&gt;陈宝国&lt;/a&gt;演的嘉靖，这一来对此剧倍感兴趣。原因是，很早看过大宅门，陈宝国在剧中给我的印象极其深刻。慢慢的随着电视剧的深入一集比一集精彩，再加上演员们都是戏骨，刻画的历史人物极其逼真。另外，也不得不说群众演员演的也极其认真，可见本剧导演&lt;a href=&quot;http://baike.baidu.com/item/张黎/2786610&quot;&gt;张黎&lt;/a&gt;功底之深。这个剧可要比当下也很流行的《大秦帝国之崛起》拍的要好上不止好几倍。&lt;/p&gt;
-
-&lt;p&gt;　　那么，我为什么想写一篇多后感呢？究其原因是因为在深入看这部剧的同时也让我不得不让我积极的思考一个问题，剧中人物的性格与做事动机皆由之前的某个细节或者消息而引出，这些消息在剧中是有过交代的 ，在我看的过程中确实没有引起我的注意，但随着事件的发生当我再倒回去重新看的时候发现自己确实没有理解剧中已经明确表达过的含义。这种情况不是一两次而已，基本上本剧每一集都会包含大量信息。所以，这让我产生了一种想法，我应该尝试着去写一篇我的理解为好，即便是有些肤浅也好，逻辑不清也罢，只要我用心的去抽丝拔茧的捋一捋自己的思路，事不过三次而，必能给自己一个在思想上的提升。&lt;/p&gt;
-
-&lt;p&gt;　　上面说了那么多，也已经表达出了我的作案动机，剩下的就是我如何去思考了。于是，我重新跟着本剧快速的写下了大纲。
-&lt;img src=&quot;https://ooo.0o0.ooo/2017/02/27/58b3030e54da6.jpg&quot; alt=&quot;IMG_0523&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　首先，要想理解剧中每个人物的动机就要先熟络剧中人物的关系。所有人的boss当然是嘉靖皇帝，嘉庆皇帝的要务就是管理国家的同时制衡手下的权势，同时也在为自己的修仙事业坚定不移的花费大笔的钱财。由于嘉庆皇帝几十年的不上朝，国家的所有朝务全权交给内阁来处理，这个关系大家都明白，皇帝本人如若想要修仙就不得不投入大笔的时间去吃丹练仙，那么国家的事务只能找一个部门替他管理，那么内阁就是不二之选。内阁成员由严嵩和徐阶组成，严嵩是内阁首辅，徐阶是次辅兼户部尚书，也就是说严嵩是徐阶的老大，但是徐阶是一直想当首辅的，然而严家的势力极其庞大所以一时也没有好办法。除了内阁是第一集团中的老大以外还有一个部门叫做司礼监，这个部门是由太监组成，司礼监的任务就是照顾皇帝的衣食住行并且也有极其重要的发言权，所以明朝的太监相比于其他朝代都要可怕。司礼监掌印太监是吕芳，也就是司礼监的老大，在他下边有几个秉笔太监，其中包括黄锦和陈洪。由于太监的独特身份，他们深知趋炎附势的重要性，而趋炎附势是他们能够在宫中活下来的本事。这里最趋炎附势的是太监陈洪，他是时刻都想坐上掌印的位置的，所以他时时刻刻在想着能够让吕芳下台，而黄锦却是一名忠厚老实的太监，他对吕芳可谓忠心耿耿。这两个大集团我已经陈述清楚了，还有一个集团就是皇上的儿子裕王，裕王是将来要接替嘉靖位置的人，虽然现在说话没有人会听，但是大家都会对他客客气气。而裕王最需要制衡的对象就是严势力，裕王手下有户部侍郎高拱，兵部侍郎张居正。严嵩手下有他儿子吏部工部侍郎严世蕃。另外，还有一些比较重要的人物像太监杨金水，商人沈一石等我就不一一说了，只要知道杨金水是给皇上办事就行了。在明确了人物关系以后，我们就可以按照剧情的发展来抽丝拔茧的分析剧中人物的动机了。&lt;/p&gt;
-
-&lt;p&gt;　　所有的一切都是由于国库亏空，皇帝开启“改稻为桑”的国策开始。大致的剧情就是国策已经由内阁商讨出来以后，下发到浙江去实行。但是，老百姓本来就背着苛监杂税的重担还要谋生计，这朝廷说的政策要老百姓说改就改，那么粮食也没产出自己又产不出桑，只能抗议不干活。朝廷的政策执行不下去，贪官污吏就使尽各种伤天害理的办法来让老百姓卖田，让大户收田。然而，大户压价买，老百姓不肯卖。事情就僵住了。这一来浙江的两位贪官何茂才与郑必昌在严的势力支持下毁坝淹田，后又被胡宗宪分流救民，制止了所有的郡县被淹，只淹了淳安建德两县。最终，引出了本剧主角&lt;a href=&quot;http://baike.baidu.com/view/7575.htm&quot;&gt;海瑞&lt;/a&gt;与海瑞将来的生死之交&lt;a href=&quot;http://baike.baidu.com/link?url=iRK8Y11ou8SvuzdImCsh_9lrijr4YLSmsveWVXr-C9Q4YfxIvhDGDh75Vg1hctstDRrUpqIl4eRtNgyzSp5oriFe9UjaFHALep2g72ZGMkgEmVv6ipBjjAWXmKUh24pW&quot;&gt;王用汲&lt;/a&gt;上任淳安建德两县的知县。而后，随着海瑞不要命的对刚腐败之风，终于刚死了皇上。&lt;/p&gt;
-
-&lt;p&gt;　　每次看到海瑞直面挑战腐败风气的时候，我都会为他叫好。一是佩服这种刚正不阿的人，二是佩服海瑞的知识，三是看到一个渺小的力量在对抗着强大的不正之风还能取得上风，随着一声巨吼把他们打的体无完肤。海瑞刚出来的时候是刚何茂才郑必昌2人，这两个人确实罪大滔天，被海瑞这么刚确实看的过瘾，让我连连叫好。慢慢的，随着此2人被绳之以法后，新上任的杭州巡抚赵贞吉，因为东海战事急需用钱购粮，而国库亏空发不出军粮，赵贞吉只能用一些不正规的手段解决，然而海瑞知道以后仍是站在百姓的角度出发制止赵贞吉。当看到这里的时候有个疑问徘徊在我的脑中，海瑞这样做到底是对不对呢？我想万事皆有正反两个方面，不能同一而论。那么评判海瑞对与不对就要分事，海瑞的刚正不阿在什么事情上是对的，在什么事情上是不对的。在贪官污吏贪污枉法之事上那么海瑞是真正的替百姓做主，这事儿做的对。但在国有外乱内无良策之下，赵贞吉做出出格之事海瑞还照刚不误，那就有些不食人间烟火了。然而海瑞是站在道德的最高点上做事，君臣确实无话可说。可是，由于当时的时局动荡，大家都在伺机而攀附权贵的情况下，海瑞的存在确实与别人格格不入。让我们试想如果海瑞是你的朋友，当你做了有违道德的事情的话，他会按照公认的道德标准批的你体无完肤，我想尽管他是你再要好的朋友，以后做事你都会避而远之了吧。中国的社会自古就是讲究人脉的社会，古往今来哪个权贵之人不希望自己人能够占据更多的话语权的位置？这说明人都是需要团体的，就连现在的世界各国也在不断拉拢能够帮助自己的国家吧。俗话说朋友多了好办事，但是如果你身边有个海瑞，他随时都有可能站在道德的制高点上去评判你，那这岂不是自己给自己身边留下了一个定时炸弹？&lt;/p&gt;
-
-&lt;p&gt;　　六心居酱菜铺每年都会通过严嵩之手献给皇帝20坛酱菜。可是在严党倒台之际，平时多少人都梦寐以求想找严嵩题块字匾，但是现在严嵩主动给六心居题匾，六心居都不敢要了。这是为什么呢？因为大家都知道严党倒台以后朝廷会清算严党，在这个时候大家躲还来不及呢，更别说要让严嵩题块匾了。可是，严嵩偏偏题了，而后皇上在这个心上画了一撇哼了六必居。自此，六必居的生意一下子变的门可罗雀了。海瑞来京上任的时候路过了六必居，他明知道六必居是皇上在心上加了一撇，他还是最后给这匾做了六句话的解释。像这种事情不论在哪个朝代就连现如今，也不是一般人能够做的出来的吧。然而，海瑞就能够做得出来。可他为什么能够做得出来呢？皆因为他想为六必居伸冤。而后，当皇上知道了次事以后龙颜大怒，但是也拿他没什么办法，最后只得将海瑞写的这六句话让工匠们赶紧刻出匾来和六必居那三个字一同悬在门梁之上。皇上这么做可谓是聪明至极，其实皇上比谁都明白，之前是自己做错了，经海瑞那么一闹自己才发现原来给老百姓开的酱菜脯带来了多大的灾难，然而身为一国之君又不能公开给一名举人道歉，将这六句话刻成匾算是一个折中的办法。我想说的不是嘉靖要比海瑞聪明，而是嘉靖知道如何维护双方的关系。那天和别人聊天，聊到了道家法家和儒家。人家就告诉我很多管理的行家都有一种共识也是很多较为理想的管理层级定位：基层干部做“法家”，中层干部做“儒家”，高层领导做“道家”。法家主张“法制”，儒家主张“德志”而道家主张“无为而治”，这也是嘉靖皇帝一直提倡的口号：无为而治。我们可以看看现如今的整个管理阶层其实也蕴藏着这个理论。最小的官是用制度来管理，中层领导则是主张用以德感人，而最高的领导都是具有超前的理念，正确的决策。&lt;a href=&quot;http://cache.baiducontent.com/c?m=9f65cb4a8c8507ed4fece763105392230e54f7366596964c68d4e419ce3b46120720b8ea79750d5c8896212d46f81c1bb9ac68292a497be4c699d21981eeda7268db7b6a23409b4717d112abdc46529b66cf04fdea44a7ecff25e3a9c5a2dd4323bb44737a97f0fa4d7011dd1cfa034192b1ef48025f61ad9c3a72885e6059ee3436b6&amp;amp;p=882a9644d0d017fc57ef8a3b424d8d&amp;amp;newp=cb7fd502a4904ead13bd9b7d0c108c231610db2151d6d5156b82c825d7331b001c3bbfb423231b07d1c27e6405af4d56ecf03d77370025a3dda5c91d9fb4c57479c3&amp;amp;user=baidu&amp;amp;fm=sc&amp;amp;query=%B5%C0%BC%D2+%B7%A8%BC%D2+%C8%E5%BC%D2&amp;amp;qid=e3ef385a00035702&amp;amp;p1=9&quot;&gt;查看更多&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;　　像海瑞这种个性的人在社会上当然会有，但确实凤毛菱角。正因为他的刚正不阿对民那才叫青天大老爷，对上级可谓心头大患。如果，社会上像海瑞这样的人到处都是，不知道这样的社会会是什么模样？古话说每个人心中都是圣贤的，也就是说每个人心底都是有道德标准的，只是有高有低而已。当高标准道德碰见低标准道德时，不能说低标准道德就为缺德，而低标准道德也不会把高标准道德作为楷模。那世间会有一种尺子能给出道德的标准吗？我想是有的，因为我们知道百善孝为先。这个孝字就是高标准道德和低标准道德都共有的。因为他们俩是有交集的，所以他们之间肯定会有标准。我们不妨考虑自己所站的角度来衡量他们，这也是我能想到的第一种衡量标准。也就是说你站的越高，所受到的道德标准约束就约多。你站的越低，所受到的道德标准就约少。让一个捡破烂的和一个公务员交谈，你会发现他们所处的层次是不一样的，自然说出来的话就不一样，正因为他们所处的角度不一样，才使他们能够说出不一样的话来。所以，海瑞说到底还是一个举人，虽有真才实学，但是不懂得韬光养晦之道，正因为他所站的角度都是从民出发，所以天生站的低，看的就近，只是把百姓的需求当成头等大事，而没有顾全国家之道。嘉靖是皇帝自然站的高看得远，他站的角度自然是以国家出发，所以对事物看的更加透彻。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考,观后感" /><summary type="html">有了门，我们可以出去;有了窗，我们可以不必出去。 –钱钟书</summary></entry></feed>
+&lt;p&gt;让我们再来说说白起，论战法白起算是门道高手，他被但是的人成为战神，都说只要战争拥有他就是必胜的标示，以至于当时的人不知秦王都不会不知白起。就这样白起的名声很大，以致于盖过了君王。中国有句古话“功高盖主”，一旦这样的话难免会让王上对他起猜疑，何况嬴稷旁边还有个范雎呢。在&lt;a href=&quot;http://baike.baidu.com/item/长平之战/66472?sefr=cr&quot;&gt;长平之战&lt;/a&gt;中，白起担起了统帅一职，经过自己对兵书的研读和久经沙场的经验最终打败了赵军。然而，军粮不够用，赵国的降兵如何处置让他没有办法。于是，他奏请了一封信给秦王，想让秦王拿主意。然而，嬴稷准备发诏的时候被范雎拦住了。最终，写了一纸空诏寄回给了白起，榆次同时又把白起的媳妇带到了白起身边。白起当然明白空诏就是让自己自行处理，而让老婆过来就是让自己做一道选择题，是选家还是选国。最终，白起还是在黑夜中趁着40万赵军熟睡的情况下杀死了这40万的降兵。而后，白起准备一举拿下邯郸时，嬴稷听信范雎意见命白起收兵回城，白起听到后叹气时机已过。后来，白起以病为由不再领兵打仗，任由嬴稷跑来几趟，皆是拒绝带兵出征。而后，嬴稷认为白起有可能造反就赐给他宝剑让他自问。其实，比起说白起不带兵是怕输掉这场战争，不如说是白起对范雎的一种抗拒。白起肯定会知道，自己的谗言肯定是范雎这小子闹得，所以他用这种态度来保持无作为。然而，当嬴稷最终认为白起忠的是国家，而非自己。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思考,观后感" /><summary type="html">人生据说是一部大书。假使人生真是这样，那么，我们一大半作者只能算是书评家，具有书评家的本领，无须看得几页书，议论早已发了一大堆，书评一篇写完交卷。</summary></entry></feed>
