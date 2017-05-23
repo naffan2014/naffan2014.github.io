@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.1.0 -->
+<title>MYSQL中浮点类型的区别 - 拿饭网</title>
+<meta property="og:title" content="MYSQL中浮点类型的区别" />
+<meta name="description" content="" />
+<meta property="og:description" content="" />
+<link rel="canonical" href="http://localhost:4000/tech/2017/05/23/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2017/05/23/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-23T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"@context": "http://schema.org",
+"@type": "BlogPosting",
+"headline": "MYSQL中浮点类型的区别",
+"datePublished": "2017-05-23T00:00:00+08:00",
+"description": "",
+"url": "http://localhost:4000/tech/2017/05/23/01.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/list">文章列表</a></li>
+      <li><a href="/life">生活闲杂</a></li>
+      <li><a href="/thinking">沈思默想</a></li>
+      <li><a href="/economy">经济杂谈</a></li>
+      <li><a href="/books">阅读书籍</a></li>
+      <li><a href="/links">精彩链接</a></li>
+      <li><a href="/about">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <li><a href="/list">文章列表</a></li>
+    <li><a href="/life">生活闲杂</a></li>
+    <li><a href="/thinking">沈思默想</a></li>
+    <li><a href="/economy">经济杂谈</a></li>
+    <li><a href="/books">阅读书籍</a></li>
+    <li><a href="/links">精彩链接</a></li>
+    <li><a href="/about">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<script src="/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+      $.toc.clickHideButton();
+  });
+</script>
+
+<div id="article">
+	<div class="article-title">MYSQL中浮点类型的区别</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 05/23/17</small>
+	</p> 
+	<hr/>
+	<div class="post">
+		<p><img src="data:image/png;base64,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" alt="mysql" /></p>
+
+<p>　　除了<a href="http://naffan.cn/tech/2017/05/21/01.html">《MYSQL中tinyint(1)的正确理解》</a>所述的整形以外，mysql还有两种小数类型，一种是定点数类型（decimal,numeric），一种是浮点数类型(float,double)。</p>
+
+<p>　　我们先来说说定点数，他存的值一定是准确的。所以说这个类型通常是用来做需要保存准确度的数值类型的，比如金额类型的数据。numeric其实是被decimal实现的，所以说在意义上来将，numeric和decimal是同一个道理。</p>
+
+<p>　　decimal(M,N)，其中M代表位数的总和，N代表小数点的位数，不足则补零，超出的则用四舍五入的方式进位到小数点N位，举个例子：</p>
+
+<pre><code>decimal(5,3)。
+</code></pre>
+
+<p>　该字段可以存储decimal类型的字段，字符总数为5位，小数点3位。也就是说这个字段可以存储任何5个数字以及3个小数，所以存储范围是-99.999~99.999。通过测试，我们可以总结一下几个规律：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>输入</th>
+      <th>结果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <td>111.111</td>
+      <td>out of range value</td>
+    </tr>
+    <tr>
+      <td>11111</td>
+      <td>out of range value</td>
+    </tr>
+    <tr>
+      <td>1.1112</td>
+      <td>1.111</td>
+    </tr>
+    <tr>
+      <td>1.1115</td>
+      <td>1.112</td>
+    </tr>
+    <tr>
+      <td>9.9998</td>
+      <td>10.000</td>
+    </tr>
+    <tr>
+      <td>99.9998</td>
+      <td>out of range value</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>　　让我们来关注下如果没有设置小数点位数的时候，decimal会是什么样子。比如，我设置decimal(5)，它其实就跟decimal(5,0)是等价的。也就是说这种情况下是没有小数的，如果你非要添加小数的话，他最终还是会按照四舍五入的方法进位至个位的最后存入数据库。</p>
+
+<p>　　如果你在设置decimal的时候不给他设置M值，那么mysql会默认给他赋成decimal(10)的。</p>
+
+<p>　　那么decimal最大的长度能够设置成多长呢？</p>
+
+<blockquote>
+  <p>The maximum number of digits for DECIMAL is 65, but the actual range for a given DECIMAL column can be constrained by the precision or scale for a given column. When such a column is assigned a value with more digits following the decimal point than are permitted by the specified scale, the value is converted to that scale. (The precise behavior is operating system-specific, but generally the effect is truncation to the permissible number of digits.)<br />
+　　DECIMAL 最大的数字长度是65位，但是实际的范围受制于给定的decimal列存储的precision(指M)和scale(指N)。当给此列被赋上一个由整数和不符合规范长度的小数组成的数时，这个值会被转化成符合规范的scale。(precise是操作系统指定的，但普遍来说效果是将截断至允许范围。)</p>
+</blockquote>
+
+<p>　　如果你设置decimal的长度大于65的时候，mysql会报“Too-big precision 66 specified for ‘f’ maximun is 65.”的错误。如果你去设置值时，跟上边举得例子是一摸一样的。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>输入</th>
+      <th>结果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>11111111111111111111111111111111111111111111111111111111111111111（65个1）</td>
+      <td>out of range value</td>
+    </tr>
+    <tr>
+      <td>111111111111111111111111111111111111111111111111111111111111.1111（64个1）</td>
+      <td>111111111111111111111111111111111111111111111111111111111111.11110</td>
+    </tr>
+    <tr>
+      <td>11111111111111111111111111111111111111111111111111111111111111.1111（66个1）</td>
+      <td>out of range value</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>　　接下来让我们再看看浮点数类型，他们存储的都是一个近似值。mysql用4字节存储单精度值(float)，用8字节存储双精度值(double)。由于单精度和双精度牵涉的只是有些多，在这里我先埋个坑，等自己真正明白了再给补上吧。</p>
+
+<p>　　mysql允许一种非标准的语法来定义float(M,D) 或者 real(M,D)或者double precision(M,D)。在这里，M代表所存储的字符长度以及D位的小数部分。举个例子，一列定义成float(7,4)，那么可以存储形如-999.9999，mysql会在超出这个范围存储时对这个值进行四舍五入的操作，所以你在插入999.00009的时候，系统会给算个近似值等于999.0001。</p>
+
+<p>　　由于浮点数类型的值是近似数而不是一个确切的数值，所以想用他们来存储确切值时会出现意想不到的错误。所以，我们还是尽量避免使用这种类型的值吧。</p>
+
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+			<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2017/05/21/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next disabled"><a href="javascript:void(0);">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+</div>
+<!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p class="text-muted credit">
+      &copy; 2017 拿饭网 &middot;
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>
