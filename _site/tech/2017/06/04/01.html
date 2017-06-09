@@ -5,10 +5,10 @@
 <!-- Begin Jekyll SEO tag v2.1.0 -->
 <title>正确理解javascript中的Event loop机制 - 拿饭网</title>
 <meta property="og:title" content="正确理解javascript中的Event loop机制" />
-<meta name="description" content="　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇《Javascript捕捉(capturing)与冒泡(bubbling)的区别》之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。" />
-<meta property="og:description" content="　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇《Javascript捕捉(capturing)与冒泡(bubbling)的区别》之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。" />
-<link rel="canonical" href="http://naffan.cn/tech/2017/06/04/01.html" />
-<meta property="og:url" content="http://naffan.cn/tech/2017/06/04/01.html" />
+<meta name="description" content="" />
+<meta property="og:description" content="" />
+<link rel="canonical" href="http://localhost:4000/tech/2017/06/04/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2017/06/04/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2017-06-04T00:00:00+08:00" />
@@ -23,8 +23,8 @@
 "@type": "BlogPosting",
 "headline": "正确理解javascript中的Event loop机制",
 "datePublished": "2017-06-04T00:00:00+08:00",
-"description": "　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇《Javascript捕捉(capturing)与冒泡(bubbling)的区别》之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。",
-"url": "http://naffan.cn/tech/2017/06/04/01.html"}</script>
+"description": "",
+"url": "http://localhost:4000/tech/2017/06/04/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,7 +123,9 @@ var _hmt = _hmt || [];
 	</p> 
 	<hr/>
 	<div class="post">
-		<p>　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇<a href="http://naffan.cn/tech/2016/12/10/1.html">《Javascript捕捉(capturing)与冒泡(bubbling)的区别》</a>之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。</p>
+		<p><img src="http://kupai-open.essintra.ejucloud.cn/c3041c9a-ee21-412a-83e3-a7d0d3c56214.png" alt="" /></p>
+
+<p>　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇<a href="http://naffan.cn/tech/2016/12/10/1.html">《Javascript捕捉(capturing)与冒泡(bubbling)的区别》</a>之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。</p>
 
 <p>　　想要了解event loop的概念，首先就要知道几个有关的概念。</p>
 
@@ -232,11 +234,11 @@ var _hmt = _hmt || [];
 
 <p>　　接下来，让我们看看js在运行程序的时候是如何在栈中存储的吧。</p>
 
-<p><img src="https://ooo.0o0.ooo/2017/06/08/5939638f42a45.gif" alt="2017-06-08 22_47_11" /></p>
+<p><img src="http://kupai-open.essintra.ejucloud.cn/6d3ad175-e285-458b-95eb-6a6769ecd635.gif" alt="2017-06-08 22_47_11" /></p>
 
 <p>　　我们看到js在启动的时候先将main()函数压入栈底，然后运行到printSquare()时将其压入栈中，紧接着将square和multiply接连压栈。这样就构造出了完整的printSquare()函数运行栈，紧接着程序将按照出栈的顺序开始执行，直到栈空为止。下面让我们接着来看下远程调用数据时的情况。</p>
 
-<p><img src="https://ooo.0o0.ooo/2017/06/08/5939663e62604.gif" alt="2017-06-08 22_57_55" /></p>
+<p><img src="http://kupai-open.essintra.ejucloud.cn/5a6be3e5-cd1b-4f7a-b744-02ce0216981e.gif" alt="2017-06-08 22_57_55" /></p>
 
 <p>　　这个效果和上一个例子的运行效果是一样的，但是我们注意到每个远程调用都是需要一段时间等待的，如果一个连接网络用时超长那么给我们的感觉就如同卡死一样，我们既不能操作别的动作，浏览器也不能处理诸如渲染页面之类的操作。这一问题是非常严重的，原因所在就是js是单线程的，浏览器只能完成一个任务之后再去执行下一个任务。</p>
 
@@ -252,17 +254,17 @@ var _hmt = _hmt || [];
 
 <p>　　接下来，让我们真正带着event loop的概念看一看是如何进行的。</p>
 
-<p><img src="https://ooo.0o0.ooo/2017/06/08/593973781d93e.gif" alt="2017-06-08 23_54_45" /></p>
+<p><img src="http://kupai-open.essintra.ejucloud.cn/42b86a94-85af-4bf2-a69e-74e5f63ada33.gif" alt="2017-06-08 23_54_45" /></p>
 
 <p>　　这个程序中直到webapis存储着timer之前的逻辑我不讲了（前面已经说的足够了），之后timer运行5秒以后将cb()函数塞进队列中，event loop会一直干两件事，一是检查栈中是否为空，二是检查队列是否为空。如果队列中不空就将最先执行的cb函数在栈为空的时候压栈并执行。最终得到的效果就如同异步一样，完美的完成了异步操作。</p>
 
 <p>　　接下来让我们看看Ajax的情况吧，其实和之前的例子没有什么两样的。</p>
 
-<p><img src="https://ooo.0o0.ooo/2017/06/09/5939767c2a589.gif" alt="2017-06-09 00_07_04" /></p>
+<p><img src="http://kupai-open.essintra.ejucloud.cn/f8d1801c-eba5-4aff-8d01-416b463fc704.gif" alt="2017-06-09 00_07_04" /></p>
 
 <p>　　如果很多的异步回调（几乎）同时触发，那么是什么情况呢？</p>
 
-<p><img src="https://ooo.0o0.ooo/2017/06/09/5939784088e57.gif" alt="2017-06-09 00_11_05" /></p>
+<p><img src="http://kupai-open.essintra.ejucloud.cn/06146fe0-5b01-46d0-9f11-ee9eec70de96.gif" alt="2017-06-09 00_11_05" /></p>
 
 <p>　　就像刚才我所提到event loop所干的两件事，它一直在监察着栈和队列。当第一个timeout进入队列要出队列的时候，event loop发现栈中还在运行代码，所以就先不让其出队列而是等到栈中为空时才出队列，之后进来的timeout函数都要被event loop告知栈为空时才可以一个一个进行出队列并执行。</p>
 
