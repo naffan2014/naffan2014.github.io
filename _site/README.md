@@ -15,7 +15,7 @@
 
 ### 站点截图 version 1.4
 
-![screenshot](http://kupai-open.essintra.ejucloud.cn/78f0ecbb-1a67-4201-a14a-bfb9605aa5ab.png)
+![screenshot](http://kupai-open.essintra.ejucloud.cn/a93639e3-97e8-430d-a94e-c2c60f47e6ab.jpg)
 
 * 调整部分页面的UI和样式
 
