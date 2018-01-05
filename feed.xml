@@ -1,4 +1,485 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://naffan.cn/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2017-11-24T22:07:37+08:00</updated><id>http://naffan.cn//</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">德国旅行，浪漫之路</title><link href="http://naffan.cn/life/2017/11/21/01.html" rel="alternate" type="text/html" title="德国旅行，浪漫之路" /><published>2017-11-21T00:00:00+08:00</published><updated>2017-11-21T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/11/21/01</id><content type="html" xml:base="http://naffan.cn/life/2017/11/21/01.html">&lt;p&gt;　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-03-08T23:00:13+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">学习用GO写了个聊天室</title><link href="http://localhost:4000/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
+
+&lt;p&gt;　　断断续续那么长时间学习go了，今天才第一次写出个像样的程序。总是感觉程序大都一个样，真正上手才是王道。&lt;/p&gt;
+
+&lt;p&gt;　　创建一个聊天室服务端,chatroom_client.go&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-golang&quot;&gt;package main
+
+import (
+	&quot;fmt&quot;
+	&quot;net&quot;
+	&quot;strings&quot;
+)
+//创建基于链接的哈希map，方便知道链接对应的端口号
+var onlineConns = make(map[string]net.Conn) 
+//创建一个频道，长度1000.用来存储信息
+var messageQueue = make(chan string, 1000)
+//创建一个返回布尔值的频道，用来应对没有信息的情况
+var quitChan = make(chan bool)
+//检查错误，通用方法
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+//将消息存进频道中
+func ProcessInfo(conn net.Conn){
+	buf := make([]byte , 1024) 创建个1024字节的字节流
+	defer conn.Close() //程序运行完毕时关闭链接
+    //循环体
+	for{
+	   //从信息流读出消息
+		numOfBytes,err:= conn.Read(buf) 
+		if err != nil{
+			panic(err)
+		}
+     //如果字节不等于零，就把消息字符化发到消息频道中
+	   if numOfBytes != 0{
+			message := string(buf[0:numOfBytes])
+			messageQueue &amp;lt;- message
+		}
+	}
+}
+//消费消息
+func ConsumeMessage(){
+	for{
+	   //select是配合频道使用的，选择进哪个通信操作
+		select{
+			case message:=&amp;lt;-messageQueue:
+				//对消息进行解析
+				doProcessMessage(message)
+			case &amp;lt;- quitChan:
+			   //空消息，什么都不做~
+				break
+			}
+	}
+}
+//对消息进行解析
+func doProcessMessage(message string){
+    //将消息以“#”分开，如 127.0.0.1:3389#你好
+    //就把这个消息分成两段，一段为127.0.0.1:3389，一段为你好
+    //这里面没有考虑消息体里面包括#好的情况
+	contents := strings.Split(message,&quot;#&quot;)
+	if len(contents) &amp;gt;1 {
+		addr := contents[0]
+		sendMessage := contents[1]
+     //将消息体格式化
+		addr =strings.Trim(addr, &quot; &quot;)
+		//判断哈希map中这个地址存不存在，存在就往这个链接里写消息体
+		if conn,ok := onlineConns[addr]; ok{
+			_,err := conn.Write([]byte(sendMessage))
+			if err != nil{
+			  //不存在就写发送失败
+				fmt.Println(&quot;online conns send failure!!!!&quot;)
+			}
+		}
+	}
+}
+//主函数
+func main(){
+  //监听127.0.0.1:8080端口。
+	listen_socket , err := net.Listen(&quot;tcp&quot;,&quot;127.0.0.1:8080&quot;)
+	CheckError(err)
+	//程序退出后监听关闭
+	defer listen_socket.Close()
+   //增加用户体验，让用户知道程序在运行中
+	fmt.Println(&quot;server is waitting...&quot;)
+  //开启协程来消费消息
+	go ConsumeMessage()
+  //无限循环，来监听消息并处理消息
+	for{
+		conn,err := listen_socket.Accept()
+		CheckError(err)
+     //打印出连接过来的远端地址
+		addr := fmt.Sprintf(&quot;%s&quot;, conn.RemoteAddr())
+		//将这个连接并存储到hashmap
+		onlineConns[addr] = conn
+     //循环hashmap，打印连接上来的连接
+		for i := range onlineConns{
+			fmt.Println(i)
+		}
+		//运行协程，将连接存到频道中。程序不停，此过程不断
+		go ProcessInfo(conn)
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　再创建一个客户端文件,chatroom_client.go&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-golang&quot;&gt;package main
+
+import (
+	&quot;bufio&quot;
+	&quot;fmt&quot;
+	&quot;net&quot;
+	&quot;os&quot;
+	&quot;strings&quot;
+)
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+//发送消息
+func MessageSend(conn net.Conn) {
+	var input string
+	//无限循环，发送消息
+	for {
+	   //监听输入将键入的信息记下来
+		reader := bufio.NewReader(os.Stdin)
+		//将记下来的消息以每行开始读
+		data, _, _ := reader.ReadLine()
+		//将data字符化存入到input
+		input = string(data)
+     //如果input为exit就退出，结束连接
+		if strings.ToUpper(input) == &quot;EXIT&quot; {
+			conn.Close()
+			break
+		} else {
+		  //否则，往这个连接中写入字节流
+			_, err := conn.Write([]byte (input))
+			if err != nil {
+				conn.Close()
+				fmt.Println(&quot;client connect failure&quot; + err.Error())
+			}
+		}
+	}
+}
+
+func main() {
+  //连接8080端口
+	conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:8080&quot;)
+	CheckError(err)
+	defer conn.Close()
+   //开启协程发送消息，无限循环的
+	go MessageSend(conn)
+	//创建1024长度的字节流
+	buf := make([]byte, 1024)
+	//无限循环，读取字节流信息并打印
+	for {
+		_, err := conn.Read(buf)
+		CheckError(err)
+		fmt.Println(&quot;server receive message content: &quot; + string(buf))
+	}
+
+	fmt.Println(&quot;client program done&quot;)
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://localhost:4000/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
+
+&lt;p&gt;　　这次想写的东西还挺多，一是顺便把之前的事情都按照时间点归总一下然后写个回忆录啥的。二是接着把我这段时间学过的东西、用过的东西、见过的东西写一写。这次写的东西就是我昨天重起php5.6时，遇到的早已见过的mysql8把plugin从“mysql_native_password”换成后“caching_sha2_password”服务连接不上的问题。其实，网上很多文章已经写了这个问题了，我也是在2018年4月份第一批遇到此问题的那批用户，那么我为啥要写这篇文章呢？因为，我想把我一边遇到问题一边解决问题的过程和为什么这么做的原因描述一下。我觉得这应该会更加有意义吧。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1.caching_sha2_password和mysql_native_password是什么&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　这两个是MYSQL的加密插件的规则，也可以说是加密算法。mysql8之前的mysql5都用的是native，后来才改成了sha2。安全方面的考虑吧。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;2.在哪里我可以看到这个值呢？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;登录mysql&lt;/li&gt;
+  &lt;li&gt;use mysql;&lt;/li&gt;
+  &lt;li&gt;select * from user \G;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;　　这里面包含的就是系统记录的登录用户，如果你一般用的是账户为root的用户，那么你就会发现User一列会有个root的记录。其后还会包括plugin，这个就是你在用的加密算法。之后的authentication_string就是你的密码被算法加密后的密文了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;            Host: localhost
+                User: root             (*)
+           Select_priv: Y
+           Insert_priv: Y
+           Update_priv: Y
+           Delete_priv: Y
+           Create_priv: Y
+             Drop_priv: Y
+           Reload_priv: Y
+         Shutdown_priv: Y
+          Process_priv: Y
+             File_priv: Y
+            Grant_priv: Y
+       References_priv: Y
+            Index_priv: Y
+            Alter_priv: Y
+          Show_db_priv: Y
+            Super_priv: Y
+ Create_tmp_table_priv: Y
+      Lock_tables_priv: Y
+          Execute_priv: Y
+       Repl_slave_priv: Y
+      Repl_client_priv: Y
+      Create_view_priv: Y
+        Show_view_priv: Y
+   Create_routine_priv: Y
+    Alter_routine_priv: Y
+      Create_user_priv: Y
+            Event_priv: Y
+          Trigger_priv: Y
+Create_tablespace_priv: Y
+              ssl_type:
+            ssl_cipher:
+           x509_issuer:
+          x509_subject:
+         max_questions: 0
+           max_updates: 0
+       max_connections: 0
+  max_user_connections: 0
+                plugin: mysql_native_password             (*)
+ authentication_string: *332A08JD6001FESDFDSLI11083DS41242991       (*)
+      password_expired: N
+ password_last_changed: 2019-02-28 19:43:03
+     password_lifetime: 0
+        account_locked: N
+      Create_role_priv: Y
+        Drop_role_priv: Y
+Password_reuse_history: NULL
+   Password_reuse_time: NULL
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;3.比如你在用PHP连接MYSQL时会报“requested authentication method unknown to the client [caching_sha2_password]”的错误，我们如何解决呢？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　首先，我们要明确一下问题。&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;正如上面列的mysql数据，你数据中plugin是什么？authentication_string加密前的密码是正确的么？如果你不确定密码的话你最好重置一下密码，如果不需要就跳到问题【5】&lt;/li&gt;
+  &lt;li&gt;你的My.cnf（*unix）中的配置应该怎么配?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;4.如何重置mysql密码&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;关闭mysql服务。&lt;/li&gt;
+  &lt;li&gt;找到mysql的安装位置，并进入bin文件夹，会发现mysqld运行文件&lt;/li&gt;
+  &lt;li&gt;运行 mysqld –skip-grant-tables #跳过登录检验环节直接启动mysql&lt;/li&gt;
+  &lt;li&gt;use mysql;&lt;/li&gt;
+  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘你的密码’ PASSWORD EXPIRE NEVER; #修改密码规则&lt;/li&gt;
+  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’; #更新用户密码&lt;/li&gt;
+  &lt;li&gt;flush privileges; #刷新权限，必须做&lt;/li&gt;
+  &lt;li&gt;重启你的机器，建议你做这一步&lt;/li&gt;
+  &lt;li&gt;开启mysql服务&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;5.My.cnf的配置&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　下面的配置是我的配置，标（*）的地方就是要将密码规则插件改mysql_native_password。（*）要在[mysqld]下面。因为在用php连接服务的时候会走这个配置。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
+# *** DO NOT EDIT THIS FILE. It's a template which will be copied to the
+# *** default location during install, and will be replaced if you
+# *** upgrade to a newer version of MySQL.
+[mysqld]
+default_authentication_plugin=mysql_native_password (*)
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin =~/logs/mysql/mysql-bin
+# These are commonly set, remove the # and set as required.
+# basedir = /usr/local/var/mysql/
+ datadir = /usr/local/var/mysql
+ port = 3306
+# server_id = .....
+ socket = /usr/local/var/run/mysql.sock
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+[client]
+socket = /usr/local/var/run/mysql.sock
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;ol&gt;
+    &lt;li&gt;更改密码规则及密码&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;登录mysql&lt;/li&gt;
+  &lt;li&gt;use mysql;&lt;/li&gt;
+  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘你的密码’ PASSWORD EXPIRE NEVER; #修改密码规则&lt;/li&gt;
+  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’; #更新用户密码&lt;/li&gt;
+  &lt;li&gt;flush privileges; #刷新权限，必须做&lt;/li&gt;
+  &lt;li&gt;重启Mysql服务&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://localhost:4000/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2018/09/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2018/09/01/01.html">&lt;blockquote&gt;
+  &lt;p&gt;Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在我们的工作中，版本控制工具通常会用git工具。当你公司用git的时候你肯定不想用你github的账号进行推送。反过来也一样。那我就说一下如何配置才能将不同git域分开来。&lt;/p&gt;
+
+&lt;p&gt;首先，我默认读者具备SSH keys的知识。&lt;/p&gt;
+
+&lt;p&gt;在~/.ssh文件夹内有个config文件。这个文件就是用来实现多git账号共存的配置文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt; Host github@github.com   //是git服务的主机
+ HostName github.com    //git的域名
+ User naffan2014    //登录名，是你这个网站的用户ID
+ IdentityFile ~/.ssh/id_rsa_github //ssh keys存储的文件位置
+
+ Host git@sina.com
+ HostName sina.com
+ User naffan@sina.com
+ IdentityFile ~/.ssh/id_rsa
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://localhost:4000/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/05/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
+
+&lt;p&gt;说者无意，听者有心。当时，我脑子里就在想妹妹为什么能够读书那么快呢？后来我自己有意地去试了下自己的读书速度，我能够明显感觉到自己读书的方式是在一行一行的看，速度不但慢，有时还会因为分心想别的事情，然而等回过神后，发现这段时间里面所读的内容通通没有印象，只能又重新读过。&lt;/p&gt;
+
+&lt;p&gt;自打我在上初中的时候，学校就有专门安排过快速阅读这门课程。当时的我傻傻什么都不懂，根本不知道这门课程的重要性，每每上这课的时候。我总是遥看窗外的操场，心早就飞的不知踪影了。若干年后我家装修，突然从柜子里面翻出了当时这门课程的教材，还挺贵20块1本呢。于是，我就拿起这个教材来准备认真的学一学。但是，后来觉得这玩意太枯燥就早早放弃了。到了现在，我对阅读的渴望越变越大，一直惯用的读书技巧早已过时，而且有的时候我都觉得自己受制于这种习惯，所以这次我忽然在寻找图书的时候发现了这本书，于是就准备再好好的重新学一下这门课程。&lt;/p&gt;
+
+&lt;p&gt;总的来说，本书所要传授的阅读方法用下面这张图就可以总的概括起来：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/14c9cb67-154c-479d-a838-cb36dc2c51f2.jpeg@imageMogr2/thumbnail/700x&quot; alt=&quot;学习流程示意图&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;视觉卡片&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其中最为重要的一环，就是作者多次强调的“制作视觉卡片”。这是因为作者研究了人脑如何能够快速的记忆事情。他得出的结果是认为人脑与生俱来的就对图很敏感。故把一些事情记录在不同的图片上，就会给读者留下更深的印象。同时，再加上关键词的辅助，就更能够让大脑理解这些东西了。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;大纲是了解全书的第一方法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;首先，要了解一本书的话。应该先将书中的大纲翻一翻，就像在拼图之前首先要看清包装上的完整图像。这就相当于在阅读的时候粗略了解一下整本书的大致内容。在阅读的过程中应该主动的去思考，由于人脑的左脑和右脑各自负责的功能是不一样的，只有让两个半脑分工配合起来，才会记东西越来越快。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;左脑与右脑&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;左脑负责的有逻辑，语言，数字，次序，因果，线性分析等。右脑负责的有节奏，幻想，白日梦，色彩，空间感，全貌等。对于一段要记忆的文字来说，我们通过反复阅读很难记住故事的内容，这是因为死记硬背的机械式方法不仅消耗了大量时间，还无法保证长期记忆。一个星期以后你完全有可能全部忘记。然而我们可以采用右脑思维顺利的解决这类问题。具体事例可以在书中寻找。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;视线范围&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大多数人以为自己的实现移动轨迹是从左向右移动然后换行再从左向右移动，其实不然。真正的实现其实是在向后跳跃着，因为我们想要看清一个物体的时候，首先就要将实现停止下来，然后进行对焦，直到生成清晰的图像。这样就会产生三个问题：低效阅读、无法集中注意力及视线的下意识游移。作者首先就要带领我们改变这个习惯，作者建议我们用手指作为参照物，当手指平行移动的时候，实现要跟住手指的移动方向进行阅读。当阅读的速度提高起来的时候，就到了我们可以慢慢从一目几行，一目多行，乃至一目十行的时候了。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;舒适区&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;要掌握新的阅读技巧，首先我们必须超越自己现有的阅读水平。这意味着我们必须勇敢迈出自己现有的舒适区。每次离开原有的舒适区，都是一次学习新知识的旅程。一分耕耘，一分收获，练得越勤，你的阅读能力进步的就越快。&lt;/p&gt;
+
+&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://localhost:4000/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/02/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
+
+&lt;p&gt;　　今天，我想写一篇关于这本书的读后感，读完这本书其实大概是在17年的10月份左右，那时候有一些时间可以看看关于理财的书籍。本想看完以后立刻写出读后感的但是由于事情很多的原因给耽搁了。其实，在好几年前古月兄就建议我来看看了，我当时也有一些想法但是终于被我托到了这个时间。后来，自己的女朋友也在我之前把这本书读完了，她也在极力的劝我来读读的。我记得我们在15年到16年的时候经常会结伴的去桌游吧玩桌游，当时古月兄就极力的推荐桌游老板进一款叫现金流的游戏，过了半年老板终于进了这款游戏，可是我们也再也没有时间去那里玩了。原因大致是大家都不太能凑到一起，而且各自的生活也在朝着不同的方向前进着。&lt;/p&gt;
+
+&lt;p&gt;　　说来也巧，我刚读完这本书的时候我正好经历着一些痛苦的事情，幸运的是当时的心情还真有一些和这本书里讲到的东西对应上了。所以，我现在打算将自己通过对这本书的理解进行一次总结。&lt;/p&gt;
+
+&lt;p&gt;　　在2009年我大学毕业，妈妈提前为我打算以后有可能结婚时用房就在回龙观那里购置了2套商住两用房子，房子的位置很好而且还是挨着的两户。这种想法一是为了生活，二也是为了将来有可能会脱手而买下的。当时是8000/平，我们家里一时拿不出这么多钱，所以也是和亲朋借钱买下的，谁知随着房地产野蛮型的发展，房子的总价也在不断的在水涨船高。很快我们家中很快的把借来的钱全部还完了，而且自家的总资产也翻了几倍。这些事实给当时懵懂的我留下了太多冲击，我知道当时我们家每个成员的月收入情况，可就算我们家辛勤工作几十年也不可能赚到这么多钱的。这里边就蕴含着很多经济学的道理，而我家也算乘上房地产涨价的最后一班车，后来很多人都佩服我们当时的决断。&lt;/p&gt;
+
+&lt;p&gt;　　后来了解到我周围的朋友有在比我还早几年就在回龙观这块购买了很多套房子，当时的房价肯定要比8000低的，以至于在猛涨之后，他们将这几套租了出去，得到了比自己辛勤干活好几倍的收入。可想而知，发财并不是你多努力的工作才能实现，像这样的情况有很多。&lt;/p&gt;
+
+&lt;p&gt;　　工作了这么多年，看到的也很多很多了。有比自己高很多级别的领导，有比自己精明许多的同事。他们中的很多人大都全身心的铺在了工作上，工作确实可以得到稳定的现金流，但是他们都没有能够实现在几年内使自己的身价翻很多倍。他们，同时也包括我浪费了很多时间和机会，将自己的力量铺在了为被人修砌道路的方式上。&lt;/p&gt;
+
+&lt;p&gt;　　这本书，开门见山的提出了“富人不为钱工作”，作者通过自己幼年时的一个故事讲述了自己是如何懂得了这个道理的。写到这里我本想把我认为重要的子句摘抄到这的，但是经过通读后发现竟然长达16页，故写在这里是不合适的。那么，我就简单的摘抄几句我认为连贯且富有表达性的语句吧。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;富爸爸笑着又说了：“25美分1小时怎么样？这样是否能让你们心跳加速？”&lt;br /&gt;
+我摇摇头说：“不会啊”，可事实上，25美分1小时对我而言可真是一大笔钱啊！&lt;br /&gt;
+“好，我每小时给你1美元。”富爸爸带着狡黠的笑容说。&lt;br /&gt;
+我的心开始狂跳，头也开始发晕。“接受，快接受。”我的心里在喊，但我不相信我所听到的，所以什么也没说。&lt;br /&gt;
+“好吧，每小时2美元。”&lt;br /&gt;
+我那9岁的大脑和心脏几乎要爆炸了。毕竟这是1956年，每小时2美元将使我成为世界上最有钱的孩子！我无法相信哪里能挣到这么多钱。我想说：“好的”，我真想达成这笔交易。&lt;br /&gt;
+……&lt;br /&gt;
+“好，5美元1小时。”&lt;br /&gt;
+我的内心突然平静下来了，内心发生了一些变化。&lt;font color=&quot;red&quot;&gt;这个出价太高了，显得有些荒谬。&lt;/font&gt;&lt;br /&gt;
+“很好，”富爸爸轻轻地说，“大多数人都希望有一份工资收入，之所以会这样是因为他们有恐惧和贪婪之心。先说恐惧感，没钱的恐惧会刺激我们努力工作，当我们得到报酬时，贪婪或欲望又开始让我们去想所有钱能买到的东西。于是就形成了一种模式。”&lt;br /&gt;
+“什么模式？”我问。&lt;br /&gt;
+“起床，上班，付账，再起床，再上班，再付账……他们的生活就在无穷尽地为这两种感觉而奔忙：恐惧和贪婪。给他们更多的钱，他们就会以更高的开支重复这种循环。”&lt;br /&gt;
+……&lt;br /&gt;
+当我坐在那儿听着富爸爸的话时，脑中无数次地闪出了我爸爸的话：“我对钱不感兴趣。”他常说这句话，他说：“我工作是因为我热爱这个职业。”
+“那我们该怎么办？”我问，“不为钱工作直到所有的恐惧和贪婪都消失吗？”
+“那只会浪费时间。人需要有感情，它使我们真实，&lt;font color=&quot;red&quot;&gt;感情这个词表达着行动的能力&lt;/font&gt;。真实地看待你的感情，以你喜欢的方式运用你的头脑和感情，而不是与自己作对。”
+……&lt;br /&gt;
+“别急于行动。大多数人不懂得是他们的感情代替了他们的思想，感情是感情，你还必须学会&lt;font color=&quot;red&quot;&gt;独立思考&lt;/font&gt;。”&lt;br /&gt;
+……&lt;br /&gt;
+“比如说吧，如果人们害怕没有钱花，就立刻去找工作，然后挣到了钱，使恐惧感消除。这样做似乎很对。可一旦这样理解，他就不会去思考这样一个问题，一份工作能长期解决你的经济问题吗？依我看，答案是‘不能’，尤其从人的一生来看更是如此。工作只是试图用暂时的办法来解决长期的问题。”&lt;br /&gt;
+……&lt;br /&gt;
+“我想教你们学会支配钱，而不是害怕它，这在学校里是学不到的。如果你不学，你就会变成钱的奴隶。”&lt;br /&gt;
+……&lt;br /&gt;
+“你看，我们最终是雇员，只不过处于不同层次而已。我只希望孩子们有机会避开由恐惧和欲望组成的陷阱，能按你喜欢的方式选用恐惧和欲望，别让恐惧和欲望控制你。”&lt;br /&gt;
+……&lt;br /&gt;
+“但你们没有对感觉屈服，你们推迟了决定的作用。这是极为重要的。我们总是有着恐惧或贪婪之心。从现在开始，对你们来说，重要的是&lt;font color=&quot;red&quot;&gt;运用这些感情&lt;/font&gt;为你们的长期利益谋利，别让你们的感情控制了思想。”&lt;br /&gt;
+……&lt;br /&gt;
+“不错，当你长大后，你的玩具会变贵，会变成要给你的朋友留下印象深刻的汽车、汽艇、大房子，”富爸爸笑着说，“恐惧把你推出门外，愿望又召唤你过去，诱惑你去触礁。这就是陷阱。”&lt;br /&gt;
+“那答案是什么呢？”&lt;br /&gt;
+“强化恐惧和欲望是无知的表现，这就是为什么很多有钱人常常会担惊受怕。钱就是胡萝卜，人是幻想。如果驴能看到整幅图像，它可能会重新想想是否还要去追求萝卜。”&lt;br /&gt;
+“对钱的无知导致了如此之多的恐惧和贪婪的产生。……不久，在富人和穷人之间就有了一条可怕的鸿沟，混乱就会爆发。当鸿沟达到了极点时，一个社会就会崩溃。……因为人们没有以史为鉴。我们只是记住了历史事件发生的时间和名称，却没记住教训。”&lt;br /&gt;
+“价格难道不能上涨吗？”我问。&lt;br /&gt;
+“在一个教育水平高和政府管理良好的社会中价格会上涨，&lt;font color=&quot;red&quot;&gt;实际上应该下降&lt;/font&gt;，价格上涨的原因是由无知引起的贪婪和恐惧。如果学校教学生认识钱，社会就有可能变得更富有且物价低廉。但学校关注的只是教学生为钱而工作，而不是如何开发和利用钱的力量”&lt;br /&gt;
+“学会让感情跟随你的思想，而不要让思想跟随你的感情。当你俩控制了感情，同意免费干活时，我就知道你们还有希望。当你们在我用更多的钱诱惑你们时，你们抵制住了感情，你们就又一次进行了思考而不是任由感情控制你们。这是第一步。”&lt;br /&gt;
+……&lt;br /&gt;
+“我会叫你们三思而后行，而不是条件反射式地运动，就像匆忙咽下早餐的咖啡后跑去工作一样。记住我以前所说的：工作指示面对长期问题的一种暂时解决方法。大多数人心里只有一个问题，并且是短期的，那就是月末要付账了，于是又感到恐惧了。钱控制了他们的生活，或者说对钱的无知或恐惧控制了他们的生活。所以他们就像他们的父母一样生活，早早起来去工作挣钱，而从不抽时间问问，有什么别的法子吗？他们的思想由他们的感情控制着，而不是他们的头脑。”&lt;br /&gt;
+……&lt;br /&gt;
+“我总是听到这种话，‘每个人都必须去工作’，或者是‘富人是骗子’、‘我要换份工作’，‘我应该得到更高的工资’，‘我喜欢这份工作因为它很安定’，而不是说，‘&lt;font color=&quot;red&quot;&gt;我失去了什么东西吗？&lt;/font&gt;’，这样的话才会避免你感情用事而留给你仔细思考的时间。”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　上面这些摘抄都是我经过筛选后得出的，我已经剪短了很多，并且已经用红笔标出了重点。其实，通读下来最终不难发现作者的中心思想已经在这些摘抄中全面的覆盖到了。说来庆幸，直到我做完这些摘抄时又有了一次温习也发现了之前看过漏掉的思想。&lt;/p&gt;
+
+&lt;p&gt;　　我有个朋友，自从他工作开始信心满满，但是随着时间的流逝他的目标已经慢慢从要做一番事业转变成了赚更多的钱了。他管我借过3次钱，第一次在13年的时候他家里出了点事，第二次是在15年的时候他想在北京买房子，第三次在17年他买了辆大宝马。前两次我觉得借他钱是很好的，因为一次是应急一次是投资也是刚需，但是对于第三次他买宝马这事上我觉得他已经掉入了这个模式的陷阱，因为他购入的不再是资产而是负债，到了现在他还一直在群里讨论各种汽车的性能以及他对他这辆宝马怎么怎么的改造追求性能上的突破。就算他的月薪再高无外乎就是这么一个死循环，等到以后他会陷的越来越深，直到他醒悟过来，希望那时不会为时已晚。&lt;/p&gt;
+
+&lt;p&gt;　　我们应该像书中所说的一样，现在就要慢慢的一块一块的把钱积累到资产的堆积上来，以此来提高自己的投资水平和眼光，慢慢的才会拥有更大的财富。如果我们克制住了自己的贪婪和欲望，而是简谱的生活，不断买入资产，四处寻找机会，不断提高财商，我们不会过多久就会如巴菲特一样觉得赚钱是件快乐的事情，而不会像我那位朋友一样，现在觉得赚钱很累，感觉在消耗自己一样。&lt;/p&gt;
+
+&lt;p&gt;　　书中第二个观念是，关注自己的事业。也如第一个观念一样，开门见山的说出了“职业不是事业”这个概念。现在很多人都把自己的职业混淆成了自己的事业。职业和事业不相等，我的职业是程序员，但是不代表我的事业就是程序，我可以是商人。往往我们把所学的专业当成了自己的事业，从而耗费一生的去关注别人的事业并使他人致富。我们所要做的是要定位自己的事业围绕于自己的资产，而不是收入。资产和负债之前的的区别就是去买人家资产。富人关心的焦点是他们的资产而其他人关心的确实他们的收入。&lt;/p&gt;
+
+&lt;p&gt;　　现在，我们不妨设想一下，就在现在世界经济崩塌了，你还有那些东西可以让你保持稳定的收入？又有哪些自己觉得是资产的东西反而变成了自己的负债？房产吗？我不觉得在世界经济崩塌之时还会有人为了住进一个大房子里还会花大价钱从你手中买过来，同时这个房产的税负维护是不是也会变成自己的一种支出呢？当意识到了这个问题的时候，我们就应该懂得如何去分清楚什么是自己的资产了。别着急，作者已经为我们总结出了他认为的资产分类。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;不需要我到现场就可以正常运作的业务。&lt;/li&gt;
+  &lt;li&gt;股票&lt;/li&gt;
+  &lt;li&gt;债券&lt;/li&gt;
+  &lt;li&gt;共同基金&lt;/li&gt;
+  &lt;li&gt;产生收入的房地产&lt;/li&gt;
+  &lt;li&gt;票据&lt;/li&gt;
+  &lt;li&gt;专利权，如音乐、手稿、专利等&lt;/li&gt;
+  &lt;li&gt;任何其他有价值、可产生收入或可能增值并且有很好的流通市场的东西&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　与此同时，我们还需要尽自己最大能力的去提高自己的财商。因为这样做，就会获得更大的成功。不这样做，对你来说，这个时代就会成为一个令人恐慌的时代。你会发现一些人勇敢地走在了前面，而另一些人却陷入生活的恶性循环并难以自拔。我们唯一、最重要的资产是我们的大脑。如果收到良好的训练，转瞬间它就能创造大量财富。&lt;/p&gt;
+
+&lt;p&gt;　　书中的第三个和第四个概念分别是税收和投资。因为作者生活在资本主义社会中，和我们中国的社会主义有很大的差别的，就因为这些差别所以就有了很多不尽相同的地方，又因为这两个涉及的面颇大，所以我不打算在这里进行总结了。&lt;/p&gt;
+
+&lt;p&gt;　　最后一个概念则讲的是我们不要为金钱而工作。这句看似普通的道理其实蕴含着丰富的含义。&lt;/p&gt;
+
+&lt;p&gt;　　还拿我的那位朋友作为例子，我们是在新浪工作时遇到的。当时，我们都是普普通通的程序员，各自负责着不同的业务线的代码。后来，这位朋友跳槽到了搜狐干起了数据分析。干的本来生龙活虎，再后来就跳到了一个B2C的卖菜的电商网站。当时，在新浪他离开的时候我就问他为什么选择去搜狐，他的答案是在这里已经没有所学的东西了，我很赞成他的这种举动。可是，再后来的跳槽他为的纯粹是钱。我并不是说他的发展不好，我只是想说他的做法欠妥。虽然，金钱确实能够使他满足目前的虚荣心，但是长远来说这不是一件好事。&lt;/p&gt;
+
+&lt;p&gt;　　其实，如果换我，我就会选择用另一种方法选择跳槽。其实大部分人需要学习掌握不并不止一项技能，只有这样他们的收入才能获得显著的增长。况且，即使就会一种技能在漫长的工作道路上，不会觉得很累么？相反，换一种技能，当然不是超脱出这个行业的技能，岂不是更好？我从新浪跳出来已经有年头了，我想做的事情其实有一部分是按照书中的方法走的，但是另一部分没有，所以我还是需要学习。就如同，作者在讲这个道理的时候刚开始就用了一个女记者采访他的例子讲述的一样，如果这位女记者能够勤奋地学习掌握市场及销售方面的技能，她的收入就会显著增加。&lt;/p&gt;
+
+&lt;p&gt;　　就像作者一样，69年他从美国商业海洋学院毕业后从事加州标准石油公司的运油船队工作并且薪资可观，之后他又跳到了海军陆战队学习飞行。他的受过良好教育的穷爸爸非常伤心，而富爸爸则祝贺他做出的决定。在这里他的两位爸爸的观点就存在分歧，一个是认为他应该更加专业化的从事一项工作，而另一个却认为许多知识只需要知道一点就足够了。对于受过良好教育的爸爸来说，稳定的工作就是一切，而对于富爸爸来说，不断学习才是一切。&lt;/p&gt;
+
+&lt;p&gt;　　我们很难对这两位爸爸的观点判断出孰对孰错，我从小到大的生长环境周围基本都是穷爸爸这样的例子，可以说是清一色吧。我身边倒是有一些抱着富爸爸理念的朋友，给我感觉更多的是一种飘在上面的感觉，不踏实。我觉得这和我的环境有很大的关系，我的家庭都是穷爸爸的教育方法。从目前的事实来看，我没看到我周围谁变成了富人。&lt;/p&gt;
+
+&lt;p&gt;　　73年作者离开了军队，在施乐公司找到了一份工作，他的目的就是为了到这家公司学到美国最好的营销技能。富爸爸为他感到自豪，而穷爸爸为他感到羞耻。作者一做就是4年，做到了销售业绩榜前五后又辞去了工作，放弃了又一份的高薪。&lt;/p&gt;
+
+&lt;p&gt;　　77年，作者组建了他自己的第一家公司。这也正是作者觉得自己羽翼丰满可以单飞的时刻了。他抱着如果破产就在30岁以前的观点，这样他还有时间东山再起。而那年作者29岁。直到现在作者依然在做着国际贸易的生意，虽然近几年有他的公司破产的消息，但是这个破产公司只是他的几个公司的其中一个，而其他的公司还在正常运转。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;工人付出最高限度的努力工作以避免被解雇，而雇主提供最低限度的工资以防止工人辞职。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　终于，小结的时刻到了。推荐了那么多这本书的理念了，也该说说这本书的缺点了。如果，你是一个经济领域的老鸟，你会很排斥这本书，这本书中很多的都是假大空的理论，并没有什么太适合我们学习的方法。因为，在读真本书的时候，人家推荐给我的都是一些这书的正面信息，但是坏的信息并没有。当然，别人推荐给我的一定是别人觉得读后感想很棒的书。然而，通过我读完以后，我并没有觉得学到了什么脚踏实地的东西，如果我们按照书中的方法去实施估计半途就会夭折，有人会说这本书给你的是一种全新的经济理念，我很认同。但是，我也不得不对这本书产生一定的质疑，毕竟在书中看到的例子有一些还是比较牵强附会的，也可以说作者的思想较为激进。&lt;/p&gt;
+
+&lt;p&gt;　　总的来说，这本书适合普通用户就读，同时也是一本较不错的经济学初级读物。但是，你想从里面深究出什么你想遵循的示例的话，可惜大多并不能。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="经济,书籍" /><summary type="html">　　《富爸爸，穷爸爸》是一个真实的故事，作者罗伯特・清崎的亲生父亲和朋友的父亲对金钱的看法截然不同，这使他对认识金钱产生了兴趣，最终他接受了朋友的父亲的建议，也就是书中所说的。“富爸爸”的观念，即不要做金钱的奴隶，要让金钱为我们工作，并由此成为一名极富传奇色彩的成功的投资家。</summary></entry><entry><title type="html">德国旅行，浪漫之路</title><link href="http://localhost:4000/life/2017/11/21/01.html" rel="alternate" type="text/html" title="德国旅行，浪漫之路" /><published>2017-11-21T00:00:00+08:00</published><updated>2017-11-21T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/11/21/01</id><content type="html" xml:base="http://localhost:4000/life/2017/11/21/01.html">&lt;p&gt;　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。&lt;/p&gt;
 
 &lt;p&gt;　我感觉写游记之前还是先把要记录的事情交代一下比较好。&lt;/p&gt;
 
@@ -22,7 +503,7 @@
 &lt;/script&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/b3240ea2-8a7e-4883-9276-a7f246bc2a80.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;sixt德国机场租车行&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/b3240ea2-8a7e-4883-9276-a7f246bc2a80.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;sixt德国机场租车行&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我们8：30在SixT租车公司租到了汽车，租车时工作人员只让我提供了国际护照（白色的那个，在国内免费办的）和驾照以及租车订单。我还强调了柜台人员我们不要买任何保险，因为在国内已经买了全险了。总体来说，德国的工作人员和蔼可亲而且语速较快，对于掌握不太好英文的人来说还是有一定难度的。最后，工作人员将车钥匙递到我手中让我去车库取车，并给了我一张出车库的门票还有停车位置的指示图。临走前，我问他我怎么换车，他告诉我开车回来在T1航站楼停车库会有停车场，你只需要把车听到那里并把车钥匙插入到钥匙孔中走人即可，我当时还萌萌的问人家车被偷了怎么办，工作人员很自豪的说这里是德国，言外之意就是德国素质很好不会有偷车行为。我一下子就感到了一种德国人内心中是有多么强烈的纯种日耳曼民族的优越感啊。其实，等我还车的时候才发现，车库是有专员指导停车的，而且车一旦入位后，后面还车的人会排到我的车后边，就算你想开车走都没办法，因为前后都是死车堵着你呢~ 亏我当时还以为停车场跟北京地上停车场一样，偌大的停车场随便进入呢~&lt;/p&gt;
 
@@ -36,7 +517,7 @@
 
 &lt;p&gt;　　10：00我们与来自西班牙的小伙伴们汇合了，他们已经在德国玩了1天多了，刚到德国的他们还因为从机场坐地铁是可以在车上补票的呢，结果被乘务员无情的罚了每人60欧，开局不利呀。我们见了面去了安联球场和德国工业大学，给我留下印象深刻的是工业大学中有个图书馆，图书馆三层有两个滑道可以直接坐滑梯滑道一层。这种新颖的概念据说是德国工业系的学生构建起来的，德国大学竟然给学生那么大的权力，而且也能看出来德国对学生的创作的支持还是蛮给力的呢。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/b419eddd-58df-4b7a-952b-f4ea4c76d74f.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;安联球场&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/b419eddd-58df-4b7a-952b-f4ea4c76d74f.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;安联球场&quot; /&gt;&lt;/p&gt;
 
 &lt;div align=&quot;middle&quot;&gt;
 &lt;script&gt;
@@ -52,41 +533,41 @@
 
 &lt;p&gt;　　讷德林根这个城市很是有趣，这个城市使我们走的这条线路上一个重要景点。这座城市是有城墙包围住的。据说这个城市是在1500万那年前由陨石撞击而形成的盆地上建立起来的，我很庆幸在这么一个富有历史性的地方留下了脚印。这个地方的建筑给我带来了一种冲击，这些建筑从小在电视上看到的一模一样。如果你玩过强手这个游戏的话，我觉得德国的民宅跟强手棋中花花绿绿的塑料房子的造型长的一模一样。这种带阁楼式的房子到底住在里面是一种什么感觉呢？里面会不会有暖气呢？还是真的像电视上一样，每家都有个烟囱，他们从火炉旁取暖？&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/dc0abde6-9ced-4f52-96da-40071b912f11.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;用手托着斜着照相&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/dc0abde6-9ced-4f52-96da-40071b912f11.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;用手托着斜着照相&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我们在这个城中随便走了走，本来说城中心有个&lt;a href=&quot;https://wxn.qq.com/cmsid/WXN2017112300148000&quot;&gt;塔楼&lt;/a&gt;可以上去鸟瞰整个城镇的，但是我们到达这里的时间正好是塔楼歇业的时间，所以就没上去。我们只是在这里简单的照了照相就开车继续赶往下一个目的地了。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/7dbeecf4-e6f3-4412-b44c-ce096d9b4fbf.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;庞大的建筑&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/7dbeecf4-e6f3-4412-b44c-ce096d9b4fbf.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;庞大的建筑&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　德国的公路可真是牛逼，一路畅通的要命。这里真是地广人稀啊，虽然以前在西班牙自驾游过，确实感受到过欧洲的高速公路的畅快，但是这次10天的自驾游，天天都会开车，所以感受的自驾快感真是爽到爆了。之后回到国内，早9点北三环的路上，速度能达到每小时10麦就不错，要知道我们在德国的高速公路上经常是140麦以上呢。可想而知，回来时开车的感觉一下子就骤降到了极点。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/2b95a2b5-fefa-4e03-acdb-c83533b9b152.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/2b95a2b5-fefa-4e03-acdb-c83533b9b152.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;讷德林根&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我们出了讷德林根后，奔向了多瑙沃特。一路上都出都是五颜六色的庄稼地，一片接一片的让我们看的应接不暇。我们当时其实已经被浪漫之路上的景观所折服了，但是谁成想后面的黑森林才更加让我们感受到了德国景色的壮丽。&lt;/p&gt;
 
 &lt;p&gt;　　多瑙沃特这个城镇网上攻略都说他是个非主流小镇，因为他没有什么著名的景点可以吸引到旅游人们。虽然，这个地方没有被大多数人选择毕竟之地，但是这里是多瑙河和沃特河交汇处。而这座城市的名字也就去了这两条河流的名字。这个城市很简单，简单到你只是能看到路两旁的建筑物，其他什么都没有。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/0a9bf618-2577-49a5-a8f4-b56159f9dc8c.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/0a9bf618-2577-49a5-a8f4-b56159f9dc8c.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;sixt德国机场租车行&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我有幸来到了这个地方，因为每当我听到多瑙河这个字眼的时候我会想起我曾经站在过多瑙河旁看着他与沃特河交汇。我在想正式这条河流孕育出了很著名的音乐曲子，比如蓝色多瑙河。虽然，多瑙河只是一条看起来很普通的河流，但是其长度可是相当长的，可以说这条河就像中国黄河一般给当地的民生带来了无限生机。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/286f0fc8-0ed1-4d14-a755-2aaff54236a1.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/286f0fc8-0ed1-4d14-a755-2aaff54236a1.JPG@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;丁克尔斯比尔&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　下一站就是&lt;a href=&quot;http://blog.sina.com.cn/s/blog_5e4a15f101011qoh.html&quot;&gt;丁克尔斯比尔&lt;/a&gt;了。到这里的时候正好是下午4：30，趁着落日的余晖在，我们赶紧抓起手中的相机留下这匆匆的纪念。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/803638c6-067d-4944-b844-7aed6c2a8edc.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/803638c6-067d-4944-b844-7aed6c2a8edc.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;处理两旁&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　这个镇子并不大，风格跟之前的讷德林根有一些相像。瓦砖铺砌的路面上两排德国小尖房子矗立在两旁。红棕色的房顶再加上红色或者白色的楼面，组合成了一副独有的欧式建筑风格，这种风格朴素不招摇，给人的感觉就像进入了一座街心公园一样，舒适惬意。别看这里是个镇子，但是人还是挺多的，街上车来车往，一下就能让我想到这个镇子夏天时的喧哗和繁忙。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/4ac3af95-5cf7-44df-94cd-75ad35474360.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/4ac3af95-5cf7-44df-94cd-75ad35474360.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;吃饭&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我们在这个城里吃了顿晚饭，这是我们在德国吃的第一次饭。所以，我们挑选了这里的米其林三星的餐馆。但是，进去以后服务员告诉我们这里需要预定，最早的时间也是第二天的下午才能预定上。我们选择了在这个小镇子别的地方吃饭，幸好往前走了不到200米，我们找到了一家叫miser’s的咖啡饭馆。我们看到里面好多人都在吃饭，所以就跟着进去了。我们随后找服务员要了一份英文的菜单，然后点下了在德国的第一顿饭菜。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/83d03b0d-46a2-4e8e-a17c-a82575e45cb6.jpg@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/83d03b0d-46a2-4e8e-a17c-a82575e45cb6.jpg@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;吃饭啊&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　说实话，这里的饭菜很贵，人均得200多人民币呢。不过出来玩嘛，该破费的还是要破费的。在欧洲的饭馆是讲究给小费的，我们大家就该不该给小费做了激烈的讨论。原因是，这家的一个女服务员对待我们的态度很不友好，爱答不理且高傲自大。给我的感觉就是这个女服务员歧视亚洲人，所以我做出了不给小费的选择。德国在人文方面给我的印象不是很好，这是第一次感受到被鄙视了。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/1ee4b07c-7588-43d0-802f-f9d2e9dfdeb3.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;http://kupai-open.essintra.ejucloud.cn/1ee4b07c-7588-43d0-802f-f9d2e9dfdeb3.png@imageMogr2/thumbnail/700x@watermark/2/text/bmFmZmFuLmNu/fill/cmVk/fontsize/700&quot; src=&quot;/images/default.jpg&quot; alt=&quot;车程&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我们吃完饭大概是7：00了吧，我们距离罗腾堡还有半个多小时的路程。德国在下午5点的时候就天黑了，所以我们在德国的国道上驾驶除了车灯以外什么都看不到。不过，路上车并不多，我们很快到了&lt;a href=&quot;https://baike.baidu.com/item/罗腾堡/5273810?fr=aladdin&quot;&gt;罗腾堡&lt;/a&gt;。&lt;/p&gt;
 
@@ -94,7 +575,7 @@
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://pan.baidu.com/s/1qXJGuM4&quot;&gt;我的相册&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国" /><summary type="html">　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。</summary></entry><entry><title type="html">最近家里装修以及准备出游</title><link href="http://naffan.cn/life/2017/09/28/01.html" rel="alternate" type="text/html" title="最近家里装修以及准备出游" /><published>2017-09-28T00:00:00+08:00</published><updated>2017-09-28T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/09/28/01</id><content type="html" xml:base="http://naffan.cn/life/2017/09/28/01.html">&lt;p&gt;时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国" /><summary type="html">　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。</summary></entry><entry><title type="html">最近家里装修以及准备出游</title><link href="http://localhost:4000/life/2017/09/28/01.html" rel="alternate" type="text/html" title="最近家里装修以及准备出游" /><published>2017-09-28T00:00:00+08:00</published><updated>2017-09-28T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/09/28/01</id><content type="html" xml:base="http://localhost:4000/life/2017/09/28/01.html">&lt;p&gt;时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。&lt;/p&gt;
 
 &lt;p&gt;对于家中装修我们着实花了很大的力气。因为我已经到了娶妻生子的年龄了，所以从4月份开始家里就为了我将回龙观的房子腾出来准备装修了。4月份是北京初春的时节，本要开始装修，可是女朋友要应付研究生考试所以要一直背书奋战到5月中旬，所以我们一直在等她考完试。在这段时间里我们双方父母正式见了面，我家也去她家正式的登门拜访了。另外，今年的3月到6月我们部门因为赶进度所以强制进行10106的高负荷工作，经常是晚上加完班后回到家就直接睡了，周末只有一天休息的时间，所以装修的事情就一直这么被拖着。终于来到了7月，我们部门的项目不再那么紧急了，所以才有了比较充足的休息时间。在这个月里我也回复了自己的健身计划。现在写下这篇文章的时候也是我快健身一年了，健身的效果还是蛮可喜可贺的，由原先的200斤一直减到现在的178斤。健身的目的就是能够赶在拍婚纱照之前让自己的身体看起来很有型，索性在9月5日拍婚纱照的时候在镜子中看到了自己肌肉感满满的效果。&lt;/p&gt;
 
@@ -104,7 +585,7 @@
 
 &lt;p&gt;自从6月初我们去了婚博会定了婚纱照，9月份我们又去了一次婚博会，碰巧的是我们旁边的酒店Holiday inn正好也参展了，而且还新推出了他们的小院。这正好满足了我女朋友对婚礼的要求，所以很痛快的就定下了婚礼的酒店。这次真的是碰巧了，为了酒店我们跑了不下9个地方，时间跨度很大。如果不是这次乱闯还真不知道酒店这事会让我头痛多长时间呢。接下来就是选择婚庆公司了，我打算再去一次婚博会，据说春夏秋冬都有婚博会，估计这也是三个月后的事情了，到时候看看在婚博会上能不能定下心仪的婚庆公司吧。&lt;/p&gt;
 
-&lt;p&gt;我还要说下自己的健身效果。自从去年10月开始我就开始了健身。今年的3-6月因为工作关系没有去，但是自己也一直在吃严格要求自己。所以那段时间没有反弹，7月份后恢复训练，到8月份刷脂，一直到现在还一直保持着一周至少两天去健身。一年来健身的效果是能直观的看出来的，谁看到我都会说我瘦了不少。其实我的不光瘦了，还涨肌肉了，所以肥肉更少了。这种健康的饮食习惯和锻炼习惯我一定要保持下去。因为，明年婚礼还是个里程碑呢&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国,装修" /><summary type="html">时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。</summary></entry><entry><title type="html">MAC下配置php环境遇到的费解问题</title><link href="http://naffan.cn/tech/2017/06/15/01.html" rel="alternate" type="text/html" title="MAC下配置php环境遇到的费解问题" /><published>2017-06-15T00:00:00+08:00</published><updated>2017-06-15T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/06/15/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/06/15/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;我还要说下自己的健身效果。自从去年10月开始我就开始了健身。今年的3-6月因为工作关系没有去，但是自己也一直在吃严格要求自己。所以那段时间没有反弹，7月份后恢复训练，到8月份刷脂，一直到现在还一直保持着一周至少两天去健身。一年来健身的效果是能直观的看出来的，谁看到我都会说我瘦了不少。其实我的不光瘦了，还涨肌肉了，所以肥肉更少了。这种健康的饮食习惯和锻炼习惯我一定要保持下去。因为，明年婚礼还是个里程碑呢&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国,装修" /><summary type="html">时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。</summary></entry><entry><title type="html">MAC下配置php环境遇到的费解问题</title><link href="http://localhost:4000/tech/2017/06/15/01.html" rel="alternate" type="text/html" title="MAC下配置php环境遇到的费解问题" /><published>2017-06-15T00:00:00+08:00</published><updated>2017-06-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/06/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/06/15/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　就在昨天晚上突然起了雅兴看了个大型网站redis队列应用的视频，正巧上班的时候和一位同事聊起了这个话题，突然发现曾经的理解有些偏差，所以正好趁这个机会自己练一下。谁成想刚开始动手就遇到了问题。&lt;/p&gt;
 
@@ -190,7 +671,7 @@
 
 &lt;p&gt;　　我们可以通过运行php –ini来查看cli读取的php.ini。phpinfo.php可以用来查看服务的php.ini情况。&lt;/p&gt;
 
-&lt;p&gt;　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="php,ngxin,apache" /><summary type="html"></summary></entry><entry><title type="html">正确理解javascript中的Event loop机制</title><link href="http://naffan.cn/tech/2017/06/04/01.html" rel="alternate" type="text/html" title="正确理解javascript中的Event loop机制" /><published>2017-06-04T00:00:00+08:00</published><updated>2017-06-04T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/06/04/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/06/04/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/c3041c9a-ee21-412a-83e3-a7d0d3c56214.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="php,ngxin,apache" /><summary type="html"></summary></entry><entry><title type="html">正确理解javascript中的Event loop机制</title><link href="http://localhost:4000/tech/2017/06/04/01.html" rel="alternate" type="text/html" title="正确理解javascript中的Event loop机制" /><published>2017-06-04T00:00:00+08:00</published><updated>2017-06-04T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/06/04/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/06/04/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/c3041c9a-ee21-412a-83e3-a7d0d3c56214.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇&lt;a href=&quot;http://naffan.cn/tech/2016/12/10/1.html&quot;&gt;《Javascript捕捉(capturing)与冒泡(bubbling)的区别》&lt;/a&gt;之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。&lt;/p&gt;
 
@@ -344,7 +825,7 @@
   &lt;li&gt;https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop&lt;/li&gt;
   &lt;li&gt;https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage&lt;/li&gt;
   &lt;li&gt;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="javascript" /><summary type="html"></summary></entry><entry><title type="html">MYSQL中浮点类型的区别</title><link href="http://naffan.cn/tech/2017/05/23/01.html" rel="alternate" type="text/html" title="MYSQL中浮点类型的区别" /><published>2017-05-23T00:00:00+08:00</published><updated>2017-05-23T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/23/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/23/01.html">&lt;p&gt;&lt;img src=&quot;data:image/png;base64,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&quot; alt=&quot;mysql&quot; /&gt;&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="javascript" /><summary type="html"></summary></entry><entry><title type="html">MYSQL中浮点类型的区别</title><link href="http://localhost:4000/tech/2017/05/23/01.html" rel="alternate" type="text/html" title="MYSQL中浮点类型的区别" /><published>2017-05-23T00:00:00+08:00</published><updated>2017-05-23T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/05/23/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/05/23/01.html">&lt;p&gt;&lt;img src=&quot;data:image/png;base64,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&quot; alt=&quot;mysql&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　除了&lt;a href=&quot;http://naffan.cn/tech/2017/05/21/01.html&quot;&gt;《MYSQL中tinyint(1)的正确理解》&lt;/a&gt;所述的整形以外，mysql还有两种小数类型，一种是定点数类型（decimal,numeric），一种是浮点数类型(float,double)。&lt;/p&gt;
 
@@ -436,654 +917,4 @@
 
 &lt;p&gt;　　mysql允许一种非标准的语法来定义float(M,D) 或者 real(M,D)或者double precision(M,D)。在这里，M代表所存储的字符长度以及D位的小数部分。举个例子，一列定义成float(7,4)，那么可以存储形如-999.9999，mysql会在超出这个范围存储时对这个值进行四舍五入的操作，所以你在插入999.00009的时候，系统会给算个近似值等于999.0001。&lt;/p&gt;
 
-&lt;p&gt;　　由于浮点数类型的值是近似数而不是一个确切的数值，所以想用他们来存储确切值时会出现意想不到的错误。所以，我们还是尽量避免使用这种类型的值吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry><entry><title type="html">MYSQL中tinyint(1)的正确理解</title><link href="http://naffan.cn/tech/2017/05/21/01.html" rel="alternate" type="text/html" title="MYSQL中tinyint(1)的正确理解" /><published>2017-05-21T00:00:00+08:00</published><updated>2017-05-21T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/21/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/21/01.html">&lt;p&gt;&lt;img src=&quot;https://timgsa.baidu.com/timg?image&amp;amp;quality=80&amp;amp;size=b9999_10000&amp;amp;sec=1495385716534&amp;amp;di=ed94757005ca2587cec41c926a1ee8eb&amp;amp;imgtype=0&amp;amp;src=http%3A%2F%2Fa1.jikexueyuan.com%2Fhome%2F201506%2F15%2F3604%2F557e2e270a34e.jpg&quot; alt=&quot;mysql头图&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　今天，想起了一个关于mysql中类型长度的问题。一切的起源就是两年前和同事聊天时讨论状态位的字段用什么字段类型来存储，我还依稀记得刚进新浪工作的时候开发项目时总是将数字类型设置为int并且在长度栏填写10。程序在应用的时候没有任何问题而且也从没有关注过mysql存储类型相关细节。&lt;/p&gt;
-
-&lt;p&gt;　　可是，有的时候在和同事聊天的过程中会突然谈论起mysql的存储类型相关问题，而我也没觉得有什么可以拿出来侃侃而谈的知识。后来，有一天新浪基础架构部门发了一封关于调整所有部门数据库用户id字段类型的邮件，邮件中要求所有用到uid的地方需要改成bigint类型。&lt;/p&gt;
-
-&lt;p&gt;　　当时我正在负责新浪游戏的微坛项目，项目中的uid当然就是用int(10)来设定的。为了响应公司的要求，我就简简单单的将uid摄为了bigint(11)。在做出这一改变的过程中，我也询问了部门技术主管关于为什么要更改这个字段类型的原因，主管跟我们说因为起初新浪微博的用户id设置的就是int(10)，后来随着微博的业务发展壮大，用户量也急剧增长，原先10位的用户id已经不能够存储大于10位数了，所以让我们进行修改。比如以前用户id为10个9，后来有一个人注册了新浪微博账号，账号本应该加一位，可是因为只能够存十位所以数据库将这新进的人id覆盖了原先的id，这样就导致了问题的发生。&lt;/p&gt;
-
-&lt;p&gt;　　当时的我一听觉得很有道理啊，10个9加1则进一位就成了1和10个0 。那么我改成bigint以后将长度写为11就能够满足正常的逻辑了，而且变成了11位，不论后面进再多少个人我也完全不怵啊。于是，这个问题就这样“完美”的解决了，而之后的运行也没有发生相关的问题。直到后来的某一天在翻看mysql数据类型所占字节长度的文章时，才发现当年的我真是兔羊兔森破。直到再后来又和同事聊状态位字段应该用什么字段类型及长度存储的时候，我说用tinyint(1)来存储，有符号tinyint可以存储数值最大是127，然而后边的长度1就是限定只能存储1位，也就是0-9 。而且，当年说这番话的时候我是很坚定的回答的。我都能想到当时我的样子是多么的胸有成竹啊，然而事实并不是这个样子的。。。我对问题的理解真是有够知其一不知其二的，如果那个同事能够反问我，如果1就只能存0-9，那么int(1)不和tinyint(1)一样了吗？我想我就不会认为自己很有道理了。&lt;/p&gt;
-
-&lt;p&gt;　　好了，闲话就扯到这里。今天，我闲来有功夫就想将真正对的理解落于书面，这样的好处自然是如果接下来有理解错误的地方，我可以在未来的某个时间再接着此篇文章来进行知识的更新。那么，接下来我就以tinyint(1)这个概念进行阐述。&lt;/p&gt;
-
-&lt;p&gt;　　在mysql中不同的字段类型有着不同的长度。tinyint就被设置为1字节。在计算机中规定8位为1字节。1字节为最小单位，字节的值就代表着高电平或者低电平，用数值来表示就是1和0 。那么，8位的话存储的大小就是00000000 - 11111111(无符号二进制)，转化为十进制的话就是0-255 。所以，1字节在没有符号的时候能够存储的值可以用十进制的0-255来表示。也就是说tinyint类型可以存储256个十进制的数字。而如果有符号的话8位存储的二进制值就是10000000-01111111(-128~127)，在计算机中涉及到负数的时候都是用补码的形式存储的，具体为什么可以参看&lt;a href=&quot;http://www.ruanyifeng.com/blog/2009/08/twos_complement.html&quot;&gt;《关于2的补码》&lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;　　话题扯远了，赶紧拽回来。。。&lt;/p&gt;
-
-&lt;p&gt;　　我们知道了tinyint中在有无符号时分别可以存储什么范围的十进制数以后，那么后边的括号中的1又代表的是什么呢？其实我们可以理解为&lt;strong&gt;用多长的长度来读出这个数字&lt;/strong&gt;。通过字面的意思我们可以理解为tinyint(1)就是用1位字符的长度读出tinyint值。我觉得tinyint(1)并不是很好的列子，我打算先用tinyint(2)作为例子来进行演示，之后再回头来说1的情况。那我们有两种情况：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;当我的值的长度超过2字符长度，结果会如何？&lt;/li&gt;
-  &lt;li&gt;当我的值的长度不超过2字节的长度，结果会如何？&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　首先，让我们先创建一张表出来。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE TABLE `a` (
-  `id` int(11) NOT NULL,
-  `c` tinyint(2) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-) ENGINE=MyISAM DEFAULT CHARSET=utf8
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;　　我往表中插入几个数据，&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;INSERT INTO `a` VALUES ('1','3');
-INSERT INTO `a` VALUES ('2','33');
-INSERT INTO `a` VALUES ('3','0');
-INSERT INTO `a` VALUES ('4','111');
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我们分别执行select操作，看看会有什么结果。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; select c from a where id =1;
-+------+
-| c    |
-+------+
-|    3 |
-+------+
-1 row in set (0.00 sec)
-
-mysql&amp;gt; select c from a where id =2;
-+------+
-| c    |
-+------+
-|   33 |
-+------+
-1 row in set (0.00 sec)
-
-mysql&amp;gt; select c from a where id =3;
-+------+
-| c    |
-+------+
-|    0 |
-+------+
-
-1 row in set (0.00 sec)
-
-mysql&amp;gt; select c from a where id =4;
-+------+
-| c    |
-+------+
-|  111 |
-+------+
-1 row in set (0.00 sec)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　结果显示即使我设置了tinyint(2)以后查询出来的结果还是可以显示出所有位数的数据，这个(2)根本没起任何作用啊。即使我的数据的长度超过了2或者没有超过2结果都是可以正常被显示出来的。&lt;/p&gt;
-
-&lt;p&gt;　　那么，我再重新创建一次这张表，不同的是我给c增加了0填充。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE TABLE `a` (
-  `id` int(11) NOT NULL,
-  `c` tinyint(2) unsigned zerofill DEFAULT NULL,
-  PRIMARY KEY (`id`),
-) ENGINE=MyISAM DEFAULT CHARSET=utf8
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我同样插入一样的数据，然后再对他们执行查询操作。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; select c from a where id =1;
-+------+
-| c    |
-+------+
-|   03 |
-+------+
-1 row in set (0.00 sec)
-
-mysql&amp;gt; select c from a where id =2;
-+------+
-| c    |
-+------+
-|   33 |
-+------+
-1 row in set (0.00 sec)
-
-mysql&amp;gt; select c from a where id =3;
-+------+
-| c    |
-+------+
-|   00 |
-+------+
-1 row in set (0.00 sec)
-
-mysql&amp;gt; select c from a where id =4;
-+------+
-| c    |
-+------+
-|  111 |
-+------+
-1 row in set (0.00 sec)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　可以看到区别了吧，如果我设置了0填充的话。那么，数据会按照不足2位的前补0，多于2位的完全展示出来。这也就是我前面提到的“用多长的长度来读出这个数字”。&lt;/p&gt;
-
-&lt;p&gt;　　好了，到这里我们发现，不论长度取什么值，光设置他是没有任何作用的，我们还需要指定当前数据长度小于这个值时用什么来填充它。于是，tinyint(4),tinyint(16)这样的设置我们就知道在读出的时候他们会长什么样子来了吧？&lt;/p&gt;
-
-&lt;p&gt;　　这里有个mysql自己的设置细节，如果我要将c这个字段设置为0填充，那么也还需将此字段同时设置为unsigned。如果你没有作此操作，mysql会自动为你加上。mysql的官方文档&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/numeric-type-overview.html&quot;&gt;《Numeric Type Overview》&lt;/a&gt;有提到。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;if you specify ZEROFILL for a numeric column, MySQL automatically adds the UNSIGNED attribute to the column.&lt;br /&gt;
-如果你指定了ZEROFILL，MYSQL会自动的将UNSIGNED属性一并添加上。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　我想这样设置有可能是跟补码有关的。我们知道正数存放的时候前面都是0，而负数的话高位那里必须是1，所以用零填充的话一定会出问题。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry><entry><title type="html">MYSQL性能优化</title><link href="http://naffan.cn/tech/2017/05/10/01.html" rel="alternate" type="text/html" title="MYSQL性能优化" /><published>2017-05-10T00:00:00+08:00</published><updated>2017-05-10T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/10/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/10/01.html">&lt;h2 id=&quot;section&quot;&gt;优化简介&lt;/h2&gt;
-
-&lt;p&gt;　　我们可以通过show status语句查询mysql数据库的性能。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;show status like 'value';
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;　　其中，value参数是常用的几个统计参数，这些参数介绍如下：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;connections:连接mysql服务器的次数；&lt;/li&gt;
-  &lt;li&gt;uptime:mysql服务器的上线时间；&lt;/li&gt;
-  &lt;li&gt;slow_queries:慢查询的次数；&lt;/li&gt;
-  &lt;li&gt;Com_select:查询操作的次数；&lt;/li&gt;
-  &lt;li&gt;Com_insert:插入操作的次数；&lt;/li&gt;
-  &lt;li&gt;Com_update:更新操作的次数；&lt;/li&gt;
-  &lt;li&gt;Com_delete:删除操作的次数；&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　mysql中存在查询InnoDB类型的表的一些参数：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Innodb_rows_read:select语句查询的记录数；&lt;/li&gt;
-  &lt;li&gt;Innodb_rows_inserted:insert插入的记录数；&lt;/li&gt;
-  &lt;li&gt;Innodb_rows_update:update更新的记录数；&lt;/li&gt;
-  &lt;li&gt;Innodb_rows_deleted:delete删除的记录数；&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　通过这些参数可以分析mysql的性能，根据分析结果，进行相应的性能优化。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;优化查询&lt;/h2&gt;
-
-&lt;p&gt;　　通过对查询语句的分析，可以了解查询语句的执行情况，我们可以通过EXPLAIN和DESCRIBE来分析查询语句&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;explain select 语句
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;　　结果中：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;id:表示select语句的编号；&lt;/li&gt;
-  &lt;li&gt;select_type:表示select语句的类型，这个参数有几个常用的取值，simple表示简单查询，其中不包括连接查询和子查询；primary表示主查询，或者是最外层的语句；union表示连接查询的第二个或后面的查询语句；&lt;/li&gt;
-  &lt;li&gt;table:表示查询的表；&lt;/li&gt;
-  &lt;li&gt;type:表示标的连接类型。这个参数有几个常用的取值，system表示表中只有一条记录；const表示表中有多条记录，但只从表中查询一条记录；all表示对表进行了完整的扫描；eq_ref表示多表连接时，后面的表使用了unique或者primary key；ref表示多表查询时，后面的表使用了普通索引；unique_subquery表示子查询中使用了unique或者primary key；index_subquery表示子查询中使用了普通索引；range表示查询语句中给出了查询范围；index表示对表中的索引进行了完整的扫描；&lt;/li&gt;
-  &lt;li&gt;possible_keys:表示查询中可能使用的索引；&lt;/li&gt;
-  &lt;li&gt;key:表示查询使用到的索引；&lt;/li&gt;
-  &lt;li&gt;key_len:表示索引字段的长度；&lt;/li&gt;
-  &lt;li&gt;ref:表示使用哪个列或常数于索引一起来查询记录；&lt;/li&gt;
-  &lt;li&gt;rows:表示查询的元组个数；&lt;/li&gt;
-  &lt;li&gt;filtered:表示按照条件过滤的元组个数	的百分比；&lt;/li&gt;
-  &lt;li&gt;extra:表示查询过程的附件信息。这个参数有几个常用的取值，using where表示查询使用了where语句来处理的；using temporary表示使用了内部临时（基于内存）表；using filesort表示这是order by语句的结果；using index表示使用到了索引，没有直接访问整个表数据；using join buffer表示在连接查询时没有使用索引，并且需要连接缓冲区来存储中间的结果；impossible where表示where条件时没有找到符合的数据；select tables optimized away表示仅通过使用索引从聚合函数中返回一行数据；distinct表示找到一行数据后就停止了搜索；index merges表示使用了超过一个的索引时候，并以以下格式中的一个展现出来：
-    &lt;ul&gt;
-      &lt;li&gt;using sort_union(…)&lt;/li&gt;
-      &lt;li&gt;using union(…)&lt;/li&gt;
-      &lt;li&gt;using intersect(…)&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;以上三个的区别我会在以后的测试中展现出来。&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;　　DESCRIBE语句（DESC）的使用方法与EXPLAIN语句是一样的。这两者的分析结果也是一样的。DESCRIBE语句的形式如：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;describe select 语句；
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　在使用索引进行查询的过程中，有些时候即使查询时使用的是索引，但是索引并没有起作用。所以我们需要注意到几点情况：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;使用like的时候，如果匹配字符串的第一个字符为%,索引是不会被使用的，如果不在第一个位置，索引就会被使用&lt;/li&gt;
-  &lt;li&gt;在使用多列索引时，只有查询条件中使用了这些字段中第一个字段时，索引才会被使用&lt;/li&gt;
-  &lt;li&gt;如果查询语句只有OR关键字时，如果OR前后的两个条件都是索引时，查询中将使用索引。如果前后有一个条件的列不是索引，那么查询中将不使用索引&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;优化插入记录的速度&lt;/h2&gt;
-
-&lt;p&gt;1.禁用索引&lt;/p&gt;
-
-&lt;p&gt;　　插入记录时，mysql会根据表的索引对插入的记录进行排序。如果插入大量数据时，这些排序会降低插入记录的速度。为了解决这个情况，再插入记录之前应该先禁用索引。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;alter table 表名 disable keys;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　当数据都被插入以后，应该重新开启索引&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;alter table 表名 enbale keys;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　这块知识的应用，我已经在前边的文章有了对这块知识的应用：&lt;a href=&quot;http://naffan.cn/tech/2017/05/09/01.html&quot;&gt;《如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能》&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2.禁用唯一性检查&lt;/p&gt;
-
-&lt;p&gt;　　插入数据时，mysql会对插入的记录进行唯一性校验。这种校验也会降低插入记录的速度。可以在插入记录之前禁用唯一性检验。等到记录插入完毕后再开启。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;set unique_checks=0;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　重新开启唯一性检查&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;set unique_checks=1;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;3.优化insert语句&lt;/p&gt;
-
-&lt;p&gt;　　一般在批量插入数据的时候，会优先想到用多个insert语句去插入数据。但是，其实如果将所有的数据汇聚成一条insert语句，将会减少与数据库的连接等操作。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;分析表、检查表和优化表&lt;/h2&gt;
-&lt;p&gt;　　分析表主要作用是分析关键字的分布。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;analyze table 表名1[,表名2...];
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　检查表主要作用是检查表是否存在错误。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;check table 表名1[,表名2...][option];
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;　　option参数有5个参数：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;quick&lt;/li&gt;
-  &lt;li&gt;fast&lt;/li&gt;
-  &lt;li&gt;changed&lt;/li&gt;
-  &lt;li&gt;medium&lt;/li&gt;
-  &lt;li&gt;extended&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　这5个参数的执行效率依次降低。option选项只对MyISAM类型的表有效，对Innodb类型的表无效。同时还要注意这个执行过程会给表叫上只读锁。&lt;/p&gt;
-
-&lt;p&gt;　　优化表主要作用是消除删除或更新造成的空间浪费。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;optimize table 表名1[,表名2...]；
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　如果一个表使用了TEXT或者BLOB这样的数据类型，那么更新、删除等操作就会造成磁盘空间的浪费。&lt;/p&gt;
-
-&lt;h2 id=&quot;mysql&quot;&gt;优化mysql的参数&lt;/h2&gt;
-
-&lt;p&gt;　　mysql中比较重要的配置参数都在my.cnf或者my.ini文件的[mysqld]组中。下面对几个重要的参数进行详细介绍：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;key_buffer_size:表示索引缓存的大小。这个值越大，使用索引进行查询的速度越快。&lt;/li&gt;
-  &lt;li&gt;table_cache:表示同时打开的表的个数。这个值越大，能够同时同时打开的表的个数越多。这个值不是越大越好，因为同时打开的表太多会影响操作系统的性能。&lt;/li&gt;
-  &lt;li&gt;query_cache_size:表示查询缓存区的大小。使用查询缓存区可以提高查询的速度，这种方式只适用于修改操作少且经常执行相同的查询操作的情况；其默认值为0.当取值为2时，只有select语句中使用了sql_cache关键字，查询缓存区才会使用。例如，select sql_cache * from score&lt;/li&gt;
-  &lt;li&gt;query_cache_type:表示查询缓存区的开启状态。其取值为0时表示关闭，取值为1时表示开器，取值为2时表示按要求使用查询缓存区。&lt;/li&gt;
-  &lt;li&gt;max_connections:表示数据库的最大连接数。这个连接数不是越大越好，因为这些连接会浪费内存的资源。&lt;/li&gt;
-  &lt;li&gt;sort_buffer_size:表示排序缓存区的大小。这个值越大，进行排序的速度越快。&lt;/li&gt;
-  &lt;li&gt;read_buffer_size:表示为每个线程保留的缓冲区的大小。当线程需要从表中连续读取记录时需要用到这个缓冲区。set session read_buffer_size=n可以临时设置该参数的值。&lt;/li&gt;
-  &lt;li&gt;read_rnd_buffer_size:表示为每个线程保留的缓冲区的大小，与read_buffer_size相似。但主要用于存储按特定顺序读取出来的记录。也可以用set session read_rnd_buffer_size=n来临时设置该参数的值。&lt;/li&gt;
-  &lt;li&gt;innodb_buffer_pool_size:表示innodb类型的表和索引的最大缓存。这个值越大，查询的速度就会越快。但这个值太大了会影响操作系统的性能。&lt;/li&gt;
-  &lt;li&gt;innodb_flush_log_at_trx_commit:表示何时缓冲区的数据写入日志文件，并且将日志文件写入磁盘中。该参数有3个值，分别是0、1和2.值为0时表示每隔1秒将数据写入日志文件并将日志文件写入磁盘；值为1时表示每次提交事务时将数据写入日志文件并将日志文件写入磁盘；值为2时表示每次提交事务时将数据写入日志文件，每隔1秒将日志文件写入磁盘。该参数的默认值为1.这个默认值是最全最合理的。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　合理的配置这些参数可以提高mysql服务器的性能。除以上参数外，还有innodb_log_buffer_size、innodb_log_file_size等参数。如果想要了解更多的参数的话，应该去手册中进行查看。&lt;/p&gt;
-
-&lt;p&gt;本文参考：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://book.douban.com/subject/5450806/&quot;&gt;《mysql入门很简单》&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">优化简介</summary></entry><entry><title type="html">如何向MYSQL插入大量数据的方法和性能对比</title><link href="http://naffan.cn/tech/2017/05/09/01.html" rel="alternate" type="text/html" title="如何向MYSQL插入大量数据的方法和性能对比" /><published>2017-05-09T00:00:00+08:00</published><updated>2017-05-09T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/09/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/09/01.html">&lt;p&gt;&lt;img src=&quot;https://timgsa.baidu.com/timg?image&amp;amp;quality=80&amp;amp;size=b9999_10000&amp;amp;sec=1494359970180&amp;amp;di=b0128a39c2341bf21bdb2a64ce7afe0b&amp;amp;imgtype=0&amp;amp;src=http%3A%2F%2Fa1.jikexueyuan.com%2Fhome%2F201506%2F26%2Fae91%2F558cca408efa6.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　在操作mysql的时候，为了理解mysql的特性我们往往需要构造出一张承载很大数据量的数据表。那么如何创建出大数据量的表呢？&lt;/p&gt;
-
-&lt;p&gt;　　首先，我们要在自己的脑中先设想出能够满足这个需求的几个实现方案：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;通过你所掌握的语言编写脚本实现&lt;/li&gt;
-  &lt;li&gt;在数据库中直接通过脚本实现&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　第一种方案实现起来比较简单，对我来说php是我的主语言，我用php去实现这个需求的业务逻辑很简单。但是，在实际的操作中就会发现光光写好一段能够满足此需求的逻辑还远远不够，我们还需要考虑运行程序机器的内存限制以及超时时间等。与直接通过数据库脚本实现来说，性能和时间都不是很有优势。&lt;/p&gt;
-
-&lt;p&gt;　　第二种方案实现起来稍微复杂且需要一点点学习成本，首先是需要掌握最基本的数据库操作知识，其次还要通过编写mysql存储过程的标准格式。但是，运行起来的速度以及方便程度还有性能都远远比第一种方案来的效率。&lt;/p&gt;
-
-&lt;p&gt;　　首先，我们需要将数据表结构建立起来。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE TABLE millionData (
-   id INT NOT NULL,
-   email VARCHAR(64) NOT NULL,
-   name VARCHAR(32) NOT NULL,
-   password VARCHAR(32) NOT NULL,
-   phone VARCHAR(13),
-   birth DATE,
-   sex INT(1),
-   avatar BLOB,
-   address VARCHAR(64),
-   regtime DATETIME,
-   lastip VARCHAR(15),
-   modifytime TIMESTAMP NOT NULL,
-  PRIMARY KEY (id)
-)ENGINE = MyISAM ROW_FORMAT = DEFAULT
-partition BY RANGE (id) (     
-    partition p0 VALUES LESS THAN (100000),     
-    partition p1 VALUES LESS THAN (500000),     
-    partition p2 VALUES LESS THAN (1000000),     
-    partition p3 VALUES LESS THAN (1500000),
-    partition p4 VALUES LESS THAN (2000000),
-    Partition p5 VALUES LESS THAN MAXVALUE     
-); 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我们规定首先选择引擎为MyISAM，因为MyISAM的插入速度要比INNODB的插入速度快出10%。如果需要INNODB引擎的表，就在数据插入完成以后再对表进行此操作即可：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;alter table millionData engine=innodb
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　虽说，这条语句在更改的时候也需要时间。但是，相对于直接用innodb引擎的表进行插入来说还是要快很多的。接下来，我们就要对此表进行数据的插入了。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE DEFINER=`root`@`localhost` PROCEDURE `BatchInsertMillionData`(IN `start` int, IN loop_time int)
-    DETERMINISTIC
-BEGIN
- DECLARE Var INT;
- DECLARE ID INT;
- SET Var = 0;
- SET ID= start;
-      WHILE Var &amp;lt; loop_time 
-        DO
-      insert into millionData(ID,email,name,password,phone,birth,sex,avatar,address,regtime,lastip,modifytime) 
-  values(ID,CONCAT(ID,'@sina.com'),CONCAT('name_',rand(ID)*10000 mod 200),123456,13800000000,adddate('1995-01-01',(rand(ID)*36520) mod 3652),Var%2,'http:///it/u=2267714161,58787848&amp;amp;fm=52&amp;amp;gp=0.jpg','北京市海淀区',adddate('1995-01-01',(rand(ID)*36520) mod 3652),'8.8.8.8',adddate('1995-01-01',(rand(ID)*36520) mod 3652));
-      SET Var = Var + 1;
-      SET ID= ID + 1;
-      END WHILE;
-END
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　通过阅读上面的代码，我们可以发现。BatchInsertMillionData有两个输入参数，一个是起始id，一个是要插入的数据量。代码是通过这两个输入的值做while循环，一条一条insert数据插入到数据库当中的。让我们来看看实际应用的耗时吧。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt;call BatchInsertMillionData(1,1000000);
-Query OK, 1 row affected (1 min 21.30 sec)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;　　让我们多做一步&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; truncate table millionData;
-Query OK, 0 rows affected (0.02 sec)
-
-mysql&amp;gt; alter table millionData disable keys;
-Query OK, 0 rows affected (0.01 sec)
-
-mysql&amp;gt; call BatchInsertMillionData(1,1000000);
-Query OK, 1 row affected (1 min 23.05 sec)
-
-mysql&amp;gt; alter table millionData enable keys;
-Query OK, 0 rows affected (0.00 sec)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　从上面的两个运行方法来看，第二种在运行存储过程之前对myisam表进行了关闭索引的操作。然而完成的时间并没有提高反而慢了1秒多。为什么我会增加这个步骤呢？这是因为有人说这步骤可以实现打开/关闭myisam表非唯一索引的更新。然而，我并没有对此表任何字段添加任何索引。所以，以最后的完成时间来看。关闭key的操作并没有对我的插入起到什么效果。那好，我们就对这张表增加几个非唯一索引来试试。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; truncate table millionData;
-Query OK, 0 rows affected (0.01 sec)
-
-mysql&amp;gt; alter table millionData add key name(name);
-Query OK, 0 rows affected (0.01 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql&amp;gt; alter table millionData add key phone(phone);
-Query OK, 0 rows affected (0.02 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql&amp;gt; alter table millionData add key phoneAndName(phone,name);
-Query OK, 0 rows affected (0.02 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql&amp;gt; show create table millionData;
-(中间的制表符省略)
-| Table       | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-(中间的制表符省略)
-| millionData | CREATE TABLE `millionData` (
-  `id` int(11) NOT NULL,
-  `email` varchar(64) COLLATE utf8_bin NOT NULL,
-  `name` varchar(32) COLLATE utf8_bin NOT NULL,
-  `password` varchar(32) COLLATE utf8_bin NOT NULL,
-  `phone` varchar(13) COLLATE utf8_bin DEFAULT NULL,
-  `birth` date DEFAULT NULL,
-  `sex` int(1) DEFAULT NULL,
-  `avatar` blob,
-  `address` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `regtime` datetime DEFAULT NULL,
-  `lastip` varchar(15) COLLATE utf8_bin DEFAULT NULL,
-  `modifytime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `name` (`name`),
-  KEY `phone` (`phone`),
-  KEY `phoneAndName` (`phone`,`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin
-/*!50100 PARTITION BY RANGE (id)
-(PARTITION p0 VALUES LESS THAN (100000) ENGINE = MyISAM,
- PARTITION p1 VALUES LESS THAN (500000) ENGINE = MyISAM,
- PARTITION p2 VALUES LESS THAN (1000000) ENGINE = MyISAM,
- PARTITION p3 VALUES LESS THAN (1500000) ENGINE = MyISAM,
- PARTITION p4 VALUES LESS THAN (2000000) ENGINE = MyISAM,
- PARTITION p5 VALUES LESS THAN MAXVALUE ENGINE = MyISAM) */ |
-(中间的制表符省略)
-1 row in set (0.00 sec)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;　　接下来我们运行两种方法的插入。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; call BatchInsertMillionData(1,1000000);
-Query OK, 1 row affected (2 min 1.12 sec)
-
-mysql&amp;gt; truncate table millionData;
-Query OK, 0 rows affected (0.01 sec)
-
-mysql&amp;gt; alter table millionData disable keys;
-Query OK, 0 rows affected (0.00 sec)
-
-mysql&amp;gt; call BatchInsertMillionData(1,1000000);
-Query OK, 1 row affected (1 min 27.24 sec)
-
-alter table millionData enable keys;
-Query OK, 0 rows affected (7.87 sec)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　可以看到，我们对此表增加了3个索引（一张表建议最好不要添加多于6个索引）。两个普通索引和一个关联索引。没有关闭非唯一索引的插入时间要比关闭非唯一索引的插入时间慢了半分钟，虽然最后开开了索引也只是在用时8秒。所以说，如果你的表建立的时候就建立了索引，在导入大批量数据之前，一定要先尝试着关闭这些索引，这一个步骤会让你省去很多的等待时间。&lt;/p&gt;
-
-&lt;p&gt;　　上面我们插入的是一百万数据而已，那么接下来我们尝试插入一亿条数据试试。我们建立一张表，同样用的也是之前的建表语句，只是表的名称改成了billionData。讲个题外话，你是不是经常搞不清million和billion谁大以及各代表的数字呢？我告诉你们一个好方法，你只要记住b比m大，而b是3个3个0，m是2个3个0。因为，外国人记录数字都习惯用3个0位一个段。所以，million代表1，000，000，billion代表1，000，000，000。&lt;/p&gt;
-
-&lt;p&gt;　　如果我们还是用上面的那个存储过程的话，很悲催，最后会出现query超时或者丢失的提示，而进程还没等数据插入完成就早早停止住了。这是因为mysql在做数据插入的时候是有一个循环体在不断的向mysql中注入信息的，如果要插入的数据时时刻刻都在往这个循环内插入数据，然而写入磁盘的数据量是有上限的，这样一来数据远远超过了消费数据的能力，mysql就会报出这样的错误来。那么问题来了，我们需要怎么修改存储过程才能满足这个需求呢？&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;CREATE DEFINER=`root`@`localhost` PROCEDURE `BatchInsertBillionData2`(IN start int(11), IN loop_time int(11))
-BEGIN
-	DECLARE times INT;
-	DECLARE ID INT;
-	DECLARE j INT;
-	DECLARE count INT;
-	SET ID = start;
-	SET times = loop_time/1000;
-	SET count = 0;
-	SET @exedata = &quot;&quot;;
-	WHILE count &amp;lt; times DO
-		SET j = 0;
-		WHILE j &amp;lt; 1000 DO
-			SET @exedata = concat(@exedata,&quot;,('&quot;,ID,&quot;','&quot;,CONCAT(ID,'@sina.com'),&quot;','&quot;,CONCAT('name_',rand(ID)*10000 mod 200),&quot;','123456','13800000000','&quot;,adddate('1995-01-01',(rand(ID)*36520) mod 3652),&quot;','&quot;,ID%2,&quot;','http://it/u=2267714161,58787848&amp;amp;fm=52&amp;amp;gp=0.jpg','北京市海淀区','&quot;,adddate('1995-01-01',(rand(ID)*36520) mod 3652),&quot;','8.8.8.8','&quot;,adddate('1995-01-01',(rand(ID)*36520) mod 3652),&quot;')&quot;);
-			SET j = j+1;
-			SET ID = ID + 1;
-		end while;
-		SET @exedata = SUBSTRING(@exedata,2);
-		SET @exesql = concat(&quot;insert into billionData(ID,email,name,password,phone,birth,sex,avatar,address,regtime,lastip,modifytime) values &quot;,@exedata);	
-		prepare stmt from @exesql;
-		execute stmt;
-		DEALLOCATE prepare stmt;
-		SET @exedata = &quot;&quot;;
-		SET count = count +1 ;
-	end while;
-END
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　以上就是对存储过程的修改，大概意思就是判断要插入的数据量除以1000，所得到的数字就是最外层循环的循环次数，内层循环再做1000此循环，循环体就是在每次循环中将sql组成类似insert into billionData(…) values (…),…,(…)的形式然后再通过prepare和execute进行分批量的插入。这样一是将1000次的请求汇成一个请求然后异步的去插入数据库，然后马上再进行下一个1000次的组装和插入。这样就不会发生丢失query连接的报错了。&lt;/p&gt;
-
-&lt;p&gt;　　想说一下用这个方法插入了一亿条数据的耗时吧。这段代码大约耗时2个多小时，总数据量在17G左右，每秒20000条插入到数据表中。在没有任何索引的情况下，将此表引擎改成innodb花了12分钟左右：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; alter table  billionData engine=innodb;
-Query OK, 0 rows affected (11 min 51.20 sec)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/05/10/5911f7eb697d8.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;以下写于2017-05-10&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;　　首先，让我插个题外话。今天凌晨，2017年欧冠半决赛尤文图斯战胜了摩纳哥。时隔两年尤文图斯又站上了欧冠的巅峰，接下来就要看明日凌晨皇马和马竞谁能赢了，不过皇马已经在前半回合3比0领先马竞了，不出意外皇马不会被马竞翻盘的，毕竟现在C罗如日中天屌的一逼。回想2015年10月我也是曾经在卡尔德隆球场看过皇马对马竞比赛的男人。&lt;/p&gt;
-
-&lt;p&gt;　　好了，扯回来吧。之前的方式还不是最高效的。后来，了解到还有一种大法就是Load data。这个方法简直高效的要命，时间占用比例是之前的约5%，提升了95%的速度呢。为了进行测试我将昨日插入的一百万数据导出成txt，让我们先看一下mysql导出这个文件花了多长时间。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/05/10/5912897f0c087.png&quot; alt=&quot;QQ20170510-105800&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　接着，让我们来用load data的方法尝试插入数据库吧。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql&amp;gt; truncate table millionData;
-Query OK, 0 rows affected (0.09 sec)
-
-load data local infile '/Users/yifanzhang/Downloads/millionData.txt' into table millionData;
-ERROR 1148 (42000): The used command is not allowed with this MySQL version
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　上来就遇到了error的报错。通过报错我们知道是因为这个方法是不被当前的数据库版本所支持的。经过查询手册得知：&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;LOCAL works only if your server and your client both have been configured to permit it. For example, if mysqld was started with –local-infile=0, LOCAL does not work. See Section 6.1.6, “Security Issues with LOAD DATA LOCAL”.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　local关键字只有服务器端和客户端都设置为允许的情况下才可以使用。默认情况下mysqld是以–local-infile=0开始启动的，所以local不能够工作。&lt;/p&gt;
-
-&lt;p&gt;　　所以说有两种方式可以将local功能打开。一种是在启动mysql客户端时带上允许local的参数，一种是配置在my.cnf中的，允许mysql一直保持local的开启。显然，我是在做测试，毕竟这个功能不会一直用到，所以我采用的就是第一种方法。那么我们先退出mysql，然后重新启动mysql客户端。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-sql&quot;&gt;mysql --local-infile -uroot test
-Reading table information for completion of table and column names
-You can turn off this feature to get a quicker startup with -A
-
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 35
-Server version: 5.7.10 Homebrew
-
-Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
-mysql&amp;gt; load data local infile '/Users/yifanzhang/Downloads/millionData.txt' into table millionData;
-Query OK, 1000000 rows affected, 65535 warnings (5.88 sec)
-Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 12000000
-
-mysql&amp;gt; truncate table millionData;
-Query OK, 0 rows affected (0.20 sec)
-
-mysql&amp;gt; alter table millionData add index name(name);
-Query OK, 0 rows affected (0.03 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql&amp;gt; alter table millionData add index phone(phone);
-Query OK, 0 rows affected (0.01 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql&amp;gt; alter table millionData add index phoneAndName(phone,name);
-Query OK, 0 rows affected (0.01 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql&amp;gt; load data local infile '/Users/yifanzhang/Downloads/millionData.txt' into table millionData;
-Query OK, 1000000 rows affected, 65535 warnings (11.70 sec)
-Records: 1000000  Deleted: 0  Skipped: 0  Warnings: 12000000
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　通过测试，我们可以看到用load data的方式插入数据，在数据表没有索引以及有索引的情况下，性能都要比之前的每一种方法快很多。只是，这种方法你需要导入的数据文本以及打开相关配置。在什么时候使用哪种情况，完全取决于你所处的环境之下。&lt;/p&gt;
-
-&lt;p&gt;　　PS:拥有一千万数据量的millionData.txt总大小为146.2MB，在数据库中包括三个索引的容量为41MB。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry><entry><title type="html">实现jekyll分类目录</title><link href="http://naffan.cn/tech/2017/04/15/01.html" rel="alternate" type="text/html" title="实现jekyll分类目录" /><published>2017-04-15T00:00:00+08:00</published><updated>2017-04-15T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/04/15/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/04/15/01.html">&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/15/58f1026a213b8.png&quot; alt=&quot;jekyllserve&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　首先，感谢作者sverrirs的开源项目&lt;a href=&quot;https://github.com/sverrirs/jekyll-paginate-v2&quot;&gt;jekyll-paginate-v2&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;　　自打我这个博客建立到现在已经有半年的时光了，从简单的jekyll本机跑起来，到实现各种rb的插件，再到部署到github-pages服务器上，然后又研究了如何让page可以实现插件功能，之后又发现百度蜘蛛抓被github-pages禁止后转向了CDN服务，现如今又解决了jekyll的分类的分页。可以说，从现在开始我的博客终于实现了作为一个博客的最基础的功能。当刚才实现了分类的分页让我欣喜若狂，我终于不用担心着自己的文章多的只能在一个html中不够地方展现了。&lt;/p&gt;
-
-&lt;p&gt;　　接下来介绍一下实现方法吧，现在都夜里1点了，今天（周六）早上还要上班呢，赶紧在睡觉之前把这篇文章写完吧。&lt;/p&gt;
-
-&lt;p&gt;　　jekyll-paginate-v2是一个专给jekyll博客系统开发出的一个分页类，他继承了jekyll的原始paginator方法，并且将每个目录中的paginator.posts替换成YAML中所指定的聚合类（collectoion,category,tag），最终达到只要在YAML中规定好目录的所属分类即可实现分类中的分页效果。&lt;/p&gt;
-
-&lt;p&gt;　　由于，jekyll的源代码中是不支持分类的分页的，可以从官方的&lt;a href=&quot;http://jekyll.com.cn/docs/pagination/#note&quot;&gt;说明文档&lt;/a&gt;中看到：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;不支持对“标签”和“类别”分页
-分页功能仅仅遍历文章列表并计算出结果，并无读取 YAML 头信息，现在不支持对“标签”和“类别”分页。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　就因为jekyll本身不支持这样的操作，所以引来了很多的开发者致力于实现这个功能，虽然很多开发者都在试图开发出这个功能，但是也许是因为jekyll过于小众，所以从进展上来说，没有一个可以兼容的实现此功能的。但是，16年12月sverrirs却开发出了jekyll-paginate-v2分页类，终于实现了这个功能。其实，我也是半年以后才发现他这个插件的。通过它的帮助文档，虽然有一些小小的问题，但是最终还是实现了我梦寐以求的功能。不得不说这个开发者为我们jekyll用户造福了。&lt;/p&gt;
-
-&lt;p&gt;　　就像说明文档说的一样，我们只需要安装好了这个插件，然后在_config.yml以及Gemfile中配置完成即可以应用了。然后，你再在每个分类index.html页面中规定好YAML信息就可以最终实现了。&lt;/p&gt;
-
-&lt;p&gt;　　比如，我的&lt;strong&gt;深思默想&lt;/strong&gt;分类，thinking是这个分类的文件夹，置于root下，然后在这个文件夹中建立index.html，index.html中配置即可。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;---
-title: 拿饭-沈思默想
-pagination: 
-  enabled: true
-  category: thinking
----
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="jekyll,jekyll-paginate-v2" /><summary type="html"></summary></entry><entry><title type="html">如何培养自己结构化思维的能力</title><link href="http://naffan.cn/thinking/2017/04/09/1.html" rel="alternate" type="text/html" title="如何培养自己结构化思维的能力" /><published>2017-04-09T00:00:00+08:00</published><updated>2017-04-09T00:00:00+08:00</updated><id>http://naffan.cn/thinking/2017/04/09/1</id><content type="html" xml:base="http://naffan.cn/thinking/2017/04/09/1.html">&lt;blockquote&gt;
-  &lt;p&gt;谈话开始的最初30秒决定一切，所以你需要一下子就抓住对方的注意力。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　最近在微信公众号上看到了一篇文章叫做&lt;a href=&quot;http://mt.sohu.com/20170321/n484031234.shtml&quot;&gt;《结构化思维-让项目经理受益三生三世》&lt;/a&gt;，看完以后让我受益匪浅。故想借着热劲儿赶紧写一篇我对结构化思维的理解出来，但是工作需要十十六又正处我转型的过程中，所以一拖再拖没有来得及静下心来思考关于如何让自己掌握结构化思维的问题，好在当时看完了这篇文章以后就顺手在我的代办事务上记下了这个事情，于是之后的每一天电脑都会提醒我这个待办事情，今天终于可以腾出时间好好研究了一下。&lt;/p&gt;
-
-&lt;p&gt;　　周六加完班吃完饭到家都快10点了，所以就翻出了这篇文章重新温读了一番。但是，感觉这篇文章写的还不是那么透彻。于是，就到网络上搜了一下“结构化思维”这个关键词，不搜不知道，一搜还真是文章一大把呢。但是，在点进前几篇文章阅读以后发现其他的文章无非就是互相改一改案例之类的，雷同的还是挺多的。&lt;/p&gt;
-
-&lt;p&gt;　　关于“结构化思维”的方法，很多文章都提到了&lt;a href=&quot;http://wiki.mbalib.com/wiki/MECE分析法&quot;&gt;MECE&lt;/a&gt;方法。这个方法我就不再多赘述了，反正只需要记住八个字“相互独立，完全穷尽”即可。具体如何理解，可以参考这篇文章&lt;a href=&quot;https://sanwen8.cn/p/14bZzFA.html&quot;&gt;结构化思维是最值得培养的思维方式&lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;　　下面我来说一下我理解的MECE吧。如果你看了上边我链接的文章或者你曾经看过类似的文章你应该MECE有两种主流结构吧。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;自上而下结构法&lt;/li&gt;
-  &lt;li&gt;自下而上结构法&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　其实区分这两种方法是很简单的。首先自上而下的结构法是针对于最终结果是已知的，在知道结果的情况下，去找寻能够完成的方法。举个例子，就是做菜。比如你想要炒个鱼香肉丝。炒鱼香肉丝就是结果，而我们要用自上而下的结构法去分析如何才能完成这道菜。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/09/58ea28b7c12ee.png&quot; alt=&quot;炒鱼香肉丝分析&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　根据上面的结构图，我们就能够很快的了解如何去炒鱼香肉丝了。当然，上面这幅图里面炒菜模块下面的结构没有画完整，但是已经能够体现出我想表达的自上而下分析问题的方法了。&lt;/p&gt;
-
-&lt;p&gt;　　不论生活中还是工作中，自上而下的结构法用处也很多，不过总感觉有点像统筹管理。而且此思维方法感觉更加适用于生活中的安排之类的事情，更深入的思考还是需要掌握自下而上的结构方法。所以，更加关键的还应该是说自下而上更加对自己有帮助一些。&lt;/p&gt;
-
-&lt;p&gt;　　当我认真的研究自下而上结构法的时候，我在网上看到了这么一篇文章：&lt;a href=&quot;http://news.mbalib.com/story/230292&quot;&gt;如何养成高薪人士的逻辑思维力？&lt;/a&gt;。这个题目一下子吸引到了我的注意力，我觉得作者也挺会给文章起名字的。通读了整篇文章以后，确实发现作者对自下而上结构法有自己的认识并且已经基本上掌握了这种方法。作者在这篇文章中给出了很多的例子，能够帮助我们切身的体会出这里面的道理。&lt;/p&gt;
-
-&lt;p&gt;　　所有文章看完以后，我准备动手尝试进行归纳总结了。但是，我首先需要找个能够让我进行思考的例子。其实，身边很多事情都能当例子，可是当我突然想去研究一下的时候却发现脑中一片空白。后来突然想到这周六上班在等红绿灯的时候，有很多发广告的农民从车窗中扔进来了很多房产广告。那我就拿这些房产广告作为例子，假设自己要在这些广告中挑选一套房子。&lt;/p&gt;
-
-&lt;p&gt;　　首先，让我先列举一些自下而上结构法的几个关键步骤：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;头脑风暴：把所有能够想到的想法碎片列举出来&lt;/li&gt;
-  &lt;li&gt;连线分组：对这些碎片进行归纳并连线&lt;/li&gt;
-  &lt;li&gt;结构提炼：对分组后的结果一一分组，这一步就要依照MECE方法的独立且穷尽来这里了&lt;/li&gt;
-  &lt;li&gt;补充观点：因为有了分组了，所以就能够按照这个分组的意义去补充更多的细节了&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　综上所述，当整幅图画出以后，就能够让你一目了然所有的细枝末节了。通过这幅图就能够帮助我们总结归纳然后做出明智的选择了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/09/58ea59cecd09a.png&quot; alt=&quot;房屋小广告&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　首先，我按照1中所说的，将我能够想到的关于我认为购置房产时购房者最关心的问题一一列举了出来。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/10/58ea633509f76.png&quot; alt=&quot;QQ20170410-000608@2x&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　当然，仅仅这些思维碎片肯定是不够的。但是在刚开始的时候想出的多少并不是关键，我们可以多想想，即使漏掉了在以下的步骤中我们还会再重新审视一遍的，在那个时候因为有了组织结构了，所以更能够帮助自己选定了方向去思考。接下来我就应该将这些碎片进行连线划分了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/10/58ea63354947a.png&quot; alt=&quot;QQ20170410-001458@2x&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　通过上图，我们可以看到这些碎片已经被我一一关联了起来。这些线就是我脑中认为的碎片之间的关系。比如单价和平米是一种类型，地理位置和用途是一个类型等等。现在我们可以对这些琐碎的思维碎片进行结构化了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/10/58ea63354c7b7.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　这样这里出来以后，我就可以很直观的看到，我现在这个阶段能够考虑到的就是这几个组织结构：价格，环境，用途，利益。&lt;/p&gt;
-
-&lt;p&gt;　　在这幅图中，我有个思考过程。其中用途相关这里，为什么类型和政策会放在这里呢？没错，是MECE。我是这样想的，类型就是这个房子是商住两用的还是住宅的还是商驻的。政策就是国家规定这个房子是用来干什么的。其实考虑到如果把政策放到利益相关这个组织里面，那就代表我认为的政策是国家对买卖房屋出的限购之类的政策了。我本意并非如此，我想的是国家对这种房子的规划，也就是说这种房子将来政府会把他归属于那种类别怎么用。因为这样的考虑所以我把政策规划到用途相关里了。如果，把政策单拎出来放在一个叫做政策相关的结构里，也不是不行。但是，总感觉这个政策相关和我买房并没有太大关系。而且还会和利益产生交集。说了那么多其实我想说明的是，这些归纳总结是属于一个人自己的想法的，即使别人不这么认为，也没多大关系，因为是你自己在总结，你总结出来的东西收益的是自己，而非他人。&lt;/p&gt;
-
-&lt;p&gt;　　这样，我们已经完成了前三部了。接下来，我们需要进入到第四部，也就是对这些结构补充细节了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/10/58ea64aaf3ced.png&quot; alt=&quot;QQ20170410-004305@2x&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　经过，最后这一轮的思考。我将我能够想到的方方面面全部总结到了这张表中。虽说，我对买卖房屋没有太多的经验。但是，如果我按照这个我总结出的标准去看房子，一定不会走眼。在将来的生活中，如果发现了更多的想法我就可以在这张表中继续填加现在没能够想到的细节了。长此以往，买房子这种事情自己就会有主心骨了。也不用听人家说如何如何了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/04/10/58ea6c7e2817f.jpg&quot; alt=&quot;表格&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　通过对每一项细节一一的带入到表中，这样就汇总出来了一份可供我们理解的结构化思维的工具了。通过这幅图我们可以直观的看到很多很多细节，虽然这个例子是拿街边小广告做的，而我也没有买房的意愿，但是我仍然觉得通过这么一归纳，买还是不卖的结果已经了然于胸。&lt;/p&gt;
-
-&lt;p&gt;　　从表中我们可以看到。相比之下投资性价比最高的还是别墅这一款。但是，由于宣传单上缺少了太多的必要信息了，所以只能实打实的去咨询为好。另外，香江公馆和酒店公寓就稍微差点了，首先房屋是商住两用的，那就意味着房子的质量以及物业费会比住宅不划算很多。但是，价格上确实有很大优势，而这些优势也大都是建立在离城区相对较远上。另外，香江公馆周围的配套设施要比其他的房型都要齐全一些。所以，如果是真正的选择居住的话肯定会选香江公馆。至于艺术农庄这个项目来说，由于农庄的产权是又村子划拨的，他并不受政府的重视，也就是说政府是任由村子自有处置土地的，同样我们可以看出来这个35年使用权有一些问题。我们知道普通住宅使用权是70年，商用是45年。然而这个却是35年。也就是说这种农家院都是由村子管理的，好坏那就要看这个村子的知名度如何了。如果村子还没有发展起来呢，那买这种农场的意义就不存在了。毕竟风险太大，政府说啥就是啥，如果有一天政府要收回征地了，那么房子具体是不是你的也会说不清的。&lt;/p&gt;
-
-&lt;p&gt;　　好了，经过以上的分析都是出自本人思考以后得出的结论。通过这个方法起初肯定是比价生疏的，但只要勤加练习，就像别人文章中所提到的一样。刻意的这样联系，3个月后，你就刻意融会贯通了。以后再遇见类似的事情，你都可以用这种结构化的思维去解决了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="思维,能力" /><summary type="html">谈话开始的最初30秒决定一切，所以你需要一下子就抓住对方的注意力。</summary></entry></feed>
+&lt;p&gt;　　由于浮点数类型的值是近似数而不是一个确切的数值，所以想用他们来存储确切值时会出现意想不到的错误。所以，我们还是尽量避免使用这种类型的值吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry></feed>

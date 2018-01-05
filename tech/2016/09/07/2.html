@@ -2,13 +2,16 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.1.0 -->
-<title>让MWeb支持甘特图的办法（2.0以上版本 - 拿饭网</title>
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>让MWeb支持甘特图的办法（2.0以上版本 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.6.2" />
 <meta property="og:title" content="让MWeb支持甘特图的办法（2.0以上版本" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
 <meta name="description" content="开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说" />
 <meta property="og:description" content="开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说" />
-<link rel="canonical" href="http://naffan.cn/tech/2016/09/07/2.html" />
-<meta property="og:url" content="http://naffan.cn/tech/2016/09/07/2.html" />
+<link rel="canonical" href="http://localhost:4000/tech/2016/09/07/2.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2016/09/07/2.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2016-09-07T00:00:00+08:00" />
@@ -19,12 +22,7 @@
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"@context": "http://schema.org",
-"@type": "BlogPosting",
-"headline": "让MWeb支持甘特图的办法（2.0以上版本",
-"datePublished": "2016-09-07T00:00:00+08:00",
-"description": "开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说",
-"url": "http://naffan.cn/tech/2016/09/07/2.html"}</script>
+{"description":"开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2016/09/07/2.html","headline":"让MWeb支持甘特图的办法（2.0以上版本","dateModified":"2016-09-07T00:00:00+08:00","datePublished":"2016-09-07T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/09/07/2.html"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,13 +69,13 @@ var _hmt = _hmt || [];
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-      <li><a href="/list">文章列表</a></li>
-      <li><a href="/life">生活闲杂</a></li>
-      <li><a href="/thinking">沈思默想</a></li>
-      <li><a href="/economy">经济杂谈</a></li>
-      <li><a href="/books">阅读书籍</a></li>
-      <li><a href="/links">精彩链接</a></li>
-      <li><a href="/about">关于本人</a></li> 
+      <li><a href="/list/index.html">文章列表</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
       </ul>
     </div><!--/.nav-collapse -->
   </div>
@@ -89,13 +87,13 @@ var _hmt = _hmt || [];
     <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
     <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
     <hr />
-    <li><a href="/list">文章列表</a></li>
-    <li><a href="/life">生活闲杂</a></li>
-    <li><a href="/thinking">沈思默想</a></li>
-    <li><a href="/economy">经济杂谈</a></li>
-    <li><a href="/books">阅读书籍</a></li>
-    <li><a href="/links">精彩链接</a></li>
-    <li><a href="/about">关于本人</a></li> 
+    <li><a href="/list/index.html">文章列表</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
     <hr>
   </ul>
 </div>
@@ -160,7 +158,7 @@ $(function(){
   <div class="post">
     <p><code>开篇一定要注明一下：这个方法只能使用在Mweb2.0以上版本，以下版本不行。原因正文说</code></p>
 
-<h3 id="mwebmacmarkdownhttpzhmwebim">Mweb是区禄海（开发者）开发的一款适用于MAC系统的MARKDOWN编辑软件，官网地址在这里<a href="http://zh.mweb.im">官网地址</a>。</h3>
+<h3 id="mweb是区禄海开发者开发的一款适用于mac系统的markdown编辑软件官网地址在这里官网地址">Mweb是区禄海（开发者）开发的一款适用于MAC系统的MARKDOWN编辑软件，官网地址在这里<a href="http://zh.mweb.im">官网地址</a>。</h3>
 
 <p>这款软件在APP store上还是有一定的热度的，我也用了这款软件用来编写自己的博客和工作中应用的各种文案。身为程序员我深表感激，这款软件在我大部分应用情况中都基本上可以解决任何问题。</p>
 
@@ -246,7 +244,7 @@ $(function(){
     <div>
       <ul class="pager">
 
- 	<li class="previous"><a href="/2016/09/07/1.html">&larr; 前一篇</a></li>
+ 	<li class="previous"><a href="/tech/2016/09/07/1.html">&larr; 前一篇</a></li>
 
 
 
@@ -264,7 +262,7 @@ var appid = 'cysGfqald';
 var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
 var width = window.innerWidth || document.documentElement.clientWidth; 
 if (width < 960) { 
-window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("http://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
 
       </div>
       <div class="container">
@@ -279,8 +277,9 @@ window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="tex
 	  ga('send', 'pageview');
 
 	</script>
-    <p class="text-muted credit">
-      &copy; 2017 拿饭网 &middot;
+    <p>
+      &copy; 2019 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script>
     </p>
   </footer>
 </div>

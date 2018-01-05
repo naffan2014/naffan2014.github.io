@@ -7,7 +7,6 @@ function exe_cmd() {
 
 if [ $# -lt 1 ]; then
     echo "Usage: sh $0 master"
-    exit
 fi
 
 branch=$1
