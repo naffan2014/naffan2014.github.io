@@ -41,7 +41,7 @@ p
 {
   font-family:"Helvetica Neue", helvetica, "Open Sans", sans-serif;
   line-height: 2em;
-  font-size: 1.2em;
+  #font-size: 1.2em;
   font-weight:200
 }
 table
@@ -143,7 +143,7 @@ th
 
 .sidebar-nav li
 {
-  line-height:30px;
+  line-height:35px;
   text-indent:40px;
   font-family:"Helvetica Neue", helvetica, "Open Sans", sans-serif;
   font-weight:200;

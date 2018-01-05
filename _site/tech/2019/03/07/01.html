@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>学习用GO写了个聊天室 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.6.2" />
+<meta property="og:title" content="学习用GO写了个聊天室" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。" />
+<meta property="og:description" content="　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。" />
+<link rel="canonical" href="http://localhost:4000/tech/2019/03/07/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2019/03/07/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-07T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"description":"　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2019/03/07/01.html","headline":"学习用GO写了个聊天室","dateModified":"2019-03-07T00:00:00+08:00","datePublished":"2019-03-07T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/07/01.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/list/index.html">文章列表</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <li><a href="/list/index.html">文章列表</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<script src="/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+      $.toc.clickHideButton();
+  });
+</script>
+
+<div id="article">
+	<div class="article-title">学习用GO写了个聊天室</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 03/07/19</small>
+	</p> 
+	<hr/>
+	<div class="post">
+		<p>　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</p>
+
+<p>　　断断续续那么长时间学习go了，今天才第一次写出个像样的程序。总是感觉程序大都一个样，真正上手才是王道。</p>
+
+<p>　　创建一个聊天室服务端,chatroom_client.go</p>
+
+<pre><code class="language-golang">package main
+
+import (
+	"fmt"
+	"net"
+	"strings"
+)
+//创建基于链接的哈希map，方便知道链接对应的端口号
+var onlineConns = make(map[string]net.Conn) 
+//创建一个频道，长度1000.用来存储信息
+var messageQueue = make(chan string, 1000)
+//创建一个返回布尔值的频道，用来应对没有信息的情况
+var quitChan = make(chan bool)
+//检查错误，通用方法
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+//将消息存进频道中
+func ProcessInfo(conn net.Conn){
+	buf := make([]byte , 1024) 创建个1024字节的字节流
+	defer conn.Close() //程序运行完毕时关闭链接
+    //循环体
+	for{
+	   //从信息流读出消息
+		numOfBytes,err:= conn.Read(buf) 
+		if err != nil{
+			panic(err)
+		}
+     //如果字节不等于零，就把消息字符化发到消息频道中
+	   if numOfBytes != 0{
+			message := string(buf[0:numOfBytes])
+			messageQueue &lt;- message
+		}
+	}
+}
+//消费消息
+func ConsumeMessage(){
+	for{
+	   //select是配合频道使用的，选择进哪个通信操作
+		select{
+			case message:=&lt;-messageQueue:
+				//对消息进行解析
+				doProcessMessage(message)
+			case &lt;- quitChan:
+			   //空消息，什么都不做~
+				break
+			}
+	}
+}
+//对消息进行解析
+func doProcessMessage(message string){
+    //将消息以“#”分开，如 127.0.0.1:3389#你好
+    //就把这个消息分成两段，一段为127.0.0.1:3389，一段为你好
+    //这里面没有考虑消息体里面包括#好的情况
+	contents := strings.Split(message,"#")
+	if len(contents) &gt;1 {
+		addr := contents[0]
+		sendMessage := contents[1]
+     //将消息体格式化
+		addr =strings.Trim(addr, " ")
+		//判断哈希map中这个地址存不存在，存在就往这个链接里写消息体
+		if conn,ok := onlineConns[addr]; ok{
+			_,err := conn.Write([]byte(sendMessage))
+			if err != nil{
+			  //不存在就写发送失败
+				fmt.Println("online conns send failure!!!!")
+			}
+		}
+	}
+}
+//主函数
+func main(){
+  //监听127.0.0.1:8080端口。
+	listen_socket , err := net.Listen("tcp","127.0.0.1:8080")
+	CheckError(err)
+	//程序退出后监听关闭
+	defer listen_socket.Close()
+   //增加用户体验，让用户知道程序在运行中
+	fmt.Println("server is waitting...")
+  //开启协程来消费消息
+	go ConsumeMessage()
+  //无限循环，来监听消息并处理消息
+	for{
+		conn,err := listen_socket.Accept()
+		CheckError(err)
+     //打印出连接过来的远端地址
+		addr := fmt.Sprintf("%s", conn.RemoteAddr())
+		//将这个连接并存储到hashmap
+		onlineConns[addr] = conn
+     //循环hashmap，打印连接上来的连接
+		for i := range onlineConns{
+			fmt.Println(i)
+		}
+		//运行协程，将连接存到频道中。程序不停，此过程不断
+		go ProcessInfo(conn)
+	}
+}
+</code></pre>
+
+<p>　　再创建一个客户端文件,chatroom_client.go</p>
+
+<pre><code class="language-golang">package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"os"
+	"strings"
+)
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+//发送消息
+func MessageSend(conn net.Conn) {
+	var input string
+	//无限循环，发送消息
+	for {
+	   //监听输入将键入的信息记下来
+		reader := bufio.NewReader(os.Stdin)
+		//将记下来的消息以每行开始读
+		data, _, _ := reader.ReadLine()
+		//将data字符化存入到input
+		input = string(data)
+     //如果input为exit就退出，结束连接
+		if strings.ToUpper(input) == "EXIT" {
+			conn.Close()
+			break
+		} else {
+		  //否则，往这个连接中写入字节流
+			_, err := conn.Write([]byte (input))
+			if err != nil {
+				conn.Close()
+				fmt.Println("client connect failure" + err.Error())
+			}
+		}
+	}
+}
+
+func main() {
+  //连接8080端口
+	conn, err := net.Dial("tcp", "127.0.0.1:8080")
+	CheckError(err)
+	defer conn.Close()
+   //开启协程发送消息，无限循环的
+	go MessageSend(conn)
+	//创建1024长度的字节流
+	buf := make([]byte, 1024)
+	//无限循环，读取字节流信息并打印
+	for {
+		_, err := conn.Read(buf)
+		CheckError(err)
+		fmt.Println("server receive message content: " + string(buf))
+	}
+
+	fmt.Println("client program done")
+}
+
+</code></pre>
+
+<p>　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。</p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+			<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2019/03/01/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next disabled"><a href="javascript:void(0);">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+</div>
+<!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2019 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

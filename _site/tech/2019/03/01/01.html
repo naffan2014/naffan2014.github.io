@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>不支持caching_sha2_password的MYSQL8应如何连接 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.6.2" />
+<meta property="og:title" content="不支持caching_sha2_password的MYSQL8应如何连接" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。" />
+<meta property="og:description" content="　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。" />
+<link rel="canonical" href="http://localhost:4000/tech/2019/03/01/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2019/03/01/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-01T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"description":"　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2019/03/01/01.html","headline":"不支持caching_sha2_password的MYSQL8应如何连接","dateModified":"2019-03-01T00:00:00+08:00","datePublished":"2019-03-01T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/01/01.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/list/index.html">文章列表</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <li><a href="/list/index.html">文章列表</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<script src="/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+      $.toc.clickHideButton();
+  });
+</script>
+
+<div id="article">
+	<div class="article-title">不支持caching_sha2_password的MYSQL8应如何连接</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 03/01/19</small>
+	</p> 
+	<hr/>
+	<div class="post">
+		<p>　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</p>
+
+<p>　　这次想写的东西还挺多，一是顺便把之前的事情都按照时间点归总一下然后写个回忆录啥的。二是接着把我这段时间学过的东西、用过的东西、见过的东西写一写。这次写的东西就是我昨天重起php5.6时，遇到的早已见过的mysql8把plugin从“mysql_native_password”换成后“caching_sha2_password”服务连接不上的问题。其实，网上很多文章已经写了这个问题了，我也是在2018年4月份第一批遇到此问题的那批用户，那么我为啥要写这篇文章呢？因为，我想把我一边遇到问题一边解决问题的过程和为什么这么做的原因描述一下。我觉得这应该会更加有意义吧。</p>
+
+<blockquote>
+  <p>1.caching_sha2_password和mysql_native_password是什么</p>
+</blockquote>
+
+<p>　　这两个是MYSQL的加密插件的规则，也可以说是加密算法。mysql8之前的mysql5都用的是native，后来才改成了sha2。安全方面的考虑吧。</p>
+
+<blockquote>
+  <p>2.在哪里我可以看到这个值呢？</p>
+</blockquote>
+
+<ol>
+  <li>登录mysql</li>
+  <li>use mysql;</li>
+  <li>select * from user \G;</li>
+</ol>
+
+<p>　　这里面包含的就是系统记录的登录用户，如果你一般用的是账户为root的用户，那么你就会发现User一列会有个root的记录。其后还会包括plugin，这个就是你在用的加密算法。之后的authentication_string就是你的密码被算法加密后的密文了。</p>
+
+<pre><code class="language-mysql">            Host: localhost
+                User: root             (*)
+           Select_priv: Y
+           Insert_priv: Y
+           Update_priv: Y
+           Delete_priv: Y
+           Create_priv: Y
+             Drop_priv: Y
+           Reload_priv: Y
+         Shutdown_priv: Y
+          Process_priv: Y
+             File_priv: Y
+            Grant_priv: Y
+       References_priv: Y
+            Index_priv: Y
+            Alter_priv: Y
+          Show_db_priv: Y
+            Super_priv: Y
+ Create_tmp_table_priv: Y
+      Lock_tables_priv: Y
+          Execute_priv: Y
+       Repl_slave_priv: Y
+      Repl_client_priv: Y
+      Create_view_priv: Y
+        Show_view_priv: Y
+   Create_routine_priv: Y
+    Alter_routine_priv: Y
+      Create_user_priv: Y
+            Event_priv: Y
+          Trigger_priv: Y
+Create_tablespace_priv: Y
+              ssl_type:
+            ssl_cipher:
+           x509_issuer:
+          x509_subject:
+         max_questions: 0
+           max_updates: 0
+       max_connections: 0
+  max_user_connections: 0
+                plugin: mysql_native_password             (*)
+ authentication_string: *332A08JD6001FESDFDSLI11083DS41242991       (*)
+      password_expired: N
+ password_last_changed: 2019-02-28 19:43:03
+     password_lifetime: 0
+        account_locked: N
+      Create_role_priv: Y
+        Drop_role_priv: Y
+Password_reuse_history: NULL
+   Password_reuse_time: NULL
+</code></pre>
+
+<blockquote>
+  <p>3.比如你在用PHP连接MYSQL时会报“requested authentication method unknown to the client [caching_sha2_password]”的错误，我们如何解决呢？</p>
+</blockquote>
+
+<p>　　首先，我们要明确一下问题。</p>
+<ol>
+  <li>正如上面列的mysql数据，你数据中plugin是什么？authentication_string加密前的密码是正确的么？如果你不确定密码的话你最好重置一下密码，如果不需要就跳到问题【5】</li>
+  <li>你的My.cnf（*unix）中的配置应该怎么配?</li>
+</ol>
+
+<blockquote>
+  <p>4.如何重置mysql密码</p>
+</blockquote>
+
+<ol>
+  <li>关闭mysql服务。</li>
+  <li>找到mysql的安装位置，并进入bin文件夹，会发现mysqld运行文件</li>
+  <li>运行 mysqld –skip-grant-tables #跳过登录检验环节直接启动mysql</li>
+  <li>use mysql;</li>
+  <li>ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘你的密码’ PASSWORD EXPIRE NEVER; #修改密码规则</li>
+  <li>ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’; #更新用户密码</li>
+  <li>flush privileges; #刷新权限，必须做</li>
+  <li>重启你的机器，建议你做这一步</li>
+  <li>开启mysql服务</li>
+</ol>
+
+<blockquote>
+  <p>5.My.cnf的配置</p>
+</blockquote>
+
+<p>　　下面的配置是我的配置，标（*）的地方就是要将密码规则插件改mysql_native_password。（*）要在[mysqld]下面。因为在用php连接服务的时候会走这个配置。</p>
+<pre><code class="language-mysql"># For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
+# *** DO NOT EDIT THIS FILE. It's a template which will be copied to the
+# *** default location during install, and will be replaced if you
+# *** upgrade to a newer version of MySQL.
+[mysqld]
+default_authentication_plugin=mysql_native_password (*)
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin =~/logs/mysql/mysql-bin
+# These are commonly set, remove the # and set as required.
+# basedir = /usr/local/var/mysql/
+ datadir = /usr/local/var/mysql
+ port = 3306
+# server_id = .....
+ socket = /usr/local/var/run/mysql.sock
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+[client]
+socket = /usr/local/var/run/mysql.sock
+</code></pre>
+
+<blockquote>
+  <ol>
+    <li>更改密码规则及密码</li>
+  </ol>
+</blockquote>
+
+<ol>
+  <li>登录mysql</li>
+  <li>use mysql;</li>
+  <li>ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘你的密码’ PASSWORD EXPIRE NEVER; #修改密码规则</li>
+  <li>ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’; #更新用户密码</li>
+  <li>flush privileges; #刷新权限，必须做</li>
+  <li>重启Mysql服务</li>
+</ol>
+
+<p>　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。</p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+			<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2018/09/01/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2019/03/07/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+</div>
+<!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2019 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

@@ -63,7 +63,7 @@ tocTopTag: h1
 anchorPrefix: tocAnchor-
 showToggleButton: true
 #插件
-gems:
+plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-paginate-v2
