@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2019-03-08T23:10:36+08:00</updated><id>http://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">学习用GO写了个聊天室</title><link href="http://naffan.cn/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/07/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-03-09T13:24:50+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">git的rebase可以实现合并commit</title><link href="http://localhost:4000/tech/2019/03/08/1.html" rel="alternate" type="text/html" title="git的rebase可以实现合并commit" /><published>2019-03-08T00:00:00+08:00</published><updated>2019-03-08T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/08/1</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/08/1.html">&lt;p&gt;玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。&lt;/p&gt;
+
+&lt;p&gt;git rebase是干什么的呢？学者们把他成为变基。说是把很多的commit合并到一个commit中。之前，我想不明白除了把commit合并为一个以外还有什么地方会用到。几天，我确实碰到了一个现实中的问题。这个问题是出自我的博客的，我的docs由于很多次提交了，每次要合到master上都得来一次filter branch。这个操作刚开始会很快，但是随着博客内容的增多，每次去合master的时候都得走一次从头到尾的遍历，实属受不了。（读者可能并不明白我再说什么，你们也不用想明白。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://s2.ax1x.com/2019/03/09/ASZxpD.gif&quot; src=&quot;/images/default.jpg&quot; alt=&quot;一顿操作&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我们可以从图中看到，我首先创建了一个test文件。我们将第一行写入并置为第一次提交。之后再插入第二行作为第二行提交。现在，我想把第二次提交和第一次提交合并。这样，就不会有人再知道我曾经有过第二次提交了。这个操作就是rebase&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git rebase -i HEAD~2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们用上面的命令，就可以将最近的两次提交合并到最早的提交。之后会出现一个界面。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://s2.ax1x.com/2019/03/09/ASB856.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;rebase的todo&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这个界面前两行列出了rebase所包含的commit。剩下的就是此操作的介绍。我们只需要关心pick和squash两个关键字。通过英文我们了解到，图中的意义是将第二次操作合并至第一次操作，这样在log里面只会显示一次log，然而确实是两次更改。退出即可。如果，rebase发现没有版本冲突就会直接完成rebase操作。如果有冲突，我们就像一般解决冲突一样去纠正就好，然后git add即可，不用commit，然后运行 git rebase –continue即可。 有的时候，你并不太操心rebase发生的冲突，我们可以运行git rebase –skip跳过冲突。&lt;/p&gt;
+
+&lt;p&gt;最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。&lt;/p&gt;
+
+&lt;p&gt;好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry><entry><title type="html">学习用GO写了个聊天室</title><link href="http://localhost:4000/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
 
 &lt;p&gt;　　断断续续那么长时间学习go了，今天才第一次写出个像样的程序。总是感觉程序大都一个样，真正上手才是王道。&lt;/p&gt;
 
@@ -169,7 +188,7 @@ func main() {
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://naffan.cn/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/01/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
+&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://localhost:4000/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
 
 &lt;p&gt;　　这次想写的东西还挺多，一是顺便把之前的事情都按照时间点归总一下然后写个回忆录啥的。二是接着把我这段时间学过的东西、用过的东西、见过的东西写一写。这次写的东西就是我昨天重起php5.6时，遇到的早已见过的mysql8把plugin从“mysql_native_password”换成后“caching_sha2_password”服务连接不上的问题。其实，网上很多文章已经写了这个问题了，我也是在2018年4月份第一批遇到此问题的那批用户，那么我为啥要写这篇文章呢？因为，我想把我一边遇到问题一边解决问题的过程和为什么这么做的原因描述一下。我觉得这应该会更加有意义吧。&lt;/p&gt;
 
@@ -318,7 +337,7 @@ socket = /usr/local/var/run/mysql.sock
   &lt;li&gt;重启Mysql服务&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://naffan.cn/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://naffan.cn/tech/2018/09/01/01</id><content type="html" xml:base="http://naffan.cn/tech/2018/09/01/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://localhost:4000/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2018/09/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2018/09/01/01.html">&lt;blockquote&gt;
   &lt;p&gt;Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -339,7 +358,7 @@ socket = /usr/local/var/run/mysql.sock
  IdentityFile ~/.ssh/id_rsa
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://naffan.cn/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://naffan.cn/books/2018/01/05/01</id><content type="html" xml:base="http://naffan.cn/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
+&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://localhost:4000/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/05/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
 
 &lt;p&gt;说者无意，听者有心。当时，我脑子里就在想妹妹为什么能够读书那么快呢？后来我自己有意地去试了下自己的读书速度，我能够明显感觉到自己读书的方式是在一行一行的看，速度不但慢，有时还会因为分心想别的事情，然而等回过神后，发现这段时间里面所读的内容通通没有印象，只能又重新读过。&lt;/p&gt;
 
@@ -379,7 +398,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;要掌握新的阅读技巧，首先我们必须超越自己现有的阅读水平。这意味着我们必须勇敢迈出自己现有的舒适区。每次离开原有的舒适区，都是一次学习新知识的旅程。一分耕耘，一分收获，练得越勤，你的阅读能力进步的就越快。&lt;/p&gt;
 
-&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://naffan.cn/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://naffan.cn/books/2018/01/02/01</id><content type="html" xml:base="http://naffan.cn/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
+&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://localhost:4000/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/02/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
 
 &lt;p&gt;　　今天，我想写一篇关于这本书的读后感，读完这本书其实大概是在17年的10月份左右，那时候有一些时间可以看看关于理财的书籍。本想看完以后立刻写出读后感的但是由于事情很多的原因给耽搁了。其实，在好几年前古月兄就建议我来看看了，我当时也有一些想法但是终于被我托到了这个时间。后来，自己的女朋友也在我之前把这本书读完了，她也在极力的劝我来读读的。我记得我们在15年到16年的时候经常会结伴的去桌游吧玩桌游，当时古月兄就极力的推荐桌游老板进一款叫现金流的游戏，过了半年老板终于进了这款游戏，可是我们也再也没有时间去那里玩了。原因大致是大家都不太能凑到一起，而且各自的生活也在朝着不同的方向前进着。&lt;/p&gt;
 
@@ -479,7 +498,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;　　终于，小结的时刻到了。推荐了那么多这本书的理念了，也该说说这本书的缺点了。如果，你是一个经济领域的老鸟，你会很排斥这本书，这本书中很多的都是假大空的理论，并没有什么太适合我们学习的方法。因为，在读真本书的时候，人家推荐给我的都是一些这书的正面信息，但是坏的信息并没有。当然，别人推荐给我的一定是别人觉得读后感想很棒的书。然而，通过我读完以后，我并没有觉得学到了什么脚踏实地的东西，如果我们按照书中的方法去实施估计半途就会夭折，有人会说这本书给你的是一种全新的经济理念，我很认同。但是，我也不得不对这本书产生一定的质疑，毕竟在书中看到的例子有一些还是比较牵强附会的，也可以说作者的思想较为激进。&lt;/p&gt;
 
-&lt;p&gt;　　总的来说，这本书适合普通用户就读，同时也是一本较不错的经济学初级读物。但是，你想从里面深究出什么你想遵循的示例的话，可惜大多并不能。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="经济,书籍" /><summary type="html">　　《富爸爸，穷爸爸》是一个真实的故事，作者罗伯特・清崎的亲生父亲和朋友的父亲对金钱的看法截然不同，这使他对认识金钱产生了兴趣，最终他接受了朋友的父亲的建议，也就是书中所说的。“富爸爸”的观念，即不要做金钱的奴隶，要让金钱为我们工作，并由此成为一名极富传奇色彩的成功的投资家。</summary></entry><entry><title type="html">德国旅行，浪漫之路</title><link href="http://naffan.cn/life/2017/11/21/01.html" rel="alternate" type="text/html" title="德国旅行，浪漫之路" /><published>2017-11-21T00:00:00+08:00</published><updated>2017-11-21T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/11/21/01</id><content type="html" xml:base="http://naffan.cn/life/2017/11/21/01.html">&lt;p&gt;　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。&lt;/p&gt;
+&lt;p&gt;　　总的来说，这本书适合普通用户就读，同时也是一本较不错的经济学初级读物。但是，你想从里面深究出什么你想遵循的示例的话，可惜大多并不能。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="经济,书籍" /><summary type="html">　　《富爸爸，穷爸爸》是一个真实的故事，作者罗伯特・清崎的亲生父亲和朋友的父亲对金钱的看法截然不同，这使他对认识金钱产生了兴趣，最终他接受了朋友的父亲的建议，也就是书中所说的。“富爸爸”的观念，即不要做金钱的奴隶，要让金钱为我们工作，并由此成为一名极富传奇色彩的成功的投资家。</summary></entry><entry><title type="html">德国旅行，浪漫之路</title><link href="http://localhost:4000/life/2017/11/21/01.html" rel="alternate" type="text/html" title="德国旅行，浪漫之路" /><published>2017-11-21T00:00:00+08:00</published><updated>2017-11-21T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/11/21/01</id><content type="html" xml:base="http://localhost:4000/life/2017/11/21/01.html">&lt;p&gt;　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。&lt;/p&gt;
 
 &lt;p&gt;　我感觉写游记之前还是先把要记录的事情交代一下比较好。&lt;/p&gt;
 
@@ -575,7 +594,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://pan.baidu.com/s/1qXJGuM4&quot;&gt;我的相册&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国" /><summary type="html">　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。</summary></entry><entry><title type="html">最近家里装修以及准备出游</title><link href="http://naffan.cn/life/2017/09/28/01.html" rel="alternate" type="text/html" title="最近家里装修以及准备出游" /><published>2017-09-28T00:00:00+08:00</published><updated>2017-09-28T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/09/28/01</id><content type="html" xml:base="http://naffan.cn/life/2017/09/28/01.html">&lt;p&gt;时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国" /><summary type="html">　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。</summary></entry><entry><title type="html">最近家里装修以及准备出游</title><link href="http://localhost:4000/life/2017/09/28/01.html" rel="alternate" type="text/html" title="最近家里装修以及准备出游" /><published>2017-09-28T00:00:00+08:00</published><updated>2017-09-28T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/09/28/01</id><content type="html" xml:base="http://localhost:4000/life/2017/09/28/01.html">&lt;p&gt;时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。&lt;/p&gt;
 
 &lt;p&gt;对于家中装修我们着实花了很大的力气。因为我已经到了娶妻生子的年龄了，所以从4月份开始家里就为了我将回龙观的房子腾出来准备装修了。4月份是北京初春的时节，本要开始装修，可是女朋友要应付研究生考试所以要一直背书奋战到5月中旬，所以我们一直在等她考完试。在这段时间里我们双方父母正式见了面，我家也去她家正式的登门拜访了。另外，今年的3月到6月我们部门因为赶进度所以强制进行10106的高负荷工作，经常是晚上加完班后回到家就直接睡了，周末只有一天休息的时间，所以装修的事情就一直这么被拖着。终于来到了7月，我们部门的项目不再那么紧急了，所以才有了比较充足的休息时间。在这个月里我也回复了自己的健身计划。现在写下这篇文章的时候也是我快健身一年了，健身的效果还是蛮可喜可贺的，由原先的200斤一直减到现在的178斤。健身的目的就是能够赶在拍婚纱照之前让自己的身体看起来很有型，索性在9月5日拍婚纱照的时候在镜子中看到了自己肌肉感满满的效果。&lt;/p&gt;
 
@@ -585,7 +604,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;自从6月初我们去了婚博会定了婚纱照，9月份我们又去了一次婚博会，碰巧的是我们旁边的酒店Holiday inn正好也参展了，而且还新推出了他们的小院。这正好满足了我女朋友对婚礼的要求，所以很痛快的就定下了婚礼的酒店。这次真的是碰巧了，为了酒店我们跑了不下9个地方，时间跨度很大。如果不是这次乱闯还真不知道酒店这事会让我头痛多长时间呢。接下来就是选择婚庆公司了，我打算再去一次婚博会，据说春夏秋冬都有婚博会，估计这也是三个月后的事情了，到时候看看在婚博会上能不能定下心仪的婚庆公司吧。&lt;/p&gt;
 
-&lt;p&gt;我还要说下自己的健身效果。自从去年10月开始我就开始了健身。今年的3-6月因为工作关系没有去，但是自己也一直在吃严格要求自己。所以那段时间没有反弹，7月份后恢复训练，到8月份刷脂，一直到现在还一直保持着一周至少两天去健身。一年来健身的效果是能直观的看出来的，谁看到我都会说我瘦了不少。其实我的不光瘦了，还涨肌肉了，所以肥肉更少了。这种健康的饮食习惯和锻炼习惯我一定要保持下去。因为，明年婚礼还是个里程碑呢&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国,装修" /><summary type="html">时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。</summary></entry><entry><title type="html">MAC下配置php环境遇到的费解问题</title><link href="http://naffan.cn/tech/2017/06/15/01.html" rel="alternate" type="text/html" title="MAC下配置php环境遇到的费解问题" /><published>2017-06-15T00:00:00+08:00</published><updated>2017-06-15T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/06/15/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/06/15/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;我还要说下自己的健身效果。自从去年10月开始我就开始了健身。今年的3-6月因为工作关系没有去，但是自己也一直在吃严格要求自己。所以那段时间没有反弹，7月份后恢复训练，到8月份刷脂，一直到现在还一直保持着一周至少两天去健身。一年来健身的效果是能直观的看出来的，谁看到我都会说我瘦了不少。其实我的不光瘦了，还涨肌肉了，所以肥肉更少了。这种健康的饮食习惯和锻炼习惯我一定要保持下去。因为，明年婚礼还是个里程碑呢&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国,装修" /><summary type="html">时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。</summary></entry><entry><title type="html">MAC下配置php环境遇到的费解问题</title><link href="http://localhost:4000/tech/2017/06/15/01.html" rel="alternate" type="text/html" title="MAC下配置php环境遇到的费解问题" /><published>2017-06-15T00:00:00+08:00</published><updated>2017-06-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/06/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/06/15/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　就在昨天晚上突然起了雅兴看了个大型网站redis队列应用的视频，正巧上班的时候和一位同事聊起了这个话题，突然发现曾经的理解有些偏差，所以正好趁这个机会自己练一下。谁成想刚开始动手就遇到了问题。&lt;/p&gt;
 
@@ -671,7 +690,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;　　我们可以通过运行php –ini来查看cli读取的php.ini。phpinfo.php可以用来查看服务的php.ini情况。&lt;/p&gt;
 
-&lt;p&gt;　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="php,ngxin,apache" /><summary type="html"></summary></entry><entry><title type="html">正确理解javascript中的Event loop机制</title><link href="http://naffan.cn/tech/2017/06/04/01.html" rel="alternate" type="text/html" title="正确理解javascript中的Event loop机制" /><published>2017-06-04T00:00:00+08:00</published><updated>2017-06-04T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/06/04/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/06/04/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/c3041c9a-ee21-412a-83e3-a7d0d3c56214.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="php,ngxin,apache" /><summary type="html"></summary></entry><entry><title type="html">正确理解javascript中的Event loop机制</title><link href="http://localhost:4000/tech/2017/06/04/01.html" rel="alternate" type="text/html" title="正确理解javascript中的Event loop机制" /><published>2017-06-04T00:00:00+08:00</published><updated>2017-06-04T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/06/04/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/06/04/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/c3041c9a-ee21-412a-83e3-a7d0d3c56214.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇&lt;a href=&quot;http://naffan.cn/tech/2016/12/10/1.html&quot;&gt;《Javascript捕捉(capturing)与冒泡(bubbling)的区别》&lt;/a&gt;之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。&lt;/p&gt;
 
@@ -825,96 +844,4 @@ socket = /usr/local/var/run/mysql.sock
   &lt;li&gt;https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop&lt;/li&gt;
   &lt;li&gt;https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage&lt;/li&gt;
   &lt;li&gt;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="javascript" /><summary type="html"></summary></entry><entry><title type="html">MYSQL中浮点类型的区别</title><link href="http://naffan.cn/tech/2017/05/23/01.html" rel="alternate" type="text/html" title="MYSQL中浮点类型的区别" /><published>2017-05-23T00:00:00+08:00</published><updated>2017-05-23T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/05/23/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/05/23/01.html">&lt;p&gt;&lt;img src=&quot;data:image/png;base64,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&quot; alt=&quot;mysql&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　除了&lt;a href=&quot;http://naffan.cn/tech/2017/05/21/01.html&quot;&gt;《MYSQL中tinyint(1)的正确理解》&lt;/a&gt;所述的整形以外，mysql还有两种小数类型，一种是定点数类型（decimal,numeric），一种是浮点数类型(float,double)。&lt;/p&gt;
-
-&lt;p&gt;　　我们先来说说定点数，他存的值一定是准确的。所以说这个类型通常是用来做需要保存准确度的数值类型的，比如金额类型的数据。numeric其实是被decimal实现的，所以说在意义上来将，numeric和decimal是同一个道理。&lt;/p&gt;
-
-&lt;p&gt;　　decimal(M,N)，其中M代表位数的总和，N代表小数点的位数，不足则补零，超出的则用四舍五入的方式进位到小数点N位，举个例子：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;decimal(5,3)。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　该字段可以存储decimal类型的字段，字符总数为5位，小数点3位。也就是说这个字段可以存储任何5个数字以及3个小数，所以存储范围是-99.999~99.999。通过测试，我们可以总结一下几个规律：&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;输入&lt;/th&gt;
-      &lt;th&gt;结果&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0&lt;/td&gt;
-      &lt;td&gt;0.000&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;111.111&lt;/td&gt;
-      &lt;td&gt;out of range value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;11111&lt;/td&gt;
-      &lt;td&gt;out of range value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.1112&lt;/td&gt;
-      &lt;td&gt;1.111&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;1.1115&lt;/td&gt;
-      &lt;td&gt;1.112&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;9.9998&lt;/td&gt;
-      &lt;td&gt;10.000&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;99.9998&lt;/td&gt;
-      &lt;td&gt;out of range value&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;　　让我们来关注下如果没有设置小数点位数的时候，decimal会是什么样子。比如，我设置decimal(5)，它其实就跟decimal(5,0)是等价的。也就是说这种情况下是没有小数的，如果你非要添加小数的话，他最终还是会按照四舍五入的方法进位至个位的最后存入数据库。&lt;/p&gt;
-
-&lt;p&gt;　　如果你在设置decimal的时候不给他设置M值，那么mysql会默认给他赋成decimal(10)的。&lt;/p&gt;
-
-&lt;p&gt;　　那么decimal最大的长度能够设置成多长呢？&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;The maximum number of digits for DECIMAL is 65, but the actual range for a given DECIMAL column can be constrained by the precision or scale for a given column. When such a column is assigned a value with more digits following the decimal point than are permitted by the specified scale, the value is converted to that scale. (The precise behavior is operating system-specific, but generally the effect is truncation to the permissible number of digits.)&lt;br /&gt;
-　　DECIMAL 最大的数字长度是65位，但是实际的范围受制于给定的decimal列存储的precision(指M)和scale(指N)。当给此列被赋上一个由整数和不符合规范长度的小数组成的数时，这个值会被转化成符合规范的scale。(precise是操作系统指定的，但普遍来说效果是将截断至允许范围。)&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　如果你设置decimal的长度大于65的时候，mysql会报“Too-big precision 66 specified for ‘f’ maximun is 65.”的错误。如果你去设置值时，跟上边举得例子是一摸一样的。&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;输入&lt;/th&gt;
-      &lt;th&gt;结果&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;11111111111111111111111111111111111111111111111111111111111111111（65个1）&lt;/td&gt;
-      &lt;td&gt;out of range value&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;111111111111111111111111111111111111111111111111111111111111.1111（64个1）&lt;/td&gt;
-      &lt;td&gt;111111111111111111111111111111111111111111111111111111111111.11110&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;11111111111111111111111111111111111111111111111111111111111111.1111（66个1）&lt;/td&gt;
-      &lt;td&gt;out of range value&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;　　接下来让我们再看看浮点数类型，他们存储的都是一个近似值。mysql用4字节存储单精度值(float)，用8字节存储双精度值(double)。由于单精度和双精度牵涉的只是有些多，在这里我先埋个坑，等自己真正明白了再给补上吧。&lt;/p&gt;
-
-&lt;p&gt;　　mysql允许一种非标准的语法来定义float(M,D) 或者 real(M,D)或者double precision(M,D)。在这里，M代表所存储的字符长度以及D位的小数部分。举个例子，一列定义成float(7,4)，那么可以存储形如-999.9999，mysql会在超出这个范围存储时对这个值进行四舍五入的操作，所以你在插入999.00009的时候，系统会给算个近似值等于999.0001。&lt;/p&gt;
-
-&lt;p&gt;　　由于浮点数类型的值是近似数而不是一个确切的数值，所以想用他们来存储确切值时会出现意想不到的错误。所以，我们还是尽量避免使用这种类型的值吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html"></summary></entry></feed>
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="javascript" /><summary type="html"></summary></entry></feed>
