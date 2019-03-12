@@ -1,23 +1,138 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2019-03-09T13:25:35+08:00</updated><id>http://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">git的rebase可以实现合并commit</title><link href="http://naffan.cn/tech/2019/03/08/1.html" rel="alternate" type="text/html" title="git的rebase可以实现合并commit" /><published>2019-03-08T00:00:00+08:00</published><updated>2019-03-08T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/08/1</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/08/1.html">&lt;p&gt;玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-03-12T14:39:31+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">redis外网访问相关设置</title><link href="http://localhost:4000/tech/2019/03/12/1.html" rel="alternate" type="text/html" title="redis外网访问相关设置" /><published>2019-03-12T00:00:00+08:00</published><updated>2019-03-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/12/1</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/12/1.html">&lt;p&gt;1 . 我的redis服务用的redis配置文件在哪里？&lt;/p&gt;
 
-&lt;p&gt;git rebase是干什么的呢？学者们把他成为变基。说是把很多的commit合并到一个commit中。之前，我想不明白除了把commit合并为一个以外还有什么地方会用到。几天，我确实碰到了一个现实中的问题。这个问题是出自我的博客的，我的docs由于很多次提交了，每次要合到master上都得来一次filter branch。这个操作刚开始会很快，但是随着博客内容的增多，每次去合master的时候都得走一次从头到尾的遍历，实属受不了。（读者可能并不明白我再说什么，你们也不用想明白。）&lt;/p&gt;
+&lt;p&gt;答：我用的是centos系统，我知道redis是通过yum安装的，那么我需要通过&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -qa | grep redis
+redis-3.2.12-2.el7.x86_64
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　这样，我就知道了我装的redis版本，进而我能够知道redis用的配置文件。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -ql redis-3.2.12-2.el7.x86_64
+/etc/logrotate.d/redis
+/etc/redis-sentinel.conf
+/etc/redis.conf     （*）
+/etc/systemd/system/redis-sentinel.service.d
+/etc/systemd/system/redis-sentinel.service.d/limit.conf
+/etc/systemd/system/redis.service.d
+/etc/systemd/system/redis.service.d/limit.conf
+/usr/bin/redis-benchmark
+/usr/bin/redis-check-aof
+/usr/bin/redis-check-rdb
+/usr/bin/redis-cli
+/usr/bin/redis-sentinel
+/usr/bin/redis-server
+/usr/lib/systemd/system/redis-sentinel.service
+/usr/lib/systemd/system/redis.service
+/usr/libexec/redis-shutdown
+/usr/share/doc/redis-3.2.12
+/usr/share/doc/redis-3.2.12/00-RELEASENOTES
+/usr/share/doc/redis-3.2.12/BUGS
+/usr/share/doc/redis-3.2.12/CONTRIBUTING
+/usr/share/doc/redis-3.2.12/MANIFESTO
+/usr/share/doc/redis-3.2.12/README.md
+/usr/share/licenses/redis-3.2.12
+/usr/share/licenses/redis-3.2.12/COPYING
+/usr/share/man/man1/redis-benchmark.1.gz
+/usr/share/man/man1/redis-check-aof.1.gz
+/usr/share/man/man1/redis-check-rdb.1.gz
+/usr/share/man/man1/redis-cli.1.gz
+/usr/share/man/man1/redis-sentinel.1.gz
+/usr/share/man/man1/redis-server.1.gz
+/usr/share/man/man5/redis-sentinel.conf.5.gz
+/usr/share/man/man5/redis.conf.5.gz
+/var/lib/redis
+/var/log/redis
+/var/run/redis
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;2 . 如何更改该redis配置，可以打开外网访问？还要更改下密码以保证安全性。&lt;/p&gt;
+
+&lt;p&gt;答：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;注释掉bind 127.0.0.1，从而让redis不光监听本机的请求。&lt;/li&gt;
+  &lt;li&gt;protected-mode no，默认是打开的，想要从别的host连接古来，就需要关闭。&lt;/li&gt;
+  &lt;li&gt;requirepass 密码，设置密码。&lt;/li&gt;
+  &lt;li&gt;重启redis服务&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;3 . 重启redis服务，我如何让redis以守护进程方式启动呢？&lt;/p&gt;
+
+&lt;p&gt;答：centos 7开始，使用systemd代替daemon了，所以管理系统服务的命令全部由systemctl命令代替。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;systemctl start redis //如果遇到问题就用systemctl status来查看问题原因
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4 . 防火墙还会挡住外网访问6379端口，怎么办？&lt;/p&gt;
+
+&lt;p&gt;答：这个跟iptable的规则有关了，运维工程师们总是跟iptable打交道，我们只需要知道怎么用即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[root@iZ2ze33uzthv7txm85m303Z ~]# iptables -nvL   //查看目前服务的端口
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+7704K 1142M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+12905  687K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
+12984  779K ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+   14   896 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:6379
+ 439K   25M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:22
+5655K  271M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:80
+54310 2782K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:8080
+6545K  323M REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+ 764K  624M DOCKER-ISOLATION  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+ 400K  597M DOCKER     all  --  *      docker0  0.0.0.0/0            0.0.0.0/0           
+ 399K  597M ACCEPT     all  --  *      docker0  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+ 364K   27M ACCEPT     all  --  docker0 !docker0  0.0.0.0/0            0.0.0.0/0           
+    0     0 ACCEPT     all  --  docker0 docker0  0.0.0.0/0            0.0.0.0/0           
+    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
+
+Chain OUTPUT (policy ACCEPT 4127 packets, 1019K bytes)
+ pkts bytes target     prot opt in     out     source               destination         
+
+Chain DOCKER (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+   42  4713 ACCEPT     tcp  --  !docker0 docker0  0.0.0.0/0            172.18.0.2           tcp dpt:80
+   16  2316 ACCEPT     tcp  --  !docker0 docker0  0.0.0.0/0            172.18.0.4           tcp dpt:8080
+
+Chain DOCKER-ISOLATION (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+ 764K  624M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　目前，我已经放开了服务器的6379端口外网访问，所以结果中会有6379条目。正常来说，新配环境的时候，6379是没有的，所以我们需要添加上。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;iptables -I INPUT 4 -p tcp -m state --state NEW -m tcp --dport 6379 -j ACCEPT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　之后，还需要保存&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; service iptables save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　然后我们再通过查看语句就能看到6379了。至此我们配置完成了redis的外网访问及权限安全了。&lt;/p&gt;
+
+&lt;p&gt;　　我准备再写一个实现主从redis配置的文章，改天研究研究。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,centos" /><summary type="html">1 . 我的redis服务用的redis配置文件在哪里？</summary></entry><entry><title type="html">git的rebase可以实现合并commit</title><link href="http://localhost:4000/tech/2019/03/08/1.html" rel="alternate" type="text/html" title="git的rebase可以实现合并commit" /><published>2019-03-08T00:00:00+08:00</published><updated>2019-03-08T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/08/1</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/08/1.html">&lt;p&gt;　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。&lt;/p&gt;
+
+&lt;p&gt;　　git rebase是干什么的呢？学者们把他成为变基。说是把很多的commit合并到一个commit中。之前，我想不明白除了把commit合并为一个以外还有什么地方会用到。几天，我确实碰到了一个现实中的问题。这个问题是出自我的博客的，我的docs由于很多次提交了，每次要合到master上都得来一次filter branch。这个操作刚开始会很快，但是随着博客内容的增多，每次去合master的时候都得走一次从头到尾的遍历，实属受不了。（读者可能并不明白我再说什么，你们也不用想明白。）&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://s2.ax1x.com/2019/03/09/ASZxpD.gif&quot; src=&quot;/images/default.jpg&quot; alt=&quot;一顿操作&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;我们可以从图中看到，我首先创建了一个test文件。我们将第一行写入并置为第一次提交。之后再插入第二行作为第二行提交。现在，我想把第二次提交和第一次提交合并。这样，就不会有人再知道我曾经有过第二次提交了。这个操作就是rebase&lt;/p&gt;
+&lt;p&gt;　　我们可以从图中看到，我首先创建了一个test文件。我们将第一行写入并置为第一次提交。之后再插入第二行作为第二行提交。现在，我想把第二次提交和第一次提交合并。这样，就不会有人再知道我曾经有过第二次提交了。这个操作就是rebase&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;git rebase -i HEAD~2
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;我们用上面的命令，就可以将最近的两次提交合并到最早的提交。之后会出现一个界面。&lt;/p&gt;
+&lt;p&gt;　　我们用上面的命令，就可以将最近的两次提交合并到最早的提交。之后会出现一个界面。&lt;/p&gt;
 
 &lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://s2.ax1x.com/2019/03/09/ASB856.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;rebase的todo&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;这个界面前两行列出了rebase所包含的commit。剩下的就是此操作的介绍。我们只需要关心pick和squash两个关键字。通过英文我们了解到，图中的意义是将第二次操作合并至第一次操作，这样在log里面只会显示一次log，然而确实是两次更改。退出即可。如果，rebase发现没有版本冲突就会直接完成rebase操作。如果有冲突，我们就像一般解决冲突一样去纠正就好，然后git add即可，不用commit，然后运行 git rebase –continue即可。 有的时候，你并不太操心rebase发生的冲突，我们可以运行git rebase –skip跳过冲突。&lt;/p&gt;
+&lt;p&gt;　　这个界面前两行列出了rebase所包含的commit。剩下的就是此操作的介绍。我们只需要关心pick和squash两个关键字。通过英文我们了解到，图中的意义是将第二次操作合并至第一次操作，这样在log里面只会显示一次log，然而确实是两次更改。退出即可。如果，rebase发现没有版本冲突就会直接完成rebase操作。如果有冲突，我们就像一般解决冲突一样去纠正就好，然后git add即可，不用commit，然后运行 git rebase –continue即可。 有的时候，你并不太操心rebase发生的冲突，我们可以运行git rebase –skip跳过冲突。&lt;/p&gt;
 
-&lt;p&gt;最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。&lt;/p&gt;
+&lt;p&gt;　　最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。&lt;/p&gt;
 
-&lt;p&gt;好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry><entry><title type="html">学习用GO写了个聊天室</title><link href="http://naffan.cn/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/07/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
+&lt;p&gt;　　好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry><entry><title type="html">学习用GO写了个聊天室</title><link href="http://localhost:4000/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
 
 &lt;p&gt;　　断断续续那么长时间学习go了，今天才第一次写出个像样的程序。总是感觉程序大都一个样，真正上手才是王道。&lt;/p&gt;
 
@@ -188,7 +303,7 @@ func main() {
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://naffan.cn/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/01/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
+&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://localhost:4000/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
 
 &lt;p&gt;　　这次想写的东西还挺多，一是顺便把之前的事情都按照时间点归总一下然后写个回忆录啥的。二是接着把我这段时间学过的东西、用过的东西、见过的东西写一写。这次写的东西就是我昨天重起php5.6时，遇到的早已见过的mysql8把plugin从“mysql_native_password”换成后“caching_sha2_password”服务连接不上的问题。其实，网上很多文章已经写了这个问题了，我也是在2018年4月份第一批遇到此问题的那批用户，那么我为啥要写这篇文章呢？因为，我想把我一边遇到问题一边解决问题的过程和为什么这么做的原因描述一下。我觉得这应该会更加有意义吧。&lt;/p&gt;
 
@@ -337,7 +452,7 @@ socket = /usr/local/var/run/mysql.sock
   &lt;li&gt;重启Mysql服务&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://naffan.cn/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://naffan.cn/tech/2018/09/01/01</id><content type="html" xml:base="http://naffan.cn/tech/2018/09/01/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://localhost:4000/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2018/09/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2018/09/01/01.html">&lt;blockquote&gt;
   &lt;p&gt;Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -358,7 +473,7 @@ socket = /usr/local/var/run/mysql.sock
  IdentityFile ~/.ssh/id_rsa
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://naffan.cn/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://naffan.cn/books/2018/01/05/01</id><content type="html" xml:base="http://naffan.cn/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
+&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://localhost:4000/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/05/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
 
 &lt;p&gt;说者无意，听者有心。当时，我脑子里就在想妹妹为什么能够读书那么快呢？后来我自己有意地去试了下自己的读书速度，我能够明显感觉到自己读书的方式是在一行一行的看，速度不但慢，有时还会因为分心想别的事情，然而等回过神后，发现这段时间里面所读的内容通通没有印象，只能又重新读过。&lt;/p&gt;
 
@@ -398,7 +513,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;要掌握新的阅读技巧，首先我们必须超越自己现有的阅读水平。这意味着我们必须勇敢迈出自己现有的舒适区。每次离开原有的舒适区，都是一次学习新知识的旅程。一分耕耘，一分收获，练得越勤，你的阅读能力进步的就越快。&lt;/p&gt;
 
-&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://naffan.cn/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://naffan.cn/books/2018/01/02/01</id><content type="html" xml:base="http://naffan.cn/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
+&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://localhost:4000/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/02/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
 
 &lt;p&gt;　　今天，我想写一篇关于这本书的读后感，读完这本书其实大概是在17年的10月份左右，那时候有一些时间可以看看关于理财的书籍。本想看完以后立刻写出读后感的但是由于事情很多的原因给耽搁了。其实，在好几年前古月兄就建议我来看看了，我当时也有一些想法但是终于被我托到了这个时间。后来，自己的女朋友也在我之前把这本书读完了，她也在极力的劝我来读读的。我记得我们在15年到16年的时候经常会结伴的去桌游吧玩桌游，当时古月兄就极力的推荐桌游老板进一款叫现金流的游戏，过了半年老板终于进了这款游戏，可是我们也再也没有时间去那里玩了。原因大致是大家都不太能凑到一起，而且各自的生活也在朝着不同的方向前进着。&lt;/p&gt;
 
@@ -498,7 +613,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;　　终于，小结的时刻到了。推荐了那么多这本书的理念了，也该说说这本书的缺点了。如果，你是一个经济领域的老鸟，你会很排斥这本书，这本书中很多的都是假大空的理论，并没有什么太适合我们学习的方法。因为，在读真本书的时候，人家推荐给我的都是一些这书的正面信息，但是坏的信息并没有。当然，别人推荐给我的一定是别人觉得读后感想很棒的书。然而，通过我读完以后，我并没有觉得学到了什么脚踏实地的东西，如果我们按照书中的方法去实施估计半途就会夭折，有人会说这本书给你的是一种全新的经济理念，我很认同。但是，我也不得不对这本书产生一定的质疑，毕竟在书中看到的例子有一些还是比较牵强附会的，也可以说作者的思想较为激进。&lt;/p&gt;
 
-&lt;p&gt;　　总的来说，这本书适合普通用户就读，同时也是一本较不错的经济学初级读物。但是，你想从里面深究出什么你想遵循的示例的话，可惜大多并不能。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="经济,书籍" /><summary type="html">　　《富爸爸，穷爸爸》是一个真实的故事，作者罗伯特・清崎的亲生父亲和朋友的父亲对金钱的看法截然不同，这使他对认识金钱产生了兴趣，最终他接受了朋友的父亲的建议，也就是书中所说的。“富爸爸”的观念，即不要做金钱的奴隶，要让金钱为我们工作，并由此成为一名极富传奇色彩的成功的投资家。</summary></entry><entry><title type="html">德国旅行，浪漫之路</title><link href="http://naffan.cn/life/2017/11/21/01.html" rel="alternate" type="text/html" title="德国旅行，浪漫之路" /><published>2017-11-21T00:00:00+08:00</published><updated>2017-11-21T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/11/21/01</id><content type="html" xml:base="http://naffan.cn/life/2017/11/21/01.html">&lt;p&gt;　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。&lt;/p&gt;
+&lt;p&gt;　　总的来说，这本书适合普通用户就读，同时也是一本较不错的经济学初级读物。但是，你想从里面深究出什么你想遵循的示例的话，可惜大多并不能。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="经济,书籍" /><summary type="html">　　《富爸爸，穷爸爸》是一个真实的故事，作者罗伯特・清崎的亲生父亲和朋友的父亲对金钱的看法截然不同，这使他对认识金钱产生了兴趣，最终他接受了朋友的父亲的建议，也就是书中所说的。“富爸爸”的观念，即不要做金钱的奴隶，要让金钱为我们工作，并由此成为一名极富传奇色彩的成功的投资家。</summary></entry><entry><title type="html">德国旅行，浪漫之路</title><link href="http://localhost:4000/life/2017/11/21/01.html" rel="alternate" type="text/html" title="德国旅行，浪漫之路" /><published>2017-11-21T00:00:00+08:00</published><updated>2017-11-21T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/11/21/01</id><content type="html" xml:base="http://localhost:4000/life/2017/11/21/01.html">&lt;p&gt;　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。&lt;/p&gt;
 
 &lt;p&gt;　我感觉写游记之前还是先把要记录的事情交代一下比较好。&lt;/p&gt;
 
@@ -594,7 +709,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://pan.baidu.com/s/1qXJGuM4&quot;&gt;我的相册&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国" /><summary type="html">　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。</summary></entry><entry><title type="html">最近家里装修以及准备出游</title><link href="http://naffan.cn/life/2017/09/28/01.html" rel="alternate" type="text/html" title="最近家里装修以及准备出游" /><published>2017-09-28T00:00:00+08:00</published><updated>2017-09-28T00:00:00+08:00</updated><id>http://naffan.cn/life/2017/09/28/01</id><content type="html" xml:base="http://naffan.cn/life/2017/09/28/01.html">&lt;p&gt;时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国" /><summary type="html">　　距离上篇文章已经过去将近两个月的时间了。这段时间仍然是以装修为主旋律的生活，我只能周末去转装修，而父母基本上一周三到四次的去房子那监督进度，对于他们的帮忙我很是感激，虽说二老现都已退休，但是母亲还依然在外面坐着外聘的工作。每周末带他们出去转的时候都会有一种愧疚的情绪在里面。</summary></entry><entry><title type="html">最近家里装修以及准备出游</title><link href="http://localhost:4000/life/2017/09/28/01.html" rel="alternate" type="text/html" title="最近家里装修以及准备出游" /><published>2017-09-28T00:00:00+08:00</published><updated>2017-09-28T00:00:00+08:00</updated><id>http://localhost:4000/life/2017/09/28/01</id><content type="html" xml:base="http://localhost:4000/life/2017/09/28/01.html">&lt;p&gt;时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。&lt;/p&gt;
 
 &lt;p&gt;对于家中装修我们着实花了很大的力气。因为我已经到了娶妻生子的年龄了，所以从4月份开始家里就为了我将回龙观的房子腾出来准备装修了。4月份是北京初春的时节，本要开始装修，可是女朋友要应付研究生考试所以要一直背书奋战到5月中旬，所以我们一直在等她考完试。在这段时间里我们双方父母正式见了面，我家也去她家正式的登门拜访了。另外，今年的3月到6月我们部门因为赶进度所以强制进行10106的高负荷工作，经常是晚上加完班后回到家就直接睡了，周末只有一天休息的时间，所以装修的事情就一直这么被拖着。终于来到了7月，我们部门的项目不再那么紧急了，所以才有了比较充足的休息时间。在这个月里我也回复了自己的健身计划。现在写下这篇文章的时候也是我快健身一年了，健身的效果还是蛮可喜可贺的，由原先的200斤一直减到现在的178斤。健身的目的就是能够赶在拍婚纱照之前让自己的身体看起来很有型，索性在9月5日拍婚纱照的时候在镜子中看到了自己肌肉感满满的效果。&lt;/p&gt;
 
@@ -604,7 +719,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;自从6月初我们去了婚博会定了婚纱照，9月份我们又去了一次婚博会，碰巧的是我们旁边的酒店Holiday inn正好也参展了，而且还新推出了他们的小院。这正好满足了我女朋友对婚礼的要求，所以很痛快的就定下了婚礼的酒店。这次真的是碰巧了，为了酒店我们跑了不下9个地方，时间跨度很大。如果不是这次乱闯还真不知道酒店这事会让我头痛多长时间呢。接下来就是选择婚庆公司了，我打算再去一次婚博会，据说春夏秋冬都有婚博会，估计这也是三个月后的事情了，到时候看看在婚博会上能不能定下心仪的婚庆公司吧。&lt;/p&gt;
 
-&lt;p&gt;我还要说下自己的健身效果。自从去年10月开始我就开始了健身。今年的3-6月因为工作关系没有去，但是自己也一直在吃严格要求自己。所以那段时间没有反弹，7月份后恢复训练，到8月份刷脂，一直到现在还一直保持着一周至少两天去健身。一年来健身的效果是能直观的看出来的，谁看到我都会说我瘦了不少。其实我的不光瘦了，还涨肌肉了，所以肥肉更少了。这种健康的饮食习惯和锻炼习惯我一定要保持下去。因为，明年婚礼还是个里程碑呢&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国,装修" /><summary type="html">时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。</summary></entry><entry><title type="html">MAC下配置php环境遇到的费解问题</title><link href="http://naffan.cn/tech/2017/06/15/01.html" rel="alternate" type="text/html" title="MAC下配置php环境遇到的费解问题" /><published>2017-06-15T00:00:00+08:00</published><updated>2017-06-15T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/06/15/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/06/15/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;我还要说下自己的健身效果。自从去年10月开始我就开始了健身。今年的3-6月因为工作关系没有去，但是自己也一直在吃严格要求自己。所以那段时间没有反弹，7月份后恢复训练，到8月份刷脂，一直到现在还一直保持着一周至少两天去健身。一年来健身的效果是能直观的看出来的，谁看到我都会说我瘦了不少。其实我的不光瘦了，还涨肌肉了，所以肥肉更少了。这种健康的饮食习惯和锻炼习惯我一定要保持下去。因为，明年婚礼还是个里程碑呢&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="旅行,德国,装修" /><summary type="html">时间匆匆流逝，回看上一篇文章也是6月份的事了，这三个月没有时间写作实在是因为家里的事让我分身乏术。今天终于有空过来写写关于这三个月的事情了，就当给自己做下记录吧。话说回来我的这个博客也开通有一年的时间了，感叹时间过的飞快的同时也给自己立下一个里程碑吧。</summary></entry><entry><title type="html">MAC下配置php环境遇到的费解问题</title><link href="http://localhost:4000/tech/2017/06/15/01.html" rel="alternate" type="text/html" title="MAC下配置php环境遇到的费解问题" /><published>2017-06-15T00:00:00+08:00</published><updated>2017-06-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2017/06/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2017/06/15/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　就在昨天晚上突然起了雅兴看了个大型网站redis队列应用的视频，正巧上班的时候和一位同事聊起了这个话题，突然发现曾经的理解有些偏差，所以正好趁这个机会自己练一下。谁成想刚开始动手就遇到了问题。&lt;/p&gt;
 
@@ -690,158 +805,4 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;　　我们可以通过运行php –ini来查看cli读取的php.ini。phpinfo.php可以用来查看服务的php.ini情况。&lt;/p&gt;
 
-&lt;p&gt;　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="php,ngxin,apache" /><summary type="html"></summary></entry><entry><title type="html">正确理解javascript中的Event loop机制</title><link href="http://naffan.cn/tech/2017/06/04/01.html" rel="alternate" type="text/html" title="正确理解javascript中的Event loop机制" /><published>2017-06-04T00:00:00+08:00</published><updated>2017-06-04T00:00:00+08:00</updated><id>http://naffan.cn/tech/2017/06/04/01</id><content type="html" xml:base="http://naffan.cn/tech/2017/06/04/01.html">&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/c3041c9a-ee21-412a-83e3-a7d0d3c56214.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　这两个星期一直在想着写一篇关于javascript中event Loop的文章。自从写完上一篇&lt;a href=&quot;http://naffan.cn/tech/2016/12/10/1.html&quot;&gt;《Javascript捕捉(capturing)与冒泡(bubbling)的区别》&lt;/a&gt;之后，我抛出了一个问题。当时的我对event loop的概念还很模糊，只是觉得这个问题隐隐约约跟它有关系。我当然不能放下这个问题太久，太久了就会忘记自己原先的初衷了。所以，在看了很多关于event loop的文章和视频以后我打算将这篇文章写出来。在文章的最后，我将列举出我所翻阅的所有资料，而且我很建议大家看一看。&lt;/p&gt;
-
-&lt;p&gt;　　想要了解event loop的概念，首先就要知道几个有关的概念。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;什么叫做栈&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　栈（stack），是计算机内存存储的一种方式。数据进入栈叫做压栈，数据从栈中出来叫做出栈。栈的存储方式只支持先进后出，后进先出的原则。如果你熟悉C语言的话，你就会知道栈中的数据是静态数据，这些数据是由计算机分配的数据，不能被我们程序员进行更改。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;什么叫做堆&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　堆（heap），也是计算机内存存储的一种方式。数据根据所属的某种key分散存储在内存单元。同样你如果熟悉C语言的话，你就会知道堆中的数据是动态数据，是由操作者们单独创建出来的存储单元。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;什么叫做队列&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　队列（queue），他是一种解决问题的方法。我们人为的规定队列中的数据具有先进先出，后进后出的规则。也就是说如果你想出队你就必须等你前面的所有数据全部出队以后你才可以出队。&lt;/p&gt;
-
-&lt;p&gt;　　我相信有了以上的几种知识，你就能够明白我接下来要解释的长篇大论了。我们知道多个事情并发的时候就会出现你忙不过来的情况，如果你忙不过来那么就得让所有后面的事情等待你先解决手头的事情。这样就会出现后面的事务堆积得不到解决，那么我们怎么解决这个问题呢？javascript采用的并发模型是基于“事件循环”的。那什么叫做事件循环呢？下面我就一点一点展开。&lt;/p&gt;
-
-&lt;p&gt;　　首先声明的是，javascript是单线程的。他不可能有多线程的性质，而只是在模仿多线程的样子让我们感觉像多线程一样。&lt;/p&gt;
-
-&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/yas8jLho/embed/js,html,css,result/dark/&quot;&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/06/08/5938ee1832fb5.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　从上图，我们可以看到这段代码展示的形式就是栈的表示方法。最先运行的代码最先压进栈，我们可以看到onload其实就是代码的main函数，然后依次压栈bazz,bar,foo，而在foo中抛出一个错误停止了程序的运行。&lt;/p&gt;
-
-&lt;p&gt;　　在javascript中我们运行代码的时候，如果执行的时间很长，那么我们在这段时间内是做不了别的事情的。这就是单线程的弊端。我们可以运行个例子进行测试。&lt;/p&gt;
-
-&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/qg247n3b/embed/js,html,css,result/dark/&quot;&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://ooo.0o0.ooo/2017/06/08/5938ee1830a44.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　上面的程序，我们进行了递归调用，并且没有做异常处理。那么运行的时候会无限的调用foo函数直到碰触到内存中的栈最大值，这个时候js会抛出系统异常并终止程序。&lt;/p&gt;
-
-&lt;p&gt;　　在这里我有个好奇点，栈到底有多大呢？当然，我不能具体量化到栈可以存储多少个字节，但是我可以通过循环的次数大体判断一下。&lt;/p&gt;
-
-&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/m2aherx0/embed/js,html,css,result/dark/&quot;&gt;&lt;/script&gt;
-
-&lt;p&gt;　　这段代码在不同的浏览器中会有不同的结果，大体结果如下：&lt;/p&gt;
-
-&lt;h3 id=&quot;internet-explorer&quot;&gt;Internet Explorer&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;IE6: 1130&lt;/li&gt;
-  &lt;li&gt;IE7: 2553&lt;/li&gt;
-  &lt;li&gt;IE8: 1475&lt;/li&gt;
-  &lt;li&gt;IE9: 20678&lt;/li&gt;
-  &lt;li&gt;IE10: 20677&lt;/li&gt;
-  &lt;li&gt;IE11:54375&lt;/li&gt;
-  &lt;li&gt;edge : 16615&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;mozilla-firefox&quot;&gt;Mozilla Firefox&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;3.6: 3000&lt;/li&gt;
-  &lt;li&gt;4.0: 9015&lt;/li&gt;
-  &lt;li&gt;5.0: 9015&lt;/li&gt;
-  &lt;li&gt;6.0: 9015&lt;/li&gt;
-  &lt;li&gt;7.0: 65533&lt;/li&gt;
-  &lt;li&gt;8b3: 63485&lt;/li&gt;
-  &lt;li&gt;17: 50762&lt;/li&gt;
-  &lt;li&gt;18: 52596&lt;/li&gt;
-  &lt;li&gt;19: 52458&lt;/li&gt;
-  &lt;li&gt;42: 281810&lt;/li&gt;
-  &lt;li&gt;49: 8921&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;google-chrome&quot;&gt;Google Chrome&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;14: 26177&lt;/li&gt;
-  &lt;li&gt;15: 26168&lt;/li&gt;
-  &lt;li&gt;16: 26166&lt;/li&gt;
-  &lt;li&gt;25: 25090&lt;/li&gt;
-  &lt;li&gt;28: 26000&lt;/li&gt;
-  &lt;li&gt;47: 20878&lt;/li&gt;
-  &lt;li&gt;51: 41753&lt;/li&gt;
-  &lt;li&gt;56: 20922&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;safari&quot;&gt;Safari&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;4: 52426&lt;/li&gt;
-  &lt;li&gt;5: 65534&lt;/li&gt;
-  &lt;li&gt;9: 63444&lt;/li&gt;
-  &lt;li&gt;10: 73399&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;opera&quot;&gt;Opera&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;10.10: 9999&lt;/li&gt;
-  &lt;li&gt;10.62: 32631&lt;/li&gt;
-  &lt;li&gt;11: 32631&lt;/li&gt;
-  &lt;li&gt;12: 35990&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　不过以上的数据并不能说明什么，因为当你再用同样的版本浏览器再次运行脚本的时候会发现得出的结果和上次并不太一样。何况这也取决你所处的软件环境和内存运行情况。所以说，这些结果也就是玩玩而已并没有什么实际意义。&lt;/p&gt;
-
-&lt;p&gt;　　接下来，让我们看看js在运行程序的时候是如何在栈中存储的吧。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/6d3ad175-e285-458b-95eb-6a6769ecd635.gif&quot; alt=&quot;2017-06-08 22_47_11&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　我们看到js在启动的时候先将main()函数压入栈底，然后运行到printSquare()时将其压入栈中，紧接着将square和multiply接连压栈。这样就构造出了完整的printSquare()函数运行栈，紧接着程序将按照出栈的顺序开始执行，直到栈空为止。下面让我们接着来看下远程调用数据时的情况。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/5a6be3e5-cd1b-4f7a-b744-02ce0216981e.gif&quot; alt=&quot;2017-06-08 22_57_55&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　这个效果和上一个例子的运行效果是一样的，但是我们注意到每个远程调用都是需要一段时间等待的，如果一个连接网络用时超长那么给我们的感觉就如同卡死一样，我们既不能操作别的动作，浏览器也不能处理诸如渲染页面之类的操作。这一问题是非常严重的，原因所在就是js是单线程的，浏览器只能完成一个任务之后再去执行下一个任务。&lt;/p&gt;
-
-&lt;p&gt;　　那么我们需要一个解决办法，这个办法就是你常用的异步回调，更准确的说就是回调函数。我们运行的时候将其运行过程保存起来，在将来的&lt;strong&gt;某个时间点&lt;/strong&gt;再运行。请注意在这里所说的某个时间点的概念，请务必带着“哪个时间点？”的问题往下看。虽然我可以直接告诉你答案~&lt;/p&gt;
-
-&lt;script async=&quot;&quot; src=&quot;//jsfiddle.net/naffan/t2a1gL67/2/embed/js,html,css,result/dark/&quot;&gt;&lt;/script&gt;
-
-&lt;p&gt;　　我期望你能够运行一下并在浏览器中的控制台查看结果。&lt;/p&gt;
-
-&lt;p&gt;　　setTimeout函数将方法体保存在了队列中以让他在将来的5秒后运行。这个时候队列的概念出来了。那么问题又来了，从代码直观上来看，这样的运行结果并不稀奇，因为我让方法体5秒后执行，可不就是先执行下面的代码了么？我们再来看个例子，请你对上面的代码修改5秒为0秒，试下看看结果变没有变。&lt;/p&gt;
-
-&lt;p&gt;　　答案是没有变，虽然设置为了0秒。但他并不就等同于立即执行，而是&lt;strong&gt;某种东西&lt;/strong&gt;将其放到了队列中，当别的步骤都走完了才能开始运行队列中的代码。请注意这里所述的“某种东西”并不是javascript，而是浏览器，更准确的说是浏览器底层的C++。我们可以查看&lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout&quot;&gt;window.setTimeout&lt;/a&gt;，setTimeout是底层WEB API提供的接口，他是我们在使用javascript编写web代码时由底层进行的。所以setTimeout并不是javascript的特性，而是浏览器。再进一步说，我们在做异步的时候是浏览器在帮助我们将方法体塞进队列，然后在未来的某个时间再从队列出来并执行的，从而给了我们一种异步的感觉。javascript是单线程的这句话，这里淋漓尽致的体现出来了吧。还有，网上各种文章标题什么的js的setTimeout其实都是bullshit。&lt;/p&gt;
-
-&lt;p&gt;　　接下来，让我们真正带着event loop的概念看一看是如何进行的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/42b86a94-85af-4bf2-a69e-74e5f63ada33.gif&quot; alt=&quot;2017-06-08 23_54_45&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　这个程序中直到webapis存储着timer之前的逻辑我不讲了（前面已经说的足够了），之后timer运行5秒以后将cb()函数塞进队列中，event loop会一直干两件事，一是检查栈中是否为空，二是检查队列是否为空。如果队列中不空就将最先执行的cb函数在栈为空的时候压栈并执行。最终得到的效果就如同异步一样，完美的完成了异步操作。&lt;/p&gt;
-
-&lt;p&gt;　　接下来让我们看看Ajax的情况吧，其实和之前的例子没有什么两样的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/f8d1801c-eba5-4aff-8d01-416b463fc704.gif&quot; alt=&quot;2017-06-09 00_07_04&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　如果很多的异步回调（几乎）同时触发，那么是什么情况呢？&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/06146fe0-5b01-46d0-9f11-ee9eec70de96.gif&quot; alt=&quot;2017-06-09 00_11_05&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　就像刚才我所提到event loop所干的两件事，它一直在监察着栈和队列。当第一个timeout进入队列要出队列的时候，event loop发现栈中还在运行代码，所以就先不让其出队列而是等到栈中为空时才出队列，之后进来的timeout函数都要被event loop告知栈为空时才可以一个一个进行出队列并执行。&lt;/p&gt;
-
-&lt;p&gt;　　如果你想了解更多的话，我强烈建议你点击下边第三个引用连接，这个连接里面的内容是一个js运行时的模拟器，你可以自己写程序，他可以直观的帮助你了解你写的程序在系统中是如何执行的。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;https://www.youtube.com/watch?v=8aGhZQkoFbQ&lt;/li&gt;
-  &lt;li&gt;https://2014.jsconf.eu/speakers/philip-roberts-what-the-heck-is-the-event-loop-anyway.html&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D&quot;&gt;相当推荐的工具，由于连接较长影响了美观，所以做成了超链接&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop&lt;/li&gt;
-  &lt;li&gt;https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage&lt;/li&gt;
-  &lt;li&gt;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="javascript" /><summary type="html"></summary></entry></feed>
+&lt;p&gt;　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="php,ngxin,apache" /><summary type="html"></summary></entry></feed>
