@@ -63,10 +63,8 @@ tocTopTag: h1
 anchorPrefix: tocAnchor-
 showToggleButton: true
 #插件
-plugins:
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-paginate-v2
+plugins: [jekyll-seo-tag,jekyll-sitemap,jekyll-paginate-v2]
+
 ############################################################
 # Site configuration for the Jekyll 3 Pagination Gem
 # The values here represent the defaults if nothing is set
