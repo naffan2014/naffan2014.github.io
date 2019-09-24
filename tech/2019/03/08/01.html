@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>git的rebase可以实现合并commit | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.6.2" />
+<meta property="og:title" content="git的rebase可以实现合并commit" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。" />
+<meta property="og:description" content="　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。" />
+<link rel="canonical" href="http://localhost:4000/tech/2019/03/08/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2019/03/08/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-03-08T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"description":"　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2019/03/08/01.html","headline":"git的rebase可以实现合并commit","dateModified":"2019-03-08T00:00:00+08:00","datePublished":"2019-03-08T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/08/01.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/list/index.html">文章列表</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <li><a href="/list/index.html">文章列表</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<script src="/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+      $.toc.clickHideButton();
+  });
+</script>
+
+<div id="article">
+	<div class="article-title">git的rebase可以实现合并commit</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 03/08/19</small>
+	</p> 
+	<hr/>
+	<div class="post">
+		<p>　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</p>
+
+<p>　　git rebase是干什么的呢？学者们把他成为变基。说是把很多的commit合并到一个commit中。之前，我想不明白除了把commit合并为一个以外还有什么地方会用到。几天，我确实碰到了一个现实中的问题。这个问题是出自我的博客的，我的docs由于很多次提交了，每次要合到master上都得来一次filter branch。这个操作刚开始会很快，但是随着博客内容的增多，每次去合master的时候都得走一次从头到尾的遍历，实属受不了。（读者可能并不明白我再说什么，你们也不用想明白。）</p>
+
+<p><img class="lazy" data-original="https://s2.ax1x.com/2019/03/09/ASZxpD.gif" src="/images/default.jpg" alt="一顿操作" /></p>
+
+<p>　　我们可以从图中看到，我首先创建了一个test文件。我们将第一行写入并置为第一次提交。之后再插入第二行作为第二行提交。现在，我想把第二次提交和第一次提交合并。这样，就不会有人再知道我曾经有过第二次提交了。这个操作就是rebase</p>
+
+<pre><code>git rebase -i HEAD~2
+</code></pre>
+
+<p>　　我们用上面的命令，就可以将最近的两次提交合并到最早的提交。之后会出现一个界面。</p>
+
+<p><img class="lazy" data-original="https://s2.ax1x.com/2019/03/09/ASB856.png" src="/images/default.jpg" alt="rebase的todo" /></p>
+
+<p>　　这个界面前两行列出了rebase所包含的commit。剩下的就是此操作的介绍。我们只需要关心pick和squash两个关键字。通过英文我们了解到，图中的意义是将第二次操作合并至第一次操作，这样在log里面只会显示一次log，然而确实是两次更改。退出即可。如果，rebase发现没有版本冲突就会直接完成rebase操作。如果有冲突，我们就像一般解决冲突一样去纠正就好，然后git add即可，不用commit，然后运行 git rebase –continue即可。 有的时候，你并不太操心rebase发生的冲突，我们可以运行git rebase –skip跳过冲突。</p>
+
+<p>　　最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。</p>
+
+<p>　　好了，我就记录到这里吧。</p>
+
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+			<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2019/03/07/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2019/03/12/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+</div>
+<!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2019 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>
