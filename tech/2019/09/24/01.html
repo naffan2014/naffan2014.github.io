@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>有关字符集知识的总结 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.6.2" />
+<meta property="og:title" content="有关字符集知识的总结" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。" />
+<meta property="og:description" content="　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。" />
+<link rel="canonical" href="http://localhost:4000/tech/2019/09/24/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2019/09/24/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-24T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"description":"　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2019/09/24/01.html","headline":"有关字符集知识的总结","dateModified":"2019-09-24T00:00:00+08:00","datePublished":"2019-09-24T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/09/24/01.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/list/index.html">文章列表</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <li><a href="/list/index.html">文章列表</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<script src="/js/jquery.tocLight.js"></script>
+
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+      $.toc.clickHideButton();
+  });
+</script>
+
+<div id="article">
+	<div class="article-title">有关字符集知识的总结</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 09/24/19</small>
+	</p> 
+	<hr/>
+	<div class="post">
+		<p>　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。</p>
+
+<p>　　因为字符集类问题是很庞大的，所以让我们来规定几种字符集先。让我就unicode,gbk,ascii等字符集先做一定的温习。</p>
+
+<p>　　首先，我们来说说我们比较常用的编码之间的关系，好来展开这篇文章的复习。当计算机问世的时候因为是美国人造的，所以美国人就用了些英文字母和标点符号和辅助型符号，这些字符加起来也不过128位，所以就诞生了<code>ASCII</code>码。后来发展到了欧洲，欧洲那么多国家，每个国家的字母都不太一样，所以人们就扩充了字符集，从而出了拉丁语系的<code>ISO8859-1</code>字符集。再后来中国人参与进来了，我们中国字常用就7000多个。以现有的字符集根本承载不下来那么多字体，那人们就创造出来了<code>GBK</code>字符集，这种字符集和之前两种的区别就是GBK使用两个字节来存储的，其中收录了21003个字符。再后来又出了<code>GB18030</code>，可以收录数量达到了70244个。这个编码采用了1，2，4字节的存储方式，具体存储方式先不说。这个时候人们发现随着用来存储的字节的增多，存储量也变的巨大了。所以，传输的过程中效率问题捉襟见肘。于是，人们就开始考虑更好的存储方法，既能够囊括更多的字符同时存储的容量又不会急剧的膨胀。那么就需要一种智慧的存储方案来解决，于是<code>unicode</code>编码营运而生。unicode编码采用变长的存储结构，通过高位的特殊位数来规定采用的字节数，从而达到了目的。unicode中分为三类:<code>utf8</code>,<code>utf16</code>和<code>utf32</code>。主要用的还是utf8，而且utf8已然成为现如今世界上最为普遍的编码。</p>
+
+<h2 id="一ascii码">一、ASCII码</h2>
+
+<p>　　我们知道，计算机内部存储的数据都是二进制值。每一个二进制位（bit）有<code>0</code>和<code>1</code>两种状态。因此，八个二进制可以组合出256种状态，由八位组成一个字节，即从<code>00000000</code>到<code>11111111</code>。下表是128种ascii码表。当时规定最<code>高位为0</code>，剩下的七位来分别表示这128个字符。</p>
+
+<p><img src="http://www.asciitable.com/index/asciifull.gif" alt="ascii表格" height="500" /></p>
+
+<h2 id="二非ascii码">二、非ASCII码</h2>
+
+<p>　　可是，当高1位为1的时候，还没有利用上。所以，有的国家就开辟了剩下的128个字符，但是随之而来的问题也接踵而来。问题是每个国家都可以扩充这后128位，最终导致前一128个都是相同的，但是后128个就不同国家都不一样了。如果再这么继续下去整个世界对于字符上就不再统一了，这简直就是个噩梦。于是，美国人开发除了unicode编码。</p>
+
+<p><img src="http://www.asciitable.com/index/extend.gif" alt="扩展的" height="500" /></p>
+
+<h2 id="三unicode码">三、Unicode码</h2>
+
+<p>　　Unicode是一本很厚的字典，记录着世界上所有字符对应的一个数字。我们可以通过这两个网站查看到每个字符相对应的存储数值，<a href="https://home.unicode.org/">unicode.org</a>和<a href="http://www.chi2ko.com/tool/CJK.htm">unicode对照表</a></p>
+
+<h2 id="四utf-8">四、UTF-8</h2>
+
+<p>　　unicode主要遇到了两个问题：</p>
+
+<ol>
+  <li>如何让计算机区分出来</li>
+  <li>如何使存储空间更小</li>
+</ol>
+
+<p>　　UTF-8是目前互联网上使用最广泛的一种unicode编码方式了，它主要的特点就是变长。它可以使用1-4个字符表示一个字符（零几年还有6个字符表示的方法，但是后来取消掉了）。规则如下：</p>
+<ol>
+  <li>对于单个字节的字符，第一位设为 0，后面的 7 位对应这个字符的 Unicode 码点。因此，对于英文中的 0 - 127 号字符，与 ASCII 码完全相同。这意味着 ASCII 码那个年代的文档用 UTF-8 编码打开完全没有问题。</li>
+  <li>对于需要使用 N 个字节来表示的字符（N &gt; 1），第一个字节的前 N 位都设为 1，第 N + 1 位设为0，剩余的 N - 1 个字节的前两位都设位 10，剩下的二进制位则使用这个字符的 Unicode 码点来填充。</li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th>Unicode 十六进制码点范围</th>
+      <th>UTF-8 二进制</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0000 0000 - 0000 007F</td>
+      <td>0xxxxxxx</td>
+    </tr>
+    <tr>
+      <td>0000 0080 - 0000 07FF</td>
+      <td>110xxxxx 10xxxxxx</td>
+    </tr>
+    <tr>
+      <td>0000 0800 - 0000 FFFF</td>
+      <td>1110xxxx 10xxxxxx 10xxxxxx</td>
+    </tr>
+    <tr>
+      <td>0001 0000 - 0010 FFFF</td>
+      <td>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>　　下面，我们用<code>帆</code>字为例进行讲解</p>
+
+<p>　　帆的unicode十六进制是<code>5E06</code>，补全后位<code>0000 5E06</code>，二进制是<code>0101 1110 0000 0110</code>。跟具上表可以得知是在第三列范围内的。所以帆的utf8编码需要三个字节，即格式为<code>1110xxxx 10xxxxxx 10xxxxxx</code>。从最后一个二进制位开始，依次从后向前填入格式中的x，多出的位补0，就得到了<code>11100101 10111000 10000110</code>，转换成十六进制后得到utf8十六进制<code>E5 B8 86</code>。我们可以通过<a href="http://www.mytju.com/classcode/tools/encode_utf8.asp">utf8和unicode转化工具</a>查看。</p>
+
+<p>　　另外，说一下我们的通常表示法。utf8的16进制数表示开头加<code>0x</code>，unicode开头加<code>U+</code>。所以，帆字的utf8的16进制应该是<code>0xE5 0xB8 0x86</code>，而unicode的16进制表示应该是<code>U+5E06</code>。这个注意一下就好了，别人家写出来咱分辨不出来。</p>
+
+<h2 id="五十六进制转换十进制方法">五、十六进制转换十进制方法</h2>
+
+<p>　　这节其实是我在写这篇文章的时候遇到的问题。在这里我也就不单独拿出来写了，直接在这里温故而知新吧。我们在表示十六进制的时候，采用的表示法是<code>0x</code>。比如我们表示<code>0xA4</code>，其对应的十进制数怎么算呢？首先，我们要知道16进制的权为16，这个数转化为是十进制的方法和二进制转换成十进制一个道理。 是10(A)<em>16的一次方+4</em>16的0次方，最终等于164.那我们算下<code>0xFF</code>，是不是就等于255呢?答案是没错。</p>
+
+<h2 id="六大端法和小端法">六、大端法和小端法</h2>
+
+<p>　　计算机在存储器重排列字节有两种方式：大端法和小端法，大端法就是将高位字节放到底地址处，比如0x1234, 计算机用两个字节存储，一个是高位字节0x12,一个是低位字节0x34，它的存储方式为下：</p>
+
+<p><img src="https://img-blog.csdn.net/20180901215711147?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzYxODMx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="打断和小段" /></p>
+
+<p>　　TF-32用四个字节表示，处理单元为四个字节（一次拿到四个字节进行处理），如果不分大小端的话，那么就会出现解读错误，比如我们一次要处理四个字节 12 34 56 78，这四个字节是表示0x12 34 56 78还是表示0x78 56 34 12 ，不同的解释最终表示的值不一样。</p>
+
+<h2 id="七utf-16">七、UTF-16</h2>
+
+<p>　　utf-16也是边长字节表示，我们可以简单看看其表示的方法，不用太细的去看，等到真碰上了再思考也不迟。</p>
+
+<ol>
+  <li>对于编号在U+0000到U+FFFF的字符（常用字符集），直接用两个字节表示。</li>
+  <li>编号在 U+10000到U+10FFFF之间的字符，需要用四个字节表示。</li>
+</ol>
+
+<p>　　同样，UTF-16 也有字节的顺序问题（大小端），所以就有UTF-16BE表示大端，UTF-16LE表示小端。</p>
+
+<h2 id="八utf-32">八、UTF-32</h2>
+
+<p>　　utf-32是字符对应标号的证书二进制形式，四个字节，直接转化就可以了。比如<code>帆</code>的unicode为<code>U+5E06</code>，直接转化成二进制后得到：<code>0101 1110 0000 0110</code></p>
+
+<p>　　我们可以根据他们高低字节的存储位置来判断他们所代表的含义，所以在编码方式中有 UTF-32BE 和 UTF-32LE ，分别对应大端和小端，来正确地解释多个字节（这里是四个字节）的含义。</p>
+
+<h2 id="九随便用go玩玩">九、随便用GO玩玩</h2>
+
+<p>　　本来想用GO实现下编码互转的，但是后来发现GO原声只支持UTF-8编码，如果想用GB2312等编码还得去get包，我尝试了下但是timeout了。哎，临近国庆，很多东西都用不了啦。以后有需要再弄吧。</p>
+
+<pre><code>package main
+
+import (
+	"fmt"
+	"unicode/utf8"
+)
+
+func main(){
+	b := []byte("Hello, 帆")
+	for len(b) &gt;0{
+		r,size := utf8.DecodeLastRune(b)
+		fmt.Printf("%c %v\n",r,size)
+		b = b[:len(b)-size]
+	}
+	c := []byte("帆")
+	fmt.Println(c)
+}
+
+打印结果：
+帆 3
+  1
+, 1
+o 1
+l 1
+l 1
+e 1
+H 1
+
+[229 184 134]
+</code></pre>
+
+<p>　　我们可以看到，utf8的中文在GO中是占3个字符的。而且帆的utf8的16进制数<code>E5 B8 86</code>转换成十进制就是<code>[229 184 134]</code>。</p>
+
+<p>参考文章：</p>
+
+<p><a href="https://www.jianshu.com/p/6bdc0d52620a">彻底弄懂 Unicode 编码</a></p>
+
+<p><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">字符编码笔记：ASCII，Unicode 和 UTF-8</a></p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+			<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2019/09/23/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next disabled"><a href="javascript:void(0);">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+</div>
+<!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2019 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>
