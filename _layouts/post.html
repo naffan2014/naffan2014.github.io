@@ -4,13 +4,24 @@ layout: default
 <link rel="stylesheet" href="{{ site.baseurl }}/css/toc.css" type="text/css" media="screen">
 <link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
 <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="{{ site.baseurl }}/js/jquery.toc.js"></script>
 <script type="text/javascript" charset="utf-8">
   $(function() {
       $("img.lazy").lazyload({effect: "fadeIn"});
-
   });
 </script>
-
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
 <div id="article">
 	<div class="article-title">{{ page.title }}</div>
 	<p class="meta">
@@ -63,5 +74,4 @@ layout: default
 		</div>
 	</div>
 </div>
-{% include comment.html%}
 
