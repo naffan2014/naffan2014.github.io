@@ -2,15 +2,12 @@
 layout: default
 ---
 <link rel="stylesheet" href="{{ site.baseurl }}/css/toc.css" type="text/css" media="screen">
-<script src="{{ site.baseurl }}/js/jquery.tocLight.js"></script>
-
 <link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
 <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
-
 <script type="text/javascript" charset="utf-8">
   $(function() {
       $("img.lazy").lazyload({effect: "fadeIn"});
-      $.toc.clickHideButton();
+
   });
 </script>
 
@@ -27,8 +24,8 @@ layout: default
 		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> {{ page.date | date: "%D"}}</small>
 	</p> 
 	<hr/>
-	<div class="post">
-		{{ content | toc_generate}}
+	<div  class="post">
+		{{ content | toc_generate }}
 		<!--分享按钮 开始-->
 		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
 			<a href="#" class="bds_more" data-cmd="more"></a>

@@ -1,5 +1,5 @@
-#https://github.com/dafi/jekyll-toc-generator
 require 'nokogiri'
+
 module Jekyll
 
   module TOCGenerator
@@ -32,8 +32,8 @@ module Jekyll
 
 
       # Text labels
-      contents_label     = config["contentsLabel"] || '目录'
-      hide_label         = config["hideLabel"] || '隐藏'
+      contents_label     = config["contentsLabel"] || 'Contents'
+      hide_label         = config["hideLabel"] || 'hide'
       # show_label       = config["showLabel"] || 'show' # unused
       show_toggle_button = config["showToggleButton"]
 
