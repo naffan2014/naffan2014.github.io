@@ -3,27 +3,28 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.5.0 -->
+<!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>通过命令行获取NAS 320L权限 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.6.2" />
+<meta name="generator" content="Jekyll v4.0.0" />
 <meta property="og:title" content="通过命令行获取NAS 320L权限" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。" />
 <meta property="og:description" content="　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。" />
-<link rel="canonical" href="http://naffan.cn/tech/2017/03/24/01.html" />
-<meta property="og:url" content="http://naffan.cn/tech/2017/03/24/01.html" />
+<link rel="canonical" href="http://localhost:4000/tech/2017/03/24/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2017/03/24/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2017-03-24T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="通过命令行获取NAS 320L权限" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"description":"　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://naffan.cn/tech/2017/03/24/01.html","headline":"通过命令行获取NAS 320L权限","dateModified":"2017-03-24T00:00:00+08:00","datePublished":"2017-03-24T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://naffan.cn/tech/2017/03/24/01.html"},"@context":"http://schema.org"}</script>
+{"author":{"@type":"Person","name":"张一帆"},"url":"http://localhost:4000/tech/2017/03/24/01.html","headline":"通过命令行获取NAS 320L权限","dateModified":"2017-03-24T00:00:00+08:00","datePublished":"2017-03-24T00:00:00+08:00","description":"　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2017/03/24/01.html"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,10 +49,10 @@ var _hmt = _hmt || [];
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif] d-->
     <!-- Bootstrap core JavaScript-->
-<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/hc.js"></script>
-<script src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
 <script src="/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
   </head>
@@ -102,15 +103,12 @@ var _hmt = _hmt || [];
 
       <div class="container">
         <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
-<script src="/js/jquery.tocLight.js"></script>
-
 <link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
 <script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
-
 <script type="text/javascript" charset="utf-8">
   $(function() {
       $("img.lazy").lazyload({effect: "fadeIn"});
-      $.toc.clickHideButton();
+
   });
 </script>
 
@@ -125,7 +123,7 @@ var _hmt = _hmt || [];
 		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 03/24/17</small>
 	</p> 
 	<hr/>
-	<div class="post">
+	<div  class="post">
 		<p>　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。</p>
 
 <p>　　就因为这个问题刚开始我还以为是人家客服给我换回来的是一个残次品而我又亲自找他们去了一趟，后来不成我还给他们总部的客服打电话，最后给我转到了他们的高级技术人员才真正证实了这件事不是DLINK的问题，而是迅雷在安装到NAS上的脚本做了些文章。</p>

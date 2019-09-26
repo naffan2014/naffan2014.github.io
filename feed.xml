@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="http://naffan.cn/" rel="alternate" type="text/html" /><updated>2019-09-25T00:47:29+08:00</updated><id>http://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">有关字符集知识的总结</title><link href="http://naffan.cn/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/09/24/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-26T11:35:28+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">有关字符集知识的总结</title><link href="http://localhost:4000/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/09/24/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
 
 &lt;p&gt;　　因为字符集类问题是很庞大的，所以让我们来规定几种字符集先。让我就unicode,gbk,ascii等字符集先做一定的温习。&lt;/p&gt;
 
 &lt;p&gt;　　首先，我们来说说我们比较常用的编码之间的关系，好来展开这篇文章的复习。当计算机问世的时候因为是美国人造的，所以美国人就用了些英文字母和标点符号和辅助型符号，这些字符加起来也不过128位，所以就诞生了&lt;code&gt;ASCII&lt;/code&gt;码。后来发展到了欧洲，欧洲那么多国家，每个国家的字母都不太一样，所以人们就扩充了字符集，从而出了拉丁语系的&lt;code&gt;ISO8859-1&lt;/code&gt;字符集。再后来中国人参与进来了，我们中国字常用就7000多个。以现有的字符集根本承载不下来那么多字体，那人们就创造出来了&lt;code&gt;GBK&lt;/code&gt;字符集，这种字符集和之前两种的区别就是GBK使用两个字节来存储的，其中收录了21003个字符。再后来又出了&lt;code&gt;GB18030&lt;/code&gt;，可以收录数量达到了70244个。这个编码采用了1，2，4字节的存储方式，具体存储方式先不说。这个时候人们发现随着用来存储的字节的增多，存储量也变的巨大了。所以，传输的过程中效率问题捉襟见肘。于是，人们就开始考虑更好的存储方法，既能够囊括更多的字符同时存储的容量又不会急剧的膨胀。那么就需要一种智慧的存储方案来解决，于是&lt;code&gt;unicode&lt;/code&gt;编码营运而生。unicode编码采用变长的存储结构，通过高位的特殊位数来规定采用的字节数，从而达到了目的。unicode中分为三类:&lt;code&gt;utf8&lt;/code&gt;,&lt;code&gt;utf16&lt;/code&gt;和&lt;code&gt;utf32&lt;/code&gt;。主要用的还是utf8，而且utf8已然成为现如今世界上最为普遍的编码。&lt;/p&gt;
 
-&lt;h2 id=&quot;一ascii码&quot;&gt;一、ASCII码&lt;/h2&gt;
+&lt;h1 id=&quot;一ascii码&quot;&gt;一、ASCII码&lt;/h1&gt;
 
 &lt;p&gt;　　我们知道，计算机内部存储的数据都是二进制值。每一个二进制位（bit）有&lt;code&gt;0&lt;/code&gt;和&lt;code&gt;1&lt;/code&gt;两种状态。因此，八个二进制可以组合出256种状态，由八位组成一个字节，即从&lt;code&gt;00000000&lt;/code&gt;到&lt;code&gt;11111111&lt;/code&gt;。下表是128种ascii码表。当时规定最&lt;code&gt;高位为0&lt;/code&gt;，剩下的七位来分别表示这128个字符。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://www.asciitable.com/index/asciifull.gif&quot; alt=&quot;ascii表格&quot; height=&quot;500&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;二非ascii码&quot;&gt;二、非ASCII码&lt;/h2&gt;
+&lt;h1 id=&quot;二非ascii码&quot;&gt;二、非ASCII码&lt;/h1&gt;
 
-&lt;p&gt;　　可是，当高1位为1的时候，还没有利用上。所以，有的国家就开辟了剩下的128个字符，但是随之而来的问题也接踵而来。问题是每个国家都可以扩充这后128位，最终导致前一128个都是相同的，但是后128个就不同国家都不一样了。如果再这么继续下去整个世界对于字符上就不再统一了，这简直就是个噩梦。于是，美国人开发除了unicode编码。&lt;/p&gt;
+&lt;p&gt;　　可是，当高1位为1的时候，还没有利用上。所以，有的国家就开辟了剩下的128个字符，但是随之而来的问题也接踵而来。问题是每个国家都可以扩充这后128位，最终导致前一128个都是相同的，但是后128个就不同国家都不一样了。如果再这么继续下去整个世界对于字符上就不再统一了，这简直就是个噩梦。于是，美国人开发出了unicode编码。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://www.asciitable.com/index/extend.gif&quot; alt=&quot;扩展的&quot; height=&quot;500&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;三unicode码&quot;&gt;三、Unicode码&lt;/h2&gt;
+&lt;h1 id=&quot;三unicode码&quot;&gt;三、Unicode码&lt;/h1&gt;
 
 &lt;p&gt;　　Unicode是一本很厚的字典，记录着世界上所有字符对应的一个数字。我们可以通过这两个网站查看到每个字符相对应的存储数值，&lt;a href=&quot;https://home.unicode.org/&quot;&gt;unicode.org&lt;/a&gt;和&lt;a href=&quot;http://www.chi2ko.com/tool/CJK.htm&quot;&gt;unicode对照表&lt;/a&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;四utf-8&quot;&gt;四、UTF-8&lt;/h2&gt;
+&lt;h1 id=&quot;四utf-8&quot;&gt;四、UTF-8&lt;/h1&gt;
 
 &lt;p&gt;　　unicode主要遇到了两个问题：&lt;/p&gt;
 
@@ -68,19 +68,19 @@
 
 &lt;p&gt;　　另外，说一下我们的通常表示法。utf8的16进制数表示开头加&lt;code&gt;0x&lt;/code&gt;，unicode开头加&lt;code&gt;U+&lt;/code&gt;。所以，帆字的utf8的16进制应该是&lt;code&gt;0xE5 0xB8 0x86&lt;/code&gt;，而unicode的16进制表示应该是&lt;code&gt;U+5E06&lt;/code&gt;。这个注意一下就好了，别人家写出来咱分辨不出来。&lt;/p&gt;
 
-&lt;h2 id=&quot;五十六进制转换十进制方法&quot;&gt;五、十六进制转换十进制方法&lt;/h2&gt;
+&lt;h1 id=&quot;五十六进制转换十进制方法&quot;&gt;五、十六进制转换十进制方法&lt;/h1&gt;
 
-&lt;p&gt;　　这节其实是我在写这篇文章的时候遇到的问题。在这里我也就不单独拿出来写了，直接在这里温故而知新吧。我们在表示十六进制的时候，采用的表示法是&lt;code&gt;0x&lt;/code&gt;。比如我们表示&lt;code&gt;0xA4&lt;/code&gt;，其对应的十进制数怎么算呢？首先，我们要知道16进制的权为16，这个数转化为是十进制的方法和二进制转换成十进制一个道理。 是10(A)&lt;em&gt;16的一次方+4&lt;/em&gt;16的0次方，最终等于164.那我们算下&lt;code&gt;0xFF&lt;/code&gt;，是不是就等于255呢?答案是没错。&lt;/p&gt;
+&lt;p&gt;　　这节其实是我在写这篇文章的时候遇到的问题。在这里我也就不单独拿出来写了，直接在这里温故而知新吧。我们在表示十六进制的时候，采用的表示法是&lt;code&gt;0x&lt;/code&gt;。比如我们表示&lt;code&gt;0xA4&lt;/code&gt;，其对应的十进制数怎么算呢？首先，我们要知道16进制的权为16，这个数转化为是十进制的方法和二进制转换成十进制一个道理。 是10(A) * 16的一次方+4 * 16的0次方，最终等于164.那我们算下&lt;code&gt;0xFF&lt;/code&gt;，是不是就等于255呢?答案是没错。&lt;/p&gt;
 
-&lt;h2 id=&quot;六大端法和小端法&quot;&gt;六、大端法和小端法&lt;/h2&gt;
+&lt;h1 id=&quot;六大端法和小端法&quot;&gt;六、大端法和小端法&lt;/h1&gt;
 
 &lt;p&gt;　　计算机在存储器重排列字节有两种方式：大端法和小端法，大端法就是将高位字节放到底地址处，比如0x1234, 计算机用两个字节存储，一个是高位字节0x12,一个是低位字节0x34，它的存储方式为下：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://img-blog.csdn.net/20180901215711147?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzYxODMx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70&quot; alt=&quot;打断和小段&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/09/26/ZxRMdziesI6Th9v.png&quot; alt=&quot;大端法和小端法&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;　　TF-32用四个字节表示，处理单元为四个字节（一次拿到四个字节进行处理），如果不分大小端的话，那么就会出现解读错误，比如我们一次要处理四个字节 12 34 56 78，这四个字节是表示0x12 34 56 78还是表示0x78 56 34 12 ，不同的解释最终表示的值不一样。&lt;/p&gt;
 
-&lt;h2 id=&quot;七utf-16&quot;&gt;七、UTF-16&lt;/h2&gt;
+&lt;h1 id=&quot;七utf-16&quot;&gt;七、UTF-16&lt;/h1&gt;
 
 &lt;p&gt;　　utf-16也是边长字节表示，我们可以简单看看其表示的方法，不用太细的去看，等到真碰上了再思考也不迟。&lt;/p&gt;
 
@@ -91,13 +91,13 @@
 
 &lt;p&gt;　　同样，UTF-16 也有字节的顺序问题（大小端），所以就有UTF-16BE表示大端，UTF-16LE表示小端。&lt;/p&gt;
 
-&lt;h2 id=&quot;八utf-32&quot;&gt;八、UTF-32&lt;/h2&gt;
+&lt;h1 id=&quot;八utf-32&quot;&gt;八、UTF-32&lt;/h1&gt;
 
 &lt;p&gt;　　utf-32是字符对应标号的证书二进制形式，四个字节，直接转化就可以了。比如&lt;code&gt;帆&lt;/code&gt;的unicode为&lt;code&gt;U+5E06&lt;/code&gt;，直接转化成二进制后得到：&lt;code&gt;0101 1110 0000 0110&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;　　我们可以根据他们高低字节的存储位置来判断他们所代表的含义，所以在编码方式中有 UTF-32BE 和 UTF-32LE ，分别对应大端和小端，来正确地解释多个字节（这里是四个字节）的含义。&lt;/p&gt;
 
-&lt;h2 id=&quot;九随便用go玩玩&quot;&gt;九、随便用GO玩玩&lt;/h2&gt;
+&lt;h1 id=&quot;九随便用go玩玩&quot;&gt;九、随便用GO玩玩&lt;/h1&gt;
 
 &lt;p&gt;　　本来想用GO实现下编码互转的，但是后来发现GO原声只支持UTF-8编码，如果想用GB2312等编码还得去get包，我尝试了下但是timeout了。哎，临近国庆，很多东西都用不了啦。以后有需要再弄吧。&lt;/p&gt;
 
@@ -138,7 +138,7 @@ H 1
 
 &lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/p/6bdc0d52620a&quot;&gt;彻底弄懂 Unicode 编码&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html&quot;&gt;字符编码笔记：ASCII，Unicode 和 UTF-8&lt;/a&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="charset" /><summary type="html">　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。</summary></entry><entry><title type="html">Mysql中的too many connections问题背后</title><link href="http://naffan.cn/tech/2019/09/23/01.html" rel="alternate" type="text/html" title="Mysql中的too many connections问题背后" /><published>2019-09-23T00:00:00+08:00</published><updated>2019-09-23T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/09/23/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/09/23/01.html">&lt;p&gt;　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html&quot;&gt;字符编码笔记：ASCII，Unicode 和 UTF-8&lt;/a&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="charset" /><summary type="html">　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。</summary></entry><entry><title type="html">Mysql中的too many connections问题背后</title><link href="http://localhost:4000/tech/2019/09/23/01.html" rel="alternate" type="text/html" title="Mysql中的too many connections问题背后" /><published>2019-09-23T00:00:00+08:00</published><updated>2019-09-23T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/09/23/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/09/23/01.html">&lt;p&gt;　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。&lt;/p&gt;
 
 &lt;p&gt;　　在中秋节前的那个周二，是我们公司上线的窗口期。在晚上6点左右的时候，同事告诉我50那台机子挂了，测试数据库也在这台机子上，所以也挂掉了。我们上线前QA是需要在测试线回归一下问题后才能上线的，但是由于测试数据库挂了，导致QA的测试不能够进行，时间太短又来不及去迁移整个数据库，看来只能求助OP同学了。后来，OP同学告诉我们50这台服务器是我们的自运维机器，OP们也不知道如何操作（他们其实是不愿意管）。好说歹说OP才腾出功夫将服务器重启了（后来得知，其实并没有重启，而是50这台服务器是虚机，因为某些原道导致机器卡住了，于是虚机就被暂存起来了，然而OP做的就是吧暂存的虚机重新打开就行了），这样看似一切正常的操作，突然mysql就出现了too many connections的报错，这回我是根本连不上mysql了。经过询问DBA，这种情况是数据库太多的僵尸链接导致的，僵尸链接没有放开连接，导致后边的连接根本请求不到资源。这下问题就来了，我没有root权限（其实知道这台机子因为年代久远的原因没有人知道他的root权限了），那怎么办才能够清除这些僵尸链接呢？好了，前言已经铺垫的很多了，我也确实需要回忆一下我的解决方案和问题背后涉及的原理了。&lt;/p&gt;
 
@@ -228,7 +228,7 @@ authentication_string: *332A08EE56001FE5139E2FB111080AA441242991
 
 &lt;p&gt;　　我们可以发现结果中可以看到testA和root两个用户的连接情况。当我这个时候让testB连接的话，testB就会报too many connections的错误了。 我再让testA关闭掉，再连testB就可以了。&lt;/p&gt;
 
-&lt;p&gt;　　之后，我删除了testA和testB，应用&lt;code&gt;drop user `test`@`localhost`;&lt;/code&gt;。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。</summary></entry><entry><title type="html">《创造力-跳出盒子思考》</title><link href="http://naffan.cn/books/2019/05/24/01.html" rel="alternate" type="text/html" title="《创造力-跳出盒子思考》" /><published>2019-05-24T00:00:00+08:00</published><updated>2019-05-24T00:00:00+08:00</updated><id>http://naffan.cn/books/2019/05/24/01</id><content type="html" xml:base="http://naffan.cn/books/2019/05/24/01.html">&lt;p&gt;1.请跳出盒子思考&lt;/p&gt;
+&lt;p&gt;　　之后，我删除了testA和testB，应用&lt;code&gt;drop user `test`@`localhost`;&lt;/code&gt;。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。</summary></entry><entry><title type="html">《创造力-跳出盒子思考》</title><link href="http://localhost:4000/books/2019/05/24/01.html" rel="alternate" type="text/html" title="《创造力-跳出盒子思考》" /><published>2019-05-24T00:00:00+08:00</published><updated>2019-05-24T00:00:00+08:00</updated><id>http://localhost:4000/books/2019/05/24/01</id><content type="html" xml:base="http://localhost:4000/books/2019/05/24/01.html">&lt;p&gt;1.请跳出盒子思考&lt;/p&gt;
 
 &lt;p&gt;　　答案很简单，是不是？解这道题的关键在于，在正方形范围以外画线。你解不出这道题的原因在于，被正方形框住了。哈哈！&lt;/p&gt;
 
@@ -300,7 +300,7 @@ authentication_string: *332A08EE56001FE5139E2FB111080AA441242991
 
 &lt;p&gt;　　除了管理好体能精力，你还要管理好自己的情绪精力、意志精力，等等，下一篇将详细讲解这个问题。有兴趣的朋友，可持续关注。&lt;/p&gt;
 
-&lt;p&gt;　　以上，是我读了吉姆·兰德尔所著的简单有趣的个人管理丛书之一《创造力——跳出盒子思考》以后的一些思考和总结，与您分享。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="思维,书籍" /><summary type="html">吉姆·兰德尔(Jim Randel)，现年60岁，毕业于哥伦比亚大学法学院。他是一位企业家——购买和销售商业地产，同时拓展新业务。作为一名致力于投资和企业家精神领域的讲演者，兰德尔已经在全美许多场馆作过演讲.其中包括哈佛大学和纽约大学商学院。兰德尔学习和研究成功这一主题长达30年之久。除了阅读所有他能找到的有关这一主题的资料以外，他还不厌其烦地向成功人士请_教_.了解他们的成功之道(直到他们找理由回绝)。因此，这本书的结论是多年研究、个人试验和向他人学习的结果。兰德尔得出的结论是：成功的秘密就是欲望、努力、钻研、决心和坚持…而这些都需要毅力和自律能力。兰德尔相信，如果你愿意付出代价，一切都是可能的。</summary></entry><entry><title type="html">redis外网访问相关设置</title><link href="http://naffan.cn/tech/2019/03/12/01.html" rel="alternate" type="text/html" title="redis外网访问相关设置" /><published>2019-03-12T00:00:00+08:00</published><updated>2019-03-12T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/12/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/12/01.html">&lt;p&gt;1 . 我的redis服务用的redis配置文件在哪里？&lt;/p&gt;
+&lt;p&gt;　　以上，是我读了吉姆·兰德尔所著的简单有趣的个人管理丛书之一《创造力——跳出盒子思考》以后的一些思考和总结，与您分享。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="思维,书籍" /><summary type="html">吉姆·兰德尔(Jim Randel)，现年60岁，毕业于哥伦比亚大学法学院。他是一位企业家——购买和销售商业地产，同时拓展新业务。作为一名致力于投资和企业家精神领域的讲演者，兰德尔已经在全美许多场馆作过演讲.其中包括哈佛大学和纽约大学商学院。兰德尔学习和研究成功这一主题长达30年之久。除了阅读所有他能找到的有关这一主题的资料以外，他还不厌其烦地向成功人士请_教_.了解他们的成功之道(直到他们找理由回绝)。因此，这本书的结论是多年研究、个人试验和向他人学习的结果。兰德尔得出的结论是：成功的秘密就是欲望、努力、钻研、决心和坚持…而这些都需要毅力和自律能力。兰德尔相信，如果你愿意付出代价，一切都是可能的。</summary></entry><entry><title type="html">redis外网访问相关设置</title><link href="http://localhost:4000/tech/2019/03/12/01.html" rel="alternate" type="text/html" title="redis外网访问相关设置" /><published>2019-03-12T00:00:00+08:00</published><updated>2019-03-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/12/01.html">&lt;p&gt;1 . 我的redis服务用的redis配置文件在哪里？&lt;/p&gt;
 
 &lt;p&gt;答：我用的是centos系统，我知道redis是通过yum安装的，那么我需要通过&lt;/p&gt;
 
@@ -415,7 +415,7 @@ Chain DOCKER-ISOLATION (1 references)
 
 &lt;p&gt;　　然后我们再通过查看语句就能看到6379了。至此我们配置完成了redis的外网访问及权限安全了。&lt;/p&gt;
 
-&lt;p&gt;　　我准备再写一个实现主从redis配置的文章，改天研究研究。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,centos" /><summary type="html">1 . 我的redis服务用的redis配置文件在哪里？</summary></entry><entry><title type="html">git的rebase可以实现合并commit</title><link href="http://naffan.cn/tech/2019/03/08/01.html" rel="alternate" type="text/html" title="git的rebase可以实现合并commit" /><published>2019-03-08T00:00:00+08:00</published><updated>2019-03-08T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/08/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/08/01.html">&lt;p&gt;　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。&lt;/p&gt;
+&lt;p&gt;　　我准备再写一个实现主从redis配置的文章，改天研究研究。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,centos" /><summary type="html">1 . 我的redis服务用的redis配置文件在哪里？</summary></entry><entry><title type="html">git的rebase可以实现合并commit</title><link href="http://localhost:4000/tech/2019/03/08/01.html" rel="alternate" type="text/html" title="git的rebase可以实现合并commit" /><published>2019-03-08T00:00:00+08:00</published><updated>2019-03-08T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/08/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/08/01.html">&lt;p&gt;　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。&lt;/p&gt;
 
 &lt;p&gt;　　git rebase是干什么的呢？学者们把他成为变基。说是把很多的commit合并到一个commit中。之前，我想不明白除了把commit合并为一个以外还有什么地方会用到。几天，我确实碰到了一个现实中的问题。这个问题是出自我的博客的，我的docs由于很多次提交了，每次要合到master上都得来一次filter branch。这个操作刚开始会很快，但是随着博客内容的增多，每次去合master的时候都得走一次从头到尾的遍历，实属受不了。（读者可能并不明白我再说什么，你们也不用想明白。）&lt;/p&gt;
 
@@ -434,7 +434,7 @@ Chain DOCKER-ISOLATION (1 references)
 
 &lt;p&gt;　　最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。&lt;/p&gt;
 
-&lt;p&gt;　　好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry><entry><title type="html">学习用GO写了个聊天室</title><link href="http://naffan.cn/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/07/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
+&lt;p&gt;　　好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry><entry><title type="html">学习用GO写了个聊天室</title><link href="http://localhost:4000/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
 
 &lt;p&gt;　　断断续续那么长时间学习go了，今天才第一次写出个像样的程序。总是感觉程序大都一个样，真正上手才是王道。&lt;/p&gt;
 
@@ -605,7 +605,7 @@ func main() {
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://naffan.cn/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://naffan.cn/tech/2019/03/01/01</id><content type="html" xml:base="http://naffan.cn/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
+&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://localhost:4000/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
 
 &lt;p&gt;　　这次想写的东西还挺多，一是顺便把之前的事情都按照时间点归总一下然后写个回忆录啥的。二是接着把我这段时间学过的东西、用过的东西、见过的东西写一写。这次写的东西就是我昨天重起php5.6时，遇到的早已见过的mysql8把plugin从“mysql_native_password”换成后“caching_sha2_password”服务连接不上的问题。其实，网上很多文章已经写了这个问题了，我也是在2018年4月份第一批遇到此问题的那批用户，那么我为啥要写这篇文章呢？因为，我想把我一边遇到问题一边解决问题的过程和为什么这么做的原因描述一下。我觉得这应该会更加有意义吧。&lt;/p&gt;
 
@@ -754,7 +754,7 @@ socket = /usr/local/var/run/mysql.sock
   &lt;li&gt;重启Mysql服务&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://naffan.cn/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://naffan.cn/tech/2018/09/01/01</id><content type="html" xml:base="http://naffan.cn/tech/2018/09/01/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://localhost:4000/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2018/09/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2018/09/01/01.html">&lt;blockquote&gt;
   &lt;p&gt;Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -775,7 +775,7 @@ socket = /usr/local/var/run/mysql.sock
  IdentityFile ~/.ssh/id_rsa
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://naffan.cn/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://naffan.cn/books/2018/01/05/01</id><content type="html" xml:base="http://naffan.cn/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
+&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://localhost:4000/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/05/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
 
 &lt;p&gt;说者无意，听者有心。当时，我脑子里就在想妹妹为什么能够读书那么快呢？后来我自己有意地去试了下自己的读书速度，我能够明显感觉到自己读书的方式是在一行一行的看，速度不但慢，有时还会因为分心想别的事情，然而等回过神后，发现这段时间里面所读的内容通通没有印象，只能又重新读过。&lt;/p&gt;
 
@@ -815,7 +815,7 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;要掌握新的阅读技巧，首先我们必须超越自己现有的阅读水平。这意味着我们必须勇敢迈出自己现有的舒适区。每次离开原有的舒适区，都是一次学习新知识的旅程。一分耕耘，一分收获，练得越勤，你的阅读能力进步的就越快。&lt;/p&gt;
 
-&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://naffan.cn/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://naffan.cn/books/2018/01/02/01</id><content type="html" xml:base="http://naffan.cn/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
+&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry><entry><title type="html">《富爸爸，穷爸爸》</title><link href="http://localhost:4000/books/2018/01/02/01.html" rel="alternate" type="text/html" title="《富爸爸，穷爸爸》" /><published>2018-01-02T00:00:00+08:00</published><updated>2018-01-02T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/02/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/02/01.html">&lt;p&gt;　　终于有时间可以闲下来写点东西了，记得上次能有时间这么写点东西也是半年以前的事情了。2017年底发生了太多的事情，我也无法一一在这里表述，等我慢慢的把之前经历，看过的东西总结出来以后再慢慢道来吧。&lt;/p&gt;
 
 &lt;p&gt;　　今天，我想写一篇关于这本书的读后感，读完这本书其实大概是在17年的10月份左右，那时候有一些时间可以看看关于理财的书籍。本想看完以后立刻写出读后感的但是由于事情很多的原因给耽搁了。其实，在好几年前古月兄就建议我来看看了，我当时也有一些想法但是终于被我托到了这个时间。后来，自己的女朋友也在我之前把这本书读完了，她也在极力的劝我来读读的。我记得我们在15年到16年的时候经常会结伴的去桌游吧玩桌游，当时古月兄就极力的推荐桌游老板进一款叫现金流的游戏，过了半年老板终于进了这款游戏，可是我们也再也没有时间去那里玩了。原因大致是大家都不太能凑到一起，而且各自的生活也在朝着不同的方向前进着。&lt;/p&gt;
 
