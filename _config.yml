@@ -62,6 +62,7 @@ minItemsToShowToc: 0
 tocTopTag: h1
 anchorPrefix: tocAnchor-
 showToggleButton: true
+contentsLabel: '目录'
 #插件
 plugins: [jekyll-seo-tag,jekyll-sitemap,jekyll-paginate-v2]
 
