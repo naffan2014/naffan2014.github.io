@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-30T18:50:49+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">有关字符集知识的总结</title><link href="http://localhost:4000/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/09/24/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-01T09:11:40+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">有关字符集知识的总结</title><link href="http://localhost:4000/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/09/24/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
 
 &lt;p&gt;　　因为字符集类问题是很庞大的，所以让我们来规定几种字符集先。让我就unicode,gbk,ascii等字符集先做一定的温习。&lt;/p&gt;
 
@@ -777,44 +777,44 @@ socket = /usr/local/var/run/mysql.sock
 
 &lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry><entry><title type="html">贝壳-是个有情怀的公司</title><link href="http://localhost:4000/life/2018/08/14/01.html" rel="alternate" type="text/html" title="贝壳-是个有情怀的公司" /><published>2018-08-14T00:00:00+08:00</published><updated>2018-08-14T00:00:00+08:00</updated><id>http://localhost:4000/life/2018/08/14/01</id><content type="html" xml:base="http://localhost:4000/life/2018/08/14/01.html">&lt;p&gt;　　　　今天，带着愉快的心情我入职了贝壳公司。我对中国的房地产行业有着很大的兴趣，也希望自己的工作和房地产保持长久的关系。贝壳给了我机会，我入职到了贝壳楼盘字典部门，作为一名phpRD开始了我的贝壳生涯。谁知道，在这家公司我后来经历了转型GO语言，转型JAVA语言的美好奇遇呢。&lt;/p&gt;
 
-&lt;p&gt;　　　　贝壳坚持的是做难而正确的事情。客户至上，诚实可信，合作共赢，拼搏进取。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="charset" /><summary type="html">　　　　今天，带着愉快的心情我入职了贝壳公司。我对中国的房地产行业有着很大的兴趣，也希望自己的工作和房地产保持长久的关系。贝壳给了我机会，我入职到了贝壳楼盘字典部门，作为一名phpRD开始了我的贝壳生涯。谁知道，在这家公司我后来经历了转型GO语言，转型JAVA语言的美好奇遇呢。</summary></entry><entry><title type="html">《超级快速阅读》</title><link href="http://localhost:4000/books/2018/01/05/01.html" rel="alternate" type="text/html" title="《超级快速阅读》" /><published>2018-01-05T00:00:00+08:00</published><updated>2018-01-05T00:00:00+08:00</updated><id>http://localhost:4000/books/2018/01/05/01</id><content type="html" xml:base="http://localhost:4000/books/2018/01/05/01.html">&lt;p&gt;这本书是我在2017年10月中旬读完的，读这本书的起因是因为我总觉得自己读书的效率太低下了。我曾经听到我的舅妈说她和她女儿，也就是我的妹妹一起看小说时，我舅妈刚看到一页的中间位置时妹妹已经看完整页了，于是我舅妈就很诧异“你读那么快都记住了么？”，妹妹一听自然而然的就把这页讲到过的事情复述了一遍。这下一来，舅妈就被妹妹的读书速度所震惊到了。&lt;/p&gt;
+&lt;p&gt;　　　　贝壳坚持的是做难而正确的事情。客户至上，诚实可信，合作共赢，拼搏进取。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="charset" /><summary type="html">　　　　今天，带着愉快的心情我入职了贝壳公司。我对中国的房地产行业有着很大的兴趣，也希望自己的工作和房地产保持长久的关系。贝壳给了我机会，我入职到了贝壳楼盘字典部门，作为一名phpRD开始了我的贝壳生涯。谁知道，在这家公司我后来经历了转型GO语言，转型JAVA语言的美好奇遇呢。</summary></entry><entry><title type="html">执子之手，与子偕老</title><link href="http://localhost:4000/life/2018/06/03/01.html" rel="alternate" type="text/html" title="执子之手，与子偕老" /><published>2018-06-03T00:00:00+08:00</published><updated>2018-06-03T00:00:00+08:00</updated><id>http://localhost:4000/life/2018/06/03/01</id><content type="html" xml:base="http://localhost:4000/life/2018/06/03/01.html">&lt;blockquote&gt;
+  &lt;p&gt;回忆，是一种思念体。经常精灵一般倏地冒了出来。刚开始她吵闹着往你的脑子最深处逃走，但不时回过头来让你好发现她逃走的方向。当你顺着这个方向寻找时，她却忽闪忽现。最后，当你马上要抓住她的手，一切又烟消云散。&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;说者无意，听者有心。当时，我脑子里就在想妹妹为什么能够读书那么快呢？后来我自己有意地去试了下自己的读书速度，我能够明显感觉到自己读书的方式是在一行一行的看，速度不但慢，有时还会因为分心想别的事情，然而等回过神后，发现这段时间里面所读的内容通通没有印象，只能又重新读过。&lt;/p&gt;
+&lt;p&gt;2017年11月底，我开着车从pesco大厦出来，太阳暖暖的，洒在我的身上。小树的枯芽挡住了我的视线。不知为啥在我的记忆中，那个时候小树却有些嫩绿的枝丫。我拿着一张纸进了家门，回到家还是熟悉的家，那个挤挤的，旧旧的房间。父亲已经退休，在里屋看着电视，简单的我打了声招呼就关上了屋门。我并不伤心，因为回龙观的装修正在进行，我将要全心全意的投入到伟大的装修事业中。&lt;/p&gt;
 
-&lt;p&gt;自打我在上初中的时候，学校就有专门安排过快速阅读这门课程。当时的我傻傻什么都不懂，根本不知道这门课程的重要性，每每上这课的时候。我总是遥看窗外的操场，心早就飞的不知踪影了。若干年后我家装修，突然从柜子里面翻出了当时这门课程的教材，还挺贵20块1本呢。于是，我就拿起这个教材来准备认真的学一学。但是，后来觉得这玩意太枯燥就早早放弃了。到了现在，我对阅读的渴望越变越大，一直惯用的读书技巧早已过时，而且有的时候我都觉得自己受制于这种习惯，所以这次我忽然在寻找图书的时候发现了这本书，于是就准备再好好的重新学一下这门课程。&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08fde0b0840610dbfae90118981120f20c2801300138feca03.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;装修&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;总的来说，本书所要传授的阅读方法用下面这张图就可以总的概括起来：&lt;/p&gt;
+&lt;p&gt;2018年3月，房子装修完毕了。这半年中，我和我的父母整天都在跑建材城。没有用全包的工程就是这样，自己费心费力，但是最后的样子自己说的算，好是它，坏也是它，没有半点怨言。家里的美缝是我一个人的杰作，在天涯上看到人家装修的帖子说是自己美缝并不难，而且还很好看。就尝试着在城里的家中先进行试验，虽然累但是效果满意。遂自己开始了120平的美缝杰作。刚开始墙立面还是比较好弄的，但立面和墙顶或地面的交叉区域就需要长时间的侧身，最后是地面，地面是最累的，蹲着会让自己双腿麻很久。都那么长时间了，到现在我也觉得我的美缝不错，每次有人来家里串门我都会重点介绍这部分工作的复杂程度令人发指，来体现出我对装修的亲身体验程度。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://kupai-open.essintra.ejucloud.cn/14c9cb67-154c-479d-a838-cb36dc2c51f2.jpeg@imageMogr2/thumbnail/700x&quot; alt=&quot;学习流程示意图&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/088de3b0840610b986b60118c80920ec0c2801300138a5ac02.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;家具&quot; /&gt;&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;视觉卡片&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;之后的几个月，印象最深的就是和女朋友在周末早上5点起床，奔向双安商场，等待去往香河的大巴车。当天下午4点再乘同样的车回来。记忆中有天是初春，下着毛毛小雨，没有带够保暖的衣物，结果整天都被寒冷折磨。到最后定家具，算一下去香河的次数：坐大巴去了4次，自己开车去了2次，最后定家具双方一起去了1次。加起来一共7次。每次去还换着不同的香河肉饼老店大快朵颐。&lt;/p&gt;
 
-&lt;p&gt;其中最为重要的一环，就是作者多次强调的“制作视觉卡片”。这是因为作者研究了人脑如何能够快速的记忆事情。他得出的结果是认为人脑与生俱来的就对图很敏感。故把一些事情记录在不同的图片上，就会给读者留下更深的印象。同时，再加上关键词的辅助，就更能够让大脑理解这些东西了。&lt;/p&gt;
+&lt;p&gt;在结婚之前的四次婚博会，我们每次都去，而且每次都有所收获。第一次去是定婚戒，第二次去是定婚庆，第三次去是定酒店，第四次去是买项链。后面的几次我整个就是一个街溜子。场子混的比谁都熟。刚开始开车去没地方停车，就停在了农机院里面，因为这里是我刚开始工作的公司，我还知道里面的大概情况。花个2块钱停一下午，然后骑上共享单车到北辰大厦。后来的几次干脆就直接骑车或坐地铁了。&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;大纲是了解全书的第一方法&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08d9e3b084061092c2f60118941720ba0928013001389eda03.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;紫御江山&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;首先，要了解一本书的话。应该先将书中的大纲翻一翻，就像在拼图之前首先要看清包装上的完整图像。这就相当于在阅读的时候粗略了解一下整本书的大致内容。在阅读的过程中应该主动的去思考，由于人脑的左脑和右脑各自负责的功能是不一样的，只有让两个半脑分工配合起来，才会记东西越来越快。&lt;/p&gt;
+&lt;p&gt;2018年5月，我去了趟重庆。5月的重庆，人间的仙境。在重庆待了半个月。&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;左脑与右脑&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/0889e4b084061088aebd01189e0920b40c2801300138c6dd03.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;% }&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;左脑负责的有逻辑，语言，数字，次序，因果，线性分析等。右脑负责的有节奏，幻想，白日梦，色彩，空间感，全貌等。对于一段要记忆的文字来说，我们通过反复阅读很难记住故事的内容，这是因为死记硬背的机械式方法不仅消耗了大量时间，还无法保证长期记忆。一个星期以后你完全有可能全部忘记。然而我们可以采用右脑思维顺利的解决这类问题。具体事例可以在书中寻找。&lt;/p&gt;
+&lt;p&gt;结婚以后，我和老婆去商场买了些新衣服，然后回了门。那段时间记忆也不太清晰了。只是记得当时的我还很年轻，当时的她还很小鸟依人。&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;视线范围&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;再之后，就是我陆陆续续的请各位朋友来家里暖房。连续的约了1个多月的周末，我这边也算约完了，但是老婆那边到现在了也没有来，后来时间太长了，再来的意义也就没了，所以就更不会来了。&lt;/p&gt;
 
-&lt;p&gt;大多数人以为自己的实现移动轨迹是从左向右移动然后换行再从左向右移动，其实不然。真正的实现其实是在向后跳跃着，因为我们想要看清一个物体的时候，首先就要将实现停止下来，然后进行对焦，直到生成清晰的图像。这样就会产生三个问题：低效阅读、无法集中注意力及视线的下意识游移。作者首先就要带领我们改变这个习惯，作者建议我们用手指作为参照物，当手指平行移动的时候，实现要跟住手指的移动方向进行阅读。当阅读的速度提高起来的时候，就到了我们可以慢慢从一目几行，一目多行，乃至一目十行的时候了。&lt;/p&gt;
+&lt;p&gt;2018年7月，我又去了趟重庆，在重庆待了一个多月。体验到了重庆的闷热，也体验到了世界杯开幕时一个人抱着可乐磕着瓜子看着c罗一个人对抗西班牙。&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;舒适区&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;2018年8月14日，入职了贝壳。在贝壳干到现在，成就没啥，但学到很多。可是仍然没有晋升一级。现在的我很苦恼。随着自己的年龄增大，很多以前不是事儿的事情慢慢的也露出了小头。心中的顾虑也越来越多。&lt;/p&gt;
 
-&lt;p&gt;要掌握新的阅读技巧，首先我们必须超越自己现有的阅读水平。这意味着我们必须勇敢迈出自己现有的舒适区。每次离开原有的舒适区，都是一次学习新知识的旅程。一分耕耘，一分收获，练得越勤，你的阅读能力进步的就越快。&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08cee4b08406108c9bc00118b40920fc0c2801300138f0e202.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;磁器口&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;这本工具书在阅读能力上给我了很大帮助，我记得我按照这本书的要求做了阅读能力的测试，当时我的阅读速度是每分钟250个字。但是，利用书中教我的方法我可以让自己的速度一下子翻6倍。而且，我对读过的内容大致也都能记得下来。所以，我很推荐这本书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="工具,书籍" /><summary type="html">　　本书是《快速阅读》作者克里斯蒂安•格吕宁的成名之作。他在临近大学毕业准备德国司法考试期间，因为不能像其他同学一样有充足的时间复习备考，于是在参考众多学习方法类书籍的基础上独辟蹊径，创造出一套风靡全球的学习方法。</summary></entry></feed>
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08e9d4b2840610d6b9eb01188e1720ac082801300138f2a802.png&quot; src=&quot;/images/default.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2018年10月，我带着老婆又又去了趟重庆。当她下了火车以后，我带着她走过我早已走过无数回的重庆北站，我看到她的眼睛里满是对这座城市的好奇，仿佛任何地方她都想去看看一样。当时的我感觉我就是一个经验丰富的老大哥，带她走过我所走过的路。记得，下了火车第一件事情就是吃重庆小面，她吃了以后说这是她吃过的最好吃的面了。后来又带她去了御澜道，南岸，磁器口，嘉陵江旁边的咖啡馆，音乐学院，洪崖洞，长江索道，解放碑，观音寺等等地方，也带她吃了巧克力界的爱马仕-godiva。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08aff0b0840610c89d6e189c0920c40c2801300138838b03.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;godiva&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2018年12月，在回龙观过的第一场雪，第一个圣诞节，她开开心的买了圣诞树，把家里装饰的跟好几个圣诞老人来过一样。&lt;/p&gt;
+
+&lt;p&gt;春节，挂上了18年双11买的红灯笼以后，我家里人第一次在回龙观吃年夜饭。那时的美好，现在也难以忘怀。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="marriage" /><summary type="html">回忆，是一种思念体。经常精灵一般倏地冒了出来。刚开始她吵闹着往你的脑子最深处逃走，但不时回过头来让你好发现她逃走的方向。当你顺着这个方向寻找时，她却忽闪忽现。最后，当你马上要抓住她的手，一切又烟消云散。</summary></entry></feed>
