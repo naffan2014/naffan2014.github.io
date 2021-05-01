@@ -41,8 +41,8 @@ p
 {
   font-family:"Helvetica Neue", helvetica, "Open Sans", sans-serif;
   line-height: 2em;
-  #font-size: 1.2em;
-  font-weight:200
+  font-size: 1.2em;
+  font-weight:normal;
 }
 table
 {
@@ -75,7 +75,7 @@ th
 {
   font-size:20px;
   list-style:none;
-  font-weight:lighter;
+  font-weight:normal;
   line-height:250%;
   padding-bottom:30px
 }
@@ -146,7 +146,7 @@ th
   line-height:35px;
   text-indent:40px;
   font-family:"Helvetica Neue", helvetica, "Open Sans", sans-serif;
-  font-weight:200;
+  font-weight:bold;
   color:#9c9c9c;
   text-shadow:1px 1px #fff
 }
@@ -155,7 +155,8 @@ th
 {
   color:#999;
   display:block;
-  text-decoration:none
+  text-decoration:none;
+
 }
 
 .sidebar-nav li a:hover
@@ -179,7 +180,7 @@ th
 .sidebar-nav > .sidebar-brand > h3
 {
   font-size:15px;
-  font-weight:100;
+  font-weight:normal;
   color:#5d5f67
 }
 
@@ -349,6 +350,7 @@ pre
 #welcome-greeting h2 p{
    text-indent:2em;
    text-align:justify;
+   font-weight: 200;
 }
 
 #welcome-greeting h2 a
@@ -415,7 +417,7 @@ pre
 .meta
 {
   text-shadow:1px 1px #fff;
-  color:#b6b6b6
+  color:#31708f
 }
 
 img
@@ -441,7 +443,7 @@ img
 .post-img{
 
   display: block;
-  width: 70%;
+  width:  70%;
   margin: 0 auto;
 
 }
@@ -605,8 +607,9 @@ time
 
 .user-card p
 {
-  color:#c4c4c4;
-  font-size:small
+  color:#31708f;
+  font-size:small;
+  font-weight: bold;
 }
 
 .card
@@ -619,7 +622,7 @@ time
 .letter p
 {
   font-size:1.2em;
-  font-weight:lighter;
+  font-weight:normal;
   color:#737373;
   text-shadow:1px 1px #fff
 }
