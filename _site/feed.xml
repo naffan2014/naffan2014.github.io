@@ -1,4 +1,255 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-05T20:40:25+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">springboot的策略模式</title><link href="http://localhost:4000/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/02/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-09T02:03:19+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="http://localhost:4000/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
+
+&lt;p&gt;首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;方法&lt;/th&gt;
+      &lt;th&gt;解释&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Jackson2JsonRedisSerializer(Class&lt;T&gt; clazz)&lt;/T&gt;&lt;/td&gt;
+      &lt;td&gt;构造方法&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Jackson2JsonRedisSerializer(JavaType javaType)&lt;/td&gt;
+      &lt;td&gt;构造方法&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;deserialize&lt;/td&gt;
+      &lt;td&gt;实现&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;serialize&lt;/td&gt;
+      &lt;td&gt;实现&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;setObjectMapper&lt;/td&gt;
+      &lt;td&gt;独有&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;getJavaType&lt;/td&gt;
+      &lt;td&gt;独有&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Jackson2JsonRedisSerializer(Class&lt;T&gt; clazz)&lt;/T&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
+	 * Creates a new {@link Jackson2JsonRedisSerializer} for the given target {@link Class}.
+	 *
+	 * @param type
+	 */
+	public Jackson2JsonRedisSerializer(Class&amp;lt;T&amp;gt; type) {
+		this.javaType = getJavaType(type);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;根据传入的参数类型，通过getJavaType方法指定为databind的类型。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
+	 * Returns the Jackson {@link JavaType} for the specific class.
+	 * &amp;lt;p&amp;gt;
+	 * Default implementation returns {@link TypeFactory#constructType(java.lang.reflect.Type)}, but this can be
+	 * overridden in subclasses, to allow for custom generic collection handling. For instance:
+	 *
+	 * &amp;lt;pre class=&quot;code&quot;&amp;gt;
+	 * protected JavaType getJavaType(Class&amp;lt;?&amp;gt; clazz) {
+	 * 	if (List.class.isAssignableFrom(clazz)) {
+	 * 		return TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, MyBean.class);
+	 * 	} else {
+	 * 		return super.getJavaType(clazz);
+	 * 	}
+	 * }
+	 * &amp;lt;/pre&amp;gt;
+	 *
+	 * @param clazz the class to return the java type for
+	 * @return the java type
+	 */
+	protected JavaType getJavaType(Class&amp;lt;?&amp;gt; clazz) {
+		return TypeFactory.defaultInstance().constructType(clazz);
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;JavaType类属于com.fasterxml.jackson.databind包。它是一种令牌类的基类，用于保存信息和反序列化器的key。通过getJavaType方法经过反射来构造出指定的class。我们看到其中应用到了TypeFactory,用TypeFactory的作用就是快速的获取到clazz相对应的具体类型。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public final class TypeFactory implements java.io.Serializable
+{
+    //将clazz传入，通过_formAny方法构造。Class&amp;lt;?&amp;gt; 是实现了Type接口
+    public JavaType constructType(Type type) {
+        return _fromAny(null, type, EMPTY_BINDINGS);
+    }
+    
+    ....
+    
+     /**
+     * Factory method that can be used if type information is passed
+     * as Java typing returned from &amp;lt;code&amp;gt;getGenericXxx&amp;lt;/code&amp;gt; methods
+     * (usually for a return or argument type).
+     */
+    protected JavaType _fromAny(ClassStack context, Type type, TypeBindings bindings)
+    {
+        JavaType resultType;
+
+        // simple class?
+        if (type instanceof Class&amp;lt;?&amp;gt;) {
+            // Important: remove possible bindings since this is type-erased thingy
+            //判断type是一个简单class。然后调用_formClass
+            //ClassStack是一个工具类，用来记录调用栈信息的上下文。
+            //EMPTY_BINDINGS是TypeBindings中的常量。TypeBindings是用于解析给定类的类型参数的助手类。也就是说这个常量为空绑定关系。
+            resultType = _fromClass(context, (Class&amp;lt;?&amp;gt;) type, EMPTY_BINDINGS);
+        }
+        // But if not, need to start resolving.
+        else if (type instanceof ParameterizedType) {...}
+    ...
+    }
+    
+    /**
+     * @param bindings Mapping of formal parameter declarations (for generic
+     *   types) into actual types
+     */
+    protected JavaType _fromClass(ClassStack context, Class&amp;lt;?&amp;gt; rawType, TypeBindings bindings)
+    {
+        // Very first thing: small set of core types we know well:
+        //第一件事就是通过rawType来判断是哪种众所周知的简单类型。首先判断是否是原始类型，并且是否是BOOL，INT，LONG。如果不是就是String，Object。否则返回null
+        JavaType result = _findWellKnownSimple(rawType);
+        if (result != null) {
+            return result;
+        }
+        // Barring that, we may have recently constructed an instance
+        final Object key;
+        if ((bindings == null) || bindings.isEmpty()) {
+        //key是这种Bool Int Long String object中的一种
+            key = rawType;
+        } else {
+            key = bindings.asKey(rawType);
+        }
+        //_typeCache是一个LRUMap。LRUMap其实底层是个ConcurrentHashMap。它用来帮助我们避免核心类型的重复解析。尤其为了泛型的解析。
+        result = _typeCache.get(key); // ok, cache object is synced
+        if (result != null) {
+            return result;
+        }
+        //一般到这里就结束了。但是，如果通过我们传入的rawType没有找到绑定的关系，那就有可能是个复杂结构的结构体（递归引用）。接下来就需要通过调用栈来追踪整个结构了。
+        // 15-Oct-2015, tatu: recursive reference?
+        if (context == null) {
+            context = new ClassStack(rawType);
+        } else {
+            ClassStack prev = context.find(rawType);
+            if (prev != null) {
+                // Self-reference: needs special handling, then...
+                //可以看到，resolvedRecursiveType这个方法是用来自我引用的一个内部类型。他继承自TypeBase，TypeBase继承自javaType。
+                ResolvedRecursiveType selfRef = new ResolvedRecursiveType(rawType, EMPTY_BINDINGS);
+                prev.addSelfReference(selfRef);
+                return selfRef;
+            }
+            // no, but need to update context to allow for proper cycle resolution
+            context = context.child(rawType);
+        }
+        //到这里，可以将递归引用的结构解析到context变量里了。
+        // First: do we have an array type?
+        if (rawType.isArray()) {
+            result = ArrayType.construct(_fromAny(context, rawType.getComponentType(), bindings),
+                    bindings);
+        } else {
+            // If not, need to proceed by first resolving parent type hierarchy
+         //首先解析父类型层次结构   
+            JavaType superClass;
+            JavaType[] superInterfaces;
+
+            if (rawType.isInterface()) {
+                superClass = null;
+                //返回的是一个JavaType的数组。
+                //如果是个超接口（superInterface），通过反射返回的必须是实际用过的类型（interface or class）。
+                //如果是个class，返回的是个数组，数组中包含着所有实现过的接口。
+                //如果是个interface，返回的是个数组，数组中包含所有直接继承过的接口。
+                //如果是个class或者interface，就返回个一个长度为0的数组。
+                //如果是基础类型或者void，就返回一个长度为0的数组。
+                superInterfaces = _resolveSuperInterfaces(context, rawType, bindings);
+            } else {
+                // Note: even Enums can implement interfaces, so cannot drop those
+                //返回class表示的实体(类、接口、基本类型型或void)的直接超类
+                superClass = _resolveSuperClass(context, rawType, bindings);
+                superInterfaces = _resolveSuperInterfaces(context, rawType, bindings);
+            }
+
+            // 19-Oct-2015, tatu: Bit messy, but we need to 'fix' java.util.Properties here...
+            if (rawType == Properties.class) {
+                result = MapType.construct(rawType, bindings, superClass, superInterfaces,
+                        CORE_TYPE_STRING, CORE_TYPE_STRING);
+            }
+            // And then check what flavor of type we got. Start by asking resolved
+            // super-type if refinement is all that is needed?
+            else if (superClass != null) {
+                result = superClass.refine(rawType, bindings, superClass, superInterfaces);
+            }
+            // if not, perhaps we are now resolving a well-known class or interface?
+            if (result == null) {
+                result = _fromWellKnownClass(context, rawType, bindings, superClass, superInterfaces); 
+                if (result == null) {
+                    result = _fromWellKnownInterface(context, rawType, bindings, superClass, superInterfaces);
+                    if (result == null) {
+                        // but if nothing else, &quot;simple&quot; class for now:
+                        result = _newSimpleType(rawType, bindings, superClass, superInterfaces);
+                    }
+                }
+            }
+        }
+        context.resolveSelfReferences(result);
+        // 16-Jul-2016, tatu: [databind#1302] is solved different way, but ideally we shouldn't
+        //     cache anything with partially resolved `ResolvedRecursiveType`... so maybe improve
+        if (!result.hasHandlers()) {
+            _typeCache.putIfAbsent(key, result); // cache object syncs
+        }
+        return result;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Jackson2JsonReisSerializer(JavaType javaType)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;另一个构造方法，参数是JavaType类型。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;deserialize(@Nullable byte[] bytes)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;反序列化方法，可为null的byte数组为参数。如果是空或者null的话，返回null。否则，通过ObjectMapper将byte数组进行反序列化。&lt;/p&gt;
+
+&lt;p&gt;ObjectMapper提供读和写JSON的能力。不论是转成POJO还是从POJO转出，或者是转成JSON还是从JSON转出，还是一些相关的转化功能。ObjectMapper都可以高定制化的兼容不同种的JSON格式。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;serialize(@Nullable Object t)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;序列化方法，同上。t如果为null，则返回空byte数组。否则，将t序列化。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;setObjectMapper(ObjectMapper objectMapper)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个方法比较有用，它可以用来自定义JSON序列化进程的。相关设置可以参见ObjectMapper.java中的方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;ObjectMapper mapper = new ObjectMapper();
+		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		serializer.setObjectMapper(mapper);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;getJavaType(Class&amp;lt;?&amp;gt; clazz)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个方法是被Jackson2JsonRedisSerializer方法调用的，用途就是返回指定class的jackson格式。&lt;/p&gt;
+
+&lt;p&gt;通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="http://localhost:4000/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/02/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
 
 &lt;p&gt;当你用springboot的时候，会牵扯到如何将类委托给spring容器，如果你按照策略模式的传统写法，就会遇到类似问题。所以，我们应该将不同的策略实现公用的接口，也就是面向接口编程。&lt;/p&gt;
 
@@ -876,25 +1127,4 @@ socket = /usr/local/var/run/mysql.sock
   &lt;li&gt;重启Mysql服务&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry><entry><title type="html">多git账号共存</title><link href="http://localhost:4000/tech/2018/09/01/01.html" rel="alternate" type="text/html" title="多git账号共存" /><published>2018-09-01T00:00:00+08:00</published><updated>2018-09-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2018/09/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2018/09/01/01.html">&lt;blockquote&gt;
-  &lt;p&gt;Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;在我们的工作中，版本控制工具通常会用git工具。当你公司用git的时候你肯定不想用你github的账号进行推送。反过来也一样。那我就说一下如何配置才能将不同git域分开来。&lt;/p&gt;
-
-&lt;p&gt;首先，我默认读者具备SSH keys的知识。&lt;/p&gt;
-
-&lt;p&gt;在~/.ssh文件夹内有个config文件。这个文件就是用来实现多git账号共存的配置文件。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt; Host github@github.com   //是git服务的主机
- HostName github.com    //git的域名
- User naffan2014    //登录名，是你这个网站的用户ID
- IdentityFile ~/.ssh/id_rsa_github //ssh keys存储的文件位置
-
- Host git@sina.com
- HostName sina.com
- User naffan@sina.com
- IdentityFile ~/.ssh/id_rsa
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ssh,Github" /><summary type="html">Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</summary></entry></feed>
+&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry></feed>

@@ -201,6 +201,10 @@
 <lastmod>2021-05-02T00:00:00+08:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/tech/2021/05/07/01.html</loc>
+<lastmod>2021-05-07T00:00:00+08:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/</loc>
 </url>
 <url>
@@ -235,6 +239,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/list/page/5/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/list/page/6/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/economy/</loc>
