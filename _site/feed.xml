@@ -1,4 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-09T02:03:19+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="http://localhost:4000/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-14T00:32:03+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">池化技术</title><link href="http://localhost:4000/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;概念&quot;&gt;概念&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　池化技术就是把一些能复用的实例放在一起，一般指的是内存里，而池这个概念也是一个虚拟的概念。这样做的好处是省去了每次消耗在新建、销毁这些实例的时间，从而提高了整体服务性能。在开发中，我们经常遇到的就是数据库的连接池和多线程的线程池。连接池的管理是核心。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;数据库连接池&quot;&gt;数据库连接池&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　数据库包括关系型数据库和非关系型数据库两种。关系型数据库指的是mysql，非关系型数据库指的是redis。&lt;/p&gt;
+
+&lt;p&gt;　　mysql连接池有两个重要的配置：最小连接数和最大连接数。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如果当前连接数小于最小连接数，则创建新的连接处理请求。&lt;/li&gt;
+  &lt;li&gt;如果连接池中有空闲连接，则使用空闲连接。
+3。 如果没有空闲连接，并且当前连接数小于最大连接数，则继续创建新的连接。这等价于建立一个新的连接。这些连接使用完成不会立马清除，而是放在池中等待复用最终空闲超过一段时间后自动释放。&lt;/li&gt;
+  &lt;li&gt;如果当前连接数大于等于最大连接数，并且没有空闲连接了，则进入等待队列，在超时时间内等待空闲连接。&lt;/li&gt;
+  &lt;li&gt;超时之后，则提示超时失败。获取数据库连接失败。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;　　redis连接池有3个重要的配置：最大连接数，最小空闲数，最大空闲数&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;当前连接小于最大连接数，则创建新的连接处理请求。&lt;/li&gt;
+  &lt;li&gt;当前连接数大于等于最大连接数，超出的连接进入等待队列&lt;code&gt;LinkedBlockingDeque&lt;/code&gt;，判断是否开启&lt;code&gt;blockWhenExhausted&lt;/code&gt;，是则等待获取连接，否则抛错连接池已耗尽。&lt;/li&gt;
+  &lt;li&gt;当前连接数小于最小空闲数，则预热最小空闲数连接。&lt;/li&gt;
+  &lt;li&gt;当前连接数大于最大空闲数，则强制销毁这些多出来的连接。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;线程池&quot;&gt;线程池&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　JDK1.5中引入的ThreadPoolExecutor就是一种线程池的实现，它有两个重要的参数：coreThreadCount和maxThreadCount。这两个参数控制着线程池的执行过程。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如果当前线程数少于coreThreadCount时，则创建新的线程处理请求。&lt;/li&gt;
+  &lt;li&gt;如果当前线程数大于coreThreadCount则将超出的任务进队列，由当前空闲的线程执行。&lt;/li&gt;
+  &lt;li&gt;当队列中的任务对接满时，则继续创建线程，直到maxThreadCount。&lt;/li&gt;
+  &lt;li&gt;当前线程数达到maxThreadCount时还有新的任务，就将其按照抛弃策略进行抛弃。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://tva1.sinaimg.cn/large/0082zybpgy1gc7xbdxj67j30wk0ouqb3.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;JDK线程池提交任务示意图&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;总结&quot;&gt;总结&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry><entry><title type="html">我对JVM的解析和总结</title><link href="http://localhost:4000/tech/2021/05/11/01.html" rel="alternate" type="text/html" title="我对JVM的解析和总结" /><published>2021-05-11T00:00:00+08:00</published><updated>2021-05-11T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/11/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/11/01.html">&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;java运行时数据区&quot;&gt;Java运行时数据区&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;jvm会将内存划分为若干个不同的数据区域。如图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://cdn.jikewenku.com/wp-content/uploads/2021/01/74e01322f26270ccfe235ead6215d271.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;JVM运行时数据区域&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;程序计数器：线程私有，指向当前线程正在执行的字节码指令。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;虚拟机栈：java执行方法的内存模型。每个方法被执行的时候，都会创建一个栈帧压入栈，当方法&lt;code&gt;正常返回&lt;/code&gt;或者&lt;code&gt;抛出未捕获的异常&lt;/code&gt;时，栈帧就会出栈。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;jmm-java内存模型&quot;&gt;JMM Java内存模型&lt;/h1&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;堆的内存划分&quot;&gt;堆的内存划分&lt;/h1&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;gc垃圾回收&quot;&gt;GC垃圾回收&lt;/h1&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;hotspot-虚拟机详解&quot;&gt;HotSpot 虚拟机详解&lt;/h1&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;jvm优化&quot;&gt;JVM优化&lt;/h1&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;类加载机制&quot;&gt;类加载机制&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="http://localhost:4000/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
 
 &lt;p&gt;首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
 
@@ -807,324 +905,4 @@ Chain DOCKER-ISOLATION (1 references)
 
 &lt;p&gt;　　最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。&lt;/p&gt;
 
-&lt;p&gt;　　好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry><entry><title type="html">学习用GO写了个聊天室</title><link href="http://localhost:4000/tech/2019/03/07/01.html" rel="alternate" type="text/html" title="学习用GO写了个聊天室" /><published>2019-03-07T00:00:00+08:00</published><updated>2019-03-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/07/01.html">&lt;p&gt;　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。&lt;/p&gt;
-
-&lt;p&gt;　　断断续续那么长时间学习go了，今天才第一次写出个像样的程序。总是感觉程序大都一个样，真正上手才是王道。&lt;/p&gt;
-
-&lt;p&gt;　　创建一个聊天室服务端,chatroom_client.go&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-golang&quot;&gt;package main
-
-import (
-	&quot;fmt&quot;
-	&quot;net&quot;
-	&quot;strings&quot;
-)
-//创建基于链接的哈希map，方便知道链接对应的端口号
-var onlineConns = make(map[string]net.Conn) 
-//创建一个频道，长度1000.用来存储信息
-var messageQueue = make(chan string, 1000)
-//创建一个返回布尔值的频道，用来应对没有信息的情况
-var quitChan = make(chan bool)
-//检查错误，通用方法
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-//将消息存进频道中
-func ProcessInfo(conn net.Conn){
-	buf := make([]byte , 1024) 创建个1024字节的字节流
-	defer conn.Close() //程序运行完毕时关闭链接
-    //循环体
-	for{
-	   //从信息流读出消息
-		numOfBytes,err:= conn.Read(buf) 
-		if err != nil{
-			panic(err)
-		}
-     //如果字节不等于零，就把消息字符化发到消息频道中
-	   if numOfBytes != 0{
-			message := string(buf[0:numOfBytes])
-			messageQueue &amp;lt;- message
-		}
-	}
-}
-//消费消息
-func ConsumeMessage(){
-	for{
-	   //select是配合频道使用的，选择进哪个通信操作
-		select{
-			case message:=&amp;lt;-messageQueue:
-				//对消息进行解析
-				doProcessMessage(message)
-			case &amp;lt;- quitChan:
-			   //空消息，什么都不做~
-				break
-			}
-	}
-}
-//对消息进行解析
-func doProcessMessage(message string){
-    //将消息以“#”分开，如 127.0.0.1:3389#你好
-    //就把这个消息分成两段，一段为127.0.0.1:3389，一段为你好
-    //这里面没有考虑消息体里面包括#好的情况
-	contents := strings.Split(message,&quot;#&quot;)
-	if len(contents) &amp;gt;1 {
-		addr := contents[0]
-		sendMessage := contents[1]
-     //将消息体格式化
-		addr =strings.Trim(addr, &quot; &quot;)
-		//判断哈希map中这个地址存不存在，存在就往这个链接里写消息体
-		if conn,ok := onlineConns[addr]; ok{
-			_,err := conn.Write([]byte(sendMessage))
-			if err != nil{
-			  //不存在就写发送失败
-				fmt.Println(&quot;online conns send failure!!!!&quot;)
-			}
-		}
-	}
-}
-//主函数
-func main(){
-  //监听127.0.0.1:8080端口。
-	listen_socket , err := net.Listen(&quot;tcp&quot;,&quot;127.0.0.1:8080&quot;)
-	CheckError(err)
-	//程序退出后监听关闭
-	defer listen_socket.Close()
-   //增加用户体验，让用户知道程序在运行中
-	fmt.Println(&quot;server is waitting...&quot;)
-  //开启协程来消费消息
-	go ConsumeMessage()
-  //无限循环，来监听消息并处理消息
-	for{
-		conn,err := listen_socket.Accept()
-		CheckError(err)
-     //打印出连接过来的远端地址
-		addr := fmt.Sprintf(&quot;%s&quot;, conn.RemoteAddr())
-		//将这个连接并存储到hashmap
-		onlineConns[addr] = conn
-     //循环hashmap，打印连接上来的连接
-		for i := range onlineConns{
-			fmt.Println(i)
-		}
-		//运行协程，将连接存到频道中。程序不停，此过程不断
-		go ProcessInfo(conn)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　再创建一个客户端文件,chatroom_client.go&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-golang&quot;&gt;package main
-
-import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;net&quot;
-	&quot;os&quot;
-	&quot;strings&quot;
-)
-
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-//发送消息
-func MessageSend(conn net.Conn) {
-	var input string
-	//无限循环，发送消息
-	for {
-	   //监听输入将键入的信息记下来
-		reader := bufio.NewReader(os.Stdin)
-		//将记下来的消息以每行开始读
-		data, _, _ := reader.ReadLine()
-		//将data字符化存入到input
-		input = string(data)
-     //如果input为exit就退出，结束连接
-		if strings.ToUpper(input) == &quot;EXIT&quot; {
-			conn.Close()
-			break
-		} else {
-		  //否则，往这个连接中写入字节流
-			_, err := conn.Write([]byte (input))
-			if err != nil {
-				conn.Close()
-				fmt.Println(&quot;client connect failure&quot; + err.Error())
-			}
-		}
-	}
-}
-
-func main() {
-  //连接8080端口
-	conn, err := net.Dial(&quot;tcp&quot;, &quot;127.0.0.1:8080&quot;)
-	CheckError(err)
-	defer conn.Close()
-   //开启协程发送消息，无限循环的
-	go MessageSend(conn)
-	//创建1024长度的字节流
-	buf := make([]byte, 1024)
-	//无限循环，读取字节流信息并打印
-	for {
-		_, err := conn.Read(buf)
-		CheckError(err)
-		fmt.Println(&quot;server receive message content: &quot; + string(buf))
-	}
-
-	fmt.Println(&quot;client program done&quot;)
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　以上程序可以运行起来了。先go run chatroom_server.go。之后再起两个client。server中能看到连接上来的两个ip:port。在client中输入ip:port#文字。就可以在对应的client看到发送过来的信息了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="go,聊天室" /><summary type="html">　　最近在看GO语言，跟着教程一步一步手敲代码，拼出了个聊天室程序。其中涉及到了go语言中的go,defer,make,chan,select。了解了go中的变量类型以及部分的类型操作。同时，go语言的语言结构和逻辑控制也有了大概的初步认识。而且，也用到了go特有的语言性质。</summary></entry><entry><title type="html">不支持caching_sha2_password的MYSQL8应如何连接</title><link href="http://localhost:4000/tech/2019/03/01/01.html" rel="alternate" type="text/html" title="不支持caching_sha2_password的MYSQL8应如何连接" /><published>2019-03-01T00:00:00+08:00</published><updated>2019-03-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/01/01.html">&lt;p&gt;　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。&lt;/p&gt;
-
-&lt;p&gt;　　这次想写的东西还挺多，一是顺便把之前的事情都按照时间点归总一下然后写个回忆录啥的。二是接着把我这段时间学过的东西、用过的东西、见过的东西写一写。这次写的东西就是我昨天重起php5.6时，遇到的早已见过的mysql8把plugin从“mysql_native_password”换成后“caching_sha2_password”服务连接不上的问题。其实，网上很多文章已经写了这个问题了，我也是在2018年4月份第一批遇到此问题的那批用户，那么我为啥要写这篇文章呢？因为，我想把我一边遇到问题一边解决问题的过程和为什么这么做的原因描述一下。我觉得这应该会更加有意义吧。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;1.caching_sha2_password和mysql_native_password是什么&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　这两个是MYSQL的加密插件的规则，也可以说是加密算法。mysql8之前的mysql5都用的是native，后来才改成了sha2。安全方面的考虑吧。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;2.在哪里我可以看到这个值呢？&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;登录mysql&lt;/li&gt;
-  &lt;li&gt;use mysql;&lt;/li&gt;
-  &lt;li&gt;select * from user \G;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　这里面包含的就是系统记录的登录用户，如果你一般用的是账户为root的用户，那么你就会发现User一列会有个root的记录。其后还会包括plugin，这个就是你在用的加密算法。之后的authentication_string就是你的密码被算法加密后的密文了。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;            Host: localhost
-                User: root             (*)
-           Select_priv: Y
-           Insert_priv: Y
-           Update_priv: Y
-           Delete_priv: Y
-           Create_priv: Y
-             Drop_priv: Y
-           Reload_priv: Y
-         Shutdown_priv: Y
-          Process_priv: Y
-             File_priv: Y
-            Grant_priv: Y
-       References_priv: Y
-            Index_priv: Y
-            Alter_priv: Y
-          Show_db_priv: Y
-            Super_priv: Y
- Create_tmp_table_priv: Y
-      Lock_tables_priv: Y
-          Execute_priv: Y
-       Repl_slave_priv: Y
-      Repl_client_priv: Y
-      Create_view_priv: Y
-        Show_view_priv: Y
-   Create_routine_priv: Y
-    Alter_routine_priv: Y
-      Create_user_priv: Y
-            Event_priv: Y
-          Trigger_priv: Y
-Create_tablespace_priv: Y
-              ssl_type:
-            ssl_cipher:
-           x509_issuer:
-          x509_subject:
-         max_questions: 0
-           max_updates: 0
-       max_connections: 0
-  max_user_connections: 0
-                plugin: mysql_native_password             (*)
- authentication_string: *332A08JD6001FESDFDSLI11083DS41242991       (*)
-      password_expired: N
- password_last_changed: 2019-02-28 19:43:03
-     password_lifetime: 0
-        account_locked: N
-      Create_role_priv: Y
-        Drop_role_priv: Y
-Password_reuse_history: NULL
-   Password_reuse_time: NULL
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;3.比如你在用PHP连接MYSQL时会报“requested authentication method unknown to the client [caching_sha2_password]”的错误，我们如何解决呢？&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　首先，我们要明确一下问题。&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;正如上面列的mysql数据，你数据中plugin是什么？authentication_string加密前的密码是正确的么？如果你不确定密码的话你最好重置一下密码，如果不需要就跳到问题【5】&lt;/li&gt;
-  &lt;li&gt;你的My.cnf（*unix）中的配置应该怎么配?&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;4.如何重置mysql密码&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;关闭mysql服务。&lt;/li&gt;
-  &lt;li&gt;找到mysql的安装位置，并进入bin文件夹，会发现mysqld运行文件&lt;/li&gt;
-  &lt;li&gt;运行 mysqld –skip-grant-tables #跳过登录检验环节直接启动mysql&lt;/li&gt;
-  &lt;li&gt;use mysql;&lt;/li&gt;
-  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘你的密码’ PASSWORD EXPIRE NEVER; #修改密码规则&lt;/li&gt;
-  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’; #更新用户密码&lt;/li&gt;
-  &lt;li&gt;flush privileges; #刷新权限，必须做&lt;/li&gt;
-  &lt;li&gt;重启你的机器，建议你做这一步&lt;/li&gt;
-  &lt;li&gt;开启mysql服务&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;5.My.cnf的配置&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　下面的配置是我的配置，标（*）的地方就是要将密码规则插件改mysql_native_password。（*）要在[mysqld]下面。因为在用php连接服务的时候会走这个配置。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-mysql&quot;&gt;# For advice on how to change settings please see
-# http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
-# *** DO NOT EDIT THIS FILE. It's a template which will be copied to the
-# *** default location during install, and will be replaced if you
-# *** upgrade to a newer version of MySQL.
-[mysqld]
-default_authentication_plugin=mysql_native_password (*)
-# Remove leading # and set to the amount of RAM for the most important data
-# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
-# innodb_buffer_pool_size = 128M
-# Remove leading # to turn on a very important data integrity option: logging
-# changes to the binary log between backups.
-# log_bin =~/logs/mysql/mysql-bin
-# These are commonly set, remove the # and set as required.
-# basedir = /usr/local/var/mysql/
- datadir = /usr/local/var/mysql
- port = 3306
-# server_id = .....
- socket = /usr/local/var/run/mysql.sock
-# Remove leading # to set options mainly useful for reporting servers.
-# The server defaults are faster for transactions and fast SELECTs.
-# Adjust sizes as needed, experiment to find the optimal values.
-# join_buffer_size = 128M
-# sort_buffer_size = 2M
-# read_rnd_buffer_size = 2M
-sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
-[client]
-socket = /usr/local/var/run/mysql.sock
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-  &lt;ol&gt;
-    &lt;li&gt;更改密码规则及密码&lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/blockquote&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;登录mysql&lt;/li&gt;
-  &lt;li&gt;use mysql;&lt;/li&gt;
-  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘你的密码’ PASSWORD EXPIRE NEVER; #修改密码规则&lt;/li&gt;
-  &lt;li&gt;ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’; #更新用户密码&lt;/li&gt;
-  &lt;li&gt;flush privileges; #刷新权限，必须做&lt;/li&gt;
-  &lt;li&gt;重启Mysql服务&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　自此，sha2的连接问题可以告一段落了。我有时间把我18年4月份折腾mysql8的数据库文件的经验发出来吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　真的好长时间没有在这个博客写东西了。自从17年底到18年下旬自己发生了天翻地覆的变化，所以没有太多时间也没有太多心情来写东西。虽然，目前的状况也还不太稳定。但是，心情变得好多了。所以，我想过来写一写东西了。</summary></entry></feed>
+&lt;p&gt;　　好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry></feed>
