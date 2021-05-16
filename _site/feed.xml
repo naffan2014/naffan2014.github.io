@@ -1,4 +1,663 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-15T15:11:19+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">池化技术</title><link href="http://localhost:4000/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-16T18:21:27+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">redis连接池源码分析</title><link href="http://localhost:4000/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
+
+&lt;p&gt;　　你在开发时，可以通过jedis连接redis。jedis支持直连模式和连接池模式。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;直连模式：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt; public static void main(String[] arg){
+        //1个实例
+        Jedis jedis = new Jedis(&quot;127.0.0.1&quot;,6379,100);
+        jedis.incr(&quot;threadSafe&quot;);
+        jedis.close();
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/089f91fe840610d38104189b092092042801300138f312.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;直连&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　你不应该将一个redis实例共享给不同线程，时用时消的用法会造成产生很多的socket和tcp连接，即浪费时间又耗费资源，也提高了服务不可用的风险。如果你只是在本机环境或者使用者相对少的环境中使用，这种模式比较适宜。但是，如果你需要大量使用redis时，应该采用连接池模式。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;连接池模式：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    public static void main(String[] arg){
+        JedisPool pool = new JedisPool(new JedisPoolConfig(),&quot;localhost&quot;);
+        try (Jedis jedis = pool.getResource()) {
+            jedis.set(&quot;foo&quot;, &quot;bar&quot;);
+            String foobar = jedis.get(&quot;foo&quot;);
+            jedis.zadd(&quot;sose&quot;, 0, &quot;car&quot;); jedis.zadd(&quot;sose&quot;, 0, &quot;bike&quot;); 
+            Set&amp;lt;String&amp;gt; sose = jedis.zrange(&quot;sose&quot;, 0, -1);
+        }
+        pool.close();
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08af91fe84061087a50a189b09208b052801300138b9f703.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;连接池&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　为了避免由单一redis实例引发的未知的服务不可用的风险，我们应该采用这种方案。这种方案背后的原理就是连接池（common-pool2）。当服务到达时服务会从连接池中borrow一个jedis连接，当用完或者发生错误时，连接会归还到连接池中。如果没有borrow到连接，那么服务就会报错且关闭。&lt;/p&gt;
+
+&lt;p&gt;　　我的上一篇&lt;a href=&quot;https://www.naffan.cn/tech/2021/05/12/01.html&quot;&gt;池化技术&lt;/a&gt;已经提到过连接池的概念，所以这篇文章是我想记录并分享我所学习到的jedis连接池的知识。通过上一段代码我们看到当jedisPool实例化以后，我们从pool中通过getResource来获取一个jedis实例。那么我们的代码研究就从这里开始。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    //jedis-3.6.0.jar/redis/clients/jedis/jedisPool.class
+    public Jedis getResource() {
+        //调用父集getResource
+        Jedis jedis = (Jedis)super.getResource();
+        //将当前实例暴露出dataSource，供后续redis操作使用
+        jedis.setDataSource(this);
+        return jedis;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    //jedis-3.6.0.jar/redis/clients/jedis/client/util/Pool.class
+    //genericObjectPool是ObjectPool的实现，ObjectPool是common.pool2中关于池化对象的接口。其中定义了几个标准的对象方法，这些方法就是管理池的核心方法。
+    protected GenericObjectPool&amp;lt;T&amp;gt; internalPool;
+    ……
+    public T getResource() {
+        try {
+            //通过调用common.pool2中的borrowObject，完成对jedis实例的借取。
+            return this.internalPool.borrowObject();
+            //如果出现了异常了，按照异常的分类进行处理。
+        } catch (NoSuchElementException var2) {
+            if (null == var2.getCause()) {
+                throw new JedisExhaustedPoolException(&quot;Could not get a resource since the pool is exhausted&quot;, var2);
+            } else {
+                throw new JedisException(&quot;Could not get a resource from the pool&quot;, var2);
+            }
+        } catch (Exception var3) {
+            throw new JedisConnectionException(&quot;Could not get a resource from the pool&quot;, var3);
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　在common-pool2中，对象池的核心接口叫做ObjectPool，他定义了对象池的实现的行为。&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;addObject方法：往池中添加一个对象。池子里的所有对象都是通过这个方法进来的。&lt;/li&gt;
+  &lt;li&gt;borrowObject方法：从池中借走到一个对象。借走不等于删除。对象一直都属于池子，只是状态的变化。&lt;/li&gt;
+  &lt;li&gt;returnObject方法：把对象归还给对象池。归还不等于添加。对象一直都属于池子，只是状态的变化。&lt;/li&gt;
+  &lt;li&gt;invalidateObject：销毁一个对象。这个方法才会将对象从池子中删除，当然这其中最重要的就是释放对象本身持有的各种资源。&lt;/li&gt;
+  &lt;li&gt;getNumIdle：返回对象池中有多少对象是空闲的，也就是能够被借走的对象的数量。&lt;/li&gt;
+  &lt;li&gt;getNumActive：返回对象池中有对象对象是活跃的，也就是已经被借走的，在使用中的对象的数量。&lt;/li&gt;
+  &lt;li&gt;clear：清理对象池。注意是清理不是清空，改方法要求的是，清理所有空闲对象，释放相关资源。&lt;/li&gt;
+  &lt;li&gt;close：关闭对象池。这个方法可以达到清空的效果，清理所有对象以及相关资源。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;　　在common-pool2中，objectPool的核心实现类就是GenericObjectPool。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    //commons-pool2.jar/org/apache/commons/pool2/impl/GenericObjectedPool
+    @Override
+    public T borrowObject() throws Exception {
+        //getMaxWaitMillis()是BaseGenericObjectPool中设定的volatile类型的值，代表最长等待时间（毫秒），配置文件中的&quot;maxWait&quot;
+        return borrowObject(getMaxWaitMillis());
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　接下来我们来分析下borrowObject方法，刚才说过borrowObject是实现了ObjectPool。那么先看一下这个接口中对borrowObject的描述。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    /**
+     * Obtains an instance from this pool.
+     * &amp;lt;p&amp;gt;
+     * Instances returned from this method will have been either newly created
+     * with {@link PooledObjectFactory#makeObject} or will be a previously
+     * idle object and have been activated with
+     * {@link PooledObjectFactory#activateObject} and then validated with
+     * {@link PooledObjectFactory#validateObject}.
+     * &amp;lt;/p&amp;gt;
+     * &amp;lt;p&amp;gt;
+     * By contract, clients &amp;lt;strong&amp;gt;must&amp;lt;/strong&amp;gt; return the borrowed instance
+     * using {@link #returnObject}, {@link #invalidateObject}, or a related
+     * method as defined in an implementation or sub-interface.
+     * &amp;lt;/p&amp;gt;
+     * &amp;lt;p&amp;gt;
+     * The behavior of this method when the pool has been exhausted
+     * is not strictly specified (although it may be specified by
+     * implementations).
+     * &amp;lt;/p&amp;gt;
+     *
+     * @return an instance from this pool.
+     *
+     * @throws IllegalStateException
+     *              after {@link #close close} has been called on this pool.
+     * @throws Exception
+     *              when {@link PooledObjectFactory#makeObject} throws an
+     *              exception.
+     * @throws NoSuchElementException
+     *              when the pool is exhausted and cannot or will not return
+     *              another instance.
+     */
+     /*
+     这个method返回实例，这个实例将是一个被makeObject()创建的对象，或者是一个之前就是idle并且经过activateObject()激活过的并且经过validatedObject()验证过的对象。
+     根据约定，客户端必须调用过returenObject(),invalidateObject()或者一个在子类中实现了归还逻辑的方法后归还。
+     这个方法在池子耗尽时的表现没有指明具体如何处理（尽管他有可能被他的实现制定过。）
+     */
+    T borrowObject() throws Exception, NoSuchElementException,
+            IllegalStateException;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　接着我们再来看看这个方法的具体实现。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    //commons-pool2.jar/org/apache/commons/pool2/impl/GenericObjectPool.class
+    /**
+     * Equivalent to &amp;lt;code&amp;gt;{@link #borrowObject(long)
+     * borrowObject}({@link #getMaxWaitMillis()})&amp;lt;/code&amp;gt;.
+     * &amp;lt;p&amp;gt;
+     * {@inheritDoc}
+     * &amp;lt;/p&amp;gt;
+     */
+     //通过获取配置中MaxWait配置，当做传输调用重载的方法。
+    @Override
+    public T borrowObject() throws Exception {
+        return borrowObject(getMaxWaitMillis());
+    }
+    
+    /**
+     * Borrows an object from the pool using the specific waiting time which only
+     * applies if {@link #getBlockWhenExhausted()} is true.
+     * &amp;lt;p&amp;gt;
+     * If there is one or more idle instance available in the pool, then an
+     * idle instance will be selected based on the value of {@link #getLifo()},
+     * activated and returned. If activation fails, or {@link #getTestOnBorrow()
+     * testOnBorrow} is set to {@code true} and validation fails, the
+     * instance is destroyed and the next available instance is examined. This
+     * continues until either a valid instance is returned or there are no more
+     * idle instances available.
+     * &amp;lt;/p&amp;gt;
+     * &amp;lt;p&amp;gt;
+     * If there are no idle instances available in the pool, behavior depends on
+     * the {@link #getMaxTotal() maxTotal}, (if applicable)
+     * {@link #getBlockWhenExhausted()} and the value passed in to the
+     * {@code borrowMaxWaitMillis} parameter. If the number of instances
+     * checked out from the pool is less than {@code maxTotal,} a new
+     * instance is created, activated and (if applicable) validated and returned
+     * to the caller. If validation fails, a {@code NoSuchElementException}
+     * is thrown.
+     * &amp;lt;/p&amp;gt;
+     * &amp;lt;p&amp;gt;
+     * If the pool is exhausted (no available idle instances and no capacity to
+     * create new ones), this method will either block (if
+     * {@link #getBlockWhenExhausted()} is true) or throw a
+     * {@code NoSuchElementException} (if
+     * {@link #getBlockWhenExhausted()} is false). The length of time that this
+     * method will block when {@link #getBlockWhenExhausted()} is true is
+     * determined by the value passed in to the {@code borrowMaxWaitMillis}
+     * parameter.
+     * &amp;lt;/p&amp;gt;
+     * &amp;lt;p&amp;gt;
+     * When the pool is exhausted, multiple calling threads may be
+     * simultaneously blocked waiting for instances to become available. A
+     * &quot;fairness&quot; algorithm has been implemented to ensure that threads receive
+     * available instances in request arrival order.
+     * &amp;lt;/p&amp;gt;
+     *
+     * @param borrowMaxWaitMillis The time to wait in milliseconds for an object
+     *                            to become available
+     *
+     * @return object instance from the pool
+     *
+     * @throws NoSuchElementException if an instance cannot be returned
+     *
+     * @throws Exception if an object instance cannot be returned due to an
+     *                   error
+     */
+     /*
+     当getBlockWhenExhausted()返回true时，需要提供等待时间从对象池中借出对象，
+     如果有1个或多个空闲实例的话，就通过getLifo()方法，也就是先进先出的策略选择由哪个空闲实例承接工作。如果激活失败了，或者testOnBorrow设置为true并且检测失败了，这个实例就会销毁，接下来由下一个可用实例进行承接。这个流程一直持续，直到没有可用的实例可供使用或者没有空闲实例可供使用。
+     如果在对象池中没有空闲实例了，接下来的走向取决于maxTotal,getBlockWhenExhausted()和传进来的等待时间参数决定。如果当前对象池中的实力数量小于maxtotal，一个新的实例将被创建，激活并且检测最终返回给调用者。如果检测失败，一个NoSuchElementException异常将被抛出。
+     如果对象池已经占满了（也就是说没有可用的空闲实例并且没有容量可以被创建），这个方法要不堵塞（如果getBlockWhenExhausted设置为true的情况下才会堵塞）要不就抛出一个NoSuchElementException（相反getBlockWhenExhausted为false的情况）异常。具体阻塞的时间跟传入的borrowMaxWaitMillis时间大小有关。（还记得刚才说的maxWait的设置么？）
+     当对象池已经耗尽，多个调用线程将被同时堵塞，他们一起等待可用的jedis实例接客。接客的规则采用公平算法。其实就是先到先被接~哈哈
+     */
+    public T borrowObject(final long borrowMaxWaitMillis) throws Exception {
+        //这一步就是检查一下对象池的状态，如果之前已经关闭了，就会抛出IllegalStateException异常。
+        assertOpen();
+        //移除已经被抛弃的实例
+        final AbandonedConfig ac = this.abandonedConfig;
+        if (ac != null &amp;amp;&amp;amp; ac.getRemoveAbandonedOnBorrow() &amp;amp;&amp;amp;
+                (getNumIdle() &amp;lt; 2) &amp;amp;&amp;amp;
+                (getNumActive() &amp;gt; getMaxTotal() - 3) ) {
+            /*
+            被抛弃的实例不为null
+            borrow时去除被抛弃的实例
+            空闲线程实例&amp;lt;2
+            当前活动的实例数量大于最大实例数量-3
+            */
+            removeAbandoned(ac);
+        }
+        //定义一个PooledObject类型的对象，T是真正的实例对象。如jedis，db等。
+        PooledObject&amp;lt;T&amp;gt; p = null;
+
+        // Get local copy of current config so it is consistent for entire
+        // method execution
+        /*
+        获取一个本地的拷贝，这个拷贝是目前的配置。这样就能够保证整体的一致性。
+        这个getBlockWhenExhausted()最终是获取的一个volatile类型的值，这个值是从配置中获取的，代表当线程池满时，是否对新来的任务给予堵塞。但是，我们得注意volatile这个类型了，而且设计者在这个地方单独获取出来这个值，肯定是为了什么。接着往下看吧。
+        */
+        final boolean blockWhenExhausted = getBlockWhenExhausted();
+        //是否为新建，请区别于created。为什么仅在这里定义了变量而没有初始化呢？
+        boolean create;
+        //当前的毫秒，用来就算
+        final long waitTime = System.currentTimeMillis();
+        //循环开始，第一次p=null开始循环
+        while (p == null) {
+            //初始化create=false，代表目前这个线程不是新建的。
+            create = false;
+            /*
+            private final LinkedBlockingDeque&amp;lt;PooledObject&amp;lt;T&amp;gt;&amp;gt; idleObjects;
+            idleObjects是一个阻塞有序队列，队列的类型是刚才的封装类型，封装的是实际的资源。从名字上可以看出，这里叫做空闲对象组
+            可以看到，从空闲对象组里拿出第一个元素。pollFirst()是LinkedBlockingDeque.java中的方法。就是通过操作节点来把第一个节点删除并返回。
+            */
+            p = idleObjects.pollFirst();
+            //如果p为空代表弹出的是null，说明没有空闲。那就创建一个新的对象。
+            if (p == null) {
+                p = create();
+                //p可能会创建失败，创建失败的时候 create=false。 创建成功create=true
+                if (p != null) {
+                    create = true;
+                }
+            }
+            //如果设置了对象池耗尽后堵塞等待的标示
+            if (blockWhenExhausted) {
+                if (p == null) {
+                    //p没有创建成功
+                    if (borrowMaxWaitMillis &amp;lt; 0) {
+                        //如果没有设置为-1，只有这种情况会符合小于0.所以就直接从空闲对象组中获取第一个有效的空闲对象。这个方法有锁的实现，所以这块可能会一直堵塞着直到有一个空闲对象可以使用。
+                        p = idleObjects.takeFirst();
+                    } else {
+                    //如果设置等待时间了，就在这段时间里获取。超过了就返回null
+                        p = idleObjects.pollFirst(borrowMaxWaitMillis,
+                                TimeUnit.MILLISECONDS);
+                    }
+                }
+                //到这里如果还是空，就说明没等待到空闲的资源了。所以就要报异常了。
+                if (p == null) {
+                    throw new NoSuchElementException(
+                            &quot;Timeout waiting for idle object&quot;);
+                }
+            } else {
+                //如果没有设置blockWhenExhausted标示且p是null，那真是获取不到资源了，因为池子已经被占满了。
+                if (p == null) {
+                    throw new NoSuchElementException(&quot;Pool exhausted&quot;);
+                }
+            }
+            /*
+            到这里其实p应该不是null了，说明肯定是有资源了。有可能是获得了空闲资源或是创建了一个新的资源。这个时候就要让系统给他分配内存了。跟进allocate()代码中，发现这是一个synchronized方法，保证了线程安全。（这块会有线程安全问题。为什么呢？）方法体判断了当前池状态（空闲状态或者测试中状态）然后更改状态位，置lastBorrowTime,lastUseTime,borrowedCount++等，然后返回boolean。
+            我们可以推算出，当前的池资源状态可能会被另一个线程改写。有一种情况就是，空闲的连接还需要进行test和validate才能够正确分配。但是如果在test或validate阶段失败了，那线程就不能够被分配资源了，因为前后状态不一致了。所以需要allocate的同步操作来保证当时的空闲资源不被改写。
+            */
+            if (!p.allocate()) {
+                //没有成功分配资源，当然p就应该置为null，等待重新进行遍历。
+                p = null;
+            }
+            //到这里，分配成功的p应该进行校验阶段了。没有成功分配的p目前还是null，所以跳过下面的判断。
+            if (p != null) {
+                //从这开始p是有资源了
+                try {
+                    /*
+                    private final PooledObjectFactory&amp;lt;T&amp;gt; factory;
+                    通过池工厂（PooledObjectFactory.java）对返回来的实例重新初始化。因为PooledObjectFactory是个接口。所以，我以Jedis为T进行解析（JedisFactory.java），别的实际类型会有不同的行为，但是基本差不多。
+        这个方法里就是获取了BinaryJedis，判断当前的库是不是库0.如果不是就就简单做个select操作。如果是的话什么都不做。
+                    这块的设计有一个小心思，就是作者用这种代码结构来给开发者留出了很大的实现空间。
+                    */
+                    factory.activateObject(p);
+                } catch (final Exception e) {
+                    //激活异常
+                    try {
+                        //摧毁对象，释放资源
+                        destroy(p, DestroyMode.NORMAL);
+                    } catch (final Exception e1) {
+                        // 摧毁的程序都报异常了，我可管不了了。采取鸵鸟算法。
+                    }
+                    //help GC
+                    p = null;
+                    //如果是新建的资源，就说明分配成功，但是激活失败。抛个错吧。
+                    if (create) {
+                        final NoSuchElementException nsee = new NoSuchElementException(
+                                &quot;Unable to activate object&quot;);
+                        //用什么错误原因呢？就用上面这个吧
+                        nsee.initCause(e);
+                        throw nsee;
+                    }
+                }
+                /*
+                如果分配成功了， 激活也成功了，并且开启了TestOnBorrow，逻辑进来再让我蹂躏下吧。如果失败了跳过这个逻辑吧。
+                testOnBorrow的目的是不论资源是否是从池子里借的，都要在返回钱进行一次验证。如果失败了资源会被清除出池子并且毁掉。然后再向池对象尝试借一次。
+                */
+                if (p != null &amp;amp;&amp;amp; getTestOnBorrow()) {
+                    boolean validate = false;
+                    Throwable validationThrowable = null;
+                    try {
+                    /*
+                    我依然以JedisFactory.java分析吧。
+                    依然是首先获取一个BinaryJedis资源。判断连接的Port和设置的port是否相等。判断连接的host和设置额host是否相等。相等就返回true。否则就返回false。
+                    */
+                        validate = factory.validateObject(p);
+                    } catch (final Throwable t) {
+                        PoolUtils.checkRethrow(t);
+                        validationThrowable = t;
+                    }
+                    //如果检查没有通过依然是摧毁。如果是新建的就报错。和上面激活的流程一样。
+                    if (!validate) {
+                        try {
+                            destroy(p, DestroyMode.NORMAL);
+                            destroyedByBorrowValidationCount.incrementAndGet();
+                        } catch (final Exception e) {
+                            // Ignore - validation failure is more important
+                        }
+                        p = null;
+                        if (create) {
+                            final NoSuchElementException nsee = new NoSuchElementException(
+                                    &quot;Unable to validate object&quot;);
+                            nsee.initCause(validationThrowable);
+                            throw nsee;
+                        }
+                    }
+                }
+            }
+        }
+        //恭喜获得了一个有效的p资源。然后统计一下数据吧，比如消耗时间。
+        updateStatsBorrow(p, System.currentTimeMillis() - waitTime);
+        //返回吧。记住返回的是一个PooledObject对象。真正的资源需要通过getObject(）获取。
+        return p.getObject();
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　至此，看懂了jedis是如何从连接池中拿到资源的了。这里面经常有一些线程安全的判断，这也是难点所在，因为池化技术最重要的功能就是对线程资源的管理与利用。所以，代码中用了很多sychronize方法。不光这些，作者还要考虑到资源的释放和销毁还有扩展。&lt;/p&gt;
+
+&lt;p&gt;　　最后看到了getObject()方法。为什么作者不直接暴露资源呢？为什么还要包一层呢？接下来我来分析一下吧。PooledObject是一个接口，我们先看看接口的描述是什么。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
+ * Defines the wrapper that is used to track the additional information, such as
+ * state, for the pooled objects.
+ * &amp;lt;p&amp;gt;
+ * Implementations of this class are required to be thread-safe.
+ * &amp;lt;/p&amp;gt;
+ *
+ * @param &amp;lt;T&amp;gt; the type of object in the pool
+ *
+ * @since 2.0
+ */
+ /*
+ 定义一个封装结构，这个封装结构使用来记录额外信息的。比如池资源的状态等。
+ 实现这个接口的class文件必须是线程安全的。（为什么呢？）
+ 
+ */
+public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledObject&amp;lt;T&amp;gt;&amp;gt; {}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考资料：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_42340670/article/details/106876879&quot;&gt;对象池：commons-pool2源码解析：GenericObjectPool的borrowObject方法&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="http://localhost:4000/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/13/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/13/01.html">&lt;blockquote&gt;
+  &lt;p&gt;问如果你要设计一个池化对象，你会怎么做？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;　　设计一个T类型的池子，把T类型的资源都放到池子中。资源负责资源的事情，池子负责管理资源。管理池子要做到资源数量的管理，资源状态的管理，资源创建和销毁，线程安全，资源记录。还要考虑到复用的可能。&lt;/p&gt;
+
+&lt;p&gt;　　让我们看看common-pool2的组成部分吧：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;ObjectPool: 存取和状态管理的实现。我们直接操作的线程池就是在这里定义的。这里定义的是如何获取和释放对象等操作。至于具体创建对象的代码，是由PooledObjectFactory来负责的。&lt;/li&gt;
+  &lt;li&gt;PooledObject: 将真正的资源进行封装，封装的过程中添加一些附加信息，比如状态信息，时间等信息。这些信息方便再操作连接资源时完成特定的操作。&lt;/li&gt;
+  &lt;li&gt;PooledObjectFactory:创建，初始化，销毁对象的具体实现的地方。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08e792838506108fff0318c10420d0022801300138d233.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;//一个简单的池结果。它继承了Closeable接口，也就是说是可以关闭的数据源或目标。T是实际存在于池中的类型。
+public interface ObjectPool&amp;lt;T&amp;gt; extends Closeable{
+    
+    //通过PooledObjectFactory创建对象或者通过其他机制放入空闲池对象。addObject也用来预热空闲池。
+    void addObject() throws Exception, IllegalStateException,
+            UnsupportedOperationException;
+            
+    //传入参数count，调用count次addObject。 方法的类型是default，也就是说这个方法直接实现方法体，不用实现者实现这个方法。
+    default void addObjects(final int count) throws Exception {
+        for (int i = 0; i &amp;lt; count; i++) {
+            addObject();
+        }
+    }
+    
+    /*
+    从对象池中获取一个实例。
+    创建的实例要不是通过PooledObjectFactory中makeObject()新建出来的，要不就是用了前一个已经被PooledObjectFactory中activateObject()和PooledObjectFactory中validateObject()的空闲对象。
+    activateObject()和validateObject()这两个方法需要在不同的池类型文件中自己去实现。
+    */
+    T borrowObject() throws Exception, NoSuchElementException,
+            IllegalStateException;
+    
+    //清除随机对象放回到池中作为空闲对象。释放这个对象的相关引用资源。在clear之前一定是经过PooledObjectFacotry的destroyObject()过。
+     void clear() throws Exception, UnsupportedOperationException;
+     
+    //继承自Closeable接口，负责关闭并释放有关联系的系统资源。如果之前已经关闭了， 则调用此方法无效。
+    @Override
+    void close();
+    
+    //返回当前有多少实例从池对象中被借出了。如果返回的是负数代表这个信息不可用。
+    int getNumActive();
+    
+    //返回当前当前池中有多少空闲对象。这个值是一个近似值，因为他只代表还没有创建成新资源的被借走的对象。我理解的是还没有被分配内存地址（allocate）。
+    int getNumIdle();
+    
+    /*
+    使池中对象失效
+    按照约定，参数obj必已经被borrwoObject()或者被一个定义在子实现类中定义的方法实现了获取逻辑的对象。如果失败了就返回异常
+    */
+     void invalidateObject(T obj) throws Exception;
+     
+     //比上面多了一个DestoryMode。DestoryMode是个枚举，分别为普通摧毁和被禁的摧毁。最终调用的是PooledObjectFactory的destoryObject()。但不知为啥，我发现其实mode参数最终没有用上……。往下看，看到工厂的destoryObject（）
+     default void invalidateObject(final T obj, final DestroyMode mode) throws Exception {
+        invalidateObject(obj);
+    }
+    
+    /*
+    返回一个池对象中的实例。同invalidateObject()
+    异常中会抛出IllegalStateException。原因是如果有任何（把除了已经被分配内存的有状态的资源，即被借出了的。或者返回一个对象超过一次以上或者返回一个从未被借出过的对象）操作就会触发这个异常
+    */
+     void returnObject(T obj) throws Exception;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/*
+用来定义池对象的一个wrapper 接口，用于跟踪对象的附加信息，比如状态、创建时间、使用时间等。这个类的实现必须是线程安全的。
+*/
+public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledObject&amp;lt;T&amp;gt;&amp;gt; {
+
+    //返回被包装的实际对象
+    T getObject();
+
+    //返回该对象的创建时间
+    long getCreateTime();
+    
+    //以毫秒为单位获得该对象最后在活动状态中使用的时间(它可能仍然处于活动状态，在这种情况下后续调用将返回一个增加的值)。
+    long getActiveTimeMillis();
+
+    //借出的次数
+    default long getBorrowedCount() {
+        return -1;
+    }
+
+    //空闲时间
+    long getIdleTimeMillis();
+
+    //上次借用时间
+    long getLastBorrowTime();
+
+    //上次归还时间
+    long getLastReturnTime();
+
+     /**
+     * 返回上次使用时间的一个估计值,如果Pooled Object实现了TrackedUse接口
+     * 那么返回值将是TrackedUse.getLastUsed()和getLastBorrowTime()的较大者，
+     * 否则返回值和getLastBorrowTime()相等
+     */
+    long getLastUsedTime();
+
+     /*
+     因为接口继承了Comparable接口。所以这个接口需要实现自己的排序逻辑。
+     默认是按照空闲时间排序的。
+     */
+    @Override
+    int compareTo(PooledObject&amp;lt;T&amp;gt; other);
+
+    @Override
+    boolean equals(Object obj);
+
+    @Override
+    int hashCode();
+
+    @Override
+    String toString();
+
+    //尝试将池对象置于PooledObjectState.EVICTION状态，即收回
+    boolean startEvictionTest();
+
+     //是否完成了收回测试
+    boolean endEvictionTest(Deque&amp;lt;PooledObject&amp;lt;T&amp;gt;&amp;gt; idleQueue);
+
+    //分配内存，这个比较重要。因为连接池中的资源被分配后才能算真正的解除。分配内存的过程中可能会出现抢占资源的情况，所以会发生异常。反正，最终返回ture/false来代表是否分配内存成功，即完成了borrow，状态改为PooledObjectState.ALLOCATED
+    boolean allocate();
+
+    //与上面一个方法作用相反,将PooledObjectState.ALLOCATED置为PooledObjectState.IDLE
+    boolean deallocate();
+
+    //将对象置为PooledObjectState.INVALID无效状态
+    void invalidate();
+
+    //设置是否记录对象使用的堆栈信息,可用于池泄漏时问题追溯
+    void setLogAbandoned(boolean logAbandoned);
+
+     /*
+     设置记录堆栈信息时的策略，是全量还是只记泄露的信息。
+     设置为false时，泄露信息只包括调用类的信息而不是方法名。
+     设置为数字时，制使用包含完整堆栈跟踪信息的堆栈遍历机制；否则，如果可能，使用更快的实现。
+     参数是自common-pool2-2.7.0开始有的。
+     */
+    default void setRequireFullStackTrace(final boolean requireFullStackTrace) {
+        // noop
+    }
+
+     //记录当前对象最后一次使用的堆栈信息
+    void use();
+
+    //打印对象的调用堆栈信息
+    void printStackTrace(PrintWriter writer);
+
+    //返回对象目前的状态
+    PooledObjectState getState();
+
+    //标记该对象发生了泄漏
+    void markAbandoned();
+
+    //标记该对象正在被归还到对象池
+    void markReturning();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/*
+这个接口主要提供给ObjectPool接口使用。因为这个接口定义了池中对象的生命周期相关的所有方法。
+按照约定，以下情况ObjectPool会代理到PooledObjectFactory中：
+1.不论何时创建一个实例调用makeObject()时
+2.当实例在借出之前，已经处于passivated，每次实例在调用activateObject时
+3.当一个实例被激活时。当一个实例已经返回到池里并且正在做检查，又在passivated（卸载）之前时。当acitvated实例且确定能被借出时
+4.每个实例返回到连接池后，在调用passivateObject()时
+5.当实例正在从池中销毁时，destoryObject()调用时
+
+这个工厂必须确保线程安全，工厂只需要ObjectPool保证操作的实际类型和工厂一致即可。
+*/
+public interface PooledObjectFactory&amp;lt;T&amp;gt; {
+  
+   //创建一个资源实例，这个资源实例可以被封装起来。
+  PooledObject&amp;lt;T&amp;gt; makeObject() throws Exception;
+
+   /*
+   销毁一个不再被池子需要的实例。用的销毁模式是normal。
+   实现了这个方法的类需要注意的是：方法内没有任何保证资源处于什么状态和实现的方法如何去处理非预期的errors
+   所以，实现者需要考虑到对象没有被摧毁，即被垃圾收集器忘掉了，从而永远储存在了内存中。
+   */
+  void destroyObject(PooledObject&amp;lt;T&amp;gt; p) throws Exception;
+
+   //同上，只是采用了DestoryMode模式。但是其实感觉是mode根本没用用上。。。
+  default void destroyObject(final PooledObject&amp;lt;T&amp;gt; p, final DestroyMode mode) throws Exception {
+      destroyObject(p);
+  }
+
+  //确保实例能够安全的返回到池子里
+  boolean validateObject(PooledObject&amp;lt;T&amp;gt; p);
+
+   //重新初始化池返回的实例
+  void activateObject(PooledObject&amp;lt;T&amp;gt; p) throws Exception;
+
+   //卸载要返回到空闲对象池的实例
+  void passivateObject(PooledObject&amp;lt;T&amp;gt; p) throws Exception;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　至此，我分析完了三个接口。三个接口各司其职，互相协助。我用一张我画的图片来描述的话，一个管对象的打包，一个管对象的创建，一个管对象的进出口。用jedis举例的话就是，jedis资源打包成封装格式，封装格式被工厂创建，创建成真正使用的资源。这些资源再被借出或者归还。多么的形象哈哈。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08eede83850610aaa80818b90e20b8082801300138e0f401.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;我画的&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　下面这张图是这三个接口相关的关系。
+&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08cbdf83850610abd30818850620bb032801300138af8401.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;我画的&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　另外，上面的接口都用到了对象的状态，对象状态如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public enum PooledObjectState {
+    /**
+     * 在队列中,未被使用,空闲状态。调用allocate()方法后对象应该被置于该状态
+     */
+    IDLE,
+
+    /**
+     * 已分配,在使用中,调用allocate()方法后应该讲对象置于该状态
+     */
+    ALLOCATED,
+
+    /**
+     * 在队列中, 当前正在测试，可能会被回收。在此状态被借出后状态回被置为EVICTION_RETURN_TO_HEAD
+     */
+    EVICTION,
+
+    /**
+     * 不在队列中。当借用该对象时发现对象，发现正在进行回收测试，故将EVICTION更
+     * 改EVICTION_RETURN_TO_HEAD，表明曾经在回收过程中被借出，在回收完后它应该从新添加到队列的头部。
+     */
+    EVICTION_RETURN_TO_HEAD,
+
+    /**
+     * 在队列中,目前正在进行校验
+     */
+    VALIDATION,
+
+    /**
+     * 不在队列中，当前正在验证。当对象从池中被借出，
+     * 在配置了testOnBorrow的情况下，对像从队列移除和进行预分配的时候会进行验证(借用时校验)
+     */
+    VALIDATION_PREALLOCATED,
+
+   /**
+     * 不在队列中，正在进行验证。从池中借出对象时，发现对象正在进行校验，并将对象状态改为该状态
+     */
+    VALIDATION_RETURN_TO_HEAD,
+
+    /**
+     *无效的，并且将要或已经被销毁。
+     */
+    INVALID,
+
+    /**
+     * 泄漏的
+     */
+    ABANDONED,
+
+    /**
+     *归还中,调用markReturning()方法会将对象状态改为此状态，表明正在归还一个对象
+     */
+    RETURNING
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考链接：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/qq447995687/article/details/80413227&quot;&gt;commons-pool2源码走读(一)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/liyantianmin/article/details/86591742&quot;&gt;common-pool对象池&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry><entry><title type="html">池化技术</title><link href="http://localhost:4000/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -771,138 +1430,4 @@ authentication_string: *332A08EE56001FE5139E2FB111080AA441242991
 
 &lt;p&gt;　　除了管理好体能精力，你还要管理好自己的情绪精力、意志精力，等等，下一篇将详细讲解这个问题。有兴趣的朋友，可持续关注。&lt;/p&gt;
 
-&lt;p&gt;　　以上，是我读了吉姆·兰德尔所著的简单有趣的个人管理丛书之一《创造力——跳出盒子思考》以后的一些思考和总结，与您分享。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="思维,书籍" /><summary type="html">吉姆·兰德尔(Jim Randel)，现年60岁，毕业于哥伦比亚大学法学院。他是一位企业家——购买和销售商业地产，同时拓展新业务。作为一名致力于投资和企业家精神领域的讲演者，兰德尔已经在全美许多场馆作过演讲.其中包括哈佛大学和纽约大学商学院。兰德尔学习和研究成功这一主题长达30年之久。除了阅读所有他能找到的有关这一主题的资料以外，他还不厌其烦地向成功人士请_教_.了解他们的成功之道(直到他们找理由回绝)。因此，这本书的结论是多年研究、个人试验和向他人学习的结果。兰德尔得出的结论是：成功的秘密就是欲望、努力、钻研、决心和坚持…而这些都需要毅力和自律能力。兰德尔相信，如果你愿意付出代价，一切都是可能的。</summary></entry><entry><title type="html">redis外网访问相关设置</title><link href="http://localhost:4000/tech/2019/03/12/01.html" rel="alternate" type="text/html" title="redis外网访问相关设置" /><published>2019-03-12T00:00:00+08:00</published><updated>2019-03-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/12/01.html">&lt;p&gt;1 . 我的redis服务用的redis配置文件在哪里？&lt;/p&gt;
-
-&lt;p&gt;答：我用的是centos系统，我知道redis是通过yum安装的，那么我需要通过&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -qa | grep redis
-redis-3.2.12-2.el7.x86_64
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　这样，我就知道了我装的redis版本，进而我能够知道redis用的配置文件。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -ql redis-3.2.12-2.el7.x86_64
-/etc/logrotate.d/redis
-/etc/redis-sentinel.conf
-/etc/redis.conf     （*）
-/etc/systemd/system/redis-sentinel.service.d
-/etc/systemd/system/redis-sentinel.service.d/limit.conf
-/etc/systemd/system/redis.service.d
-/etc/systemd/system/redis.service.d/limit.conf
-/usr/bin/redis-benchmark
-/usr/bin/redis-check-aof
-/usr/bin/redis-check-rdb
-/usr/bin/redis-cli
-/usr/bin/redis-sentinel
-/usr/bin/redis-server
-/usr/lib/systemd/system/redis-sentinel.service
-/usr/lib/systemd/system/redis.service
-/usr/libexec/redis-shutdown
-/usr/share/doc/redis-3.2.12
-/usr/share/doc/redis-3.2.12/00-RELEASENOTES
-/usr/share/doc/redis-3.2.12/BUGS
-/usr/share/doc/redis-3.2.12/CONTRIBUTING
-/usr/share/doc/redis-3.2.12/MANIFESTO
-/usr/share/doc/redis-3.2.12/README.md
-/usr/share/licenses/redis-3.2.12
-/usr/share/licenses/redis-3.2.12/COPYING
-/usr/share/man/man1/redis-benchmark.1.gz
-/usr/share/man/man1/redis-check-aof.1.gz
-/usr/share/man/man1/redis-check-rdb.1.gz
-/usr/share/man/man1/redis-cli.1.gz
-/usr/share/man/man1/redis-sentinel.1.gz
-/usr/share/man/man1/redis-server.1.gz
-/usr/share/man/man5/redis-sentinel.conf.5.gz
-/usr/share/man/man5/redis.conf.5.gz
-/var/lib/redis
-/var/log/redis
-/var/run/redis
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;2 . 如何更改该redis配置，可以打开外网访问？还要更改下密码以保证安全性。&lt;/p&gt;
-
-&lt;p&gt;答：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;注释掉bind 127.0.0.1，从而让redis不光监听本机的请求。&lt;/li&gt;
-  &lt;li&gt;protected-mode no，默认是打开的，想要从别的host连接古来，就需要关闭。&lt;/li&gt;
-  &lt;li&gt;requirepass 密码，设置密码。&lt;/li&gt;
-  &lt;li&gt;重启redis服务&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;3 . 重启redis服务，我如何让redis以守护进程方式启动呢？&lt;/p&gt;
-
-&lt;p&gt;答：centos 7开始，使用systemd代替daemon了，所以管理系统服务的命令全部由systemctl命令代替。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;systemctl start redis //如果遇到问题就用systemctl status来查看问题原因
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;4 . 防火墙还会挡住外网访问6379端口，怎么办？&lt;/p&gt;
-
-&lt;p&gt;答：这个跟iptable的规则有关了，运维工程师们总是跟iptable打交道，我们只需要知道怎么用即可。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[root@iZ2ze33uzthv7txm85m303Z ~]# iptables -nvL   //查看目前服务的端口
-Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
- pkts bytes target     prot opt in     out     source               destination         
-7704K 1142M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
-12905  687K ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
-12984  779K ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
-   14   896 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:6379
- 439K   25M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:22
-5655K  271M ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:80
-54310 2782K ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            state NEW tcp dpt:8080
-6545K  323M REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
-
-Chain FORWARD (policy DROP 0 packets, 0 bytes)
- pkts bytes target     prot opt in     out     source               destination         
- 764K  624M DOCKER-ISOLATION  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
- 400K  597M DOCKER     all  --  *      docker0  0.0.0.0/0            0.0.0.0/0           
- 399K  597M ACCEPT     all  --  *      docker0  0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
- 364K   27M ACCEPT     all  --  docker0 !docker0  0.0.0.0/0            0.0.0.0/0           
-    0     0 ACCEPT     all  --  docker0 docker0  0.0.0.0/0            0.0.0.0/0           
-    0     0 REJECT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            reject-with icmp-host-prohibited
-
-Chain OUTPUT (policy ACCEPT 4127 packets, 1019K bytes)
- pkts bytes target     prot opt in     out     source               destination         
-
-Chain DOCKER (1 references)
- pkts bytes target     prot opt in     out     source               destination         
-   42  4713 ACCEPT     tcp  --  !docker0 docker0  0.0.0.0/0            172.18.0.2           tcp dpt:80
-   16  2316 ACCEPT     tcp  --  !docker0 docker0  0.0.0.0/0            172.18.0.4           tcp dpt:8080
-
-Chain DOCKER-ISOLATION (1 references)
- pkts bytes target     prot opt in     out     source               destination         
- 764K  624M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　目前，我已经放开了服务器的6379端口外网访问，所以结果中会有6379条目。正常来说，新配环境的时候，6379是没有的，所以我们需要添加上。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;iptables -I INPUT 4 -p tcp -m state --state NEW -m tcp --dport 6379 -j ACCEPT
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　之后，还需要保存&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; service iptables save
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　然后我们再通过查看语句就能看到6379了。至此我们配置完成了redis的外网访问及权限安全了。&lt;/p&gt;
-
-&lt;p&gt;　　我准备再写一个实现主从redis配置的文章，改天研究研究。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,centos" /><summary type="html">1 . 我的redis服务用的redis配置文件在哪里？</summary></entry><entry><title type="html">git的rebase可以实现合并commit</title><link href="http://localhost:4000/tech/2019/03/08/01.html" rel="alternate" type="text/html" title="git的rebase可以实现合并commit" /><published>2019-03-08T00:00:00+08:00</published><updated>2019-03-08T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/03/08/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/03/08/01.html">&lt;p&gt;　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。&lt;/p&gt;
-
-&lt;p&gt;　　git rebase是干什么的呢？学者们把他成为变基。说是把很多的commit合并到一个commit中。之前，我想不明白除了把commit合并为一个以外还有什么地方会用到。几天，我确实碰到了一个现实中的问题。这个问题是出自我的博客的，我的docs由于很多次提交了，每次要合到master上都得来一次filter branch。这个操作刚开始会很快，但是随着博客内容的增多，每次去合master的时候都得走一次从头到尾的遍历，实属受不了。（读者可能并不明白我再说什么，你们也不用想明白。）&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://s2.ax1x.com/2019/03/09/ASZxpD.gif&quot; src=&quot;/images/default.jpg&quot; alt=&quot;一顿操作&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　我们可以从图中看到，我首先创建了一个test文件。我们将第一行写入并置为第一次提交。之后再插入第二行作为第二行提交。现在，我想把第二次提交和第一次提交合并。这样，就不会有人再知道我曾经有过第二次提交了。这个操作就是rebase&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;git rebase -i HEAD~2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我们用上面的命令，就可以将最近的两次提交合并到最早的提交。之后会出现一个界面。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy&quot; data-original=&quot;https://s2.ax1x.com/2019/03/09/ASB856.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;rebase的todo&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　这个界面前两行列出了rebase所包含的commit。剩下的就是此操作的介绍。我们只需要关心pick和squash两个关键字。通过英文我们了解到，图中的意义是将第二次操作合并至第一次操作，这样在log里面只会显示一次log，然而确实是两次更改。退出即可。如果，rebase发现没有版本冲突就会直接完成rebase操作。如果有冲突，我们就像一般解决冲突一样去纠正就好，然后git add即可，不用commit，然后运行 git rebase –continue即可。 有的时候，你并不太操心rebase发生的冲突，我们可以运行git rebase –skip跳过冲突。&lt;/p&gt;
-
-&lt;p&gt;　　最后，我们还要考虑push到远端的操作。因为当前本地的版本和远端的版本不一样且不是继承版本状态。所以，系统会提示你先git pull，然后再git push。 当心，系统是好心，但如果你真像系统要求你一样去做了，那么你rebase的这些操作都会随着git pull更改为远端的版本。所以，我们在这里需要git push -f，也就是强制推送到远端不进行版本的对比。这个操作其实在多人合作的时候会产生很多副作用，让你瞬间就扮演上了小队破坏者的身份。因此，很多开发者都不建议在多人项目中用rebase这个命令，除非你和你的小队已经充分沟通过此事，而且大家也互相明白做此事的重要性，而且大家还不是新兵蛋蛋。&lt;/p&gt;
-
-&lt;p&gt;　　好了，我就记录到这里吧。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="git" /><summary type="html">　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。</summary></entry></feed>
+&lt;p&gt;　　以上，是我读了吉姆·兰德尔所著的简单有趣的个人管理丛书之一《创造力——跳出盒子思考》以后的一些思考和总结，与您分享。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="思维,书籍" /><summary type="html">吉姆·兰德尔(Jim Randel)，现年60岁，毕业于哥伦比亚大学法学院。他是一位企业家——购买和销售商业地产，同时拓展新业务。作为一名致力于投资和企业家精神领域的讲演者，兰德尔已经在全美许多场馆作过演讲.其中包括哈佛大学和纽约大学商学院。兰德尔学习和研究成功这一主题长达30年之久。除了阅读所有他能找到的有关这一主题的资料以外，他还不厌其烦地向成功人士请_教_.了解他们的成功之道(直到他们找理由回绝)。因此，这本书的结论是多年研究、个人试验和向他人学习的结果。兰德尔得出的结论是：成功的秘密就是欲望、努力、钻研、决心和坚持…而这些都需要毅力和自律能力。兰德尔相信，如果你愿意付出代价，一切都是可能的。</summary></entry></feed>
