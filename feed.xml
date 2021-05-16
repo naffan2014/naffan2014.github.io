@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-16T18:21:27+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">redis连接池源码分析</title><link href="http://localhost:4000/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-05-16T23:27:17+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">redis连接池源码分析</title><link href="https://naffan.cn/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/15/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
 
 &lt;p&gt;　　你在开发时，可以通过jedis连接redis。jedis支持直连模式和连接池模式。&lt;/p&gt;
 
@@ -385,7 +385,7 @@ public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledO
 &lt;p&gt;参考资料：&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_42340670/article/details/106876879&quot;&gt;对象池：commons-pool2源码解析：GenericObjectPool的borrowObject方法&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="http://localhost:4000/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/13/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/13/01.html">&lt;blockquote&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="https://naffan.cn/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/13/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/13/01.html">&lt;blockquote&gt;
   &lt;p&gt;问如果你要设计一个池化对象，你会怎么做？&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -657,7 +657,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/qq447995687/article/details/80413227&quot;&gt;commons-pool2源码走读(一)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/liyantianmin/article/details/86591742&quot;&gt;common-pool对象池&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry><entry><title type="html">池化技术</title><link href="http://localhost:4000/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry><entry><title type="html">池化技术</title><link href="https://naffan.cn/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/12/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -717,7 +717,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry><entry><title type="html">我对JVM的解析和总结</title><link href="http://localhost:4000/tech/2021/05/11/01.html" rel="alternate" type="text/html" title="我对JVM的解析和总结" /><published>2021-05-11T00:00:00+08:00</published><updated>2021-05-11T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/11/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/11/01.html">&lt;ul&gt;
+&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry><entry><title type="html">我对JVM的解析和总结</title><link href="https://naffan.cn/tech/2021/05/11/01.html" rel="alternate" type="text/html" title="我对JVM的解析和总结" /><published>2021-05-11T00:00:00+08:00</published><updated>2021-05-11T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/11/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/11/01.html">&lt;ul&gt;
   &lt;li&gt;
     &lt;h1 id=&quot;java运行时数据区&quot;&gt;Java运行时数据区&lt;/h1&gt;
   &lt;/li&gt;
@@ -755,7 +755,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;li&gt;
     &lt;h1 id=&quot;类加载机制&quot;&gt;类加载机制&lt;/h1&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="http://localhost:4000/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="https://naffan.cn/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/07/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
 
 &lt;p&gt;首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
 
@@ -1006,7 +1006,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 
 &lt;p&gt;这个方法是被Jackson2JsonRedisSerializer方法调用的，用途就是返回指定class的jackson格式。&lt;/p&gt;
 
-&lt;p&gt;通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="http://localhost:4000/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/02/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
+&lt;p&gt;通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="https://naffan.cn/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/02/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
 
 &lt;p&gt;当你用springboot的时候，会牵扯到如何将类委托给spring容器，如果你按照策略模式的传统写法，就会遇到类似问题。所以，我们应该将不同的策略实现公用的接口，也就是面向接口编程。&lt;/p&gt;
 
@@ -1114,7 +1114,7 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
             			}
     }
 }
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。</summary></entry><entry><title type="html">2021年的五一劳动节</title><link href="http://localhost:4000/life/2021/05/01/01.html" rel="alternate" type="text/html" title="2021年的五一劳动节" /><published>2021-05-01T00:00:00+08:00</published><updated>2021-05-01T00:00:00+08:00</updated><id>http://localhost:4000/life/2021/05/01/01</id><content type="html" xml:base="http://localhost:4000/life/2021/05/01/01.html">&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。</summary></entry><entry><title type="html">2021年的五一劳动节</title><link href="https://naffan.cn/life/2021/05/01/01.html" rel="alternate" type="text/html" title="2021年的五一劳动节" /><published>2021-05-01T00:00:00+08:00</published><updated>2021-05-01T00:00:00+08:00</updated><id>https://naffan.cn/life/2021/05/01/01</id><content type="html" xml:base="https://naffan.cn/life/2021/05/01/01.html">&lt;blockquote&gt;
   &lt;p&gt;我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1128,7 +1128,66 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
 
 &lt;p&gt;晚上，大家的聚会还是比较圆满的，只是餐馆包间的桌子比较小。很多人都是侧着身吃饭，这可把我的三姨尴尬坏了，看得出来三姨对这次选地的不满意，但是我也不想让三姨觉得难过，所以还是以很好吃夸赞了这次晚饭，只是我能感觉的出来三姨知道我是在宽慰她。&lt;/p&gt;
 
-&lt;p&gt;回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">有关字符集知识的总结</title><link href="http://localhost:4000/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/09/24/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
+&lt;p&gt;回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">阴平古道，邓艾灭蜀</title><link href="https://naffan.cn/thinking/2020/05/16/01.html" rel="alternate" type="text/html" title="阴平古道，邓艾灭蜀" /><published>2020-05-16T00:00:00+08:00</published><updated>2020-05-16T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2020/05/16/01</id><content type="html" xml:base="https://naffan.cn/thinking/2020/05/16/01.html">&lt;blockquote&gt;
+  &lt;p&gt;早入蜀都,先到先得。偷渡阴平，直取蜀汉！&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这是三国杀中邓艾的武将台词。从这两句中我感受最多的是一种豪言壮志，和一丝凄凉。一个为魏国，一个为蜀国。&lt;/p&gt;
+
+&lt;p&gt;不知什么时候，我了解三国后就把蜀国当做了三国的主角，魏国当成了三国的反派，而吴国只是一个配角，但是在读完了关羽败走麦城后，我把吴国定性为了非盗既奸的小人国家。这些都是我个人的主观色彩使然，其实在漫漫的历史长河中，任何人任何事都有两面性，历史不是被任何一个人任何一件事就能够主导或者改变的。三国中有很多名场面，很多都耳熟能详，我也略知一二。但是，今天我不知道哪来的兴趣，想了解一下让蜀国的灭亡直接的战役，想看看这场战役中到底是谁占有举足轻重的作用。&lt;/p&gt;
+
+&lt;p&gt;我18年去过重庆和成都，对当地的地形有了一定的了解，我每次去重庆的时候都要坐一夜的火车，但凡白天我看到的都是连续的隧道，正因为这里的山多，所以我们要进入四川就要穿过众多的山脉，相比于重庆来说，成都的地形较为平坦。这种地势在今天看来当然已经有科技帮我们客服了这种物理上的限制，但是对于古代的人们，可不会轻易的选择凿山穿洞的方法向前进行。然而，当时邓艾灭蜀打造的阴平小道是怎么实现的？这个问题让我颇感兴趣。&lt;/p&gt;
+
+&lt;p&gt;历史上讲魏国攻打蜀国（公元263年秋）时，钟会带领20（有说10万）万大军，因剑门关是进入成都平原的最后一道重要关隘，所以被姜维死死地挡在了剑阁之外。因为，一般入蜀只有这条道可以通过，原因是周围山脉层峦叠嶂。就算钟会有百万雄师，也只能挨个从剑阁通过。那么剑阁这个地方到底长什么样子呢？&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;何为剑阁道？剑阁道，属金牛道（石牛道）南段。其行程是从昭化（葭萌关）越牛头山，入剑门至剑阁县。此段乃石牛道上有名的险峻去处，约100公里，沿途坡陡路险，十分难行。特别是未入剑门关前的15公里，原本无路，三国时，诸葛亮北伐在峭壁悬崖上修了15公里阁道，剑阁道也由此而得名。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://gss0.baidu.com/70cFfyinKgQFm2e88IuM_a/baike/pic/item/1e30e924b899a9012afdc0c314950a7b0308f57f.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;剑门关&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08d1bb848506108ba32b18ee04209906280130013881bc02.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;剑门关&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这就是剑门关，被誉为“蜀北之屏障，两川之咽喉”的雄关险隘。目前剑门关是我国5A级旅游景区，国家级风景名胜区，全国100个红色经典旅游景区之一，已列入世界文化遗产预备名单。剑门关两边有着大小剑山72峰，峰峦叠嶂，近处是刀削斧劈似的悬崖峭壁。古蜀道穿过关楼，厚重的青石板沿着山壁一级一级伸向远方。仰望关搂，耳边的风声仿佛成了万人攻关的呐喊声。&lt;/p&gt;
+
+&lt;p&gt;就是这么一个极其重要的战略宝地，易守难攻，那为啥蜀国还是被邓艾掏了老窝了呢？这就要说到邓艾的丰功伟绩了，这就是偷渡阴平了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3c584850610a4931618ff0420bf032801300138d28802.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;灭蜀路线图&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从图中，我们可以看到。魏国大军分为三路，分别由邓艾，诸葛绪，钟会进攻蜀都。中间的军事过程可以参见下面的这个视频。p.s.这里的诸葛绪因为退后30里让姜维南下的事让他躲过了一劫，最终是这三个人里面下场最好的人。&lt;/p&gt;
+&lt;div align=&quot;middle&quot;&gt;
+&lt;script&gt;
+	document.write(&quot;&lt;iframe src='//player.bilibili.com/player.html?aid=413378551&amp;bvid=BV1FV411y7jP&amp;cid=197675942&amp;page=1'allowfullscreen='true'&gt; &lt;/iframe&gt;&quot;);
+&lt;/script&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果我是邓艾，当时我会怎么办？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当时时局姜维正在迎战邓艾，邓艾位于进军路线的西头。诸葛绪位于中间向桥头进军，意图与邓艾前后夹击姜维。钟会在最东边，钟会是第一次带重兵打仗，是当时进军路线最好，最有可能攻入蜀都的。当姜维得知汉中被钟会攻破后，马上掉头去剑阁防守。由于原来是邓艾牵制姜维，可现在邓艾被凉在旁边了，眼前的方向貌似只有追着姜维去剑阁这一条路线了。&lt;/p&gt;
+
+&lt;p&gt;接下来我对比一下当时的&lt;a href=&quot;https://baike.baidu.com/item/%E9%82%93%E8%89%BE/6770?fr=aladdin&quot;&gt;邓艾&lt;/a&gt;和&lt;a href=&quot;https://baike.baidu.com/item/%E9%92%9F%E4%BC%9A/18087?fr=aladdin&quot;&gt;钟会&lt;/a&gt;身世经历。可以看到，钟会从小生活的环境要比邓艾好且有才数技艺，博学多闻，尤其精通玄学，弱冠（20岁）时就与名士、玄学代表人物王弼并知名。相反邓艾幼年丧父，出身卑微，年幼屯田，但受到了良好的教育。典故有一幕&lt;code&gt;邓艾喜欢军事。每见高山大川，都要在那里勘察地形，指划军营处所，遭别人讥笑也不介意。&lt;/code&gt;我想邓艾最终偷渡阴平跟他一直喜欢勘探地形有极大的关系。&lt;/p&gt;
+
+&lt;p&gt;如果我是邓艾，在知道如果沿着路去追杀姜维面对的只有一种结果就是和钟会一块被姜维挡在剑阁之外，最终会因粮草短缺而退兵。而蜀军此时会将重兵屯于剑阁之后，即使攻破剑阁到时候面临的仍将是一场恶斗。我相信当时邓艾的军队一定会有密探在蜀国内部（双方都有间谍，这很正常），他肯定知道蜀国国君幼小，奸臣当道，国家也腐败。所以，如果能够跨过敌军绕道背后一定能够直取蜀都。那样擒贼先擒王，先到就先得了。而阴平这个地方地势凶险蜀国一定不会排重兵把守，所以要是我我一定想办法从阴平这修一条小道绕过蜀国重兵，直接来到绵竹。邓艾从小喜欢勘探地形这个特点天然的兼容这套方案啊。所以与其老老实实的失败还不如出其不意呢，万一失败了原路退回来不就行了。反正攻破剑阁也不是立马的事情。到时候随便找个托词给司马昭，得不到荣誉就得不到呗。但是修个阴平小道带来的收益绝对大于面对的风险。所以，我要是邓艾我就会铤而走险，修阴平小道。&lt;/p&gt;
+
+&lt;p&gt;当时修阴平小道的难度应该是很大，摆在邓艾前面的就两个问题：山和水。我们来看一眼现在的G5京昆高速的一个关键地界。我们可以看到G5是在山坡上河流里修建的，风险度极高的。而西成铁路倒是一条直线，但是需要凿山挖隧道，隧道出来就是嘉陵江，过了嘉陵江面前有事一座大山，所以又得凿山。可想而知，这种难度对于邓艾来说会有多困难。根据记载邓艾选了几千精兵，一共花了20多天把长700公里的阴平小道建成的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://pic2.zhimg.com/33638cf728e134c719eb7a20dad51ed0_r.jpg?source=1940ef5c&quot; src=&quot;/images/default.jpg&quot; alt=&quot;现在的路况&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;蜀中诸道，皆不必多忧；惟阴平之地，切须仔细。此地虽险峻，久必有失&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这是公元234年，诸葛亮临死前向众人交代后事，并且特地对姜维说的27个字。简单来说，诸葛亮在临死前特地叮嘱姜维一定要守好阴平，并且还强调这地方虽然地势险要，但难保以后没有魏国人来偷袭，所以必须小心防守才行。别人说这句话没有被姜维重视，但是我不觉得，当时诸葛亮的每一句话都是箴言，并且前有诸葛亮的锦囊妙计，任何人都不可能视诸葛亮之话而不顾，更别说当时的蜀国守国大将军邓艾了。另外，邓艾进军的时候姜维不就在阴平北的沓中么，这不也就说明姜维在守着阴平这块么。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;冬十月，艾自阴平道行无人之地七百馀里，凿山通道，造作桥阁。山高谷深，至为艰险，又粮运将匮，频於危殆。艾以毡自裹，推转而下。将士皆攀木缘崖，鱼贯而进。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;邓艾过了天险，一般来说都需要养精蓄锐，哪有说上来就干仗的。我理解这正是邓艾军事家视野之功，他笃定马邈因腐败会因天降神兵而弃城投降。最终却是也是这样的。有人说是上天眷顾邓艾，但是老天哪里会随随便便眷顾没有准备的人呢。这样邓艾兵不血刃的得了涪城，接下来诸葛瞻带领刘禅给的七万人迎战邓艾三万人马。那为啥邓艾能够迅速歼灭诸葛瞻之军呢？第一，邓艾的军队都是精兵良将，而诸葛瞻都是老弱病残或是临时拼凑。因为刘禅肯定会把精英派去剑阁防守。第二，邓爱军对刚多下涪城，此时士气正浓，然而诸葛瞻的军队士气肯定要落后很多。战场上士气这玩意真的很重要，士气高涨的军队，经常能够以少胜多。所以自古兵家很重视士兵的士气。第三，诸葛瞻战术问题，他没打过硬仗，长平之战时赵国还有廉颇和年轻的李牧，但此时的成都除了诸葛瞻，也没有什么其他人选可用了。&lt;/p&gt;
+
+&lt;p&gt;那为什么姜维知道了后方失守却为什么不回来救呢？其实我理解如果回头救的话，可能钟会会突破剑阁，到时候前后受敌，兵家大忌。与其这样还不如继续防守，后方听天由命了。但是，最终等来的消息却是刘禅的一封投降书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="三国" /><summary type="html">早入蜀都,先到先得。偷渡阴平，直取蜀汉！</summary></entry><entry><title type="html">有关字符集知识的总结</title><link href="https://naffan.cn/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>https://naffan.cn/tech/2019/09/24/01</id><content type="html" xml:base="https://naffan.cn/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
 
 &lt;p&gt;　　因为字符集类问题是很庞大的，所以让我们来规定几种字符集先。让我就unicode,gbk,ascii等字符集先做一定的温习。&lt;/p&gt;
 
@@ -1268,7 +1327,7 @@ H 1
 
 &lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/p/6bdc0d52620a&quot;&gt;彻底弄懂 Unicode 编码&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html&quot;&gt;字符编码笔记：ASCII，Unicode 和 UTF-8&lt;/a&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="charset" /><summary type="html">　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。</summary></entry><entry><title type="html">Mysql中的too many connections问题背后</title><link href="http://localhost:4000/tech/2019/09/23/01.html" rel="alternate" type="text/html" title="Mysql中的too many connections问题背后" /><published>2019-09-23T00:00:00+08:00</published><updated>2019-09-23T00:00:00+08:00</updated><id>http://localhost:4000/tech/2019/09/23/01</id><content type="html" xml:base="http://localhost:4000/tech/2019/09/23/01.html">&lt;p&gt;　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html&quot;&gt;字符编码笔记：ASCII，Unicode 和 UTF-8&lt;/a&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="charset" /><summary type="html">　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。</summary></entry><entry><title type="html">Mysql中的too many connections问题背后</title><link href="https://naffan.cn/tech/2019/09/23/01.html" rel="alternate" type="text/html" title="Mysql中的too many connections问题背后" /><published>2019-09-23T00:00:00+08:00</published><updated>2019-09-23T00:00:00+08:00</updated><id>https://naffan.cn/tech/2019/09/23/01</id><content type="html" xml:base="https://naffan.cn/tech/2019/09/23/01.html">&lt;p&gt;　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。&lt;/p&gt;
 
 &lt;p&gt;　　在中秋节前的那个周二，是我们公司上线的窗口期。在晚上6点左右的时候，同事告诉我50那台机子挂了，测试数据库也在这台机子上，所以也挂掉了。我们上线前QA是需要在测试线回归一下问题后才能上线的，但是由于测试数据库挂了，导致QA的测试不能够进行，时间太短又来不及去迁移整个数据库，看来只能求助OP同学了。后来，OP同学告诉我们50这台服务器是我们的自运维机器，OP们也不知道如何操作（他们其实是不愿意管）。好说歹说OP才腾出功夫将服务器重启了（后来得知，其实并没有重启，而是50这台服务器是虚机，因为某些原道导致机器卡住了，于是虚机就被暂存起来了，然而OP做的就是吧暂存的虚机重新打开就行了），这样看似一切正常的操作，突然mysql就出现了too many connections的报错，这回我是根本连不上mysql了。经过询问DBA，这种情况是数据库太多的僵尸链接导致的，僵尸链接没有放开连接，导致后边的连接根本请求不到资源。这下问题就来了，我没有root权限（其实知道这台机子因为年代久远的原因没有人知道他的root权限了），那怎么办才能够清除这些僵尸链接呢？好了，前言已经铺垫的很多了，我也确实需要回忆一下我的解决方案和问题背后涉及的原理了。&lt;/p&gt;
 
@@ -1358,76 +1417,4 @@ authentication_string: *332A08EE56001FE5139E2FB111080AA441242991
 
 &lt;p&gt;　　我们可以发现结果中可以看到testA和root两个用户的连接情况。当我这个时候让testB连接的话，testB就会报too many connections的错误了。 我再让testA关闭掉，再连testB就可以了。&lt;/p&gt;
 
-&lt;p&gt;　　之后，我删除了testA和testB，应用&lt;code&gt;drop user `test`@`localhost`;&lt;/code&gt;。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。</summary></entry><entry><title type="html">《创造力-跳出盒子思考》</title><link href="http://localhost:4000/books/2019/05/24/01.html" rel="alternate" type="text/html" title="《创造力-跳出盒子思考》" /><published>2019-05-24T00:00:00+08:00</published><updated>2019-05-24T00:00:00+08:00</updated><id>http://localhost:4000/books/2019/05/24/01</id><content type="html" xml:base="http://localhost:4000/books/2019/05/24/01.html">&lt;p&gt;1.请跳出盒子思考&lt;/p&gt;
-
-&lt;p&gt;　　答案很简单，是不是？解这道题的关键在于，在正方形范围以外画线。你解不出这道题的原因在于，被正方形框住了。哈哈！&lt;/p&gt;
-
-&lt;p&gt;　　其实，在我们的脑子里，类似的框框很多。这些框框，有的来自于我们的思维定势，有的来自于认知偏差，有的是因为经历、见识、眼光等方面的局限。&lt;/p&gt;
-
-&lt;p&gt;　　所以，我们一定要抱着开放的心态，去看待万事万物。对于你不习惯的新鲜事物，不要轻易地否定，可以抱着“一切有待验证”的态度，去了解它，探寻它；对于没有经历和没有见过的事情，不要忙着下结论，以防出现“黑天鹅事件”。&lt;/p&gt;
-
-&lt;p&gt;2.运用发散性思维&lt;/p&gt;
-
-&lt;p&gt;　　发散性思维，就是遇到问题的时候，能从多角度、多侧面、多层次、多结构去思考，去寻找答案。就像下图中所说的那样：想想左边，又想想右边，想想低处，再想想高处。只要你尝试，你就会有许多奇思妙想！&lt;/p&gt;
-
-&lt;p&gt;　　有两种方法可以很好地锻炼你的发散性思维：&lt;/p&gt;
-
-&lt;p&gt;　　一是利用思维导图。当你思考某一个问题的时候，就在纸的中心画个圆圈，写下你思考的问题，然后向外画开，把各种可能的点子和方案都写下来。&lt;/p&gt;
-
-&lt;p&gt;　　二是运用联想。比如说看到一个圆，你能想到什么？是数字0，字母O，还是排球、网球、乒乓球，或者是地球、月亮、太阳……放开你的思维，像儿童一样，自由地想象吧。&lt;/p&gt;
-
-&lt;p&gt;3.勇敢突破舒适区&lt;/p&gt;
-
-&lt;p&gt;　　心理学表明，人们天生喜欢稳定，喜欢呆在舒适区，不愿意冒风险。&lt;/p&gt;
-
-&lt;p&gt;　　而创新则意味着变化，意味着不确定性，意味着冒风险，这与人与生俱来的惰性相违背。&lt;/p&gt;
-
-&lt;p&gt;　　所以，必要的时候，你需要自己推自己一把，勇敢跳出舒适区，接受新的环境和挑战。&lt;/p&gt;
-
-&lt;p&gt;　　比如，尝试学习一项新的技能，研究一个完全陌生的领域，学会与背景、教育、观点各不相同的人相处，敢于接受别人的质疑和挑战，等等。&lt;/p&gt;
-
-&lt;p&gt;　　当你经常接触新鲜事物，你的头脑会更加灵光，你的思维会更加活跃。&lt;/p&gt;
-
-&lt;p&gt;4.保持专注&lt;/p&gt;
-
-&lt;p&gt;　　注意力分散，是创造性思考的大敌。&lt;/p&gt;
-
-&lt;p&gt;　　但如今我们生活在一个全天无休的互联网时代。&lt;/p&gt;
-
-&lt;p&gt;　　每天，我们的注意力被各种新奇好玩的东西所吸引，我们的大脑被海量的信息所超载，这对发挥创造性思维很不利。&lt;/p&gt;
-
-&lt;p&gt;　　所以，我们必须对海量的信息进行断舍离，只专注于所擅长和热爱的领域。冥想有助于提升专注力，你也可以尝试下。&lt;/p&gt;
-
-&lt;p&gt;5.对旧元素进行重新组合&lt;/p&gt;
-
-&lt;p&gt;　　大多数时候，创造力在于重新排列、延伸或者组合现有的事物，将其变为崭新的事物。&lt;/p&gt;
-
-&lt;p&gt;　　当你创作一幅画时，你就是通过对现有的颜料、线条、材质进行重新组合，当你的组合与别人的组合方式不同时，你就是在创造新作品。&lt;/p&gt;
-
-&lt;p&gt;　　写文章也一样，当你读了很多的书，把很多人的观点进行整合，然后加上自己的感悟，就形成了你自己独到的见解，你就创造了新作品。&lt;/p&gt;
-
-&lt;p&gt;　　所谓大道至简，从哲学层面上，各个领域的东西都是相通的。&lt;/p&gt;
-
-&lt;p&gt;　　你经历的事情越多，学到的知识越广，你的感悟就会越深，你就越容易做到跨界整合、融会贯通，这就是一种创造力。&lt;/p&gt;
-
-&lt;p&gt;6.及时记录整理灵感、思考和发现&lt;/p&gt;
-
-&lt;p&gt;　　灵感转瞬即逝，必须把它记录下来，因为“书面化的思考更便于利用”。而且，这种凭直觉而来的思想，比坐着主动推理得出的想法会更有创意。把思维活动的结果保存下来，是真正的智力节约。&lt;/p&gt;
-
-&lt;p&gt;　　有时候，灵感只是一些思维的片断。但如果你能一点点积累，有一天，它就会成为一个绝妙的创意，或者一个独到的发现。&lt;/p&gt;
-
-&lt;p&gt;　　许多时候，灵感是在你深入思考某一问题后的一种顿悟。&lt;/p&gt;
-
-&lt;p&gt;　　比如，有些人说，写文章需要有灵感，灵感没有的时候，就不动笔。但很多时候，灵感是在你落笔的时候突然出现的。也就是说，灵感不是想出来的，而是写出来的。&lt;/p&gt;
-
-&lt;p&gt;　　如果你想要开始写作，那就不要等待，赶快动手吧。如果你非要等待灵感出现才开始写，那可能你一个字都不会写。呵呵。&lt;/p&gt;
-
-&lt;p&gt;7.管理好精力能量&lt;/p&gt;
-
-&lt;p&gt;　　研究表明，创造力与能量水平直接相关。你的精力越充沛，创造力就越强，所以你要照顾好自己，注意饮食，睡眠充足，每天坚持锻炼。&lt;/p&gt;
-
-&lt;p&gt;　　当你苦思冥想，都想不出新点子的时候，你应该好好地休息一下，让潜意识帮你工作。&lt;/p&gt;
-
-&lt;p&gt;　　除了管理好体能精力，你还要管理好自己的情绪精力、意志精力，等等，下一篇将详细讲解这个问题。有兴趣的朋友，可持续关注。&lt;/p&gt;
-
-&lt;p&gt;　　以上，是我读了吉姆·兰德尔所著的简单有趣的个人管理丛书之一《创造力——跳出盒子思考》以后的一些思考和总结，与您分享。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="books" /><category term="思维,书籍" /><summary type="html">吉姆·兰德尔(Jim Randel)，现年60岁，毕业于哥伦比亚大学法学院。他是一位企业家——购买和销售商业地产，同时拓展新业务。作为一名致力于投资和企业家精神领域的讲演者，兰德尔已经在全美许多场馆作过演讲.其中包括哈佛大学和纽约大学商学院。兰德尔学习和研究成功这一主题长达30年之久。除了阅读所有他能找到的有关这一主题的资料以外，他还不厌其烦地向成功人士请_教_.了解他们的成功之道(直到他们找理由回绝)。因此，这本书的结论是多年研究、个人试验和向他人学习的结果。兰德尔得出的结论是：成功的秘密就是欲望、努力、钻研、决心和坚持…而这些都需要毅力和自律能力。兰德尔相信，如果你愿意付出代价，一切都是可能的。</summary></entry></feed>
+&lt;p&gt;　　之后，我删除了testA和testB，应用&lt;code&gt;drop user `test`@`localhost`;&lt;/code&gt;。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。</summary></entry></feed>
