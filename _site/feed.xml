@@ -1,4 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-05-16T23:49:46+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">redis连接池源码分析</title><link href="https://naffan.cn/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/15/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-22T11:11:27+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">赛格大厦晃动，原因竟然是共振</title><link href="http://localhost:4000/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格大厦晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2021/05/22/01</id><content type="html" xml:base="http://localhost:4000/thinking/2021/05/22/01.html">&lt;blockquote&gt;
+  &lt;p&gt;赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;2021年5月18日，深圳市福田区华强北街道赛格大厦出现摇晃，大厦已经封闭，大厦内人员已全部撤出
+2021年5月19日，大楼在下午一点半到两点之间出现过晃动。目前大厦原则上只能让商家等内部工作人员出入。
+2021年5月20日12时30分左右在35楼、55楼、60楼等多个楼层感受到晃动。
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="共振" /><summary type="html">赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。</summary></entry><entry><title type="html">敬给我最尊重的老板，贝壳董事长-左晖</title><link href="http://localhost:4000/life/2021/05/20/01.html" rel="alternate" type="text/html" title="敬给我最尊重的老板，贝壳董事长-左晖" /><published>2021-05-20T00:00:00+08:00</published><updated>2021-05-20T00:00:00+08:00</updated><id>http://localhost:4000/life/2021/05/20/01</id><content type="html" xml:base="http://localhost:4000/life/2021/05/20/01.html">&lt;blockquote&gt;
+  &lt;p&gt;我们这个时代企业经营者的宿命，就是要去干烟花背后的真正提升基础服务品质的苦活、累活。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://pic3.zhimg.com/80/v2-929a9e08b764aafea5ab50701fc66f82_720w.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;左晖&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;　　上面是我们公司的老板说的话，他的精神永远激励着我们，我们将矢志不渝的坚持长期主义，团结一心为新居住产业发展做难而正确的事！&lt;/p&gt;
+
+&lt;p&gt;　　我很早就把我的行业固定在了中国的房地产行业之中，我又是从事互联网的技术人员。所以很自然的就干上了产业互联网之事。而我选择链家就是因为我在见证了链家这20年来的发展，坚定了链家作为中国（将来）最好的企业之一的信念以及我对中国房地产相关产业的看好。&lt;/p&gt;
+
+&lt;p&gt;　　我是18年8月入职贝壳的，其实在四月份我就来链家面过试。那个时候福道大厦还不是贝壳的logo呢。我对链家是有一种执着的信念的，我愿意追随这样一位好领导，干有意义且难但正确的事情。入职贝壳以来，我专心落地到了为左晖先生提的”做有尊严的服务者“这句话的意义上奉献，长达3年的贝壳工作，我一直服务于链家的经纪人产品。&lt;/p&gt;
+
+&lt;p&gt;　　经过这几年的工作，从入职php，到改为写go，再到现在的java。感觉这几年对语言的转型让我对语言已经有深刻的理解了。目前我正在做自己负责的业务，并且一直致力于学习。在2020年10月，和21年4月，我得到了部门给我的晋升机会。虽然通过自己的努力，最终没有晋级成功。但是，两次折磨的过程让我重新认识到了我目前缺乏的东西，第一次是技术，但是在第二次评委已经不说我技术问题了，而是产品高度。在接下来的工作和生活中，我将以提高我的这个能力为前提努力的认真工作。左晖先生的精神，会激励着我，一直向前。&lt;/p&gt;
+
+&lt;p&gt;　　今天下午3点，在得知左晖先生离开后，我心情难以平复，本来未来可期，本来还有一番事业等待着他带领我们一起航行，可是就这样戛然而止，希望左晖先生一路走好，后面还有大S帮您完成您的愿望，我们会一起努力!&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="链家,癌症" /><summary type="html">我们这个时代企业经营者的宿命，就是要去干烟花背后的真正提升基础服务品质的苦活、累活。</summary></entry><entry><title type="html">redis连接池源码分析</title><link href="http://localhost:4000/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
 
 &lt;p&gt;　　你在开发时，可以通过jedis连接redis。jedis支持直连模式和连接池模式。&lt;/p&gt;
 
@@ -361,7 +382,7 @@
 
 &lt;p&gt;　　至此，看懂了jedis是如何从连接池中拿到资源的了。这里面经常有一些线程安全的判断，这也是难点所在，因为池化技术最重要的功能就是对线程资源的管理与利用。所以，代码中用了很多sychronize方法。不光这些，作者还要考虑到资源的释放和销毁还有扩展。&lt;/p&gt;
 
-&lt;p&gt;　　最后看到了getObject()方法。为什么作者不直接暴露资源呢？为什么还要包一层呢？接下来我来分析一下吧。PooledObject是一个接口，我们先看看接口的描述是什么。&lt;/p&gt;
+&lt;p&gt;　　最后看到了getObject()方法。为什么作者不直接暴露资源呢？为什么还要包一层呢？接下来我来分析一下吧。PooledObject是一个接口，我们先看看接口的描述是什么。详情看我的之前一篇文章&lt;a href=&quot;https://www.naffan.cn/tech/2021/05/13/01.html&quot;&gt;common-pool对象池学习&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
  * Defines the wrapper that is used to track the additional information, such as
@@ -385,7 +406,7 @@ public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledO
 &lt;p&gt;参考资料：&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_42340670/article/details/106876879&quot;&gt;对象池：commons-pool2源码解析：GenericObjectPool的borrowObject方法&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="https://naffan.cn/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/13/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/13/01.html">&lt;blockquote&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="http://localhost:4000/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/13/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/13/01.html">&lt;blockquote&gt;
   &lt;p&gt;问如果你要设计一个池化对象，你会怎么做？&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -657,7 +678,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/qq447995687/article/details/80413227&quot;&gt;commons-pool2源码走读(一)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/liyantianmin/article/details/86591742&quot;&gt;common-pool对象池&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry><entry><title type="html">池化技术</title><link href="https://naffan.cn/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/12/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry><entry><title type="html">池化技术</title><link href="http://localhost:4000/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;
@@ -717,7 +738,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry><entry><title type="html">我对JVM的解析和总结</title><link href="https://naffan.cn/tech/2021/05/11/01.html" rel="alternate" type="text/html" title="我对JVM的解析和总结" /><published>2021-05-11T00:00:00+08:00</published><updated>2021-05-11T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/11/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/11/01.html">&lt;ul&gt;
+&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry><entry><title type="html">我对JVM的解析和总结</title><link href="http://localhost:4000/tech/2021/05/11/01.html" rel="alternate" type="text/html" title="我对JVM的解析和总结" /><published>2021-05-11T00:00:00+08:00</published><updated>2021-05-11T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/11/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/11/01.html">&lt;ul&gt;
   &lt;li&gt;
     &lt;h1 id=&quot;java运行时数据区&quot;&gt;Java运行时数据区&lt;/h1&gt;
   &lt;/li&gt;
@@ -755,7 +776,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;li&gt;
     &lt;h1 id=&quot;类加载机制&quot;&gt;类加载机制&lt;/h1&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="https://naffan.cn/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/07/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="http://localhost:4000/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
 
 &lt;p&gt;首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
 
@@ -1006,7 +1027,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 
 &lt;p&gt;这个方法是被Jackson2JsonRedisSerializer方法调用的，用途就是返回指定class的jackson格式。&lt;/p&gt;
 
-&lt;p&gt;通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="https://naffan.cn/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/02/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
+&lt;p&gt;通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="http://localhost:4000/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/02/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
 
 &lt;p&gt;当你用springboot的时候，会牵扯到如何将类委托给spring容器，如果你按照策略模式的传统写法，就会遇到类似问题。所以，我们应该将不同的策略实现公用的接口，也就是面向接口编程。&lt;/p&gt;
 
@@ -1114,7 +1135,7 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
             			}
     }
 }
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。</summary></entry><entry><title type="html">2021年的五一劳动节</title><link href="https://naffan.cn/life/2021/05/01/01.html" rel="alternate" type="text/html" title="2021年的五一劳动节" /><published>2021-05-01T00:00:00+08:00</published><updated>2021-05-01T00:00:00+08:00</updated><id>https://naffan.cn/life/2021/05/01/01</id><content type="html" xml:base="https://naffan.cn/life/2021/05/01/01.html">&lt;blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。</summary></entry><entry><title type="html">2021年的五一劳动节</title><link href="http://localhost:4000/life/2021/05/01/01.html" rel="alternate" type="text/html" title="2021年的五一劳动节" /><published>2021-05-01T00:00:00+08:00</published><updated>2021-05-01T00:00:00+08:00</updated><id>http://localhost:4000/life/2021/05/01/01</id><content type="html" xml:base="http://localhost:4000/life/2021/05/01/01.html">&lt;blockquote&gt;
   &lt;p&gt;我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1128,7 +1149,7 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
 
 &lt;p&gt;晚上，大家的聚会还是比较圆满的，只是餐馆包间的桌子比较小。很多人都是侧着身吃饭，这可把我的三姨尴尬坏了，看得出来三姨对这次选地的不满意，但是我也不想让三姨觉得难过，所以还是以很好吃夸赞了这次晚饭，只是我能感觉的出来三姨知道我是在宽慰她。&lt;/p&gt;
 
-&lt;p&gt;回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">阴平古道，邓艾灭蜀</title><link href="https://naffan.cn/thinking/2020/05/16/01.html" rel="alternate" type="text/html" title="阴平古道，邓艾灭蜀" /><published>2020-05-16T00:00:00+08:00</published><updated>2020-05-16T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2020/05/16/01</id><content type="html" xml:base="https://naffan.cn/thinking/2020/05/16/01.html">&lt;blockquote&gt;
+&lt;p&gt;回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">阴平古道，邓艾灭蜀</title><link href="http://localhost:4000/thinking/2020/05/16/01.html" rel="alternate" type="text/html" title="阴平古道，邓艾灭蜀" /><published>2020-05-16T00:00:00+08:00</published><updated>2020-05-16T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2020/05/16/01</id><content type="html" xml:base="http://localhost:4000/thinking/2020/05/16/01.html">&lt;blockquote&gt;
   &lt;p&gt;早入蜀都,先到先得。偷渡阴平，直取蜀汉！&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1187,234 +1208,4 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
 
 &lt;p&gt;　　邓艾过了天险，一般来说都需要养精蓄锐，哪有说上来就干仗的。我理解这正是邓艾军事家视野之功，他笃定马邈因腐败会因天降神兵而弃城投降。最终却是也是这样的。有人说是上天眷顾邓艾，但是老天哪里会随随便便眷顾没有准备的人呢。这样邓艾兵不血刃的得了涪城，接下来诸葛瞻带领刘禅给的七万人迎战邓艾三万人马。那为啥邓艾能够迅速歼灭诸葛瞻之军呢？第一，邓艾的军队都是精兵良将，而诸葛瞻都是老弱病残或是临时拼凑。因为刘禅肯定会把精英派去剑阁防守。第二，邓爱军对刚多下涪城，此时士气正浓，然而诸葛瞻的军队士气肯定要落后很多。战场上士气这玩意真的很重要，士气高涨的军队，经常能够以少胜多。所以自古兵家很重视士兵的士气。第三，诸葛瞻战术问题，他没打过硬仗，长平之战时赵国还有廉颇和年轻的李牧，但此时的成都除了诸葛瞻，也没有什么其他人选可用了。&lt;/p&gt;
 
-&lt;p&gt;　　那为什么姜维知道了后方失守却为什么不回来救呢？其实我理解如果回头救的话，可能钟会会突破剑阁，到时候前后受敌，兵家大忌。与其这样还不如继续防守，后方听天由命了。但是，最终等来的消息却是刘禅的一封投降书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="三国" /><summary type="html">早入蜀都,先到先得。偷渡阴平，直取蜀汉！</summary></entry><entry><title type="html">有关字符集知识的总结</title><link href="https://naffan.cn/tech/2019/09/24/01.html" rel="alternate" type="text/html" title="有关字符集知识的总结" /><published>2019-09-24T00:00:00+08:00</published><updated>2019-09-24T00:00:00+08:00</updated><id>https://naffan.cn/tech/2019/09/24/01</id><content type="html" xml:base="https://naffan.cn/tech/2019/09/24/01.html">&lt;p&gt;　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。&lt;/p&gt;
-
-&lt;p&gt;　　因为字符集类问题是很庞大的，所以让我们来规定几种字符集先。让我就unicode,gbk,ascii等字符集先做一定的温习。&lt;/p&gt;
-
-&lt;p&gt;　　首先，我们来说说我们比较常用的编码之间的关系，好来展开这篇文章的复习。当计算机问世的时候因为是美国人造的，所以美国人就用了些英文字母和标点符号和辅助型符号，这些字符加起来也不过128位，所以就诞生了&lt;code&gt;ASCII&lt;/code&gt;码。后来发展到了欧洲，欧洲那么多国家，每个国家的字母都不太一样，所以人们就扩充了字符集，从而出了拉丁语系的&lt;code&gt;ISO8859-1&lt;/code&gt;字符集。再后来中国人参与进来了，我们中国字常用就7000多个。以现有的字符集根本承载不下来那么多字体，那人们就创造出来了&lt;code&gt;GBK&lt;/code&gt;字符集，这种字符集和之前两种的区别就是GBK使用两个字节来存储的，其中收录了21003个字符。再后来又出了&lt;code&gt;GB18030&lt;/code&gt;，可以收录数量达到了70244个。这个编码采用了1，2，4字节的存储方式，具体存储方式先不说。这个时候人们发现随着用来存储的字节的增多，存储量也变的巨大了。所以，传输的过程中效率问题捉襟见肘。于是，人们就开始考虑更好的存储方法，既能够囊括更多的字符同时存储的容量又不会急剧的膨胀。那么就需要一种智慧的存储方案来解决，于是&lt;code&gt;unicode&lt;/code&gt;编码营运而生。unicode编码采用变长的存储结构，通过高位的特殊位数来规定采用的字节数，从而达到了目的。unicode中分为三类:&lt;code&gt;utf8&lt;/code&gt;,&lt;code&gt;utf16&lt;/code&gt;和&lt;code&gt;utf32&lt;/code&gt;。主要用的还是utf8，而且utf8已然成为现如今世界上最为普遍的编码。&lt;/p&gt;
-
-&lt;h1 id=&quot;一ascii码&quot;&gt;一、ASCII码&lt;/h1&gt;
-
-&lt;p&gt;　　我们知道，计算机内部存储的数据都是二进制值。每一个二进制位（bit）有&lt;code&gt;0&lt;/code&gt;和&lt;code&gt;1&lt;/code&gt;两种状态。因此，八个二进制可以组合出256种状态，由八位组成一个字节，即从&lt;code&gt;00000000&lt;/code&gt;到&lt;code&gt;11111111&lt;/code&gt;。下表是128种ascii码表。当时规定最&lt;code&gt;高位为0&lt;/code&gt;，剩下的七位来分别表示这128个字符。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.asciitable.com/index/asciifull.gif&quot; alt=&quot;ascii表格&quot; height=&quot;500&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;二非ascii码&quot;&gt;二、非ASCII码&lt;/h1&gt;
-
-&lt;p&gt;　　可是，当高1位为1的时候，还没有利用上。所以，有的国家就开辟了剩下的128个字符，但是随之而来的问题也接踵而来。问题是每个国家都可以扩充这后128位，最终导致前一128个都是相同的，但是后128个就不同国家都不一样了。如果再这么继续下去整个世界对于字符上就不再统一了，这简直就是个噩梦。于是，美国人开发出了unicode编码。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://www.asciitable.com/index/extend.gif&quot; alt=&quot;扩展的&quot; height=&quot;500&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;三unicode码&quot;&gt;三、Unicode码&lt;/h1&gt;
-
-&lt;p&gt;　　Unicode是一本很厚的字典，记录着世界上所有字符对应的一个数字。我们可以通过这两个网站查看到每个字符相对应的存储数值，&lt;a href=&quot;https://home.unicode.org/&quot;&gt;unicode.org&lt;/a&gt;和&lt;a href=&quot;http://www.chi2ko.com/tool/CJK.htm&quot;&gt;unicode对照表&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;四utf-8&quot;&gt;四、UTF-8&lt;/h1&gt;
-
-&lt;p&gt;　　unicode主要遇到了两个问题：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;如何让计算机区分出来&lt;/li&gt;
-  &lt;li&gt;如何使存储空间更小&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　UTF-8是目前互联网上使用最广泛的一种unicode编码方式了，它主要的特点就是变长。它可以使用1-4个字符表示一个字符（零几年还有6个字符表示的方法，但是后来取消掉了）。规则如下：&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;对于单个字节的字符，第一位设为 0，后面的 7 位对应这个字符的 Unicode 码点。因此，对于英文中的 0 - 127 号字符，与 ASCII 码完全相同。这意味着 ASCII 码那个年代的文档用 UTF-8 编码打开完全没有问题。&lt;/li&gt;
-  &lt;li&gt;对于需要使用 N 个字节来表示的字符（N &amp;gt; 1），第一个字节的前 N 位都设为 1，第 N + 1 位设为0，剩余的 N - 1 个字节的前两位都设位 10，剩下的二进制位则使用这个字符的 Unicode 码点来填充。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Unicode 十六进制码点范围&lt;/th&gt;
-      &lt;th&gt;UTF-8 二进制&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0000 0000 - 0000 007F&lt;/td&gt;
-      &lt;td&gt;0xxxxxxx&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0000 0080 - 0000 07FF&lt;/td&gt;
-      &lt;td&gt;110xxxxx 10xxxxxx&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0000 0800 - 0000 FFFF&lt;/td&gt;
-      &lt;td&gt;1110xxxx 10xxxxxx 10xxxxxx&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0001 0000 - 0010 FFFF&lt;/td&gt;
-      &lt;td&gt;11110xxx 10xxxxxx 10xxxxxx 10xxxxxx&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;　　下面，我们用&lt;code&gt;帆&lt;/code&gt;字为例进行讲解&lt;/p&gt;
-
-&lt;p&gt;　　帆的unicode十六进制是&lt;code&gt;5E06&lt;/code&gt;，补全后位&lt;code&gt;0000 5E06&lt;/code&gt;，二进制是&lt;code&gt;0101 1110 0000 0110&lt;/code&gt;。跟具上表可以得知是在第三列范围内的。所以帆的utf8编码需要三个字节，即格式为&lt;code&gt;1110xxxx 10xxxxxx 10xxxxxx&lt;/code&gt;。从最后一个二进制位开始，依次从后向前填入格式中的x，多出的位补0，就得到了&lt;code&gt;11100101 10111000 10000110&lt;/code&gt;，转换成十六进制后得到utf8十六进制&lt;code&gt;E5 B8 86&lt;/code&gt;。我们可以通过&lt;a href=&quot;http://www.mytju.com/classcode/tools/encode_utf8.asp&quot;&gt;utf8和unicode转化工具&lt;/a&gt;查看。&lt;/p&gt;
-
-&lt;p&gt;　　另外，说一下我们的通常表示法。utf8的16进制数表示开头加&lt;code&gt;0x&lt;/code&gt;，unicode开头加&lt;code&gt;U+&lt;/code&gt;。所以，帆字的utf8的16进制应该是&lt;code&gt;0xE5 0xB8 0x86&lt;/code&gt;，而unicode的16进制表示应该是&lt;code&gt;U+5E06&lt;/code&gt;。这个注意一下就好了，别人家写出来咱分辨不出来。&lt;/p&gt;
-
-&lt;h1 id=&quot;五十六进制转换十进制方法&quot;&gt;五、十六进制转换十进制方法&lt;/h1&gt;
-
-&lt;p&gt;　　这节其实是我在写这篇文章的时候遇到的问题。在这里我也就不单独拿出来写了，直接在这里温故而知新吧。我们在表示十六进制的时候，采用的表示法是&lt;code&gt;0x&lt;/code&gt;。比如我们表示&lt;code&gt;0xA4&lt;/code&gt;，其对应的十进制数怎么算呢？首先，我们要知道16进制的权为16，这个数转化为是十进制的方法和二进制转换成十进制一个道理。 是10(A) * 16的一次方+4 * 16的0次方，最终等于164.那我们算下&lt;code&gt;0xFF&lt;/code&gt;，是不是就等于255呢?答案是没错。&lt;/p&gt;
-
-&lt;h1 id=&quot;六大端法和小端法&quot;&gt;六、大端法和小端法&lt;/h1&gt;
-
-&lt;p&gt;　　计算机在存储器重排列字节有两种方式：大端法和小端法，大端法就是将高位字节放到底地址处，比如0x1234, 计算机用两个字节存储，一个是高位字节0x12,一个是低位字节0x34，它的存储方式为下：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2019/09/26/ZxRMdziesI6Th9v.png&quot; alt=&quot;大端法和小端法&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　TF-32用四个字节表示，处理单元为四个字节（一次拿到四个字节进行处理），如果不分大小端的话，那么就会出现解读错误，比如我们一次要处理四个字节 12 34 56 78，这四个字节是表示0x12 34 56 78还是表示0x78 56 34 12 ，不同的解释最终表示的值不一样。&lt;/p&gt;
-
-&lt;h1 id=&quot;七utf-16&quot;&gt;七、UTF-16&lt;/h1&gt;
-
-&lt;p&gt;　　utf-16也是边长字节表示，我们可以简单看看其表示的方法，不用太细的去看，等到真碰上了再思考也不迟。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;对于编号在U+0000到U+FFFF的字符（常用字符集），直接用两个字节表示。&lt;/li&gt;
-  &lt;li&gt;编号在 U+10000到U+10FFFF之间的字符，需要用四个字节表示。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　同样，UTF-16 也有字节的顺序问题（大小端），所以就有UTF-16BE表示大端，UTF-16LE表示小端。&lt;/p&gt;
-
-&lt;h1 id=&quot;八utf-32&quot;&gt;八、UTF-32&lt;/h1&gt;
-
-&lt;p&gt;　　utf-32是字符对应标号的证书二进制形式，四个字节，直接转化就可以了。比如&lt;code&gt;帆&lt;/code&gt;的unicode为&lt;code&gt;U+5E06&lt;/code&gt;，直接转化成二进制后得到：&lt;code&gt;0101 1110 0000 0110&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;　　我们可以根据他们高低字节的存储位置来判断他们所代表的含义，所以在编码方式中有 UTF-32BE 和 UTF-32LE ，分别对应大端和小端，来正确地解释多个字节（这里是四个字节）的含义。&lt;/p&gt;
-
-&lt;h1 id=&quot;九随便用go玩玩&quot;&gt;九、随便用GO玩玩&lt;/h1&gt;
-
-&lt;p&gt;　　本来想用GO实现下编码互转的，但是后来发现GO原声只支持UTF-8编码，如果想用GB2312等编码还得去get包，我尝试了下但是timeout了。哎，临近国庆，很多东西都用不了啦。以后有需要再弄吧。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;package main
-
-import (
-	&quot;fmt&quot;
-	&quot;unicode/utf8&quot;
-)
-
-func main(){
-	b := []byte(&quot;Hello, 帆&quot;)
-	for len(b) &amp;gt;0{
-		r,size := utf8.DecodeLastRune(b)
-		fmt.Printf(&quot;%c %v\n&quot;,r,size)
-		b = b[:len(b)-size]
-	}
-	c := []byte(&quot;帆&quot;)
-	fmt.Println(c)
-}
-
-打印结果：
-帆 3
-  1
-, 1
-o 1
-l 1
-l 1
-e 1
-H 1
-
-[229 184 134]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我们可以看到，utf8的中文在GO中是占3个字符的。而且帆的utf8的16进制数&lt;code&gt;E5 B8 86&lt;/code&gt;转换成十进制就是&lt;code&gt;[229 184 134]&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;参考文章：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.jianshu.com/p/6bdc0d52620a&quot;&gt;彻底弄懂 Unicode 编码&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html&quot;&gt;字符编码笔记：ASCII，Unicode 和 UTF-8&lt;/a&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="charset" /><summary type="html">　　工作中的一天下午，大概是16点左右。我旁边的一位爷生气的看着我，让我莫名的有种压力。我心头一紧赶紧追问怎么回事？这位爷气冲冲的告诉我他在解决一个问题，在解决问题的过程中让需求方硬生生的给秀逗了。爷告诉我这都高级工程师了竟然会不知道中文编码的占位问题，关键是这位还竟然在群里众目睽睽地说爷的不是。所以，这位爷找不到撒气的对象了，我心想得我也别招惹这位爷的注意力赶紧结束话题干自己的事情。结果没想到，这位爷还兴冲冲的要问我几个问题。我也不知道哪来的勇气满口答应，让他放马过来。结果我也彻彻底底的秀了一次智商下限。问我的问题让我这位职场老鸟受到了奇耻大辱。所以，我当即下定了决心得恶补一下关于字符集的知识。所以，我才过来写这篇总结。</summary></entry><entry><title type="html">Mysql中的too many connections问题背后</title><link href="https://naffan.cn/tech/2019/09/23/01.html" rel="alternate" type="text/html" title="Mysql中的too many connections问题背后" /><published>2019-09-23T00:00:00+08:00</published><updated>2019-09-23T00:00:00+08:00</updated><id>https://naffan.cn/tech/2019/09/23/01</id><content type="html" xml:base="https://naffan.cn/tech/2019/09/23/01.html">&lt;p&gt;　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。&lt;/p&gt;
-
-&lt;p&gt;　　在中秋节前的那个周二，是我们公司上线的窗口期。在晚上6点左右的时候，同事告诉我50那台机子挂了，测试数据库也在这台机子上，所以也挂掉了。我们上线前QA是需要在测试线回归一下问题后才能上线的，但是由于测试数据库挂了，导致QA的测试不能够进行，时间太短又来不及去迁移整个数据库，看来只能求助OP同学了。后来，OP同学告诉我们50这台服务器是我们的自运维机器，OP们也不知道如何操作（他们其实是不愿意管）。好说歹说OP才腾出功夫将服务器重启了（后来得知，其实并没有重启，而是50这台服务器是虚机，因为某些原道导致机器卡住了，于是虚机就被暂存起来了，然而OP做的就是吧暂存的虚机重新打开就行了），这样看似一切正常的操作，突然mysql就出现了too many connections的报错，这回我是根本连不上mysql了。经过询问DBA，这种情况是数据库太多的僵尸链接导致的，僵尸链接没有放开连接，导致后边的连接根本请求不到资源。这下问题就来了，我没有root权限（其实知道这台机子因为年代久远的原因没有人知道他的root权限了），那怎么办才能够清除这些僵尸链接呢？好了，前言已经铺垫的很多了，我也确实需要回忆一下我的解决方案和问题背后涉及的原理了。&lt;/p&gt;
-
-&lt;h3 id=&quot;问题解释&quot;&gt;问题解释&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;if you get a Too many connections error when you try to connect to the mysqld server, this means that all available connections are in use by other clients.
-
-发生too many connections的错误是因为所有可用的连接都被其他客户端保持着呢。
-
-The number of connections permitted is controlled by the max_connections system variable. The default value is 151 to improve performance when MySQL is used with the Apache Web server. (Previously, the default was 100.) If you need to support more connections, you should set a larger value for this variable.
-
-max_connections定义了被允许连接的数量。默认值是151，151是一个性能较高的值，尤其在web服务上。如果你需要更多的连接数，需要设置更大的数字。
-
-mysqld actually permits max_connections+1 clients to connect. The extra connection is reserved for use by accounts that have the CONNECTION_ADMIN or SUPER privilege. By granting the privilege to administrators and not to normal users (who should not need it), an administrator who also has the PROCESS privilege can connect to the server and use SHOW PROCESSLIST to diagnose problems even if the maximum number of unprivileged clients are connected. See Section 13.7.6.29, “SHOW PROCESSLIST Syntax”. 
- 
- mysqld进程使max_connections+1为客户端最大数量，这1个特别的连接是提供给最高用户权限的人用的。最高权限的人可以单独拥有这个链接，以此在发生问题时可以登录到mysql中查看问题所在，通过show processlist命令可以分析问题。也就是说151个连接全部被打满时，仍然有个第152链接等待这个最高权限的人进入。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　上面的引用出自mysql用户手册的原语。这只是告诉了我们在这种错误的情况下我们是可以做出调整的。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mysql&amp;gt; show variables like '%max_con%' \G;
-*************************** 1. row ***************************
-Variable_name: max_connect_errors
-        Value: 100
-*************************** 2. row ***************************
-Variable_name: max_connections
-        Value: 151
-*************************** 3. row ***************************
-Variable_name: mysqlx_max_connections
-        Value: 100
-*************************** 4. row ***************************
-Variable_name: performance_schema_max_cond_classes
-        Value: 100
-*************************** 5. row ***************************
-Variable_name: performance_schema_max_cond_instances
-        Value: -1
-5 rows in set (0.00 sec)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;解决方法&quot;&gt;解决方法&lt;/h3&gt;
-&lt;p&gt;　　当我们拥有mysql的root权限的时候我们可以直接运行命令&lt;code&gt;set global max_connections = xxx&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;　　当我们没有mysql的root权限时我们可以通过重启数据库来解决。还有一种是直接在命令端更改（参见：&lt;a href=&quot;https://www.percona.com/blog/2010/03/23/too-many-connections-no-problem/&quot;&gt;外国连接&lt;/a&gt;），外国人给了一个语句&lt;code&gt;gdb -p  $(cat mysqld.pid) -ex &quot;set max_connections=xxx&quot; -batch&lt;/code&gt;来操作，这个骚气的操作我暂时没看太懂，gdb怎么就能够操作这个呢？&lt;/p&gt;
-
-&lt;h3 id=&quot;自己测试&quot;&gt;自己测试&lt;/h3&gt;
-&lt;p&gt;　　知道了问题产生的原理了，那么我就自己模拟了一下，看看我能不能复现出这类问题&lt;/p&gt;
-
-&lt;p&gt;　　首先，就是需要创建出是2个账号，然后再把max_connections设置为1.这样，当A用户连接上后，B去连接就连接不上了，然而我的root却能够登录。如果能够达到这样的效果，就说明了我复现成功了。&lt;/p&gt;
-
-&lt;p&gt;　　值得注意的是mysql自升到了8.0以后，创建用户后需要紧跟着为用户分配权限。如果不这么做，你是之后再分配权限的话，就会得到&lt;code&gt;You are not allowed to create a user with GRANT&lt;/code&gt;的错误提示。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mysql&amp;gt; create user `A`@localhost identified by 'testA';
-mysql&amp;gt; grant select on laravel562.* to `test3`@`localhost`; //创建用户后直接分配读权限
-
-Query OK, 0 rows affected (0.00 sec)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我一共创建了两个用户分别是testA和testB。当我登录testA的时候，我通过root登录后运行```show processlist``后发现&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;*************************** 1. row ***************************
-                 host: locahost
-                 user: testA
-authentication_string: *94BDCEBE19083CE2A1F959FD02F964C7AF4CFC29
-               plugin: mysql_native_password
-*************************** 2. row ***************************
-                 host: localhost
-                 user: mysql.infoschema
-authentication_string: $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED
-               plugin: caching_sha2_password
-*************************** 3. row ***************************
-                 host: localhost
-                 user: mysql.session
-authentication_string: $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED
-               plugin: caching_sha2_password
-*************************** 4. row ***************************
-                 host: localhost
-                 user: mysql.sys
-authentication_string: $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED
-               plugin: caching_sha2_password
-*************************** 5. row ***************************
-                 host: localhost
-                 user: root
-authentication_string: *332A08EE56001FE5139E2FB111080AA441242991
-               plugin: mysql_native_password
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我们可以发现结果中可以看到testA和root两个用户的连接情况。当我这个时候让testB连接的话，testB就会报too many connections的错误了。 我再让testA关闭掉，再连testB就可以了。&lt;/p&gt;
-
-&lt;p&gt;　　之后，我删除了testA和testB，应用&lt;code&gt;drop user `test`@`localhost`;&lt;/code&gt;。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="mysql" /><summary type="html">　　今天，在工作中遇到了mysql报too many connections的问题。于是，在百度上快速的搜到了解决方法，只要在数据库上操作flush hosts操作就行了。我按照这个提示操作了一遍确实可以了。于是，一旦出现问题，我优先会去做此操作，以至于我只要打开数据库就会先来一遍这个操作，反正做了会降低出问题的概率。正当我这样做的不亦乐乎之时，大问题出现了。</summary></entry></feed>
+&lt;p&gt;　　那为什么姜维知道了后方失守却为什么不回来救呢？其实我理解如果回头救的话，可能钟会会突破剑阁，到时候前后受敌，兵家大忌。与其这样还不如继续防守，后方听天由命了。但是，最终等来的消息却是刘禅的一封投降书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="三国" /><summary type="html">早入蜀都,先到先得。偷渡阴平，直取蜀汉！</summary></entry></feed>
