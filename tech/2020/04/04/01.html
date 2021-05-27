@@ -3,16 +3,16 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.6.1 -->
+<!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>sentinel降级背后的原理解析 | 拿饭网</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v3.9.0" />
 <meta property="og:title" content="sentinel降级背后的原理解析" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="介绍" />
 <meta property="og:description" content="介绍" />
-<link rel="canonical" href="https://naffan.cn/tech/2020/04/04/01.html" />
-<meta property="og:url" content="https://naffan.cn/tech/2020/04/04/01.html" />
+<link rel="canonical" href="http://localhost:4000/tech/2020/04/04/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2020/04/04/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-04-04T00:00:00+08:00" />
@@ -24,7 +24,7 @@
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"headline":"sentinel降级背后的原理解析","dateModified":"2020-04-04T00:00:00+08:00","datePublished":"2020-04-04T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2020/04/04/01.html"},"description":"介绍","@type":"BlogPosting","url":"https://naffan.cn/tech/2020/04/04/01.html","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/tech/2020/04/04/01.html","headline":"sentinel降级背后的原理解析","dateModified":"2020-04-04T00:00:00+08:00","datePublished":"2020-04-04T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2020/04/04/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"介绍","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -184,9 +184,9 @@ var _hmt = _hmt || [];
   </li>
 </ul>
 
-<p>Sentinel是阿里中间件团队开源的，面向分布式服务加购的轻量级高可用流量控制组件，主要以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度来帮助用户保护服务的稳定性。</p>
+<p>　　Sentinel是阿里中间件团队开源的，面向分布式服务加购的轻量级高可用流量控制组件，主要以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度来帮助用户保护服务的稳定性。</p>
 
-<p>首先让我们比对下目前业界流行的熔断降级库<a href="https://github.com/netflix/hystrix">Netfilix Hystrix</a>的异同。</p>
+<p>　　首先让我们比对下目前业界流行的熔断降级库<a href="https://github.com/netflix/hystrix">Netfilix Hystrix</a>的异同。</p>
 
 <hr />
 
@@ -196,7 +196,7 @@ var _hmt = _hmt || [];
   </li>
 </ul>
 
-<p>这是sentinel项目的整体结构图：</p>
+<p>　　这是sentinel项目的整体结构图：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08f0e6a8850610fe9d0218eb0220cd03280130013884ee02.png" src="/images/default.jpg" alt="sentinal结构图" />
@@ -220,7 +220,7 @@ var _hmt = _hmt || [];
   </li>
 </ul>
 
-<p>在sentinel-demo模块中有很多不同的样例，我们找到FlowQpsDemo，看看限流的样例。限流有很多种类的限流，先找qps限流的类来看。</p>
+<p>　　在sentinel-demo模块中有很多不同的样例，我们找到FlowQpsDemo，看看限流的样例。限流有很多种类的限流，先找qps限流的类来看。</p>
 
 <pre>
   <code class="language-java">/*
@@ -390,7 +390,7 @@ public class FlowQpsDemo {
 </code>
 </pre>
 
-<p>运行程序后，结果如下：</p>
+<p>　　运行程序后，结果如下：</p>
 
 <pre>
   <code class="language-txt">begin to statistic!!!
@@ -415,15 +415,15 @@ only 20 requests per second can pass
 </code>
 </pre>
 
-<p>可以看到，上面的结果中，pass的数量和我们设置的不一样。我们设定的是每秒可以pass的数量是20个。但是有很多的请求都是超过20个的。</p>
+<p>　　可以看到，上面的结果中，pass的数量和我们设置的不一样。我们设定的是每秒可以pass的数量是20个。但是有很多的请求都是超过20个的。</p>
 
-<p>原因是<code>SphU.entry(KEY)</code>的内部是没有加锁的，所以就会在高并发的情况下，pass的数量就会高于20.由于pass、block、total是全局共享的，而多个RunTask()线程在执行SphU.entry(KEY)申请获取entry时，内部没有所保护，所以会存在pass的个数超过设定的阈值。</p>
+<p>　　原因是<code>SphU.entry(KEY)</code>的内部是没有加锁的，所以就会在高并发的情况下，pass的数量就会高于20.由于pass、block、total是全局共享的，而多个RunTask()线程在执行SphU.entry(KEY)申请获取entry时，内部没有所保护，所以会存在pass的个数超过设定的阈值。</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/sentinel-basic-demo-flow-qps-module.png" src="/images/default.jpg" alt="runTask模型" />
 </p>
 
-<p>接下来，我把threadCount改为1，只有一个线程来执行这个方法，结果如下。</p>
+<p>　　接下来，我把threadCount改为1，只有一个线程来执行这个方法，结果如下。</p>
 
 <pre>
   <code class="language-txt">begin to statistic!!!
@@ -452,7 +452,7 @@ only 20 requests per second can pass
   </li>
 </ul>
 
-<p>一切的开始让我们从SphU.entry()开始。</p>
+<p>　　一切的开始让我们从SphU.entry()开始。</p>
 
 <pre>
   <code class="language-java">public class SphU {
@@ -486,7 +486,7 @@ public class Env {
 </code>
 </pre>
 
-<p>SphU.entry中Env是一个类，我们知道在JVM的生命周期里，每个类都会被加载一次，而且加载的原则是懒加载。这个类中有个Sph类型的静态变量，指向了实例化后的CtSph()。也就是说Env.sph.entry()最终是调用了CtsSph.entry()。</p>
+<p>　　SphU.entry中Env是一个类，我们知道在JVM的生命周期里，每个类都会被加载一次，而且加载的原则是懒加载。这个类中有个Sph类型的静态变量，指向了实例化后的CtSph()。也就是说Env.sph.entry()最终是调用了CtsSph.entry()。</p>
 
 <pre>
   <code class="language-java">public class CtsSph {
@@ -552,7 +552,7 @@ public class Env {
 </code>
 </pre>
 
-<p>这个方法可以分为以下几个部分：</p>
+<p>　　这个方法可以分为以下几个部分：</p>
 
 <ul>
   <li>对参数和全局配置做检测，如果不符合要求就返回一个CtEntry对象，不会再进行任何限流检测。否则就会进入检测流程。</li>
@@ -568,7 +568,7 @@ public class Env {
   </li>
 </ul>
 
-<p>我们先来看看ProcessorSlot到底是个什么东西。他是一个接口，详细的请看下面的程序解释。</p>
+<p>　　我们先来看看ProcessorSlot到底是个什么东西。他是一个接口，详细的请看下面的程序解释。</p>
 
 <pre>
   <code class="language-java">/*
@@ -597,9 +597,9 @@ public interface ProcessorSlot&lt;T&gt; {
 </code>
 </pre>
 
-<p>通过实现关系，我们可以看到这两类ProcessorSlot分别是：</p>
+<p>　　通过实现关系，我们可以看到这两类ProcessorSlot分别是：</p>
 
-<p>辅助资源指标数据统计的 ProcessorSlot：</p>
+<p>　　辅助资源指标数据统计的 ProcessorSlot：</p>
 
 <ul>
   <li>NodeSelectorSlot：为当前资源创建 DefaultNode</li>
@@ -607,7 +607,7 @@ public interface ProcessorSlot&lt;T&gt; {
   <li>StatisticSlot：这是 Sentinel 最为重要的类之一，用于实现指标数据统计。先是调用后续的 ProcessorSlot#entry 判断是否放行请求，再根据判断结果进行相应的指标数据统计操作。</li>
 </ul>
 
-<p>实现降级功能的 ProcessorSlot：</p>
+<p>　　实现降级功能的 ProcessorSlot：</p>
 
 <ul>
   <li>AuthoritySlot：实现黑白名单降级</li>
@@ -624,7 +624,7 @@ public interface ProcessorSlot&lt;T&gt; {
   </li>
 </ul>
 
-<p>然后我们看看是如何将ProcessorSlot创建成链的：</p>
+<p>　　然后我们看看是如何将ProcessorSlot创建成链的：</p>
 
 <pre>
   <code class="language-java"> //通过slot chain builder SPI提供的创建slot链的类
@@ -663,7 +663,7 @@ public final class SlotChainProvider {
 </code>
 </pre>
 
-<p>我很感兴趣slotChainBuilder，于是就去看了眼这个类。其实他是一个接口，接口中就一个build()方法。目前系统提供了两种实现，一个是DefaultSlotChainBuilder,一个是DemoSlotChainBuilder。这块对后续的增加留下了扩展性。主要体现的是<a href="https://www.jianshu.com/p/3d1c9ffb0a28">建造者模式</a>思想。</p>
+<p>　　我很感兴趣slotChainBuilder，于是就去看了眼这个类。其实他是一个接口，接口中就一个build()方法。目前系统提供了两种实现，一个是DefaultSlotChainBuilder,一个是DemoSlotChainBuilder。这块对后续的增加留下了扩展性。主要体现的是<a href="https://www.jianshu.com/p/3d1c9ffb0a28">建造者模式</a>思想。</p>
 
 <pre>
   <code class="language-java">public interface SlotChainBuilder {
@@ -674,7 +674,7 @@ public final class SlotChainProvider {
 </code>
 </pre>
 
-<p>那接下来我选择DemoSlotChainBuilder看下怎么实现的。</p>
+<p>　　那接下来我选择DemoSlotChainBuilder看下怎么实现的。</p>
 
 <pre>
   <code class="language-java">/*
@@ -707,7 +707,7 @@ public class DemoSlotChainBuilder implements SlotChainBuilder {
 </code>
 </pre>
 
-<p>通过上面的演示，就创建除了一个slot chain了。返回的就是ProcessorSlotChain。</p>
+<p>　　通过上面的演示，就创建除了一个slot chain了。返回的就是ProcessorSlotChain。</p>
 
 <hr />
 
@@ -800,7 +800,7 @@ com.alibaba.csp.sentinel.slots.block.degrade.DegradeSlot
 </code>
 </pre>
 
-<p>以上的这些slot已经被依次添加到了chain中了。然后调用DefaultProcessorSlotChain中的addLast完成责任链的创建。</p>
+<p>　　以上的这些slot已经被依次添加到了chain中了。然后调用DefaultProcessorSlotChain中的addLast完成责任链的创建。</p>
 
 <pre>
   <code class="language-java">/*
@@ -872,29 +872,29 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
 </code>
 </pre>
 
-<p>DefaultProcessorSlotChain中有两个AbstractLinkedProcessorSlot类型的变量：first和end，这就是链表的头结点和尾节点。</p>
+<p>　　DefaultProcessorSlotChain中有两个AbstractLinkedProcessorSlot类型的变量：first和end，这就是链表的头结点和尾节点。</p>
 
-<p>创建DefaultProcessorSlotChain对象时，首先创建了首节点，然后把首节点赋值给了尾节点，可以用下图表示：</p>
+<p>　　创建DefaultProcessorSlotChain对象时，首先创建了首节点，然后把首节点赋值给了尾节点，可以用下图表示：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-1.png" src="/images/default.jpg" alt="fist&amp;end" />
 </p>
 
-<p>当把第一个slot（<code>NodeSelectorSlot</code>）添加（<code>chain.addLast()</code>）到联表中。是这样的：</p>
+<p>　　当把第一个slot（<code>NodeSelectorSlot</code>）添加（<code>chain.addLast()</code>）到联表中。是这样的：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-2.png" src="/images/default.jpg" alt="fist&amp;end2" />
 </p>
 
-<p>将所有的节点都加入到联表中后，整个联表的结构变成了如下图所示：</p>
+<p>　　将所有的节点都加入到联表中后，整个联表的结构变成了如下图所示：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-3.png" src="/images/default.jpg" alt="fist&amp;end3" />
 </p>
 
-<p>样就将所有的Slot对象添加到了链表中去了，每一个Slot都是继承自AbstractLinkedProcessorSlot。而AbstractLinkedProcessorSlot是一种责任链的设计，每个对象中都有一个next属性，指向的是另一个AbstractLinkedProcessorSlot对象。其实责任链模式在很多框架中都有，比如Netty中是通过pipeline来实现的。</p>
+<p>　　样就将所有的Slot对象添加到了链表中去了，每一个Slot都是继承自AbstractLinkedProcessorSlot。而AbstractLinkedProcessorSlot是一种责任链的设计，每个对象中都有一个next属性，指向的是另一个AbstractLinkedProcessorSlot对象。其实责任链模式在很多框架中都有，比如Netty中是通过pipeline来实现的。</p>
 
-<p>知道了SlotChain是如何创建的了，那接下来就要看下是如何执行Slot的entry方法的了。</p>
+<p>　　知道了SlotChain是如何创建的了，那接下来就要看下是如何执行Slot的entry方法的了。</p>
 
 <hr />
 
@@ -904,14 +904,14 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
   </li>
 </ul>
 
-<p>回看entryWithPriority()方法。在创建玩成chain后。调用了这个方法：</p>
+<p>　　回看entryWithPriority()方法。在创建玩成chain后。调用了这个方法：</p>
 
 <pre>
   <code class="language-java">chain.entry(context, resourceWrapper, null, count, prioritized, args);
 </code>
 </pre>
 
-<p>这个方法最终调用的是</p>
+<p>　　这个方法最终调用的是</p>
 
 <pre>
   <code class="language-java"> public class DefaultProcessorSlotChain extends ProcessorSlotChain {
@@ -930,9 +930,9 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
 </code>
 </pre>
 
-<p>也就是说，DefaultProcessorSlotChain的entry实际是执行的first属性的transformEntry方法。</p>
+<p>　　也就是说，DefaultProcessorSlotChain的entry实际是执行的first属性的transformEntry方法。</p>
 
-<p>而transformEntry方法会执行当前节点的entry方法，在DefaultProcessorSlotChain中first节点重写了entry方法，具体如下:</p>
+<p>　　而transformEntry方法会执行当前节点的entry方法，在DefaultProcessorSlotChain中first节点重写了entry方法，具体如下:</p>
 
 <pre>
   <code class="language-java">public class DefaultProcessorSlotChain extends ProcessorSlotChain {
@@ -946,7 +946,7 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
 </code>
 </pre>
 
-<p>我们看到，实际entry()又执行了super的fireEntry()。</p>
+<p>　　我们看到，实际entry()又执行了super的fireEntry()。</p>
 
 <pre>
   <code class="language-java">public abstract class AbstractLinkedProcessorSlot&lt;T&gt; implements ProcessorSlot&lt;T&gt; {
@@ -963,13 +963,13 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
 </code>
 </pre>
 
-<p>从这里看到，从fireEntry()中就开始传递执行entry了，这里会执行当前节点的下一个节点的transformEntry()。上面已经分析过了，transformEntry方法会触发当前节点的entry，也就是说fireEntry方法实际是触发了下一个节点的entry方法。具体的流程如下图所示：</p>
+<p>　　从这里看到，从fireEntry()中就开始传递执行entry了，这里会执行当前节点的下一个节点的transformEntry()。上面已经分析过了，transformEntry方法会触发当前节点的entry，也就是说fireEntry方法实际是触发了下一个节点的entry方法。具体的流程如下图所示：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-entry-process.png" src="/images/default.jpg" alt="责任链开始了传递" />
 </p>
 
-<p>那责任链开始传递了，每次传递到的slot都会运行entry()。我们应该将目光看看entry()的实现了。</p>
+<p>　　那责任链开始传递了，每次传递到的slot都会运行entry()。我们应该将目光看看entry()的实现了。</p>
 
 <hr />
 
@@ -979,7 +979,7 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
   </li>
 </ul>
 
-<p>从上面得知，链表中在第一个位置的是NodeSelectorSlot。</p>
+<p>　　从上面得知，链表中在第一个位置的是NodeSelectorSlot。</p>
 
 <pre>
   <code class="language-java">@Spi(isSingleton = false, order = Constants.ORDER_NODE_SELECTOR_SLOT)
@@ -1042,13 +1042,13 @@ public class NodeSelectorSlot extends AbstractLinkedProcessorSlot&lt;Object&gt; 
 </code>
 </pre>
 
-<p>执行完业务逻辑处理后，调用了fireEntry()方法，由此触发了下一个节点的entry方法。此时我们就知道了sentinel的责任链就是这样传递的：每个Slot节点执行完自己的业务后，会调用fireEntry来触发下一个节点的entry方法。因为每个slot的逻辑都不太一样，所以这里就不展开了，我将来会写每个slot的分析的。</p>
+<p>　　执行完业务逻辑处理后，调用了fireEntry()方法，由此触发了下一个节点的entry方法。此时我们就知道了sentinel的责任链就是这样传递的：每个Slot节点执行完自己的业务后，会调用fireEntry来触发下一个节点的entry方法。因为每个slot的逻辑都不太一样，所以这里就不展开了，我将来会写每个slot的分析的。</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-entry-whole-process.png" src="/images/default.jpg" alt="整个逻辑" />
 </p>
 
-<p>至此就通过SlotChain完成了对每个节点的entry()方法的调用，每个节点会根据创建的规则，进行自己的逻辑处理，当统计的结果达到设置的阈值时，就会触发限流、降级等事件，具体是抛出BlockException异常。</p>
+<p>　　至此就通过SlotChain完成了对每个节点的entry()方法的调用，每个节点会根据创建的规则，进行自己的逻辑处理，当统计的结果达到设置的阈值时，就会触发限流、降级等事件，具体是抛出BlockException异常。</p>
 
 <p>本文参考：</p>
 
@@ -1101,7 +1101,7 @@ public class NodeSelectorSlot extends AbstractLinkedProcessorSlot&lt;Object&gt; 
 
 
 
-	<li class="next"><a href="/thinking/2020/05/16/01.html">后一篇 &rarr;</a></li>
+	<li class="next"><a href="/tech/2020/04/25/01.html">后一篇 &rarr;</a></li>
 
 </ul>
 

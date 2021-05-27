@@ -3,16 +3,16 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.6.1 -->
+<!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>sentinel的几个实体分析 | 拿饭网</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v3.9.0" />
 <meta property="og:title" content="sentinel的几个实体分析" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="sentinel中有几个比较重要的实体需要我们了解。" />
 <meta property="og:description" content="sentinel中有几个比较重要的实体需要我们了解。" />
-<link rel="canonical" href="https://naffan.cn/tech/2020/03/01/01.html" />
-<meta property="og:url" content="https://naffan.cn/tech/2020/03/01/01.html" />
+<link rel="canonical" href="http://localhost:4000/tech/2020/03/01/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2020/03/01/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-03-01T00:00:00+08:00" />
@@ -24,7 +24,7 @@
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"headline":"sentinel的几个实体分析","dateModified":"2020-03-01T00:00:00+08:00","datePublished":"2020-03-01T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2020/03/01/01.html"},"description":"sentinel中有几个比较重要的实体需要我们了解。","@type":"BlogPosting","url":"https://naffan.cn/tech/2020/03/01/01.html","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/tech/2020/03/01/01.html","headline":"sentinel的几个实体分析","dateModified":"2020-03-01T00:00:00+08:00","datePublished":"2020-03-01T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2020/03/01/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"sentinel中有几个比较重要的实体需要我们了解。","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,14 +177,14 @@ var _hmt = _hmt || [];
   </li>
 </ul>
 
-<p>resource是sentinel中最重要的一个概念。sentinel通过resource来保护具体的业务代码和其他后方服务。sentinel把复杂的逻辑给屏蔽掉了，用户只需要为受保护的代码或服务定义一个resource，然后定义rule就可以了，剩下的就通通交给sentinel来处理。并且resource和rule是解耦的，rule设置可以在runtime动态修改，定义完resource后，就可以通过在程序中埋点来保护自己的服务了，埋点的方式有两种：</p>
+<p>　　resource是sentinel中最重要的一个概念。sentinel通过resource来保护具体的业务代码和其他后方服务。sentinel把复杂的逻辑给屏蔽掉了，用户只需要为受保护的代码或服务定义一个resource，然后定义rule就可以了，剩下的就通通交给sentinel来处理。并且resource和rule是解耦的，rule设置可以在runtime动态修改，定义完resource后，就可以通过在程序中埋点来保护自己的服务了，埋点的方式有两种：</p>
 
 <ul>
   <li>try-catch 方式（通过 SphU.entry(…)），当 catch 到BlockException时执行异常处理(或fallback)</li>
   <li>if-else 方式（通过 SphO.entry(…)），当返回 false 时执行异常处理(或fallback)</li>
 </ul>
 
-<p>以上这两种方式都是通过硬编码的形式定义resource然后进行resource埋点的，对业务代码的侵入太大，从0.1.1版本开始， Sentinel 加入了注解的支持，可以通过注解来定义资源，具体的注解为：SentinelResource 。通过注解除了可以定义资源外，还可以指定 blockHandler 和 fallback 方法。</p>
+<p>　　以上这两种方式都是通过硬编码的形式定义resource然后进行resource埋点的，对业务代码的侵入太大，从0.1.1版本开始， Sentinel 加入了注解的支持，可以通过注解来定义资源，具体的注解为：SentinelResource 。通过注解除了可以定义资源外，还可以指定 blockHandler 和 fallback 方法。</p>
 
 <pre>
   <code class="language-java">//这个注解代表定义一个sentinel resource
@@ -240,7 +240,7 @@ public @interface SentinelResource {
 </code>
 </pre>
 
-<p>其中EntryType的枚举为：</p>
+<p>　　其中EntryType的枚举为：</p>
 
 <pre>
   <code class="language-java">public enum EntryType {
@@ -250,7 +250,7 @@ public @interface SentinelResource {
 </code>
 </pre>
 
-<p>有了注解以后，接下来就是看看通过反射，获取配置了注解的方法是如何使用的了。使用了<code>@SentinelResource</code>就需要依赖<code>sentinel-annotation-aspectj</code>了。具体实现如下：</p>
+<p>　　有了注解以后，接下来就是看看通过反射，获取配置了注解的方法是如何使用的了。使用了<code>@SentinelResource</code>就需要依赖<code>sentinel-annotation-aspectj</code>了。具体实现如下：</p>
 
 <pre>
   <code class="language-java"> //SentinelResource切面的实现。继承于AbstractSentinelAspectSupport
@@ -315,7 +315,7 @@ public class SentinelResourceAspect extends AbstractSentinelAspectSupport {
 </code>
 </pre>
 
-<p>我们看完了反射的注解了。但是其中有一些方法是继承于<code>AbstractSentinelAspectSupport</code>的实现方法。我们也来看看刚才用到的方法：</p>
+<p>　　我们看完了反射的注解了。但是其中有一些方法是继承于<code>AbstractSentinelAspectSupport</code>的实现方法。我们也来看看刚才用到的方法：</p>
 
 <pre>
   <code class="language-java">
@@ -463,13 +463,13 @@ public abstract class AbstractSentinelAspectSupport {
 </code>
 </pre>
 
-<p>至此，通过@SentinelResource使用熔断降级，阻塞限流的原理就分析完成了。那接下来让我们看看ResourceWrapper是什么。</p>
+<p>　　至此，通过@SentinelResource使用熔断降级，阻塞限流的原理就分析完成了。那接下来让我们看看ResourceWrapper是什么。</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-concept-of-entities/images/resource.png" src="/images/default.jpg" alt="resource的种类" />
 </p>
 
-<p>在 Sentinel 中具体表示资源的类是：ResourceWrapper ，他是一个抽象的包装类，包装了资源的 Name 和EntryType。他有两个实现类，分别是：StringResourceWrapper 和 MethodResourceWrapper</p>
+<p>　　在 Sentinel 中具体表示资源的类是：ResourceWrapper ，他是一个抽象的包装类，包装了资源的 Name 和EntryType。他有两个实现类，分别是：StringResourceWrapper 和 MethodResourceWrapper</p>
 
 <pre>
   <code class="language-java"> //resource的关于name和type的封装
@@ -523,7 +523,7 @@ public abstract class ResourceWrapper {
 </code>
 </pre>
 
-<p>从代码中，我们可以看到其实这就是一个简单的resource封装。在实际的使用过程中，作为传递的参数。这样的好处是传递时可以记录下当时的状态信息等。接下来我们看看两种继承类</p>
+<p>　　从代码中，我们可以看到其实这就是一个简单的resource封装。在实际的使用过程中，作为传递的参数。这样的好处是传递时可以记录下当时的状态信息等。接下来我们看看两种继承类</p>
 
 <pre>
   <code class="language-java">//通过方法信息来封装resource
@@ -565,7 +565,7 @@ public class MethodResourceWrapper extends ResourceWrapper {
 </code>
 </pre>
 
-<p>另一个是</p>
+<p>　　另一个是</p>
 
 <pre>
   <code class="language-java">//其实和上面的方法一个意思，只是下面的实现直接可以把resource的string类型取到了
@@ -598,7 +598,7 @@ public class StringResourceWrapper extends ResourceWrapper {
 </code>
 </pre>
 
-<p>当然，这块可以自定义的。只要按照SPI的规则来即可。</p>
+<p>　　当然，这块可以自定义的。只要按照SPI的规则来即可。</p>
 
 <hr />
 
@@ -608,13 +608,13 @@ public class StringResourceWrapper extends ResourceWrapper {
   </li>
 </ul>
 
-<p>Slot 是另一个 Sentinel 中非常重要的概念， Sentinel 的工作流程就是围绕着一个个插槽所组成的插槽链来展开的。需要注意的是每个插槽都有自己的职责，他们各司其职完好的配合，通过一定的编排顺序，来达到最终的限流降级的目的。默认的各个插槽之间的顺序是固定的，因为有的插槽需要依赖其他的插槽计算出来的结果才能进行工作。</p>
+<p>　　Slot 是另一个 Sentinel 中非常重要的概念， Sentinel 的工作流程就是围绕着一个个插槽所组成的插槽链来展开的。需要注意的是每个插槽都有自己的职责，他们各司其职完好的配合，通过一定的编排顺序，来达到最终的限流降级的目的。默认的各个插槽之间的顺序是固定的，因为有的插槽需要依赖其他的插槽计算出来的结果才能进行工作。</p>
 
-<p>但是这并不意味着我们只能按照框架的定义来，Sentinel 通过 SlotChainBuilder 作为 SPI 接口，使得 Slot Chain 具备了扩展的能力。我们可以通过实现 SlotsChainBuilder 接口加入自定义的 slot 并自定义编排各个 slot 之间的顺序，从而可以给 Sentinel 添加自定义的功能。</p>
+<p>　　但是这并不意味着我们只能按照框架的定义来，Sentinel 通过 SlotChainBuilder 作为 SPI 接口，使得 Slot Chain 具备了扩展的能力。我们可以通过实现 SlotsChainBuilder 接口加入自定义的 slot 并自定义编排各个 slot 之间的顺序，从而可以给 Sentinel 添加自定义的功能。</p>
 
-<p>那SlotChain是在哪创建的呢？是在 CtSph.lookProcessChain() 方法中创建的，并且该方法会根据当前请求的资源先去一个静态的HashMap中获取，如果获取不到才会创建，创建后会保存到HashMap中。这就意味着，同一个资源会全局共享一个SlotChain。</p>
+<p>　　那SlotChain是在哪创建的呢？是在 CtSph.lookProcessChain() 方法中创建的，并且该方法会根据当前请求的资源先去一个静态的HashMap中获取，如果获取不到才会创建，创建后会保存到HashMap中。这就意味着，同一个资源会全局共享一个SlotChain。</p>
 
-<p>相关slot的更多讲解可以看我之前写的<a href="https://www.naffan.cn/tech/2020/04/04/01.html">sentinel原理解析</a>，上面介绍的slot都在里面讲到过</p>
+<p>　　相关slot的更多讲解可以看我之前写的<a href="https://www.naffan.cn/tech/2020/04/04/01.html">sentinel原理解析</a>，上面介绍的slot都在里面讲到过</p>
 
 <p>
   <img class="lazy" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-concept-of-entities/images/slot-chain.png" src="/images/default.jpg" alt="slot图" />
@@ -628,7 +628,7 @@ public class StringResourceWrapper extends ResourceWrapper {
   </li>
 </ul>
 
-<p>context是sentinel整个系统的上下文功能。context里面记载着很多关键信息。</p>
+<p>　　context是sentinel整个系统的上下文功能。context里面记载着很多关键信息。</p>
 
 <pre>
   <code class="language-java"> /*
@@ -773,7 +773,7 @@ public class Context {
 </code>
 </pre>
 
-<p>可以看到，context中存储着entry和node等信息。等一会我会详细的分析这两个类。但是，我想想先看看context的创建实现。context的实现位置在ContextUtil.java中</p>
+<p>　　可以看到，context中存储着entry和node等信息。等一会我会详细的分析这两个类。但是，我想想先看看context的创建实现。context的实现位置在ContextUtil.java中</p>
 
 <pre>
   <code class="language-java"> //工具类，用来在当前线程中获取或者创建上下文
@@ -967,7 +967,7 @@ public class ContextUtil {
 </code>
 </pre>
 
-<p>ContextUtil看完了，再看看NullContext。</p>
+<p>　　ContextUtil看完了，再看看NullContext。</p>
 
 <pre>
   <code class="language-java"> 
@@ -981,7 +981,7 @@ public class NullContext extends Context {
 </code>
 </pre>
 
-<p>就这样，我了解了context在sentinel中起的作用了。其实，主要就是为了将请求行程有关系的结构，也就是调用链，其结构是由Node（节点）组成的树。</p>
+<p>　　就这样，我了解了context在sentinel中起的作用了。其实，主要就是为了将请求行程有关系的结构，也就是调用链，其结构是由Node（节点）组成的树。</p>
 
 <hr />
 
@@ -991,9 +991,9 @@ public class NullContext extends Context {
   </li>
 </ul>
 
-<p>Entry 是 Sentinel 中用来表示是否通过限流的一个凭证，就像一个token一样。每次执行 SphU.entry() 或 SphO.entry() 都会返回一个 Entry 给调用者，意思就是告诉调用者，如果正确返回了 Entry 给你，那表示你可以正常访问被 Sentinel 保护的后方服务了，否则 Sentinel 会抛出一个BlockException(如果是 SphO.entry() 会返回false)，这就表示调用者想要访问的服务被保护了，也就是说调用者本身被限流了。</p>
+<p>　　Entry 是 Sentinel 中用来表示是否通过限流的一个凭证，就像一个token一样。每次执行 SphU.entry() 或 SphO.entry() 都会返回一个 Entry 给调用者，意思就是告诉调用者，如果正确返回了 Entry 给你，那表示你可以正常访问被 Sentinel 保护的后方服务了，否则 Sentinel 会抛出一个BlockException(如果是 SphO.entry() 会返回false)，这就表示调用者想要访问的服务被保护了，也就是说调用者本身被限流了。</p>
 
-<p>entry中保存了本次执行 entry() 方法的一些基本信息，包括：</p>
+<p>　　entry中保存了本次执行 entry() 方法的一些基本信息，包括：</p>
 
 <ul>
   <li>createTime：当前Entry的创建时间，主要用来后期计算rt</li>
@@ -1002,9 +1002,9 @@ public class NullContext extends Context {
   <li>resourceWrapper：当前Entry所关联的资源</li>
 </ul>
 
-<p>当在一个上下文中多次调用了 SphU.entry() 方法时，就会创建一个调用树，这个树的节点之间是通过parent和child关系维持的。</p>
+<p>　　当在一个上下文中多次调用了 SphU.entry() 方法时，就会创建一个调用树，这个树的节点之间是通过parent和child关系维持的。</p>
 
-<p><code>需要注意的是：parent和child是在 CtSph 类的一个私有内部类 CtEntry 中定义的</code>，CtEntry 是 Entry 的一个子类。 由于context中总是保存着调用链树中的当前入口，所以当当前entry执行exit退出时，需要将parent设置为当前入口。</p>
+<p>　　<code>需要注意的是：parent和child是在 CtSph 类的一个私有内部类 CtEntry 中定义的</code>，CtEntry 是 Entry 的一个子类。 由于context中总是保存着调用链树中的当前入口，所以当当前entry执行exit退出时，需要将parent设置为当前入口。</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-concept-of-entities/images/entry.png" src="/images/default.jpg" alt="sentinal结构图" />
@@ -1018,13 +1018,13 @@ public class NullContext extends Context {
   </li>
 </ul>
 
-<p>Node 中保存了资源的实时统计数据，例如：passQps，blockQps，rt等实时数据。正是有了这些统计数据后， Sentinel 才能进行限流、降级等一系列的操作。</p>
+<p>　　Node 中保存了资源的实时统计数据，例如：passQps，blockQps，rt等实时数据。正是有了这些统计数据后， Sentinel 才能进行限流、降级等一系列的操作。</p>
 
-<p>node是一个接口，他有一个实现类：StatisticNode，但是StatisticNode本身也有两个子类，一个是DefaultNode，另一个是ClusterNode，DefaultNode又有一个子类叫EntranceNode。</p>
+<p>　　node是一个接口，他有一个实现类：StatisticNode，但是StatisticNode本身也有两个子类，一个是DefaultNode，另一个是ClusterNode，DefaultNode又有一个子类叫EntranceNode。</p>
 
-<p>其中entranceNode是每个上下文的入口，该节点是直接挂在root下的，是全局唯一的，每一个context都会对应一个entranceNode。另外defaultNode是记录当前调用的实时数据的，每个defaultNode都关联着一个资源和clusterNode，有着相同资源的defaultNode，他们关联着同一个clusterNode。</p>
+<p>　　其中entranceNode是每个上下文的入口，该节点是直接挂在root下的，是全局唯一的，每一个context都会对应一个entranceNode。另外defaultNode是记录当前调用的实时数据的，每个defaultNode都关联着一个资源和clusterNode，有着相同资源的defaultNode，他们关联着同一个clusterNode。</p>
 
-<p>首先，我先看看Node的定义。其实想要全部看懂Node的设计，还是应该先了解下Metric度量的设计，否则可能不太明白sentinel怎么进行计算每个时间维度的量：</p>
+<p>　　首先，我先看看Node的定义。其实想要全部看懂Node的设计，还是应该先了解下Metric度量的设计，否则可能不太明白sentinel怎么进行计算每个时间维度的量：</p>
 
 <pre>
   <code class="language-java"> //掌握着资源的时实统计数据
@@ -1102,7 +1102,7 @@ public interface Node extends OccupySupport, DebugSupport {
 
 </code>
 </pre>
-<p>Node接口的描述也有了。那么剩下的实现其实就是在其基础上实现不同的功能了。我不打算一一进行分析了。所以，就暂时先分析一个StaticNode吧，毕竟其他的Node也都是继承于他。</p>
+<p>　　Node接口的描述也有了。那么剩下的实现其实就是在其基础上实现不同的功能了。我不打算一一进行分析了。所以，就暂时先分析一个StaticNode吧，毕竟其他的Node也都是继承于他。</p>
 
 <pre>
   <code class="language-java">/*
@@ -1392,7 +1392,7 @@ public class StatisticNode implements Node {
 </code>
 </pre>
 
-<p>他们之间的继承关系，也侧面反映出来了，每个资源都有一个统计信息，对应存储到Node上，但是上一级的信息会是下一级信息的一个统计。</p>
+<p>　　他们之间的继承关系，也侧面反映出来了，每个资源都有一个统计信息，对应存储到Node上，但是上一级的信息会是下一级信息的一个统计。</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-concept-of-entities/images/node.png" src="/images/default.jpg" alt="node结构图" />
@@ -1406,15 +1406,15 @@ public class StatisticNode implements Node {
   </li>
 </ul>
 
-<p>Metric 是 Sentinel 中用来进行实时数据统计的度量接口，node就是通过metric来进行数据统计的。而metric本身也并没有统计的能力，他也是通过Window来进行统计的。</p>
+<p>　　Metric 是 Sentinel 中用来进行实时数据统计的度量接口，node就是通过metric来进行数据统计的。而metric本身也并没有统计的能力，他也是通过Window来进行统计的。</p>
 
-<p>Metric有一个实现类：ArrayMetric，在ArrayMetric中主要是通过一个叫WindowLeapArray的对象进行窗口统计的。</p>
+<p>　　Metric有一个实现类：ArrayMetric，在ArrayMetric中主要是通过一个叫LeapArray<metricbucket>的对象进行窗口统计的。</metricbucket></p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-concept-of-entities/images/metric.png" src="/images/default.jpg" alt="metrics" />
 </p>
 
-<p>如果想要了解sentinel是如何计算度量统计数据的，需要深度LeapArray这个类。里面有很多方法值得学习的。我想抽时间学习一下他采用的<a href="https://www.zhihu.com/question/314669016">时间窗口算法</a>，然后再写一篇自己的理解吧。</p>
+<p>　　如果想要了解sentinel是如何计算度量统计数据的，需要深度LeapArray这个类。里面有很多方法值得学习的。我想抽时间学习一下他采用的<a href="https://www.zhihu.com/question/314669016">时间窗口算法</a>，然后再写一篇自己的理解吧。</p>
 
 <p>本文参考：</p>
 
@@ -1460,7 +1460,7 @@ public class StatisticNode implements Node {
 		<div>
 			<ul class="pager">
 
- 	<li class="previous"><a href="/tech/2019/09/24/01.html">&larr; 前一篇</a></li>
+ 	<li class="previous"><a href="/tech/2020/01/27/01.html">&larr; 前一篇</a></li>
 
 
 
