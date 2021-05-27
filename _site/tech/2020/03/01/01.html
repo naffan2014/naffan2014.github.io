@@ -1408,7 +1408,7 @@ public class StatisticNode implements Node {
 
 <p>Metric 是 Sentinel 中用来进行实时数据统计的度量接口，node就是通过metric来进行数据统计的。而metric本身也并没有统计的能力，他也是通过Window来进行统计的。</p>
 
-<p>Metric有一个实现类：ArrayMetric，在ArrayMetric中主要是通过一个叫WindowLeapArray的对象进行窗口统计的。</p>
+<p>Metric有一个实现类：ArrayMetric，在ArrayMetric中主要是通过一个叫LeapArray<metricbucket>的对象进行窗口统计的。</metricbucket></p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-concept-of-entities/images/metric.png" src="/images/default.jpg" alt="metrics" />
