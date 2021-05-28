@@ -9,8 +9,8 @@
 <meta property="og:title" content="sentinel中的滑动窗口算法实现" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。" />
-<meta property="og:description" content="在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。" />
+<meta name="description" content="　　在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。" />
+<meta property="og:description" content="　　在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。" />
 <link rel="canonical" href="https://naffan.cn/tech/2020/04/25/01.html" />
 <meta property="og:url" content="https://naffan.cn/tech/2020/04/25/01.html" />
 <meta property="og:site_name" content="拿饭网" />
@@ -24,7 +24,7 @@
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"headline":"sentinel中的滑动窗口算法实现","dateModified":"2020-04-25T00:00:00+08:00","datePublished":"2020-04-25T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2020/04/25/01.html"},"description":"在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。","@type":"BlogPosting","url":"https://naffan.cn/tech/2020/04/25/01.html","@context":"https://schema.org"}</script>
+{"headline":"sentinel中的滑动窗口算法实现","dateModified":"2020-04-25T00:00:00+08:00","datePublished":"2020-04-25T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2020/04/25/01.html"},"description":"　　在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。","@type":"BlogPosting","url":"https://naffan.cn/tech/2020/04/25/01.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -163,9 +163,9 @@ var _hmt = _hmt || [];
       </tr>
     </tbody>
   </table>
-</div><p>在上篇<a href="https://www.naffan.cn/tech/2020/03/01/01.html">《sentinel的几个实体分析》</a>的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。</p>
+</div><p>　　在上篇<a href="https://www.naffan.cn/tech/2020/03/01/01.html">《sentinel的几个实体分析》</a>的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。</p>
 
-<p>在上一篇<a href="https://www.naffan.cn/tech/2020/04/04/01.html">《sentinel降级背后的原理解析》</a>已经分析了sentinel是如何驱动的。在里面提到了有很多的slot按照顺序依次排列并运行的。所以，我们先来看一看这些数据是按照什么路径获取到的。那么，首先我们知道StatisticSlot是进行统计的。所以我们就要看看他的entry方法</p>
+<p>　　在上一篇<a href="https://www.naffan.cn/tech/2020/04/04/01.html">《sentinel降级背后的原理解析》</a>已经分析了sentinel是如何驱动的。在里面提到了有很多的slot按照顺序依次排列并运行的。所以，我们先来看一看这些数据是按照什么路径获取到的。那么，首先我们知道StatisticSlot是进行统计的。所以我们就要看看他的entry方法</p>
 
 <ul>
   <li>
@@ -212,7 +212,7 @@ public class StatisticSlot extends AbstractLinkedProcessorSlot&lt;DefaultNode&gt
 </code>
 </pre>
 
-<p>从上面代码，我们可知</p>
+<p>　　从上面代码，我们可知</p>
 
 <ol>
   <li>通过node中的当前的实时统计指标信息进行规则校验</li>
@@ -220,7 +220,7 @@ public class StatisticSlot extends AbstractLinkedProcessorSlot&lt;DefaultNode&gt
   <li>如果被block了或者出现异常了，则更新node中block的指标或异常指标</li>
 </ol>
 
-<p>从上面的代码中，可以清晰的看到所有的实时指标都是在node中进行的。我们以qps的指标进行分析，看sentinel是怎么统计出qps的。</p>
+<p>　　从上面的代码中，可以清晰的看到所有的实时指标都是在node中进行的。我们以qps的指标进行分析，看sentinel是怎么统计出qps的。</p>
 
 <hr />
 
@@ -255,13 +255,13 @@ public class DefaultNode extends StatisticNode {
 </code>
 </pre>
 
-<p>DefaultNode和ClusterNode有一些区别。</p>
+<p>　　DefaultNode和ClusterNode有一些区别。</p>
 
-<p>DefaultNode是保存着某个resource的某个context的实时指标。每个DefaultNode都指向一个ClusterNode，</p>
+<p>　　DefaultNode是保存着某个resource的某个context的实时指标。每个DefaultNode都指向一个ClusterNode，</p>
 
-<p>ClusterNode是保存着某个resource在所有的context中实时指标的总和。同样的resource会共享同一个ClusterNode，不管它在那个context中。</p>
+<p>　　ClusterNode是保存着某个resource在所有的context中实时指标的总和。同样的resource会共享同一个ClusterNode，不管它在那个context中。</p>
 
-<p>上面说了，最终都是执行的StatisticNode对象的addPassRequest方法：</p>
+<p>　　上面说了，最终都是执行的StatisticNode对象的addPassRequest方法：</p>
 
 <pre>
   <code class="language-java">public class StatisticNode implements Node {
@@ -382,7 +382,7 @@ public class OccupiableBucketLeapArray extends LeapArray&lt;MetricBucket&gt; {
 </code>
 </pre>
 
-<p>接着往下</p>
+<p>　　接着往下</p>
 
 <pre>
   <code class="language-java">
@@ -417,7 +417,7 @@ public class FutureBucketLeapArray extends LeapArray&lt;MetricBucket&gt; {
 </code>
 </pre>
 
-<p>调用了父构造方法。</p>
+<p>　　调用了父构造方法。</p>
 
 <pre>
   <code class="language-java">
@@ -468,9 +468,9 @@ public abstract class LeapArray&lt;T&gt; {
 </code>
 </pre>
 
-<p>这样ArrayMetric中就构造出了一个包含类内变量data 为LeapArray<metricbucket>的数组来了，最终以ArrayMetric返回。</metricbucket></p>
+<p>　　这样ArrayMetric中就构造出了一个包含类内变量data 为LeapArray<metricbucket>的数组来了，最终以ArrayMetric返回。</metricbucket></p>
 
-<p>然后，程序会一路进行下去，直到要进行实时的数据统计调用了，这里就是窗口算法的体现了。</p>
+<p>　　然后，程序会一路进行下去，直到要进行实时的数据统计调用了，这里就是窗口算法的体现了。</p>
 
 <pre>
   <code class="language-java">    /*
@@ -537,9 +537,9 @@ public abstract class LeapArray&lt;T&gt; {
 </code>
 </pre>
 
-<p>至此，就算出了QPS通过的，阻塞的，总数等指标了。上面的代码调用顺序不是线性的，简单的线性阅读肯定不能够掌握这里面的算法。就在我写这篇分析的时候，分析代码的时候都是跳来跳去，很容易把自己绕晕。所以，还是建议跟随者代码debug时，参照上面所说的进行阅读。这样效果要比较好。</p>
+<p>　　至此，就算出了QPS通过的，阻塞的，总数等指标了。上面的代码调用顺序不是线性的，简单的线性阅读肯定不能够掌握这里面的算法。就在我写这篇分析的时候，分析代码的时候都是跳来跳去，很容易把自己绕晕。所以，还是建议跟随者代码debug时，参照上面所说的进行阅读。这样效果要比较好。</p>
 
-<p>上面的发生时机，我来分析下。因为slot的排列顺序是这样的：</p>
+<p>　　上面的发生时机，我来分析下。因为slot的排列顺序是这样的：</p>
 
 <pre>
   <code># Sentinel default ProcessorSlots
@@ -554,13 +554,13 @@ com.alibaba.csp.sentinel.slots.block.degrade.DegradeSlot
 </code>
 </pre>
 
-<p>然后，根据调用栈来看。如图：</p>
+<p>　　然后，根据调用栈来看。如图：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08b7eabd850610f1ce0618960420870328013001388bd701.png" src="/images/default.jpg" alt="调用栈" />
 </p>
 
-<p>可以看到，滑动窗口发生的时间是在统计阶段。还没有到限流或者熔断的阶段。</p>
+<p>　　可以看到，滑动窗口发生的时间是在统计阶段。还没有到限流或者熔断的阶段。</p>
 
 		<!--分享按钮 开始-->
 		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">

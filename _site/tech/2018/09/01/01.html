@@ -141,11 +141,11 @@ var _hmt = _hmt || [];
   <p>Are you serious about network security? Then check out SSH, the Secure Shell, which provides key-based authentication and transparent encryption for your network connections</p>
 </blockquote>
 
-<p>在我们的工作中，版本控制工具通常会用git工具。当你公司用git的时候你肯定不想用你github的账号进行推送。反过来也一样。那我就说一下如何配置才能将不同git域分开来。</p>
+<p>　　在我们的工作中，版本控制工具通常会用git工具。当你公司用git的时候你肯定不想用你github的账号进行推送。反过来也一样。那我就说一下如何配置才能将不同git域分开来。</p>
 
-<p>首先，我默认读者具备SSH keys的知识。</p>
+<p>　　首先，我默认读者具备SSH keys的知识。</p>
 
-<p>在~/.ssh文件夹内有个config文件。这个文件就是用来实现多git账号共存的配置文件。</p>
+<p>　　在~/.ssh文件夹内有个config文件。这个文件就是用来实现多git账号共存的配置文件。</p>
 
 <pre><code class="language-bash"> Host github@github.com   //是git服务的主机
  HostName github.com    //git的域名
@@ -158,7 +158,7 @@ var _hmt = _hmt || [];
  IdentityFile ~/.ssh/id_rsa
 </code></pre>
 
-<p>然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。</p>
+<p>　　然后，我们还需要将这个配置加载到ssh-agent。用ssh-add命令。但是，这个命令只是暂时将sshkey添加到ssh agent当中。 重启电脑以后就会失效。所以我们需要添加-K 参数。让他添加到mac的keychain中。</p>
 
 
 		<!--分享按钮 开始-->

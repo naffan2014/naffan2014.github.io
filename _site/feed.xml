@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-05-27T18:39:52+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="https://naffan.cn/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2021/05/22/01</id><content type="html" xml:base="https://naffan.cn/thinking/2021/05/22/01.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-05-28T15:46:54+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="https://naffan.cn/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2021/05/22/01</id><content type="html" xml:base="https://naffan.cn/thinking/2021/05/22/01.html">&lt;blockquote&gt;
   &lt;p&gt;赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -834,9 +834,9 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;li&gt;
     &lt;h1 id=&quot;类加载机制&quot;&gt;类加载机制&lt;/h1&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="https://naffan.cn/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/07/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/07/01.html">&lt;p&gt;spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java运行时数据区</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="https://naffan.cn/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/07/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/07/01.html">&lt;p&gt;　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
 
-&lt;p&gt;首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
+&lt;p&gt;　　首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
 
 &lt;table&gt;
   &lt;thead&gt;
@@ -887,7 +887,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 	}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;根据传入的参数类型，通过getJavaType方法指定为databind的类型。&lt;/p&gt;
+&lt;p&gt;　　根据传入的参数类型，通过getJavaType方法指定为databind的类型。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
 	 * Returns the Jackson {@link JavaType} for the specific class.
@@ -913,7 +913,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 	}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;JavaType类属于com.fasterxml.jackson.databind包。它是一种令牌类的基类，用于保存信息和反序列化器的key。通过getJavaType方法经过反射来构造出指定的class。我们看到其中应用到了TypeFactory,用TypeFactory的作用就是快速的获取到clazz相对应的具体类型。&lt;/p&gt;
+&lt;p&gt;　　JavaType类属于com.fasterxml.jackson.databind包。它是一种令牌类的基类，用于保存信息和反序列化器的key。通过getJavaType方法经过反射来构造出指定的class。我们看到其中应用到了TypeFactory,用TypeFactory的作用就是快速的获取到clazz相对应的具体类型。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public final class TypeFactory implements java.io.Serializable
 {
@@ -1051,15 +1051,15 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;li&gt;Jackson2JsonReisSerializer(JavaType javaType)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;另一个构造方法，参数是JavaType类型。&lt;/p&gt;
+&lt;p&gt;　　另一个构造方法，参数是JavaType类型。&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;deserialize(@Nullable byte[] bytes)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;反序列化方法，可为null的byte数组为参数。如果是空或者null的话，返回null。否则，通过ObjectMapper将byte数组进行反序列化。&lt;/p&gt;
+&lt;p&gt;　　反序列化方法，可为null的byte数组为参数。如果是空或者null的话，返回null。否则，通过ObjectMapper将byte数组进行反序列化。&lt;/p&gt;
 
-&lt;p&gt;ObjectMapper提供读和写JSON的能力。不论是转成POJO还是从POJO转出，或者是转成JSON还是从JSON转出，还是一些相关的转化功能。ObjectMapper都可以高定制化的兼容不同种的JSON格式。&lt;/p&gt;
+&lt;p&gt;　　ObjectMapper提供读和写JSON的能力。不论是转成POJO还是从POJO转出，或者是转成JSON还是从JSON转出，还是一些相关的转化功能。ObjectMapper都可以高定制化的兼容不同种的JSON格式。&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;serialize(@Nullable Object t)&lt;/li&gt;
@@ -1071,7 +1071,7 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;li&gt;setObjectMapper(ObjectMapper objectMapper)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;这个方法比较有用，它可以用来自定义JSON序列化进程的。相关设置可以参见ObjectMapper.java中的方法。&lt;/p&gt;
+&lt;p&gt;　　这个方法比较有用，它可以用来自定义JSON序列化进程的。相关设置可以参见ObjectMapper.java中的方法。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;ObjectMapper mapper = new ObjectMapper();
 		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
@@ -1083,9 +1083,9 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;li&gt;getJavaType(Class&amp;lt;?&amp;gt; clazz)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;这个方法是被Jackson2JsonRedisSerializer方法调用的，用途就是返回指定class的jackson格式。&lt;/p&gt;
+&lt;p&gt;　　这个方法是被Jackson2JsonRedisSerializer方法调用的，用途就是返回指定class的jackson格式。&lt;/p&gt;
 
-&lt;p&gt;通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="https://naffan.cn/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/02/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
+&lt;p&gt;　　通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry><entry><title type="html">springboot的策略模式</title><link href="https://naffan.cn/tech/2021/05/02/01.html" rel="alternate" type="text/html" title="springboot的策略模式" /><published>2021-05-02T00:00:00+08:00</published><updated>2021-05-02T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/02/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/02/01.html">&lt;p&gt;策略模式的目的是将不同的策略封装起来，每个策略形成一个一个类文件。你可以进行任意的替换。策略模式遵循开闭原则，意即对扩展保持开放，对修改保持关闭。&lt;/p&gt;
 
 &lt;p&gt;当你用springboot的时候，会牵扯到如何将类委托给spring容器，如果你按照策略模式的传统写法，就会遇到类似问题。所以，我们应该将不同的策略实现公用的接口，也就是面向接口编程。&lt;/p&gt;
 
@@ -1197,17 +1197,19 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
   &lt;p&gt;我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;2021年的劳动节是自疫情之后中国的第一个能够群体聚集的首个节日。为了这个节日中国政府将五一前后的周末各调休了一天，用来凑出这次有五天假期的劳动节。就是因为这五天的假期，全国人名举国出游。很庆幸，我们没有参与其中，我们只是全程在抖音上参观景点的盛景。看着视频里“我后悔了，不想出来玩了，我想回家”，心中虽有偷着乐的愉悦心情，但也还是计划着接下来的几天出去走走，只是仅在北京周边自驾玩一玩。&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08e4d4b5840610c3b62618dc0720de0d280130013886ed03.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;晚饭&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;五一前一周末我从网上订购了一款4人帐篷以及户外炊具，就想着用特斯拉载着家人去环郊，找一片草坪停下车来，打开帐篷，烧着咖啡，看着风景，带上一本好书，悠闲的享受整个下午。&lt;/p&gt;
+&lt;p&gt;　　2021年的劳动节是自疫情之后中国的第一个能够群体聚集的首个节日。为了这个节日中国政府将五一前后的周末各调休了一天，用来凑出这次有五天假期的劳动节。就是因为这五天的假期，全国人名举国出游。很庆幸，我们没有参与其中，我们只是全程在抖音上参观景点的盛景。看着视频里“我后悔了，不想出来玩了，我想回家”，心中虽有偷着乐的愉悦心情，但也还是计划着接下来的几天出去走走，只是仅在北京周边自驾玩一玩。&lt;/p&gt;
 
-&lt;p&gt;五一当天，雷打不动的还是固定节目-跟家人们吃饭。说心里话，这种正日子一起坐下来吃个饭，聊聊天，悠闲的慢生活是最佳选择。但是，妈妈偏偏把之前商量好的包饺子改成了做家常饭。妈妈跟我说回来吃一次不容易，还是想给我做一些我喜欢吃的菜。结果是，大家坐在一起吃饭，还不到10分钟就已经吃完了，加上收拾碗筷和擦桌子洗碗，总共加起来不超过20分钟。就这样，难得的中午时光被这么临时的改动浪费了。其实，在前几天我已经跟他们沟通叫上双方的服务一起在我家的小院烤肉，可是在做决定的那天下午，手机的头条发来五一会有8级大风，于是我才同意的改为在705吃饺子。这么说，其实这都是天意。我也没得办法。&lt;/p&gt;
+&lt;p&gt;　　五一前一周末我从网上订购了一款4人帐篷以及户外炊具，就想着用特斯拉载着家人去环郊，找一片草坪停下车来，打开帐篷，烧着咖啡，看着风景，带上一本好书，悠闲的享受整个下午。&lt;/p&gt;
 
-&lt;p&gt;下午，父母是需要睡午觉的，但是我和媳妇不困，不想睡觉了。于是，我提议我们俩去新华百货转一转，让父母睡完觉再跟我联系，到时候一起赶赴大家庭的晚餐聚会。跟媳妇转商场没有什么说的，就是逛和买。但想喝一杯DQ的脏脏奶昔，结果发现到了新街口豁口，DQ却在装修，查了一下最近的DQ门店远在2.4km以外，于是作罢。媳妇提议去对面的咖啡店喝杯咖啡，因为之前媳妇和她闺蜜去喝过，感觉很好喝，所以她建议我跟她再去一次。首先我是拒绝的，但是我也没有什么好的建议，于是妥协了。不过，也是因为这次妥协，我也真正意义的喝上了一杯手磨的咖啡。也学会了一些品咖啡的方法。咖啡的苦要像巧克力的苦，酸要像果酸，咽下去的时候喉咙会感受到回甘。老婆给我点的咖啡应该还是不错的，只是自己没有经验，我也就学着尝试品尝了。回想之前在回龙观的酒吧，老板教我品威士忌，两者相比较来说方法有些相像。&lt;/p&gt;
+&lt;p&gt;　　五一当天，雷打不动的还是固定节目-跟家人们吃饭。说心里话，这种正日子一起坐下来吃个饭，聊聊天，悠闲的慢生活是最佳选择。但是，妈妈偏偏把之前商量好的包饺子改成了做家常饭。妈妈跟我说回来吃一次不容易，还是想给我做一些我喜欢吃的菜。结果是，大家坐在一起吃饭，还不到10分钟就已经吃完了，加上收拾碗筷和擦桌子洗碗，总共加起来不超过20分钟。就这样，难得的中午时光被这么临时的改动浪费了。其实，在前几天我已经跟他们沟通叫上双方的服务一起在我家的小院烤肉，可是在做决定的那天下午，手机的头条发来五一会有8级大风，于是我才同意的改为在705吃饺子。这么说，其实这都是天意。我也没得办法。&lt;/p&gt;
 
-&lt;p&gt;晚上，大家的聚会还是比较圆满的，只是餐馆包间的桌子比较小。很多人都是侧着身吃饭，这可把我的三姨尴尬坏了，看得出来三姨对这次选地的不满意，但是我也不想让三姨觉得难过，所以还是以很好吃夸赞了这次晚饭，只是我能感觉的出来三姨知道我是在宽慰她。&lt;/p&gt;
+&lt;p&gt;　　下午，父母是需要睡午觉的，但是我和媳妇不困，不想睡觉了。于是，我提议我们俩去新华百货转一转，让父母睡完觉再跟我联系，到时候一起赶赴大家庭的晚餐聚会。跟媳妇转商场没有什么说的，就是逛和买。但想喝一杯DQ的脏脏奶昔，结果发现到了新街口豁口，DQ却在装修，查了一下最近的DQ门店远在2.4km以外，于是作罢。媳妇提议去对面的咖啡店喝杯咖啡，因为之前媳妇和她闺蜜去喝过，感觉很好喝，所以她建议我跟她再去一次。首先我是拒绝的，但是我也没有什么好的建议，于是妥协了。不过，也是因为这次妥协，我也真正意义的喝上了一杯手磨的咖啡。也学会了一些品咖啡的方法。咖啡的苦要像巧克力的苦，酸要像果酸，咽下去的时候喉咙会感受到回甘。老婆给我点的咖啡应该还是不错的，只是自己没有经验，我也就学着尝试品尝了。回想之前在回龙观的酒吧，老板教我品威士忌，两者相比较来说方法有些相像。&lt;/p&gt;
 
-&lt;p&gt;回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">阴平古道，邓艾灭蜀</title><link href="https://naffan.cn/thinking/2020/05/16/01.html" rel="alternate" type="text/html" title="阴平古道，邓艾灭蜀" /><published>2020-05-16T00:00:00+08:00</published><updated>2020-05-16T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2020/05/16/01</id><content type="html" xml:base="https://naffan.cn/thinking/2020/05/16/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　晚上，大家的聚会还是比较圆满的，只是餐馆包间的桌子比较小。很多人都是侧着身吃饭，这可把我的三姨尴尬坏了，看得出来三姨对这次选地的不满意，但是我也不想让三姨觉得难过，所以还是以很好吃夸赞了这次晚饭，只是我能感觉的出来三姨知道我是在宽慰她。&lt;/p&gt;
+
+&lt;p&gt;　　回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">阴平古道，邓艾灭蜀</title><link href="https://naffan.cn/thinking/2020/05/16/01.html" rel="alternate" type="text/html" title="阴平古道，邓艾灭蜀" /><published>2020-05-16T00:00:00+08:00</published><updated>2020-05-16T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2020/05/16/01</id><content type="html" xml:base="https://naffan.cn/thinking/2020/05/16/01.html">&lt;blockquote&gt;
   &lt;p&gt;早入蜀都,先到先得。偷渡阴平，直取蜀汉！&lt;/p&gt;
 &lt;/blockquote&gt;
 
