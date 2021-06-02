@@ -4,26 +4,27 @@
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Page 4 of 4 for 拿饭-技术总结 - page 4 | 拿饭网</title>
+<title>拿饭网对java的classLoader分析 | 拿饭网</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="拿饭-技术总结 - page 4" />
+<meta property="og:title" content="拿饭网对java的classLoader分析" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
-<meta property="og:description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
-<link rel="canonical" href="http://localhost:4000/tech/page/4/" />
-<meta property="og:url" content="http://localhost:4000/tech/page/4/" />
+<meta name="description" content="asdf" />
+<meta property="og:description" content="asdf" />
+<link rel="canonical" href="http://localhost:4000/tech/2021/06/01/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2021/06/01/01.html" />
 <meta property="og:site_name" content="拿饭网" />
-<link rel="prev" href="http://localhost:4000/tech/page/3/" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-06-01T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="拿饭-技术总结 - page 4" />
+<meta property="twitter:title" content="拿饭网对java的classLoader分析" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"headline":"拿饭-技术总结 - page 4","author":{"@type":"Person","name":"张一帆"},"description":"拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。","@type":"WebPage","url":"http://localhost:4000/tech/page/4/","@context":"https://schema.org"}</script>
+{"headline":"拿饭网对java的classLoader分析","dateModified":"2021-06-01T00:00:00+08:00","datePublished":"2021-06-01T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2021/06/01/01.html"},"description":"asdf","@type":"BlogPosting","url":"http://localhost:4000/tech/2021/06/01/01.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,57 +104,103 @@ var _hmt = _hmt || [];
 </div>
 
       <div class="container">
-        <div class="container" style="width:95%;">
-  <div id="article">
-    <center><h1>技术总结</h1></center>
-    <ul class="posts">
-      
-      	<li>
-          <span>
-            <a href="/tech/2016/11/28/2.html">publish-gh-pages.sh解读</a>
-            <time class="pull-right post-list"><h4>11/28/16</h4></time>
-          </span>
-        </li>
-		
-      	<li>
-          <span>
-            <a href="/tech/2016/11/28/1.html">在Github-Pages上应用jekyll博客插件</a>
-            <time class="pull-right post-list"><h4>11/28/16</h4></time>
-          </span>
-        </li>
-		
-      	<li>
-          <span>
-            <a href="/tech/2016/09/09/1.html">painter12在mac上解决延迟</a>
-            <time class="pull-right post-list"><h4>09/09/16</h4></time>
-          </span>
-        </li>
-		
-      	<li>
-          <span>
-            <a href="/tech/2016/09/07/2.html">让MWeb支持甘特图的办法（2.0以上版本</a>
-            <time class="pull-right post-list"><h4>09/07/16</h4></time>
-          </span>
-        </li>
-		
-      	<li>
-          <span>
-            <a href="/tech/2016/09/07/1.html">WdatePicker手册</a>
-            <time class="pull-right post-list"><h4>09/07/16</h4></time>
-          </span>
-        </li>
-		
-    </ul>
-    <center>
-    <ul class="pagination">
-      
-        <li><a href="/tech/page/3/">上一页</a></li>
-      
-      
-      
-    </ul>
-  </center>
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">拿饭网对java的classLoader分析</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2021年06月01日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<p>asdf</p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/thinking/2021/05/22/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next disabled"><a href="javascript:void(0);">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2021/06/01/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
 </div>
+
+
       </div>
       <div class="container">
   <footer>

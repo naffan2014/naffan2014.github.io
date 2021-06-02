@@ -162,16 +162,19 @@ var _hmt = _hmt || [];
               <a href="#tocAnchor-1-5"><span class="tocnumber">5</span> <span class="toctext">虚拟机栈</span></a>
             </li>
             <li class="toc_level-1 toc_section-6">
-              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">JMM Java内存模型</span></a>
+              <a href="#tocAnchor-1-6"><span class="tocnumber">6</span> <span class="toctext">本地方法栈</span></a>
             </li>
             <li class="toc_level-1 toc_section-7">
-              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">重排序和happens-before规则</span></a>
+              <a href="#tocAnchor-1-7"><span class="tocnumber">7</span> <span class="toctext">JMM Java内存模型</span></a>
             </li>
             <li class="toc_level-1 toc_section-8">
-              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">堆的内存划分及GC垃圾回收</span></a>
+              <a href="#tocAnchor-1-8"><span class="tocnumber">8</span> <span class="toctext">重排序和happens-before规则</span></a>
             </li>
             <li class="toc_level-1 toc_section-9">
-              <a href="#tocAnchor-1-9"><span class="tocnumber">9</span> <span class="toctext">JVM优化</span></a>
+              <a href="#tocAnchor-1-9"><span class="tocnumber">9</span> <span class="toctext">堆的内存划分及GC垃圾回收</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-10">
+              <a href="#tocAnchor-1-10"><span class="tocnumber">10</span> <span class="toctext">JVM优化</span></a>
             </li>
           </ul>
         </td>
@@ -454,11 +457,190 @@ public class Demo {
 
 <p>　　在图中的最后，我们看到ireturn语句，他的意思就是将结果返回。具体返回到那里呢，程序会去程序计数器中查找上一个栈帧的地址，结果就是返回给这个栈帧的。原理是，这段代码是首先调用的main函数，然后调用的math方法。所以，程序计数器会保存着这个关系，同样每段代码的顺序也会被程序计数器记录住。也就说，线程中程序运行到了哪里和从哪运行的都会在这个地方记录着。如果我们考虑多线程的情况，在一个线程运行过程中cpu的时间片到了，于是cpu把下一个时间片分给了新的线程。这个时候程序计数器也会记录住前一个线程运行到了哪里，新的线程从原先旧的线程中何时开始的，结束完成后还需要跳回旧线程中继续执行代码。</p>
 
+<p>如果我们把程序改成这样：</p>
+
+<pre>
+  <code class="language-java">public class Demo {
+
+    public int math() {
+        int a = 1;
+        int b = 2;
+        Object obj = new Object(); //加入个实例
+        int c = (a + b) * 10;
+        return c;
+    }
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+        demo.math();
+    }
+}
+
+</code>
+</pre>
+
+<p>我们通过<code>javap -v Demo</code>来看看,可以看到输出的信息比上边的多了很多。</p>
+
+<pre>
+  <code class="language-java">Classfile Demo.class
+  Last modified 2021-5-11; size 599 bytes
+  MD5 checksum b0253c6a0b3c51e6d1a72e8cc76da634
+  Compiled from "Demo.java"
+public class Demo
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #2.#28         // java/lang/Object."&lt;init&gt;":()V
+   #2 = Class              #29            // java/lang/Object
+   #3 = Class              #30            // Demo
+   #4 = Methodref          #3.#28         // Demo."&lt;init&gt;":()V
+   #5 = Methodref          #3.#31         // Demo.math:()I
+   #6 = Utf8               &lt;init&gt;
+   #7 = Utf8               ()V
+   #8 = Utf8               Code
+   #9 = Utf8               LineNumberTable
+  #10 = Utf8               LocalVariableTable
+  #11 = Utf8               this
+  #12 = Utf8               LDemo;
+  #13 = Utf8               math
+  #14 = Utf8               ()I
+  #15 = Utf8               a
+  #16 = Utf8               I
+  #17 = Utf8               b
+  #18 = Utf8               obj
+  #19 = Utf8               Ljava/lang/Object;
+  #20 = Utf8               c
+  #21 = Utf8               main
+  #22 = Utf8               ([Ljava/lang/String;)V
+  #23 = Utf8               args
+  #24 = Utf8               [Ljava/lang/String;
+  #25 = Utf8               demo
+  #26 = Utf8               SourceFile
+  #27 = Utf8               Demo.java
+  #28 = NameAndType        #6:#7          // "&lt;init&gt;":()V
+  #29 = Utf8               java/lang/Object
+  #30 = Utf8               Demo
+  #31 = NameAndType        #13:#14        // math:()I
+{
+  public Demo();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V
+         4: return
+      LineNumberTable:
+        line 6: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   LDemo;
+
+  public int math();
+    descriptor: ()I
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=5, args_size=1
+         0: iconst_1
+         1: istore_1
+         2: iconst_2
+         3: istore_2
+         4: new           #2                  // class java/lang/Object
+         7: dup
+         8: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V
+        11: astore_3
+        12: iload_1
+        13: iload_2
+        14: iadd
+        15: bipush        10
+        17: imul
+        18: istore        4
+        20: iload         4
+        22: ireturn
+      LineNumberTable:
+        line 9: 0
+        line 10: 2
+        line 11: 4
+        line 12: 12
+        line 13: 20
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      23     0  this   LDemo;
+            2      21     1     a   I
+            4      19     2     b   I
+           12      11     3   obj   Ljava/lang/Object;
+           20       3     4     c   I
+
+  public static void main(java.lang.String[]);
+    descriptor: ([Ljava/lang/String;)V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: new           #3                  // class Demo
+         3: dup
+         4: invokespecial #4                  // Method "&lt;init&gt;":()V
+         7: astore_1
+         8: aload_1
+         9: invokevirtual #5                  // Method math:()I 
+        12: pop
+        13: return
+      LineNumberTable:
+        line 17: 0
+        line 18: 8
+        line 19: 13
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      14     0  args   [Ljava/lang/String;
+            8       6     1  demo   LDemo;
+}
+SourceFile: "Demo.java"
+
+</code>
+</pre>
+
+<p>因为上边的输出太多，本来我想写在代码旁边用注释的形式备注，但是因为顺序是跳跃的，所以用这种方法不太好解释。所以，我还是准备写在下边，因为这样的形式可以保证时间线清晰。</p>
+
+<p>首先，我们发现在代码编译期，就有了<code>Constant pool</code>常量池了。那常量池是什么呢？他是java文件被编译成.class文件时，存储这些class文件的资源库。其主要存放两大类常亮：<code>字面量</code>（文本字符串、声明为final的常量值等）和<code>符号引用</code>（有三类：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符）。</p>
+
+<p>除了常量池以外，还有个运行时常量池。运行时常量池是方法区的一部分，class文件中的常量池在类加载后进入方法区的运行时常量池存放。他具有动态性，为什么这么说呢？因为class文件一旦编译后，class常量池就确定了。但是运行时常量池在运行期间有可能有新的常量存入池中。</p>
+
+<p>在main()中，我们看到<code>9: invokevirtual #5</code>这行，这代表我们调用了constant pool中的#5。#5代表这是一个方法引用，在虚拟机栈的栈帧的局部变量表中，就会生成一个ref并指向方法区中的Demo.math()，通过符号引用就实现了直接引用。其他的同理。</p>
+
 <hr />
 
 <ul>
   <li>
-    <h1 id="tocAnchor-1-6">JMM Java内存模型</h1>
+    <h1 id="tocAnchor-1-6">本地方法栈</h1>
+  </li>
+</ul>
+
+<p>　　本地方法栈和虚拟机方法栈看起来感觉很像是不是？没错，其实就是很像，只是本地方法栈是由本地系统控制的方法栈。作为java程序员你并不能看到这个栈实际发生了什么，因为系统属于底层，底层是由C写的。那java什么时候会触发系统级的指令呢？让我们看下thread的实现吧。</p>
+
+<pre>
+  <code class="language-java">    //src.zip/java/lang/Thread
+    public class Thread implements Runnable {
+    
+        …………
+        
+        private native void start0();
+        
+        public static native Thread currentThread();
+        
+        public static native void yield();
+        
+        …………
+    }
+</code>
+</pre>
+
+<p>　　我们可以看到很多个native修饰的方法，java中会用这个关键词来修饰那些调用底层C方法的方法。本地方法栈就是为了这些方法而存在的。意思就是通过系统级方法来实现java想要实现的功能，所以本地方法栈被设计到了JVM中。</p>
+
+<hr />
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-7">JMM Java内存模型</h1>
   </li>
 </ul>
 
@@ -484,7 +666,7 @@ public class Demo {
 
 <ul>
   <li>
-    <h1 id="tocAnchor-1-7">重排序和happens-before规则</h1>
+    <h1 id="tocAnchor-1-8">重排序和happens-before规则</h1>
   </li>
 </ul>
 
@@ -540,7 +722,7 @@ public class Demo {
 
 <ul>
   <li>
-    <h1 id="tocAnchor-1-8">堆的内存划分及GC垃圾回收</h1>
+    <h1 id="tocAnchor-1-9">堆的内存划分及GC垃圾回收</h1>
   </li>
 </ul>
 
@@ -550,7 +732,7 @@ public class Demo {
 
 <ul>
   <li>
-    <h1 id="tocAnchor-1-9">JVM优化</h1>
+    <h1 id="tocAnchor-1-10">JVM优化</h1>
   </li>
 </ul>
 

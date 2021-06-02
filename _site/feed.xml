@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-05-31T22:49:44+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="http://localhost:4000/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2021/05/22/01</id><content type="html" xml:base="http://localhost:4000/thinking/2021/05/22/01.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-06-02T15:50:57+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">拿饭网对java的classLoader分析</title><link href="http://localhost:4000/tech/2021/06/01/01.html" rel="alternate" type="text/html" title="拿饭网对java的classLoader分析" /><published>2021-06-01T00:00:00+08:00</published><updated>2021-06-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/06/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/06/01/01.html">&lt;p&gt;asdf&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">asdf</summary></entry><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="http://localhost:4000/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2021/05/22/01</id><content type="html" xml:base="http://localhost:4000/thinking/2021/05/22/01.html">&lt;blockquote&gt;
   &lt;p&gt;赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1050,6 +1050,179 @@ public class Demo {
 
 &lt;p&gt;　　在图中的最后，我们看到ireturn语句，他的意思就是将结果返回。具体返回到那里呢，程序会去程序计数器中查找上一个栈帧的地址，结果就是返回给这个栈帧的。原理是，这段代码是首先调用的main函数，然后调用的math方法。所以，程序计数器会保存着这个关系，同样每段代码的顺序也会被程序计数器记录住。也就说，线程中程序运行到了哪里和从哪运行的都会在这个地方记录着。如果我们考虑多线程的情况，在一个线程运行过程中cpu的时间片到了，于是cpu把下一个时间片分给了新的线程。这个时候程序计数器也会记录住前一个线程运行到了哪里，新的线程从原先旧的线程中何时开始的，结束完成后还需要跳回旧线程中继续执行代码。&lt;/p&gt;
 
+&lt;p&gt;如果我们把程序改成这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class Demo {
+
+    public int math() {
+        int a = 1;
+        int b = 2;
+        Object obj = new Object(); //加入个实例
+        int c = (a + b) * 10;
+        return c;
+    }
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+        demo.math();
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们通过&lt;code&gt;javap -v Demo&lt;/code&gt;来看看,可以看到输出的信息比上边的多了很多。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;Classfile Demo.class
+  Last modified 2021-5-11; size 599 bytes
+  MD5 checksum b0253c6a0b3c51e6d1a72e8cc76da634
+  Compiled from &quot;Demo.java&quot;
+public class Demo
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #2.#28         // java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
+   #2 = Class              #29            // java/lang/Object
+   #3 = Class              #30            // Demo
+   #4 = Methodref          #3.#28         // Demo.&quot;&amp;lt;init&amp;gt;&quot;:()V
+   #5 = Methodref          #3.#31         // Demo.math:()I
+   #6 = Utf8               &amp;lt;init&amp;gt;
+   #7 = Utf8               ()V
+   #8 = Utf8               Code
+   #9 = Utf8               LineNumberTable
+  #10 = Utf8               LocalVariableTable
+  #11 = Utf8               this
+  #12 = Utf8               LDemo;
+  #13 = Utf8               math
+  #14 = Utf8               ()I
+  #15 = Utf8               a
+  #16 = Utf8               I
+  #17 = Utf8               b
+  #18 = Utf8               obj
+  #19 = Utf8               Ljava/lang/Object;
+  #20 = Utf8               c
+  #21 = Utf8               main
+  #22 = Utf8               ([Ljava/lang/String;)V
+  #23 = Utf8               args
+  #24 = Utf8               [Ljava/lang/String;
+  #25 = Utf8               demo
+  #26 = Utf8               SourceFile
+  #27 = Utf8               Demo.java
+  #28 = NameAndType        #6:#7          // &quot;&amp;lt;init&amp;gt;&quot;:()V
+  #29 = Utf8               java/lang/Object
+  #30 = Utf8               Demo
+  #31 = NameAndType        #13:#14        // math:()I
+{
+  public Demo();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
+         4: return
+      LineNumberTable:
+        line 6: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   LDemo;
+
+  public int math();
+    descriptor: ()I
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=5, args_size=1
+         0: iconst_1
+         1: istore_1
+         2: iconst_2
+         3: istore_2
+         4: new           #2                  // class java/lang/Object
+         7: dup
+         8: invokespecial #1                  // Method java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
+        11: astore_3
+        12: iload_1
+        13: iload_2
+        14: iadd
+        15: bipush        10
+        17: imul
+        18: istore        4
+        20: iload         4
+        22: ireturn
+      LineNumberTable:
+        line 9: 0
+        line 10: 2
+        line 11: 4
+        line 12: 12
+        line 13: 20
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      23     0  this   LDemo;
+            2      21     1     a   I
+            4      19     2     b   I
+           12      11     3   obj   Ljava/lang/Object;
+           20       3     4     c   I
+
+  public static void main(java.lang.String[]);
+    descriptor: ([Ljava/lang/String;)V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: new           #3                  // class Demo
+         3: dup
+         4: invokespecial #4                  // Method &quot;&amp;lt;init&amp;gt;&quot;:()V
+         7: astore_1
+         8: aload_1
+         9: invokevirtual #5                  // Method math:()I 
+        12: pop
+        13: return
+      LineNumberTable:
+        line 17: 0
+        line 18: 8
+        line 19: 13
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      14     0  args   [Ljava/lang/String;
+            8       6     1  demo   LDemo;
+}
+SourceFile: &quot;Demo.java&quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;因为上边的输出太多，本来我想写在代码旁边用注释的形式备注，但是因为顺序是跳跃的，所以用这种方法不太好解释。所以，我还是准备写在下边，因为这样的形式可以保证时间线清晰。&lt;/p&gt;
+
+&lt;p&gt;首先，我们发现在代码编译期，就有了&lt;code&gt;Constant pool&lt;/code&gt;常量池了。那常量池是什么呢？他是java文件被编译成.class文件时，存储这些class文件的资源库。其主要存放两大类常亮：&lt;code&gt;字面量&lt;/code&gt;（文本字符串、声明为final的常量值等）和&lt;code&gt;符号引用&lt;/code&gt;（有三类：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符）。&lt;/p&gt;
+
+&lt;p&gt;除了常量池以外，还有个运行时常量池。运行时常量池是方法区的一部分，class文件中的常量池在类加载后进入方法区的运行时常量池存放。他具有动态性，为什么这么说呢？因为class文件一旦编译后，class常量池就确定了。但是运行时常量池在运行期间有可能有新的常量存入池中。&lt;/p&gt;
+
+&lt;p&gt;在main()中，我们看到&lt;code&gt;9: invokevirtual #5&lt;/code&gt;这行，这代表我们调用了constant pool中的#5。#5代表这是一个方法引用，在虚拟机栈的栈帧的局部变量表中，就会生成一个ref并指向方法区中的Demo.math()，通过符号引用就实现了直接引用。其他的同理。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h1 id=&quot;本地方法栈&quot;&gt;本地方法栈&lt;/h1&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;　　本地方法栈和虚拟机方法栈看起来感觉很像是不是？没错，其实就是很像，只是本地方法栈是由本地系统控制的方法栈。作为java程序员你并不能看到这个栈实际发生了什么，因为系统属于底层，底层是由C写的。那java什么时候会触发系统级的指令呢？让我们看下thread的实现吧。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    //src.zip/java/lang/Thread
+    public class Thread implements Runnable {
+    
+        …………
+        
+        private native void start0();
+        
+        public static native Thread currentThread();
+        
+        public static native void yield();
+        
+        …………
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　我们可以看到很多个native修饰的方法，java中会用这个关键词来修饰那些调用底层C方法的方法。本地方法栈就是为了这些方法而存在的。意思就是通过系统级方法来实现java想要实现的功能，所以本地方法栈被设计到了JVM中。&lt;/p&gt;
+
 &lt;hr /&gt;
 
 &lt;ul&gt;
@@ -1543,63 +1716,4 @@ public class BStrategy implements ICreateOrderAndMissionStrategy {
 
 &lt;p&gt;　　晚上，大家的聚会还是比较圆满的，只是餐馆包间的桌子比较小。很多人都是侧着身吃饭，这可把我的三姨尴尬坏了，看得出来三姨对这次选地的不满意，但是我也不想让三姨觉得难过，所以还是以很好吃夸赞了这次晚饭，只是我能感觉的出来三姨知道我是在宽慰她。&lt;/p&gt;
 
-&lt;p&gt;　　回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry><entry><title type="html">阴平古道，邓艾灭蜀</title><link href="http://localhost:4000/thinking/2020/05/16/01.html" rel="alternate" type="text/html" title="阴平古道，邓艾灭蜀" /><published>2020-05-16T00:00:00+08:00</published><updated>2020-05-16T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2020/05/16/01</id><content type="html" xml:base="http://localhost:4000/thinking/2020/05/16/01.html">&lt;blockquote&gt;
-  &lt;p&gt;早入蜀都,先到先得。偷渡阴平，直取蜀汉！&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　这是三国杀中邓艾的武将台词。从这两句中我感受最多的是一种豪言壮志，和一丝凄凉。一个为魏国，一个为蜀国。&lt;/p&gt;
-
-&lt;p&gt;　　不知什么时候，我了解三国后就把蜀国当做了三国的主角，魏国当成了三国的反派，而吴国只是一个配角，但是在读完了关羽败走麦城后，我把吴国定性为了非盗既奸的小人国家。这些都是我个人的主观色彩使然，其实在漫漫的历史长河中，任何人任何事都有两面性，历史不是被任何一个人任何一件事就能够主导或者改变的。三国中有很多名场面，很多都耳熟能详，我也略知一二。但是，今天我不知道哪来的兴趣，想了解一下让蜀国的灭亡直接的战役，想看看这场战役中到底是谁占有举足轻重的作用。&lt;/p&gt;
-
-&lt;p&gt;　　我18年去过重庆和成都，对当地的地形有了一定的了解，我每次去重庆的时候都要坐一夜的火车，但凡白天我看到的都是连续的隧道，正因为这里的山多，所以我们要进入四川就要穿过众多的山脉，相比于重庆来说，成都的地形较为平坦。这种地势在今天看来当然已经有科技帮我们客服了这种物理上的限制，但是对于古代的人们，可不会轻易的选择凿山穿洞的方法向前进行。然而，当时邓艾灭蜀打造的阴平小道是怎么实现的？这个问题让我颇感兴趣。&lt;/p&gt;
-
-&lt;p&gt;　　历史上讲魏国攻打蜀国（公元263年秋）时，钟会带领20（有说10万）万大军，因剑门关是进入成都平原的最后一道重要关隘，所以被姜维死死地挡在了剑阁之外。因为，一般入蜀只有这条道可以通过，原因是周围山脉层峦叠嶂。就算钟会有百万雄师，也只能挨个从剑阁通过。那么剑阁这个地方到底长什么样子呢？&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;何为剑阁道？剑阁道，属金牛道（石牛道）南段。其行程是从昭化（葭萌关）越牛头山，入剑门至剑阁县。此段乃石牛道上有名的险峻去处，约100公里，沿途坡陡路险，十分难行。特别是未入剑门关前的15公里，原本无路，三国时，诸葛亮北伐在峭壁悬崖上修了15公里阁道，剑阁道也由此而得名。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://gss0.baidu.com/70cFfyinKgQFm2e88IuM_a/baike/pic/item/1e30e924b899a9012afdc0c314950a7b0308f57f.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;剑门关&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08d1bb848506108ba32b18ee04209906280130013881bc02.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;剑门关&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　这就是剑门关，被誉为“蜀北之屏障，两川之咽喉”的雄关险隘。目前剑门关是我国5A级旅游景区，国家级风景名胜区，全国100个红色经典旅游景区之一，已列入世界文化遗产预备名单。剑门关两边有着大小剑山72峰，峰峦叠嶂，近处是刀削斧劈似的悬崖峭壁。古蜀道穿过关楼，厚重的青石板沿着山壁一级一级伸向远方。仰望关搂，耳边的风声仿佛成了万人攻关的呐喊声。&lt;/p&gt;
-
-&lt;p&gt;　　就是这么一个极其重要的战略宝地，易守难攻，那为啥蜀国还是被邓艾掏了老窝了呢？这就要说到邓艾的丰功伟绩了，这就是偷渡阴平了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3c584850610a4931618ff0420bf032801300138d28802.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;灭蜀路线图&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　从图中，我们可以看到。魏国大军分为三路，分别由邓艾，诸葛绪，钟会进攻蜀都。中间的军事过程可以参见下面的这个视频。p.s.这里的诸葛绪因为退后30里让姜维南下的事让他躲过了一劫，最终是这三个人里面下场最好的人。&lt;/p&gt;
-&lt;div align=&quot;middle&quot;&gt;
-&lt;script&gt;
-	document.write(&quot;&lt;iframe src='//player.bilibili.com/player.html?aid=413378551&amp;bvid=BV1FV411y7jP&amp;cid=197675942&amp;page=1'allowfullscreen='true'&gt; &lt;/iframe&gt;&quot;);
-&lt;/script&gt;
-&lt;/div&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;如果我是邓艾，当时我会怎么办？&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　当时时局姜维正在迎战邓艾，邓艾位于进军路线的西头。诸葛绪位于中间向桥头进军，意图与邓艾前后夹击姜维。钟会在最东边，钟会是第一次带重兵打仗，是当时进军路线最好，最有可能攻入蜀都的。当姜维得知汉中被钟会攻破后，马上掉头去剑阁防守。由于原来是邓艾牵制姜维，可现在邓艾被凉在旁边了，眼前的方向貌似只有追着姜维去剑阁这一条路线了。&lt;/p&gt;
-
-&lt;p&gt;　　接下来我对比一下当时的&lt;a href=&quot;https://baike.baidu.com/item/%E9%82%93%E8%89%BE/6770?fr=aladdin&quot;&gt;邓艾&lt;/a&gt;和&lt;a href=&quot;https://baike.baidu.com/item/%E9%92%9F%E4%BC%9A/18087?fr=aladdin&quot;&gt;钟会&lt;/a&gt;身世经历。可以看到，钟会从小生活的环境要比邓艾好且有才数技艺，博学多闻，尤其精通玄学，弱冠（20岁）时就与名士、玄学代表人物王弼并知名。相反邓艾幼年丧父，出身卑微，年幼屯田，但受到了良好的教育。典故有一幕&lt;code&gt;邓艾喜欢军事。每见高山大川，都要在那里勘察地形，指划军营处所，遭别人讥笑也不介意。&lt;/code&gt;我想邓艾最终偷渡阴平跟他一直喜欢勘探地形有极大的关系。&lt;/p&gt;
-
-&lt;p&gt;　　如果我是邓艾，在知道如果沿着路去追杀姜维面对的只有一种结果就是和钟会一块被姜维挡在剑阁之外，最终会因粮草短缺而退兵。而蜀军此时会将重兵屯于剑阁之后，即使攻破剑阁到时候面临的仍将是一场恶斗。我相信当时邓艾的军队一定会有密探在蜀国内部（双方都有间谍，这很正常），他肯定知道蜀国国君幼小，奸臣当道，国家也腐败。所以，如果能够跨过敌军绕道背后一定能够直取蜀都。那样擒贼先擒王，先到就先得了。而阴平这个地方地势凶险蜀国一定不会排重兵把守，所以要是我我一定想办法从阴平这修一条小道绕过蜀国重兵，直接来到绵竹。邓艾从小喜欢勘探地形这个特点天然的兼容这套方案啊。所以与其老老实实的失败还不如出其不意呢，万一失败了原路退回来不就行了。反正攻破剑阁也不是立马的事情。到时候随便找个托词给司马昭，得不到荣誉就得不到呗。但是修个阴平小道带来的收益绝对大于面对的风险。所以，我要是邓艾我就会铤而走险，修阴平小道。&lt;/p&gt;
-
-&lt;p&gt;　　当时修阴平小道的难度应该是很大，摆在邓艾前面的就两个问题：山和水。我们来看一眼现在的G5京昆高速的一个关键地界。我们可以看到G5是在山坡上河流里修建的，风险度极高的。而西成铁路倒是一条直线，但是需要凿山挖隧道，隧道出来就是嘉陵江，过了嘉陵江面前有事一座大山，所以又得凿山。可想而知，这种难度对于邓艾来说会有多困难。根据记载邓艾选了几千精兵，一共花了20多天把长700公里的阴平小道建成的。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://pic2.zhimg.com/33638cf728e134c719eb7a20dad51ed0_r.jpg?source=1940ef5c&quot; src=&quot;/images/default.jpg&quot; alt=&quot;现在的路况&quot; /&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;蜀中诸道，皆不必多忧；惟阴平之地，切须仔细。此地虽险峻，久必有失&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　这是公元234年，诸葛亮临死前向众人交代后事，并且特地对姜维说的27个字。简单来说，诸葛亮在临死前特地叮嘱姜维一定要守好阴平，并且还强调这地方虽然地势险要，但难保以后没有魏国人来偷袭，所以必须小心防守才行。别人说这句话没有被姜维重视，但是我不觉得，当时诸葛亮的每一句话都是箴言，并且前有诸葛亮的锦囊妙计，任何人都不可能视诸葛亮之话而不顾，更别说当时的蜀国守国大将军姜维了。另外，邓艾进军的时候姜维不就在阴平北的沓中么，这不也就说明姜维在守着阴平这块么。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;冬十月，艾自阴平道行无人之地七百馀里，凿山通道，造作桥阁。山高谷深，至为艰险，又粮运将匮，频於危殆。艾以毡自裹，推转而下。将士皆攀木缘崖，鱼贯而进。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　邓艾过了天险，一般来说都需要养精蓄锐，哪有说上来就干仗的。我理解这正是邓艾军事家视野之功，他笃定马邈因腐败会因天降神兵而弃城投降。最终却是也是这样的。有人说是上天眷顾邓艾，但是老天哪里会随随便便眷顾没有准备的人呢。这样邓艾兵不血刃的得了涪城，接下来诸葛瞻带领刘禅给的七万人迎战邓艾三万人马。那为啥邓艾能够迅速歼灭诸葛瞻之军呢？第一，邓艾的军队都是精兵良将，而诸葛瞻都是老弱病残或是临时拼凑。因为刘禅肯定会把精英派去剑阁防守。第二，邓爱军对刚多下涪城，此时士气正浓，然而诸葛瞻的军队士气肯定要落后很多。战场上士气这玩意真的很重要，士气高涨的军队，经常能够以少胜多。所以自古兵家很重视士兵的士气。第三，诸葛瞻战术问题，他没打过硬仗，长平之战时赵国还有廉颇和年轻的李牧，但此时的成都除了诸葛瞻，也没有什么其他人选可用了。&lt;/p&gt;
-
-&lt;p&gt;　　那为什么姜维知道了后方失守却为什么不回来救呢？其实我理解如果回头救的话，可能钟会会突破剑阁，到时候前后受敌，兵家大忌。与其这样还不如继续防守，后方听天由命了。但是，最终等来的消息却是刘禅的一封投降书。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="三国" /><summary type="html">早入蜀都,先到先得。偷渡阴平，直取蜀汉！</summary></entry></feed>
+&lt;p&gt;　　回到705写下了这篇日记。晋升的失败没有跟妈妈说，我怕她为我担心，我的不干不应写在脸上。我需要时间再次审视自己的缺陷。在接下来的一年中补齐这块短板。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="劳动节" /><summary type="html">我国劳动节是一个全球性的节日，中国的劳动节可以追溯到1918年，很多先进人士上海、杭州、汉口等城市向人们宣传五一劳动节。后来，北京、上海等地的工人纷纷到街上游行，就这样，五一劳动节在中国流传开来。1949年中华人民共和国成立后，我国将每年的五月一日定为劳动节。</summary></entry></feed>
