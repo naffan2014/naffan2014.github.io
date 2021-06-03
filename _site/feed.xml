@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-06-02T15:50:57+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">拿饭网对java的classLoader分析</title><link href="http://localhost:4000/tech/2021/06/01/01.html" rel="alternate" type="text/html" title="拿饭网对java的classLoader分析" /><published>2021-06-01T00:00:00+08:00</published><updated>2021-06-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/06/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/06/01/01.html">&lt;p&gt;asdf&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">asdf</summary></entry><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="http://localhost:4000/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2021/05/22/01</id><content type="html" xml:base="http://localhost:4000/thinking/2021/05/22/01.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-06-03T15:24:15+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">拿饭网对java的classLoader分析</title><link href="http://localhost:4000/tech/2021/06/01/01.html" rel="alternate" type="text/html" title="拿饭网对java的classLoader分析" /><published>2021-06-01T00:00:00+08:00</published><updated>2021-06-01T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/06/01/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/06/01/01.html">&lt;p&gt;asdf&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">asdf</summary></entry><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="http://localhost:4000/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2021/05/22/01</id><content type="html" xml:base="http://localhost:4000/thinking/2021/05/22/01.html">&lt;blockquote&gt;
   &lt;p&gt;赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1188,13 +1188,13 @@ SourceFile: &quot;Demo.java&quot;
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;因为上边的输出太多，本来我想写在代码旁边用注释的形式备注，但是因为顺序是跳跃的，所以用这种方法不太好解释。所以，我还是准备写在下边，因为这样的形式可以保证时间线清晰。&lt;/p&gt;
+&lt;p&gt;　　因为上边的输出太多，本来我想写在代码旁边用注释的形式备注，但是因为顺序是跳跃的，所以用这种方法不太好解释。所以，我还是准备写在下边，因为这样的形式可以保证时间线清晰。&lt;/p&gt;
 
-&lt;p&gt;首先，我们发现在代码编译期，就有了&lt;code&gt;Constant pool&lt;/code&gt;常量池了。那常量池是什么呢？他是java文件被编译成.class文件时，存储这些class文件的资源库。其主要存放两大类常亮：&lt;code&gt;字面量&lt;/code&gt;（文本字符串、声明为final的常量值等）和&lt;code&gt;符号引用&lt;/code&gt;（有三类：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符）。&lt;/p&gt;
+&lt;p&gt;　　首先，我们发现在代码编译期，就有了&lt;code&gt;Constant pool&lt;/code&gt;常量池了。那常量池是什么呢？他是java文件被编译成.class文件时，存储这些class文件的资源库。其主要存放两大类常亮：&lt;code&gt;字面量&lt;/code&gt;（文本字符串、声明为final的常量值等）和&lt;code&gt;符号引用&lt;/code&gt;（有三类：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符）。&lt;/p&gt;
 
-&lt;p&gt;除了常量池以外，还有个运行时常量池。运行时常量池是方法区的一部分，class文件中的常量池在类加载后进入方法区的运行时常量池存放。他具有动态性，为什么这么说呢？因为class文件一旦编译后，class常量池就确定了。但是运行时常量池在运行期间有可能有新的常量存入池中。&lt;/p&gt;
+&lt;p&gt;　　除了常量池以外，还有个运行时常量池。运行时常量池是方法区的一部分，class文件中的常量池在类加载后进入方法区的运行时常量池存放。他具有动态性，为什么这么说呢？因为class文件一旦编译后，class常量池就确定了。但是运行时常量池在运行期间有可能有新的常量存入池中。&lt;/p&gt;
 
-&lt;p&gt;在main()中，我们看到&lt;code&gt;9: invokevirtual #5&lt;/code&gt;这行，这代表我们调用了constant pool中的#5。#5代表这是一个方法引用，在虚拟机栈的栈帧的局部变量表中，就会生成一个ref并指向方法区中的Demo.math()，通过符号引用就实现了直接引用。其他的同理。&lt;/p&gt;
+&lt;p&gt;　　在main()中，我们看到&lt;code&gt;9: invokevirtual #5&lt;/code&gt;这行，这代表我们调用了constant pool中的#5。#5代表这是一个方法引用，在虚拟机栈的栈帧的局部变量表中，就会生成一个ref并指向方法区中的Demo.math()，通过符号引用就实现了直接引用。其他的同理。&lt;/p&gt;
 
 &lt;hr /&gt;
 
