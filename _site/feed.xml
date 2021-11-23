@@ -1,4 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-11-21T23:18:49+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">借助DDD思想，实践出质量检测系统</title><link href="http://localhost:4000/tech/2021/09/12/01.html" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" /><published>2021-09-12T00:00:00+08:00</published><updated>2021-09-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/09/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/09/12/01.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-11-23T23:45:44+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">聊聊我使用ffmpeg时总结的最佳实践</title><link href="http://localhost:4000/tech/2021/11/23/01.html" rel="alternate" type="text/html" title="聊聊我使用ffmpeg时总结的最佳实践" /><published>2021-11-23T00:00:00+08:00</published><updated>2021-11-23T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/11/23/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/11/23/01.html">&lt;blockquote&gt;
+  &lt;p&gt;FFmpeg is the leading multimedia framework, able to &lt;strong&gt;decode&lt;/strong&gt;, &lt;strong&gt;encode&lt;/strong&gt;, &lt;strong&gt;transcode&lt;/strong&gt;, &lt;strong&gt;mux&lt;/strong&gt;, &lt;strong&gt;demux&lt;/strong&gt;, &lt;strong&gt;stream&lt;/strong&gt;, &lt;strong&gt;filter&lt;/strong&gt; and &lt;strong&gt;play&lt;/strong&gt; pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure &lt;a href=&quot;http://fate.ffmpeg.org/&quot;&gt;FATE&lt;/a&gt; across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;部门的项目涉及到视频处理的功能，公司里负责存储服务的同学并没有这方面的能力支持（虽然他们也正在建设此方面的能力，因为公司内部需要视频处理的业务越来越多了。），所以我们只能硬着头皮开搞ffmpeg。曾经在看游戏的时候短暂的接触过半年多ffmpeg，但那个时候解决问题的能力不足，靠别人帮助的情况比较多。这么多年过去了，自己在开发领域的驾轻就熟，让我有了底气接了这摊子事儿。那么接下来我就总结下这几个月对ffmpeg的学习和使用吧。&lt;/p&gt;
+
+&lt;h1 id=&quot;一框架选择---jave&quot;&gt;一、框架选择 - jave&lt;/h1&gt;
+
+&lt;p&gt;项目是java的项目，借助github和google，了解到目前处理ffmpeg的框架最好用的是一个叫做&lt;a href=&quot;https://github.com/a-schild/jave2&quot;&gt;jave&lt;/a&gt;的开源项目。jave其实就是一个对ffmpeg包装的java库。目前jave的版本已经发展到了3.2.0，只需要在项目中引用jave-all-deps即可，他包括了jave-core和不同平台的ffmpeg脚本。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;&amp;lt;dependency&amp;gt;
+ &amp;lt;groupId&amp;gt;ws.schild&amp;lt;/groupId&amp;gt;
+ &amp;lt;artifactId&amp;gt;jave-all-deps&amp;lt;/artifactId&amp;gt;
+ &amp;lt;version&amp;gt;3.2.0&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于我们公司的maven库的阿里镜像源超时的原因（那个时候找不到人来解决这个问题。），导致我用不到3.2.0版本的jave，我能获取到最新的版本就是2.7.3。这就导致了我在使用2.7.3时发现了问题去github上提&lt;a href=&quot;https://github.com/a-schild/jave2/issues/160&quot;&gt;concat mp4 not working properly. version 2.7.3 &lt;/a&gt;，开发者明确表示他没有资源去解决老版本的问题。反正，经过各种方面的努力，我也找到了我们公司管理maven库的同学，在他的帮助下我可以获取到3.2.0版本的jave了。但是，jave框架在视频拼接的处理上做的实在够差，我提了很多类似拼接的issue，比如&lt;a href=&quot;https://github.com/a-schild/jave2/issues/166&quot;&gt;The ffmpeg version included in 2.7.3 is a vry old one, which might cause the issue. &lt;/a&gt;。开发者在我的追问下已经不再回答我了。还有一次给他提了一个多个视频拼接时监控代码会报NPE问题的issue，&lt;a href=&quot;https://github.com/a-schild/jave2/issues/178&quot;&gt;when lots of videos to concat . EncoderProgressListernr get a NPE Exception&lt;/a&gt;，感觉开发者实在忙不过来了，转而求助我对此框架的修复。&lt;/p&gt;
+
+&lt;p&gt;最终，拼接视频的代码我自己写了。格式转换的用了jave的。总的来说，jave可以帮助门外汉快速上手，因为我们可以通过看他的代码一步一步了解他封装ffmpeg时使用的方法以及他在遇到不同操作情况时是采用的什么方案。但是，当你慢慢了解ffmpeg的时候，jave框架会因为他的封装不够扩展而让开发举步维艰。&lt;/p&gt;
+
+&lt;p&gt;当对ffmpeg有了一些最基本的了解后，ffmpeg官方网站（https://ffmpeg.org）就成为了进阶时最信得过的锦囊宝典。&lt;/p&gt;
+
+&lt;h1 id=&quot;二ffmpeg官网&quot;&gt;二、FFmpeg官网&lt;/h1&gt;
+
+&lt;p&gt;FFmpeg官网的左边栏，我们可以下载到ffmpeg最新的命令行。通过Documentation我们可以实时查看目前现有的所有功能，因为这个页面每晚都会重新生成。里面最常用的就是“&lt;strong&gt;Command Line Tools Documentation&lt;/strong&gt;”和“&lt;strong&gt;Components Documentation&lt;/strong&gt;”还有“&lt;strong&gt;General Documentation&lt;/strong&gt;”。&lt;/p&gt;
+
+&lt;p&gt;官网同时还提供了IRC和MAIL等联系方式，IRC的频道是#ffmpeg 和 #ffmpeg-devel。两个频道分别面向的是使用者和开发者。我曾经在使用ffmpeg发生各种问题时进到IRC的频道里去寻求帮助，虽然里面会有4百多位处在挂机状态，但不时还是会有一些人进行交流的。我总得看下来，感觉里面说的东西都是C方面的问题，别的问题感觉里面的人不太感兴趣。我就因为又一次遇到了问题在里面提问了，确实有人回应我了，人家要我给出命令行以及错误堆栈。在IRC中你不能直接贴出来代码，需要一些专门托管代码片段的网站专门来制作代码片段连接，这一点有点让我觉得麻烦，可是又没别的好办法。等过了一会我把连接贴出来后，就没人再回应了。总体来说，体验很差，浪费了自己很多宝贵时间。我建议后来的人还是不要在IRC上浪费时间了。&lt;/p&gt;
+
+&lt;h1 id=&quot;三音视频流的概念&quot;&gt;三、音视频流的概念&lt;/h1&gt;
+
+&lt;p&gt;让我们先看一个视频的详细信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffprobe 1_1637395707\&amp;amp;88966_1637395335_1637395635.mp4 -hide_banner
+[aac @ 0x7f846a808600] Input buffer exhausted before END element found
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395335_1637395635.mp4&apos;:
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: isommp42
+    creation_time   : 2021-11-20T08:07:16.000000Z
+    com.android.version: 9
+  Duration: 00:04:59.78, start: 0.000000, bitrate: 575 kb/s
+  Stream #0:0(eng): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p, 1280x720, 478 kb/s, SAR 1:1 DAR 16:9, 6.15 fps, 90k tbr, 90k tbn, 180k tbc (default)
+   Metadata:
+     creation_time   : 2021-11-20T08:07:16.000000Z
+     handler_name    : VideoHandle
+     vendor_id       : [0][0][0][0]
+  Stream #0:1(eng): Audio: aac (LC) (mp4a / 0x6134706D), 16000 Hz, mono, fltp, 96 kb/s (default)
+    Metadata:
+      creation_time   : 2021-11-20T08:07:16.000000Z
+      handler_name    : SoundHandle
+      vendor_id       : [0][0][0][0]
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;视频一共有三种流：音频流，视频流，字幕流。我建议还是去看看FFmpeg官网对这几种结构的解释，介绍的挺全的，比我写的强多了。&lt;/p&gt;
+
+&lt;p&gt;一般来说一个视频会有一个视频流和多个音频流及多个字幕流。他们的顺序安排按照约定俗成的顺序是第一个是视频流，对应着Stream #0:0；第二个及多个是音频流，对应着Stream#0:1，字幕流按此规则依次展开（当然，在我做ffmpeg的时候，经历过audio和video反了的情况，这种反了情况如果不去做处理ffmpeg其实会智能帮助挑选的，但是在某些时候就会报错失败。所以建议还是按照这个顺序来）。所以，我们可以从上面的代码片段中看到1_1637395707\&amp;amp;88966_1637395335_1637395635.mp4这个mp4文件包含以下信息：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;视频持续时间 00:04:59.78，开始时间是0.000000，码率是575kb/s&lt;/li&gt;
+  &lt;li&gt;#0:0是视频流（Video），h264编码，profile等级为baseline,采样格式是yuv420p，分辨率1280*720，平均码率478kb/s，帧率 6.15fps，时间基线 90k。（我列举出来的这几个是挺重要的参数，其他参数我还没有太明白）&lt;/li&gt;
+  &lt;li&gt;#0:1是音频流（Audio）,aac编码，采样率16000Hz，单声道，码率96kb/s&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;四concat&quot;&gt;四、concat&lt;/h1&gt;
+
+&lt;p&gt;拼接的意思就是，将两段或者多端音视频片段拼接成一个完整的音视频。ffmpeg官网&lt;a href=&quot;https://ffmpeg.org/faq.html#How-can-I-concatenate-video-files_003f&quot;&gt;指出&lt;/a&gt;，根据不同的情况，有多种方案可以进行选择。&lt;/p&gt;
+
+&lt;h2 id=&quot;1拼接的3种方案&quot;&gt;1、拼接的3种方案&lt;/h2&gt;
+
+&lt;h3 id=&quot;1concat-filter&quot;&gt;（1）concat filter&lt;/h3&gt;
+
+&lt;p&gt;过滤器法适用于同步视频和音频流的片段，每个视频段都必须具有相同数量的流（包括类型），而且最终输出的视频也会按照这个顺序进行合并。这种方法会对视频进行重新编码，速度慢，耗cpu和内存。&lt;/p&gt;
+
+&lt;p&gt;因为有些流不一定会和别的流的时间一致，举例来说一段视频有1个视频流和2个音频流，其中有一个音频流长度很短。那么这个方法就会按照这个视频最长时间的那个流为基准，其他流就会填补上静音。手册里明确说明最后一个视频不能这样。&lt;/p&gt;
+
+&lt;p&gt;如果想让合并如预期那样工作，一定要保证所有视频片段的时间戳都是从0开始的。否则会出现，画面和声音不同步的情况。&lt;/p&gt;
+
+&lt;p&gt;合并的时候还会遇到不同视频片段中有不同类型，不同采样率，不同通道的音频流。FFmpeg会自动的选择一个值来进行处理。另外，还有一些值是不能被FFmpeg自动填充的。还是需要人为的指定。另外，如果每段视频片段拥有不同的帧率，我们在最终结果视频制作时一定要设定个值，否则制作出来的视频就会按照每段自己的帧率进行合并了，这样的结果就是视频卡顿。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffmpeg -i opening.mkv -i episode.mkv -i ending.mkv -filter_complex \
+  &apos;[0:0] [0:1] [0:2] [1:0] [1:1] [1:2] [2:0] [2:1] [2:2]
+   concat=n=3:v=1:a=2 [v] [a1] [a2]&apos; \
+  -map &apos;[v]&apos; -map &apos;[a1]&apos; -map &apos;[a2]&apos; output.mkv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这个bash脚本的具体意思，怎么使。我看到了一篇CSDN上的文章，直接在这里做个&lt;a href=&quot;https://blog.csdn.net/xiaoluer/article/details/81136478&quot;&gt;传送门&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;2demuxer&quot;&gt;（2）demuxer&lt;/h3&gt;
+
+&lt;p&gt;当我们的视频文件不支持文件级别的拼接并且我们想要避免重新编译，就应该采用这种方案。&lt;/p&gt;
+
+&lt;p&gt;这种方案，通过读取一个文件里面的视频，将他们一个一个进行拼接。这些视频片段的时间都会被重新调整，第一个视频的开始时间调整为0，后面的视频等待前一个文件拼接完毕再进行拼接。如果他们的流时间长短不一，就会在他们之间产生间隙。&lt;/p&gt;
+
+&lt;p&gt;如果他们的duration不同，那就会产生伪影（这个伪影，是翻译软件的翻译，我出现过这个问题，形象讲就是还在说话但是画面不动了。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# 文件名为file，内容为
+file &apos;/mnt/share/file-1.mp4&apos;
+file &apos;/mnt/share/file 2.mp4&apos;
+file &apos;/mnt/share/file 3.mp4&apos;
+
+# ffmpg -y -f concat -i file  output.mp4 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;3protocol&quot;&gt;（3）protocol&lt;/h3&gt;
+
+&lt;p&gt;物理上进行拼接的方案，这个方案支持文件级拼接，也是最快的方案。一定要保证拼接的视频文件格式都一样。我最终就是选择用这个方案来进行拼接的，因为这种方案更稳定，更高效。（当然，如果你每个文件都不一样的结构，那这个方案就不行。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bas&quot;&gt;# ffmpeg -y -i &quot;concat:a.mp4|b.mp4&quot; output.mp4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;2拼接时我遇到的各种问题&quot;&gt;2、拼接时我遇到的各种问题&lt;/h2&gt;
+
+&lt;h4 id=&quot;1-channel-element-10-is-not-allocated&quot;&gt;（1） channel element 1.0 is not allocated&lt;/h4&gt;
+
+&lt;p&gt;在采用demuxer拼接方案时，遇到了这个错误。错误的根本原因是拼接的视频文件中的流顺序和第一个文件的流顺序不一致导致的。&lt;/p&gt;
+
+&lt;p&gt;demuxer的方案，是以第一个文件作为基准的。如果第一个视频的流顺序 #0:0是video，#0:1是audio，那么后面的所有视频文件的流顺序也得是 #0:0是video，#0:1是audio。这种情况是很可能发生的，因为你的输入可能是别人给你的，别人在操作视频的时候因为个人的疏忽或者经验缺失，有可能在制作的过程中将这种顺序弄混。如果你真遇到了这种情况，通过下面的命令，就能将顺序调整成第一个流是video,第二个流是audio。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffmpeg -i input.mp4 -y output.mp4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;2non-monotonous-dts-in-output-stream-01-previous-3277744-current-3276712-changing-to-3277745-this-may-result-in-incorrect-timestamps-in-the-output-file&quot;&gt;（2）Non-monotonous DTS in output stream 0:1; previous: 3277744, current: 3276712; changing to 3277745. This may result in incorrect timestamps in the output file.&lt;/h4&gt;
+
+&lt;p&gt;首先需要了解一下DTS和PTS是什么意思。简单说，PTS就是这一帧应该在什么时候显示，DTS就是这一帧应该在什么时候进行解码。所以，这个问题是有关于帧的时间的报错。我们可以通过以下两个文章了解到更多。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/fanyun_01/article/details/89608876&quot;&gt;DTS和PTS的解释&lt;/a&gt;和&lt;a href=&quot;https://www.cnblogs.com/linyilong3/p/9940230.html&quot;&gt;图解DTS和PTS&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;所以，问题的关键就是让各文件的采样率一致了。就是因为各文件的采样率不一致导致的，拼接视频时解码的时间3277744之后应该是3277745，但突然变小了 3276712。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ffmpeg" /><summary type="html">FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure FATE across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.</summary></entry><entry><title type="html">借助DDD思想，实践出质量检测系统</title><link href="http://localhost:4000/tech/2021/09/12/01.html" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" /><published>2021-09-12T00:00:00+08:00</published><updated>2021-09-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/09/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/09/12/01.html">&lt;blockquote&gt;
   &lt;p&gt;&lt;strong&gt;DDD 是 Domain-Driven Design 的缩写。&lt;/strong&gt;其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1654,255 +1784,4 @@ SourceFile: &quot;Demo.java&quot;
   &lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html#jvms-6.5.istore&quot;&gt;javaSe8手册&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/czwbig/p/11127124.html&quot;&gt;Java内存区域（运行时数据区域）和内存模型（JMM）&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java虚拟机</summary></entry><entry><title type="html">spring-data-redis中的Jackson2JsonRedisSerializer研读</title><link href="http://localhost:4000/tech/2021/05/07/01.html" rel="alternate" type="text/html" title="spring-data-redis中的Jackson2JsonRedisSerializer研读" /><published>2021-05-07T00:00:00+08:00</published><updated>2021-05-07T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/07/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/07/01.html">&lt;p&gt;　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。&lt;/p&gt;
-
-&lt;p&gt;　　首先，Jackson2JsonRedisSerializer一共有6个方法。&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;方法&lt;/th&gt;
-      &lt;th&gt;解释&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Jackson2JsonRedisSerializer(Class&lt;T&gt; clazz)&lt;/T&gt;&lt;/td&gt;
-      &lt;td&gt;构造方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Jackson2JsonRedisSerializer(JavaType javaType)&lt;/td&gt;
-      &lt;td&gt;构造方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;deserialize&lt;/td&gt;
-      &lt;td&gt;实现&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;serialize&lt;/td&gt;
-      &lt;td&gt;实现&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;setObjectMapper&lt;/td&gt;
-      &lt;td&gt;独有&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;getJavaType&lt;/td&gt;
-      &lt;td&gt;独有&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Jackson2JsonRedisSerializer(Class&lt;T&gt; clazz)&lt;/T&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
-	 * Creates a new {@link Jackson2JsonRedisSerializer} for the given target {@link Class}.
-	 *
-	 * @param type
-	 */
-	public Jackson2JsonRedisSerializer(Class&amp;lt;T&amp;gt; type) {
-		this.javaType = getJavaType(type);
-	}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　根据传入的参数类型，通过getJavaType方法指定为databind的类型。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/**
-	 * Returns the Jackson {@link JavaType} for the specific class.
-	 * &amp;lt;p&amp;gt;
-	 * Default implementation returns {@link TypeFactory#constructType(java.lang.reflect.Type)}, but this can be
-	 * overridden in subclasses, to allow for custom generic collection handling. For instance:
-	 *
-	 * &amp;lt;pre class=&quot;code&quot;&amp;gt;
-	 * protected JavaType getJavaType(Class&amp;lt;?&amp;gt; clazz) {
-	 * 	if (List.class.isAssignableFrom(clazz)) {
-	 * 		return TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, MyBean.class);
-	 * 	} else {
-	 * 		return super.getJavaType(clazz);
-	 * 	}
-	 * }
-	 * &amp;lt;/pre&amp;gt;
-	 *
-	 * @param clazz the class to return the java type for
-	 * @return the java type
-	 */
-	protected JavaType getJavaType(Class&amp;lt;?&amp;gt; clazz) {
-		return TypeFactory.defaultInstance().constructType(clazz);
-	}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　JavaType类属于com.fasterxml.jackson.databind包。它是一种令牌类的基类，用于保存信息和反序列化器的key。通过getJavaType方法经过反射来构造出指定的class。我们看到其中应用到了TypeFactory,用TypeFactory的作用就是快速的获取到clazz相对应的具体类型。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public final class TypeFactory implements java.io.Serializable
-{
-    //将clazz传入，通过_formAny方法构造。Class&amp;lt;?&amp;gt; 是实现了Type接口
-    public JavaType constructType(Type type) {
-        return _fromAny(null, type, EMPTY_BINDINGS);
-    }
-    
-    ....
-    
-     /**
-     * Factory method that can be used if type information is passed
-     * as Java typing returned from &amp;lt;code&amp;gt;getGenericXxx&amp;lt;/code&amp;gt; methods
-     * (usually for a return or argument type).
-     */
-    protected JavaType _fromAny(ClassStack context, Type type, TypeBindings bindings)
-    {
-        JavaType resultType;
-
-        // simple class?
-        if (type instanceof Class&amp;lt;?&amp;gt;) {
-            // Important: remove possible bindings since this is type-erased thingy
-            //判断type是一个简单class。然后调用_formClass
-            //ClassStack是一个工具类，用来记录调用栈信息的上下文。
-            //EMPTY_BINDINGS是TypeBindings中的常量。TypeBindings是用于解析给定类的类型参数的助手类。也就是说这个常量为空绑定关系。
-            resultType = _fromClass(context, (Class&amp;lt;?&amp;gt;) type, EMPTY_BINDINGS);
-        }
-        // But if not, need to start resolving.
-        else if (type instanceof ParameterizedType) {...}
-    ...
-    }
-    
-    /**
-     * @param bindings Mapping of formal parameter declarations (for generic
-     *   types) into actual types
-     */
-    protected JavaType _fromClass(ClassStack context, Class&amp;lt;?&amp;gt; rawType, TypeBindings bindings)
-    {
-        // Very first thing: small set of core types we know well:
-        //第一件事就是通过rawType来判断是哪种众所周知的简单类型。首先判断是否是原始类型，并且是否是BOOL，INT，LONG。如果不是就是String，Object。否则返回null
-        JavaType result = _findWellKnownSimple(rawType);
-        if (result != null) {
-            return result;
-        }
-        // Barring that, we may have recently constructed an instance
-        final Object key;
-        if ((bindings == null) || bindings.isEmpty()) {
-        //key是这种Bool Int Long String object中的一种
-            key = rawType;
-        } else {
-            key = bindings.asKey(rawType);
-        }
-        //_typeCache是一个LRUMap。LRUMap其实底层是个ConcurrentHashMap。它用来帮助我们避免核心类型的重复解析。尤其为了泛型的解析。
-        result = _typeCache.get(key); // ok, cache object is synced
-        if (result != null) {
-            return result;
-        }
-        //一般到这里就结束了。但是，如果通过我们传入的rawType没有找到绑定的关系，那就有可能是个复杂结构的结构体（递归引用）。接下来就需要通过调用栈来追踪整个结构了。
-        // 15-Oct-2015, tatu: recursive reference?
-        if (context == null) {
-            context = new ClassStack(rawType);
-        } else {
-            ClassStack prev = context.find(rawType);
-            if (prev != null) {
-                // Self-reference: needs special handling, then...
-                //可以看到，resolvedRecursiveType这个方法是用来自我引用的一个内部类型。他继承自TypeBase，TypeBase继承自javaType。
-                ResolvedRecursiveType selfRef = new ResolvedRecursiveType(rawType, EMPTY_BINDINGS);
-                prev.addSelfReference(selfRef);
-                return selfRef;
-            }
-            // no, but need to update context to allow for proper cycle resolution
-            context = context.child(rawType);
-        }
-        //到这里，可以将递归引用的结构解析到context变量里了。
-        // First: do we have an array type?
-        if (rawType.isArray()) {
-            result = ArrayType.construct(_fromAny(context, rawType.getComponentType(), bindings),
-                    bindings);
-        } else {
-            // If not, need to proceed by first resolving parent type hierarchy
-         //首先解析父类型层次结构   
-            JavaType superClass;
-            JavaType[] superInterfaces;
-
-            if (rawType.isInterface()) {
-                superClass = null;
-                //返回的是一个JavaType的数组。
-                //如果是个超接口（superInterface），通过反射返回的必须是实际用过的类型（interface or class）。
-                //如果是个class，返回的是个数组，数组中包含着所有实现过的接口。
-                //如果是个interface，返回的是个数组，数组中包含所有直接继承过的接口。
-                //如果是个class或者interface，就返回个一个长度为0的数组。
-                //如果是基础类型或者void，就返回一个长度为0的数组。
-                superInterfaces = _resolveSuperInterfaces(context, rawType, bindings);
-            } else {
-                // Note: even Enums can implement interfaces, so cannot drop those
-                //返回class表示的实体(类、接口、基本类型型或void)的直接超类
-                superClass = _resolveSuperClass(context, rawType, bindings);
-                superInterfaces = _resolveSuperInterfaces(context, rawType, bindings);
-            }
-
-            // 19-Oct-2015, tatu: Bit messy, but we need to &apos;fix&apos; java.util.Properties here...
-            if (rawType == Properties.class) {
-                result = MapType.construct(rawType, bindings, superClass, superInterfaces,
-                        CORE_TYPE_STRING, CORE_TYPE_STRING);
-            }
-            // And then check what flavor of type we got. Start by asking resolved
-            // super-type if refinement is all that is needed?
-            else if (superClass != null) {
-                result = superClass.refine(rawType, bindings, superClass, superInterfaces);
-            }
-            // if not, perhaps we are now resolving a well-known class or interface?
-            if (result == null) {
-                result = _fromWellKnownClass(context, rawType, bindings, superClass, superInterfaces); 
-                if (result == null) {
-                    result = _fromWellKnownInterface(context, rawType, bindings, superClass, superInterfaces);
-                    if (result == null) {
-                        // but if nothing else, &quot;simple&quot; class for now:
-                        result = _newSimpleType(rawType, bindings, superClass, superInterfaces);
-                    }
-                }
-            }
-        }
-        context.resolveSelfReferences(result);
-        // 16-Jul-2016, tatu: [databind#1302] is solved different way, but ideally we shouldn&apos;t
-        //     cache anything with partially resolved `ResolvedRecursiveType`... so maybe improve
-        if (!result.hasHandlers()) {
-            _typeCache.putIfAbsent(key, result); // cache object syncs
-        }
-        return result;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Jackson2JsonReisSerializer(JavaType javaType)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　另一个构造方法，参数是JavaType类型。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;deserialize(@Nullable byte[] bytes)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　反序列化方法，可为null的byte数组为参数。如果是空或者null的话，返回null。否则，通过ObjectMapper将byte数组进行反序列化。&lt;/p&gt;
-
-&lt;p&gt;　　ObjectMapper提供读和写JSON的能力。不论是转成POJO还是从POJO转出，或者是转成JSON还是从JSON转出，还是一些相关的转化功能。ObjectMapper都可以高定制化的兼容不同种的JSON格式。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;serialize(@Nullable Object t)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;序列化方法，同上。t如果为null，则返回空byte数组。否则，将t序列化。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;setObjectMapper(ObjectMapper objectMapper)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　这个方法比较有用，它可以用来自定义JSON序列化进程的。相关设置可以参见ObjectMapper.java中的方法。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;ObjectMapper mapper = new ObjectMapper();
-		mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-		mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-		serializer.setObjectMapper(mapper);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;getJavaType(Class&amp;lt;?&amp;gt; clazz)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　这个方法是被Jackson2JsonRedisSerializer方法调用的，用途就是返回指定class的jackson格式。&lt;/p&gt;
-
-&lt;p&gt;　　通过简单阅读了这个类的源码，我对这个类也有了大致的了解。作为spring-data-redis对redis的封装中的一个策略，这个策略满足了要保存的数据有比较复杂的层级结构，而且效率还是非常高的。建议用这个策略进行保存，只是可读性差了一些。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java虚拟机</summary></entry></feed>
