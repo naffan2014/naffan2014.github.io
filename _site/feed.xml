@@ -1,4 +1,401 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-12-07T23:17:55+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">聊聊我使用ffmpeg时总结的最佳实践</title><link href="https://naffan.cn/tech/2021/11/25/01.html" rel="alternate" type="text/html" title="聊聊我使用ffmpeg时总结的最佳实践" /><published>2021-11-25T00:00:00+08:00</published><updated>2021-11-25T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/11/25/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/11/25/01.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-12-12T23:53:36+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">Async和Transactional注解使用时的动态代理问题</title><link href="https://naffan.cn/tech/2021/12/11/01.html" rel="alternate" type="text/html" title="Async和Transactional注解使用时的动态代理问题" /><published>2021-12-11T00:00:00+08:00</published><updated>2021-12-11T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/12/11/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/12/11/01.html">&lt;blockquote&gt;
+  &lt;p&gt;代理是指由被委托人接受委托人的委托全权去办理一件事情，在办理这件事情的过程中委托人会限制被委托人的行事边界。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;哈喽 大家好，这次我想写一些关于我在工作中遇到的有关java动态代理问题的排查与解决，希望能够帮助自己总结的同时对网络上的其他小伙伴有些许的帮助。首先我要列举几个@Async和@Transactional的例子。&lt;/p&gt;
+
+&lt;h1 id=&quot;transactional&quot;&gt;@Transactional&lt;/h1&gt;
+
+&lt;p&gt;这种情况属于“自调用”的情况。自调用的意思就是通过CGLIB方式动态代理的方法，调用了类内其他方法。这种“自调用”的情况会使注解无效。具体代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;@Service
+public class Galaxy {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public void alpha(){
+        beta();//这就是“自调用”：在Galaxy类内注解的方法内调用了同类内的其他方法。
+    }
+
+    //对beta()方法开启了事务
+    @Transactional
+    public void beta(){
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain(); //断点
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　在beta()方法中打下断点，数据库中是没有事务的。说明注解没有生效。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;mysql&amp;gt; select * from information_schema.innodb_trx \G;
+Empty set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面代码运行结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;mysql&amp;gt; select * from user;
++----+-------------+-----------+--------+
+| id | account     | name      | pwd    |
++----+-------------+-----------+--------+
+|  3 | zhouhuajina | 周华健    | 123456 |
+|  4 | Jay zhou    | 周杰伦    | 123456 |
++----+-------------+-----------+--------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过断点时的堆栈信息，我们发现实际调用beta()的是&lt;code&gt; Galaxy$$FastClassBySpringCGLIB$$76b76f24&lt;/code&gt;方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;beta:44, Galaxy (com.example.service.galaxy)
+alpha:31, Galaxy (com.example.service.galaxy)
+invoke:-1, Galaxy$$EnhancerBySpringCGLIB$$76b76f24 (com.example.service.galaxy)
+......
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　Galaxy\(EnhancerBySpringCGLIB\)76b76f24方法是通过cglib做动态代理时被jvm建立起来的一个虚拟的文件，这个文件是对Galxy类的增强类(GalxyEnhence)，增强类继承了Galaxy类并对注解的类进行方法增强。方法增强指的是你使用的那个注解会把相关代码（注解开发人员早已经写好了的代码）用重写的方式将你的代码增强起来。所以，这个被jvm虚拟出来的文件大概应该长这样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class Galaxy$$EnhancerBySpringCGLIB$$76b76f24 extend Galaxy{
+  
+  		//因为beta方法被注解了，所以通过重写的方式增强这个方法。其他没有被注解的方法，不重写
+     @Override
+     public void beta(){
+      try {
+            // 开启事务
+            startTransaction();
+            UserDomain UserDomain = new UserDomain();
+            UserDomain.setId(4L);
+            UserDomain.setName(&quot;周杰伦&quot;);
+            UserDomain.setAccount(&quot;Jay zhou&quot;);
+            UserDomain.setPwd(&quot;123456&quot;);
+            userRepository.save(UserDomain);
+            UserDomain = new UserDomain();
+            UserDomain.setId(3L);
+            UserDomain.setName(&quot;周华健&quot;);
+            UserDomain.setAccount(&quot;zhouhuajina&quot;);
+            UserDomain.setPwd(&quot;123456&quot;);
+            userRepository.save(UserDomain);
+        } catch (Exception e) {
+            // 出现异常回滚事务
+            rollbackTransaction();
+        }
+        // 提交事务
+        commitTransaction();
+    }
+    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是，这段代码出现了一个问题：&lt;code&gt;beta()的调用者是隐含的this&lt;/code&gt;。这就是“自调用”的意思，那实际的调用链是：Galaxy.alpha() =&amp;gt;  Galaxy.beta()。它没有走我们的增强类的beta()！所以就出现了刚才的结果。按照这种思路可以这样改：&lt;/p&gt;
+
+&lt;h3 id=&quot;解决方案1利用transactional的传递性在总方法上加transactional&quot;&gt;解决方案1：利用@Transactional的传递性，在总方法上加@Transactional。&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;@Service
+public class Galaxy {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    //解决方案1：将注解加到alpha上。
+    //借助@transactional的传递性，会把beta()也加到事务里来。
+  	@Transactional
+    public void alpha(){
+        beta();
+    }
+  
+    public void beta(){
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain(); //断点
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　在beta()方法中打下断点，数据库中出现了事务，说明起效了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;mysql&amp;gt; select * from information_schema.innodb_trx \G;
+*************************** 1. row ***************************
+                    trx_id: 422025326292896
+                 trx_state: RUNNING
+               trx_started: 2021-12-12 21:54:14
+     trx_requested_lock_id: NULL
+          trx_wait_started: NULL
+                trx_weight: 0
+       trx_mysql_thread_id: 6022
+                 trx_query: NULL
+       trx_operation_state: NULL
+         trx_tables_in_use: 0
+         trx_tables_locked: 0
+          trx_lock_structs: 0
+     trx_lock_memory_bytes: 1128
+           trx_rows_locked: 0
+         trx_rows_modified: 0
+   trx_concurrency_tickets: 0
+       trx_isolation_level: REPEATABLE READ
+         trx_unique_checks: 1
+    trx_foreign_key_checks: 1
+trx_last_foreign_key_error: NULL
+ trx_adaptive_hash_latched: 0
+ trx_adaptive_hash_timeout: 0
+          trx_is_read_only: 0
+trx_autocommit_non_locking: 0
+       trx_schedule_weight: NULL
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用链为：Galaxy\(EnhancerBySpringCGLIB\)76b76f24.alpha()=&amp;gt; Galaxy\(EnhancerBySpringCGLIB\)76b76f24.beta()&lt;/p&gt;
+
+&lt;h3 id=&quot;解决方案2在被代理类的外部调用其方法&quot;&gt;解决方案2：在被代理类的外部调用其方法。&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;// Galaxy.java
+@Service
+public class Galaxy {
+
+    @Autowired
+    private UserService userService;
+
+    public void alpha(){
+        userService.beta();//调用者换成了外部类userService。
+    }
+}
+
+//UserService.java
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    //将注解放到这里。
+    @Transactional
+    public void beta(){
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain();  //断点
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;调用链为：Galaxy.alpha =&amp;gt; UserService.beta()。这其实不能算是一种解决方案，而是一种解决思路。&lt;/p&gt;
+
+&lt;h3 id=&quot;解决方案3自注入&quot;&gt;解决方案3：自注入&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;@Service
+public class Galaxy {
+
+  	//注解自己进入spring容器里。
+  	@Autowired
+  	private Galaxy galaxy
+      
+    @Autowired
+    private UserRepository userRepository;
+  	
+    public void alpha(){
+        galaxy.beta();  //beta()的调用者换成了galaxy类，就可以让spring直接从容器里拿增强类。
+    }
+  
+    @Transactional
+    public void beta(){
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain(); //断点
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　调用链为：Galaxy.alpha()=&amp;gt;Galaxy\(EnhancerBySpringCGLIB\)76b76f24.beta()&lt;/p&gt;
+
+&lt;h1 id=&quot;async-和-transactional&quot;&gt;@Async 和 @Transactional&lt;/h1&gt;
+
+&lt;p&gt;看下面的列子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;@Service
+public class Galaxy {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional(rollbackFor = Exception.class)
+    public void alpha() throws Exception{
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain();
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        beta();
+    }
+
+    @Async(value = &quot;beta&quot;)
+    public void beta() throws InterruptedException {
+        Thread.sleep(3000);
+        System.out.println(&quot;这是beta线程&quot;); //断点
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　这个例子的意图是：alpha方法首先入库数据，然后调用异步方法beta。预期的效果应该是，alpha()直接插入数据，立刻退出。不会等到beta()中的数据输出。但是，实际情况却是alpha()在等待beta()3秒后，输出beta线程文案后退出。这意味着beta()上的@Async没有起效。&lt;/p&gt;
+
+&lt;p&gt;我在beta()中打了个断点，让我们看看当时的堆栈是什么情况：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-shell&quot;&gt;beta:47, Galaxy (com.example.service.galaxy)
+alpha:41, Galaxy (com.example.service.galaxy)
+。。。。。
+alpha:-1, Galaxy$$EnhancerBySpringCGLIB$$d543df13 (com.example.service.galaxy)
+。。。。。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;按照刚才的理论来讲，应该是jvm制造出来了一个增强类叫&lt;code&gt; Galaxy$$EnhancerBySpringCGLIB$$d543df13&lt;/code&gt;，这个类继承了Galaxy类并且重写了alpha()和beta()。调用链应该是： Galaxy\(EnhancerBySpringCGLIB\)d543df13.alpha() =&amp;gt; Galaxy.beta()。因为调用的是Galaxy.beta()而不是 Galaxy\(EnhancerBySpringCGLIB\)d543df13.beta()，所以@Async没有生效。&lt;/p&gt;
+
+&lt;p&gt;　　但是，按照上面解决方案2来重新构造代码发现@Async仍然没有生效，这就有些矛盾了。通过搜索找到了这篇&lt;a href=&quot;https://github.com/spring-projects/spring-framework/issues/11806&quot;&gt;issue&lt;/a&gt;。根据文中所述，是@Async和@Transactional的order先后的顺序导致了这个问题。因为spring开发者认为@Async的顺序应该是最优先的，所以即使@Async和@Transactional放在了一起，也会是先实现异步再进行事务。那接下来让我们试一试：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;//Galaxy.java
+@Service
+public class Galaxy {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+  //1.先异步线程
+    @Async(value = &quot;alpha&quot;)
+    public void alpha() throws Exception{
+        System.out.println(&quot;alpha thread start&quot;);
+        userService.beta(); //2.进入事务中
+        System.out.println(&quot;alpha thread end&quot;);
+        userService.gamma(); //3.抛出异常，回滚
+    }
+}
+
+
+//UserService.java
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional(rollbackFor = Exception.class)
+    public void beta() throws Exception{
+        System.out.println(&quot;这是beta线程&quot;);
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain();
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+    }
+
+    public void gamma() throws Exception {
+        throw new Exception();
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　最终结果，符合预期，数据库里的数据被回滚了。然后再试一次两个注解在一起的情况：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;//Galaxy.java
+@Service
+public class Galaxy {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+  //1.先异步线程
+    @Async(value = &quot;alpha&quot;)
+    @Transactional(rollbackFor = Exception.class)
+    public void alpha() throws Exception{
+        System.out.println(&quot;alpha thread start&quot;);
+        userService.beta(); //2.进入事务中
+        System.out.println(&quot;alpha thread end&quot;);
+        userService.gamma(); //3.抛出异常，回滚
+    }
+}
+
+
+//UserService.java
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public void beta() throws Exception{
+        System.out.println(&quot;这是beta线程&quot;);
+        UserDomain UserDomain = new UserDomain();
+        UserDomain.setId(4L);
+        UserDomain.setName(&quot;周杰伦&quot;);
+        UserDomain.setAccount(&quot;Jay zhou&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+        UserDomain = new UserDomain();
+        UserDomain.setId(3L);
+        UserDomain.setName(&quot;周华健&quot;);
+        UserDomain.setAccount(&quot;zhouhuajina&quot;);
+        UserDomain.setPwd(&quot;123456&quot;);
+        userRepository.save(UserDomain);
+    }
+
+    public void gamma() throws Exception {
+        throw new Exception();
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　最终，也符合预期。最后，至于注解的时序原理等我有时间研究一下再写出来。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">代理是指由被委托人接受委托人的委托全权去办理一件事情，在办理这件事情的过程中委托人会限制被委托人的行事边界。</summary></entry><entry><title type="html">聊聊我使用ffmpeg时总结的最佳实践</title><link href="https://naffan.cn/tech/2021/11/25/01.html" rel="alternate" type="text/html" title="聊聊我使用ffmpeg时总结的最佳实践" /><published>2021-11-25T00:00:00+08:00</published><updated>2021-11-25T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/11/25/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/11/25/01.html">&lt;blockquote&gt;
   &lt;p&gt;FFmpeg is the leading multimedia framework, able to &lt;strong&gt;decode&lt;/strong&gt;, &lt;strong&gt;encode&lt;/strong&gt;, &lt;strong&gt;transcode&lt;/strong&gt;, &lt;strong&gt;mux&lt;/strong&gt;, &lt;strong&gt;demux&lt;/strong&gt;, &lt;strong&gt;stream&lt;/strong&gt;, &lt;strong&gt;filter&lt;/strong&gt; and &lt;strong&gt;play&lt;/strong&gt; pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure &lt;a href=&quot;http://fate.ffmpeg.org/&quot;&gt;FATE&lt;/a&gt; across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -6,7 +403,7 @@
 
 &lt;h1 id=&quot;一框架选择---jave&quot;&gt;一、框架选择 - jave&lt;/h1&gt;
 
-&lt;p&gt;项目是java的项目，借助github和google，了解到目前处理ffmpeg的框架最好用的是一个叫做&lt;a href=&quot;https://github.com/a-schild/jave2&quot;&gt;jave&lt;/a&gt;的开源项目。jave其实就是一个对ffmpeg包装的java库。目前jave的版本已经发展到了3.2.0，只需要在项目中引用jave-all-deps即可，他包括了jave-core和不同平台的ffmpeg脚本。&lt;/p&gt;
+&lt;p&gt;　　项目是java的项目，借助github和google，了解到目前处理ffmpeg的框架最好用的是一个叫做&lt;a href=&quot;https://github.com/a-schild/jave2&quot;&gt;jave&lt;/a&gt;的开源项目。jave其实就是一个对ffmpeg包装的java库。目前jave的版本已经发展到了3.2.0，只需要在项目中引用jave-all-deps即可，他包括了jave-core和不同平台的ffmpeg脚本。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;&amp;lt;dependency&amp;gt;
  &amp;lt;groupId&amp;gt;ws.schild&amp;lt;/groupId&amp;gt;
@@ -17,15 +414,15 @@
 
 &lt;p&gt;由于我们公司的maven库的阿里镜像源超时的原因（那个时候找不到人来解决这个问题。），导致我用不到3.2.0版本的jave，我能获取到最新的版本就是2.7.3。这就导致了我在使用2.7.3时发现了问题去github上提&lt;a href=&quot;https://github.com/a-schild/jave2/issues/160&quot;&gt;concat mp4 not working properly. version 2.7.3 &lt;/a&gt;，开发者明确表示他没有资源去解决老版本的问题。反正，经过各种方面的努力，我也找到了我们公司管理maven库的同学，在他的帮助下我可以获取到3.2.0版本的jave了。但是，jave框架在视频拼接的处理上做的实在够差，我提了很多类似拼接的issue，比如&lt;a href=&quot;https://github.com/a-schild/jave2/issues/166&quot;&gt;The ffmpeg version included in 2.7.3 is a vry old one, which might cause the issue. &lt;/a&gt;。开发者在我的追问下已经不再回答我了。还有一次给他提了一个多个视频拼接时监控代码会报NPE问题的issue，&lt;a href=&quot;https://github.com/a-schild/jave2/issues/178&quot;&gt;when lots of videos to concat . EncoderProgressListernr get a NPE Exception&lt;/a&gt;，感觉开发者实在忙不过来了，转而求助我对此框架的修复。&lt;/p&gt;
 
-&lt;p&gt;最终，拼接视频的代码我自己写了。格式转换的用了jave的。总的来说，jave可以帮助门外汉快速上手，因为我们可以通过看他的代码一步一步了解他封装ffmpeg时使用的方法以及他在遇到不同操作情况时是采用的什么方案。但是，当你慢慢了解ffmpeg的时候，jave框架会因为他的封装不够扩展而让开发举步维艰。&lt;/p&gt;
+&lt;p&gt;　　最终，拼接视频的代码我自己写了。格式转换的用了jave的。总的来说，jave可以帮助门外汉快速上手，因为我们可以通过看他的代码一步一步了解他封装ffmpeg时使用的方法以及他在遇到不同操作情况时是采用的什么方案。但是，当你慢慢了解ffmpeg的时候，jave框架会因为他的封装不够扩展而让开发举步维艰。&lt;/p&gt;
 
-&lt;p&gt;当对ffmpeg有了一些最基本的了解后，ffmpeg官方网站（https://ffmpeg.org）就成为了进阶时最信得过的锦囊宝典。&lt;/p&gt;
+&lt;p&gt;　　当对ffmpeg有了一些最基本的了解后，ffmpeg官方网站（https://ffmpeg.org）就成为了进阶时最信得过的锦囊宝典。&lt;/p&gt;
 
 &lt;h1 id=&quot;二ffmpeg官网&quot;&gt;二、FFmpeg官网&lt;/h1&gt;
 
-&lt;p&gt;FFmpeg官网的左边栏，我们可以下载到ffmpeg最新的命令行。通过Documentation我们可以实时查看目前现有的所有功能，因为这个页面每晚都会重新生成。里面最常用的就是“&lt;strong&gt;Command Line Tools Documentation&lt;/strong&gt;”和“&lt;strong&gt;Components Documentation&lt;/strong&gt;”还有“&lt;strong&gt;General Documentation&lt;/strong&gt;”。&lt;/p&gt;
+&lt;p&gt;　　FFmpeg官网的左边栏，我们可以下载到ffmpeg最新的命令行。通过Documentation我们可以实时查看目前现有的所有功能，因为这个页面每晚都会重新生成。里面最常用的就是“&lt;strong&gt;Command Line Tools Documentation&lt;/strong&gt;”和“&lt;strong&gt;Components Documentation&lt;/strong&gt;”还有“&lt;strong&gt;General Documentation&lt;/strong&gt;”。&lt;/p&gt;
 
-&lt;p&gt;官网同时还提供了IRC和MAIL等联系方式，IRC的频道是#ffmpeg 和 #ffmpeg-devel。两个频道分别面向的是使用者和开发者。我曾经在使用ffmpeg发生各种问题时进到IRC的频道里去寻求帮助，虽然里面会有4百多位处在挂机状态，但不时还是会有一些人进行交流的。我总得看下来，感觉里面说的东西都是C方面的问题，别的问题感觉里面的人不太感兴趣。我就因为又一次遇到了问题在里面提问了，确实有人回应我了，人家要我给出命令行以及错误堆栈。在IRC中你不能直接贴出来代码，需要一些专门托管代码片段的网站专门来制作代码片段连接，这一点有点让我觉得麻烦，可是又没别的好办法。等过了一会我把连接贴出来后，就没人再回应了。总体来说，体验很差，浪费了自己很多宝贵时间。我建议后来的人还是不要在IRC上浪费时间了。&lt;/p&gt;
+&lt;p&gt;　　官网同时还提供了IRC和MAIL等联系方式，IRC的频道是#ffmpeg 和 #ffmpeg-devel。两个频道分别面向的是使用者和开发者。我曾经在使用ffmpeg发生各种问题时进到IRC的频道里去寻求帮助，虽然里面会有4百多位处在挂机状态，但不时还是会有一些人进行交流的。我总得看下来，感觉里面说的东西都是C方面的问题，别的问题感觉里面的人不太感兴趣。我就因为又一次遇到了问题在里面提问了，确实有人回应我了，人家要我给出命令行以及错误堆栈。在IRC中你不能直接贴出来代码，需要一些专门托管代码片段的网站专门来制作代码片段连接，这一点有点让我觉得麻烦，可是又没别的好办法。等过了一会我把连接贴出来后，就没人再回应了。总体来说，体验很差，浪费了自己很多宝贵时间。我建议后来的人还是不要在IRC上浪费时间了。&lt;/p&gt;
 
 &lt;h1 id=&quot;三音视频流的概念&quot;&gt;三、音视频流的概念&lt;/h1&gt;
 
@@ -54,9 +451,9 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;视频一共有三种流：音频流，视频流，字幕流。我建议还是去看看FFmpeg官网对这几种结构的解释，介绍的挺全的，比我写的强多了。&lt;/p&gt;
+&lt;p&gt;　　视频一共有三种流：音频流，视频流，字幕流。我建议还是去看看FFmpeg官网对这几种结构的解释，介绍的挺全的，比我写的强多了。&lt;/p&gt;
 
-&lt;p&gt;一般来说一个视频会有一个视频流和多个音频流及多个字幕流。他们的顺序安排按照约定俗成的顺序是第一个是视频流，对应着Stream #0:0；第二个及多个是音频流，对应着Stream#0:1，字幕流按此规则依次展开（当然，在我做ffmpeg的时候，经历过audio和video反了的情况，这种反了情况如果不去做处理ffmpeg其实会智能帮助挑选的，但是在某些时候就会报错失败。所以建议还是按照这个顺序来）。所以，我们可以从上面的代码片段中看到1_1637395707\&amp;amp;88966_1637395335_1637395635.mp4这个mp4文件包含以下信息：&lt;/p&gt;
+&lt;p&gt;　　一般来说一个视频会有一个视频流和多个音频流及多个字幕流。他们的顺序安排按照约定俗成的顺序是第一个是视频流，对应着Stream #0:0；第二个及多个是音频流，对应着Stream#0:1，字幕流按此规则依次展开（当然，在我做ffmpeg的时候，经历过audio和video反了的情况，这种反了情况如果不去做处理ffmpeg其实会智能帮助挑选的，但是在某些时候就会报错失败。所以建议还是按照这个顺序来）。所以，我们可以从上面的代码片段中看到1_1637395707\&amp;amp;88966_1637395335_1637395635.mp4这个mp4文件包含以下信息：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;视频持续时间 00:04:59.78，开始时间是0.000000，码率是575kb/s&lt;/li&gt;
@@ -66,7 +463,7 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395
 
 &lt;h1 id=&quot;四concat&quot;&gt;四、concat&lt;/h1&gt;
 
-&lt;p&gt;拼接的意思就是，将两段或者多端音视频片段拼接成一个完整的音视频。ffmpeg官网&lt;a href=&quot;https://ffmpeg.org/faq.html#How-can-I-concatenate-video-files_003f&quot;&gt;指出&lt;/a&gt;，根据不同的情况，有多种方案可以进行选择。&lt;/p&gt;
+&lt;p&gt;　　　拼接的意思就是，将两段或者多段音视频片段拼接成一个完整的音视频。ffmpeg官网&lt;a href=&quot;https://ffmpeg.org/faq.html#How-can-I-concatenate-video-files_003f&quot;&gt;指出&lt;/a&gt;，根据不同的情况，有多种方案可以进行选择。&lt;/p&gt;
 
 &lt;h2 id=&quot;1拼接的3种方案&quot;&gt;1、拼接的3种方案&lt;/h2&gt;
 
@@ -76,7 +473,7 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395
 
 &lt;p&gt;因为有些流不一定会和别的流的时间一致，举例来说一段视频有1个视频流和2个音频流，其中有一个音频流长度很短。那么这个方法就会按照这个视频最长时间的那个流为基准，其他流就会填补上静音。手册里明确说明最后一个视频不能这样。&lt;/p&gt;
 
-&lt;p&gt;如果想让合并如预期那样工作，一定要保证所有视频片段的时间戳都是从0开始的。否则会出现，画面和声音不同步的情况。&lt;/p&gt;
+&lt;p&gt;　　如果想让合并如预期那样工作，一定要保证所有视频片段的时间戳都是从0开始的。否则会出现，画面和声音不同步的情况。&lt;/p&gt;
 
 &lt;p&gt;合并的时候还会遇到不同视频片段中有不同类型，不同采样率，不同通道的音频流。FFmpeg会自动的选择一个值来进行处理。另外，还有一些值是不能被FFmpeg自动填充的。还是需要人为的指定。另外，如果每段视频片段拥有不同的帧率，我们在最终结果视频制作时一定要设定个值，否则制作出来的视频就会按照每段自己的帧率进行合并了，这样的结果就是视频卡顿。&lt;/p&gt;
 
@@ -90,11 +487,11 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395
 
 &lt;h3 id=&quot;2demuxer&quot;&gt;（2）demuxer&lt;/h3&gt;
 
-&lt;p&gt;当我们的视频文件不支持文件级别的拼接并且我们想要避免重新编译，就应该采用这种方案。&lt;/p&gt;
+&lt;p&gt;　　当我们的视频文件不支持文件级别的拼接并且我们想要避免重新编译，就应该采用这种方案。&lt;/p&gt;
 
-&lt;p&gt;这种方案，通过读取一个文件里面的视频，将他们一个一个进行拼接。这些视频片段的时间都会被重新调整，第一个视频的开始时间调整为0，后面的视频等待前一个文件拼接完毕再进行拼接。如果他们的流时间长短不一，就会在他们之间产生间隙。&lt;/p&gt;
+&lt;p&gt;　　这种方案，通过读取一个文件里面的视频，将他们一个一个进行拼接。这些视频片段的时间都会被重新调整，第一个视频的开始时间调整为0，后面的视频等待前一个文件拼接完毕再进行拼接。如果他们的流时间长短不一，就会在他们之间产生间隙。&lt;/p&gt;
 
-&lt;p&gt;如果他们的duration不同，那就会产生伪影（这个伪影，是翻译软件的翻译，我出现过这个问题，形象讲就是还在说话但是画面不动了。）&lt;/p&gt;
+&lt;p&gt;　　如果他们的duration不同，那就会产生伪影（这个伪影，是翻译软件的翻译，我出现过这个问题，形象讲就是还在说话但是画面不动了。）&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# 文件名为file，内容为
 file &apos;/mnt/share/file-1.mp4&apos;
@@ -117,7 +514,7 @@ file &apos;/mnt/share/file 3.mp4&apos;
 
 &lt;p&gt;在采用demuxer拼接方案时，遇到了这个错误。错误的根本原因是拼接的视频文件中的流顺序和第一个文件的流顺序不一致导致的。&lt;/p&gt;
 
-&lt;p&gt;demuxer的方案，是以第一个文件作为基准的。如果第一个视频的流顺序 #0:0是video，#0:1是audio，那么后面的所有视频文件的流顺序也得是 #0:0是video，#0:1是audio。这种情况是很可能发生的，因为你的输入可能是别人给你的，别人在操作视频的时候因为个人的疏忽或者经验缺失，有可能在制作的过程中将这种顺序弄混。如果你真遇到了这种情况，通过下面的命令，就能将顺序调整成第一个流是video,第二个流是audio。&lt;/p&gt;
+&lt;p&gt;　　demuxer的方案，是以第一个文件作为基准的。如果第一个视频的流顺序 #0:0是video，#0:1是audio，那么后面的所有视频文件的流顺序也得是 #0:0是video，#0:1是audio。这种情况是很可能发生的，因为你的输入可能是别人给你的，别人在操作视频的时候因为个人的疏忽或者经验缺失，有可能在制作的过程中将这种顺序弄混。如果你真遇到了这种情况，通过下面的命令，就能将顺序调整成第一个流是video,第二个流是audio。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffmpeg -i input.mp4 -y output.mp4
 &lt;/code&gt;&lt;/pre&gt;
@@ -132,11 +529,11 @@ file &apos;/mnt/share/file 3.mp4&apos;
 
 &lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08c4b0f98c0610a3e11d18f4082092032801300138a168.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;IBP&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;然后，我们得再了解下采样率是什么，有什么用途。我百度了很多关于采样率的文章，感觉大家都在抄互相的东西，让人看的一头雾水。&lt;/p&gt;
+&lt;p&gt;　　然后，我们得再了解下采样率是什么，有什么用途。我百度了很多关于采样率的文章，感觉大家都在抄互相的东西，让人看的一头雾水。&lt;/p&gt;
 
 &lt;p&gt;首先要确定一点，采样率的意义是模拟信号转成数字信号时的参考。因为根据Nyquist和Shannon定理指出，当采样率大于被采信号最大频率的两倍时才能无损的重建原始的模拟信号。如果采样率低的话，就无法从采样信号中重建，或者可能产生混叠的现象。采样率实际上表明了采集的频率，单位是KHZ，意思就是每秒做了1000次采集。例如：音频CD的采样率是44.1khz，这意味着模拟信号每秒采样44100次，就能在数字信号中还原模拟信号。更多内容可以参考这个&lt;a href=&quot;https://www.sweetwater.com/insync/7-things-about-sample-rate/&quot;&gt;《7 Questions About Sample Rate》&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;所以，问题的关键就是让各文件的采样率一致了。就是因为各文件的采样率不一致导致的，拼接视频时解码的时间3277744之后应该是3277745，但突然变小了 3276712就出现了问题。&lt;/p&gt;
+&lt;p&gt;　　所以，问题的关键就是让各文件的采样率一致了。就是因为各文件的采样率不一致导致的，拼接视频时解码的时间3277744之后应该是3277745，但突然变小了 3276712就出现了问题。&lt;/p&gt;
 
 &lt;h4 id=&quot;3多个mp4文件拼接不成功---found-duplicated-moov-atomfound-duplicated-moov-atom&quot;&gt;（3）多个mp4文件拼接不成功 - Found duplicated MOOV Atom.Found duplicated MOOV Atom.&lt;/h4&gt;
 
@@ -243,11 +640,11 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
 [aac @ 0x7f9576807680] Qavg: 20877.602
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;我们注意，其中有个报错是&lt;code&gt;Found duplicated MOOV Atom.&lt;/code&gt; ，MOOV Atom是个什么东西呢？我们可以参考这篇文章：&lt;a href=&quot;https://zhuanlan.zhihu.com/p/88196225&quot;&gt;理解 MPEG 的 moov atom&lt;/a&gt;，通过这篇文章我们了解到mp4是个封装容器，一个视频文件只能有一个MOOV Atom，现在两个mp4文件要进行拼接，就会有两个MOOV Atom。所以，ffmpeg就会选择第一个文件作为最终文件直接输出出来，而后面的都会选择跳过。&lt;/p&gt;
+&lt;p&gt;　　我们注意，其中有个报错是&lt;code&gt;Found duplicated MOOV Atom.&lt;/code&gt; ，MOOV Atom是个什么东西呢？我们可以参考这篇文章：&lt;a href=&quot;https://zhuanlan.zhihu.com/p/88196225&quot;&gt;理解 MPEG 的 moov atom&lt;/a&gt;，通过这篇文章我们了解到mp4是个封装容器，一个视频文件只能有一个MOOV Atom，现在两个mp4文件要进行拼接，就会有两个MOOV Atom。所以，ffmpeg就会选择第一个文件作为最终文件直接输出出来，而后面的都会选择跳过。&lt;/p&gt;
 
 &lt;p&gt;所以，想用concat方法直接去拼接mp4文件的想法应该立刻停止。我们可以选择其他方案继续进行，比如ts类型文件就是少数可以这么做的类型之一。ts文件是在DVD标准上存储的视频流文件。它使用的是标准的MPEG-2（.MPEG）来压缩视频数据。我们只需要记住ts文件主要存储的是流媒体，流媒体可以直接拼。&lt;/p&gt;
 
-&lt;p&gt;最后，我的方案就是：先转成ts文件，然后再按照concat protocol拼接起来。完美，perfect。此种方法耗费cpu资源和少量内存资源。可以说，是最佳方案，而且健壮性很强。我为什么说健壮性很强呢，因为下面的问题。&lt;/p&gt;
+&lt;p&gt;　　最后，我的方案就是：先转成ts文件，然后再按照concat protocol拼接起来。完美，perfect。此种方法耗费cpu资源和少量内存资源。可以说，是最佳方案，而且健壮性很强。我为什么说健壮性很强呢，因为下面的问题。&lt;/p&gt;
 
 &lt;h4 id=&quot;4使用filter方案无缘无故的停止ffmpeg线程&quot;&gt;（4）使用filter方案，无缘无故的停止ffmpeg线程&lt;/h4&gt;
 
@@ -255,7 +652,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
 
 &lt;h4 id=&quot;5could-not-find-codec-parameters-for-stream-0--xxxx-consider-increasing-the-value-for-the-analyzeduration-and-probesize-options&quot;&gt;（5）Could not find codec parameters for stream 0  XXXX Consider increasing the value for the ‘analyzeduration’ and ‘probesize’ options&lt;/h4&gt;
 
-&lt;p&gt;ffmpeg在avformat_find_stream_info中会读取一部分源文件的音视频数据，来分析文件信息。其中有两个参数来控制：probesize和analyzeduration。该函数的作用是通过读取一定时间内或一定长度内的字节码流数据来分析码流的基本信息。比如编码信息，时长，码率，帧率等等。如果这两个值设置的过小就会增加此函数的耗时，严重的可能会导致读取数据量不足，从而无法解析出来关键信息。这样就会导致播放失败或者有音频没有视频，有视频没有音频的问题。&lt;/p&gt;
+&lt;p&gt;　　ffmpeg在avformat_find_stream_info中会读取一部分源文件的音视频数据，来分析文件信息。其中有两个参数来控制：probesize和analyzeduration。该函数的作用是通过读取一定时间内或一定长度内的字节码流数据来分析码流的基本信息。比如编码信息，时长，码率，帧率等等。如果这两个值设置的过小就会增加此函数的耗时，严重的可能会导致读取数据量不足，从而无法解析出来关键信息。这样就会导致播放失败或者有音频没有视频，有视频没有音频的问题。&lt;/p&gt;
 
 &lt;p&gt;我就是因为没有设置这两个值，端上采集的视频由于电视的cpu持续飙高，视频中的关键信息被延迟写入到视频内，我的ffmpeg以默认的值去读取视频而没有获取到关键信息，最终拼接出来的视频有声音但是没有图像。&lt;/p&gt;
 
@@ -271,7 +668,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
 # -y abc.mp4;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这里面有几个参数我需要说明下。&lt;/p&gt;
+&lt;p&gt;　　这里面有几个参数我需要说明下。&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;-f lavfi 代表输入是一个虚拟输入源。-i 后面的就是这个是什么样的输入源&lt;/li&gt;
@@ -279,7 +676,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
   &lt;li&gt;-video_track_timescale 设置视频tbn，tbn是容器的时间基准。经过测试，他的作用是如果设置的过大视频就会以几倍速的速度快速播放。如果设置的小就会以原来的几分之一的速度播放。最终，会造成和音频流不同步。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;因为，空源视频是放在所有视频之前的，所以tbn这个值一定要设置好。因为后面的所有视频都以它为基准进行拼接。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ffmpeg" /><summary type="html">FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure FATE across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.</summary></entry><entry><title type="html">借助DDD思想，实践出质量检测系统</title><link href="https://naffan.cn/tech/2021/09/12/01.html" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" /><published>2021-09-12T00:00:00+08:00</published><updated>2021-09-12T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/09/12/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/09/12/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　因为，空源视频是放在所有视频之前的，所以tbn这个值一定要设置好。因为后面的所有视频都以它为基准进行拼接。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ffmpeg" /><summary type="html">FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure FATE across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.</summary></entry><entry><title type="html">借助DDD思想，实践出质量检测系统</title><link href="https://naffan.cn/tech/2021/09/12/01.html" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" /><published>2021-09-12T00:00:00+08:00</published><updated>2021-09-12T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/09/12/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/09/12/01.html">&lt;blockquote&gt;
   &lt;p&gt;&lt;strong&gt;DDD 是 Domain-Driven Design 的缩写。&lt;/strong&gt;其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1390,549 +1787,4 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry><entry><title type="html">拿饭网对JVM的解析和总结</title><link href="https://naffan.cn/tech/2021/05/11/01.html" rel="alternate" type="text/html" title="拿饭网对JVM的解析和总结" /><published>2021-05-11T00:00:00+08:00</published><updated>2021-05-11T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/11/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/11/01.html">&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;java虚拟机&quot;&gt;Java虚拟机&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　java虚拟机（java virtual machine,JVM），一种能够运行java字节码的虚拟机。作为一种编程语言的虚拟机啊，实际上不知是专用于java语言，只要生成的编译文件匹配JVM对加载编译文件格式要求，任何语言都可以由JVM编译运行。&lt;/p&gt;
-
-&lt;p&gt;　　java源代码被编译成&lt;code&gt;字节码&lt;/code&gt;-&lt;code&gt;一个.class的文件&lt;/code&gt;。编译的时候class文件会被VM翻译。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://javatutorial.net/wp-content/uploads/2017/10/write-once-run-anywhere-jvm.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;一次编译，各地运行&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;jvm的基本结构&quot;&gt;JVM的基本结构&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　JVM由三个主要的子系统构成&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;类加载子系统&lt;/li&gt;
-  &lt;li&gt;运行时数据区（内存结构）&lt;/li&gt;
-  &lt;li&gt;执行引擎&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;jvm架构&quot;&gt;JVM架构&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　首先，先我们看一看架构图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://javatutorial.net/wp-content/uploads/2017/10/jvm-architecture.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;JVM架构&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　我们，先说一下class loader subsystem。首先，loading一共有三个class loader类型：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;loading&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Bootstrap Class Loader – 加载JDK内部类，比如rt.jar和类似&lt;code&gt;java.lang.*&lt;/code&gt;这样的核心类。&lt;/li&gt;
-  &lt;li&gt;Extensions Class Loader – 从JDK的扩展目录加载类。&lt;/li&gt;
-  &lt;li&gt;System Class Loader – 从系统设定的classpath加载类，可以在程序启动时通过-cp或者-classpath指令进行设置。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;linking&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　其次，linking是链接一个类或接口时包括验证和准备这个类或接口的直接超类、直接超接口及必要时的元素类型。JVM需要满足以下点才能够连接：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;类或接口在被链接之前会被完全加载。&lt;/li&gt;
-  &lt;li&gt;在初始化类或接口之前，会对其进行完全的验证和准备。&lt;/li&gt;
-  &lt;li&gt;不论因为直接还是间接的代码中包含的连接错误能够被侦察到。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Initialization&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　类或接口的初始化包括执行它的类或接口初始化方法或调用类的构造函数。因为Java虚拟机是多线程的，所以类或接口的初始化需要小心地同步，因为其他一些线程可能试图同时初始化相同的类或接口。同时，这是Class Loading的最后一个阶段，这里所有静态变量都将被赋值为原始值，并且静态块将被执行。&lt;/p&gt;
-
-&lt;p&gt;　　我们学习JVM最重要的部分就是运行时数据区。如图：&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://cdn.jikewenku.com/wp-content/uploads/2021/01/74e01322f26270ccfe235ead6215d271.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;JVM运行时数据区域&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;1.程序计数器：每个线程都有独立的PC寄存器，以保存当前执行指令的地址，一旦指令被执行，PC寄存器将被下一条指令更新。&lt;/p&gt;
-
-&lt;p&gt;2.虚拟机栈：java执行方法的内存模型。每个方法被执行的时候，都会创建一个栈帧压入栈，当方法&lt;code&gt;正常返回&lt;/code&gt;或者&lt;code&gt;抛出未捕获的异常&lt;/code&gt;时，栈帧就会出栈。&lt;/p&gt;
-
-&lt;p&gt;（1）栈帧：栈帧存储方法的相关信息，包好局部变量表、发回执、操作数栈、动态链接。&lt;/p&gt;
-
-&lt;p&gt; a.局部变量表：包含了方法执过程中的所有变量。局部变量数组所需要的空间在编译期间完成分配，在方法运行期间不会改变局部变量数组的大小。&lt;/p&gt;
-
-&lt;p&gt;b.返回值：如果有的话，压入调用者栈帧中的操作数栈中，并且把pc的值指向方法调用指令后面的一条指令地址。&lt;/p&gt;
-
-&lt;p&gt;c.操作数栈：操作变量的内存模型。操作数栈的最大深度在编译的时候已经确定。&lt;/p&gt;
-
-&lt;p&gt;d.动态链接：每个栈帧都持有在运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态链接。&lt;/p&gt;
-
-&lt;p&gt;（2）线程私有&lt;/p&gt;
-
-&lt;p&gt;3.本地方法栈：本地方法堆栈保存本地方法信息。对于每个线程，将创建一个单独的本机方法堆栈。&lt;/p&gt;
-
-&lt;p&gt;4.方法区：所有类级别的数据都将存储在这里，包括静态变量。每个JVM只有一个方法区域，它是一个共享资源。&lt;/p&gt;
-
-&lt;p&gt;5.堆：所有对象及其对应的实例变量和数组都将存储在这里。每个JVM也有一个堆区域。由于方法和堆区域为多个线程共享内存，存储的数据不是线程安全的。&lt;/p&gt;
-
-&lt;p&gt;（1）java堆是虚拟机管理的内存中最大的一块&lt;/p&gt;
-
-&lt;p&gt;（2）java堆是所有线程共享的区域&lt;/p&gt;
-
-&lt;p&gt;（3）在虚拟机启动时创建&lt;/p&gt;
-
-&lt;p&gt;（4）此内存区域的唯一目的就是存放对象实例，几乎所有对象实例都在这里分配内存。存放new生成的对象和数组。&lt;/p&gt;
-
-&lt;p&gt;（5）java堆是垃圾收集器管理的内存区域。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;不同变量存储的位置&quot;&gt;不同变量存储的位置&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　我们可以把内存理解成可以单独操作字节的字节数组。在内存中的每个字节或者位置，都像Java中的数组一样可以访问。在32位机中，每个内存槽最大支持32位，也就是一个字符或者4个字节。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://javatutorial.net/wp-content/uploads/2019/06/Untitled-1.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;内存模型2&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　正如上图所示，4000，4004，4008等等数字代表每个内存槽的地址。这些数字代表32位。因为每个内存槽持有32位，或者说4个字节，每个内存槽的增量是4.&lt;/p&gt;
-
-&lt;p&gt;　　java中有两种类型变量域-全局变量和本地变量。全局变量可以在程序中任何地方访问到，但是本地变量只能通过创建了它的方法才能访问到。这两种变量域分别存储在方法区和虚拟机栈中。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://javatutorial.net/wp-content/uploads/2019/06/regions.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;内存模型2&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://javatutorial.net/wp-content/uploads/2019/06/where.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;内存模型3&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;虚拟机栈&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public void doSomething() {
-   int v = 0;
-   System.out.println(v);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　上面代码中的变量v是在方法中创建的，所以他保存在线程的虚拟机栈中。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;方法区&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class Example {
-   int globalVar = 3;
-   public int showVar() {
-       return globalVar;
-   }
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　上面的代码中，globalVar保存在方法区中。因为他可以被方法获取到，所以他是可以被整个系统获取到的。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;堆&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class Person {
-    int pid;
-    String name;
-    public Person(int id, String name) {
-       this.pid = id;
-       this.name = name;
-    }
-}
-
-public class Driver {
-    public static void main(String[] args) {
-        int id = 1;
-        String pName = &quot;Rick&quot;;
-        Person p = new Person(id, pName);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　在上面的代码中我们可以看到，我们创建了Person的实例并储存在变量p中，本质上，我们使用堆区来动态分配内存，我们需要使用new关键字创建这样一个实例。换句话说，我们确定不了这个实例的确切大小。无论实例有多少字节，如果有足够的内存(可能会有)，该实例将被创建，并且只保留创建它所需的字节量。&lt;/p&gt;
-
-&lt;p&gt;　　java其实帮助我们解决了很多动态分配内存的棘手问题，相比C语言来说，C语言必须自己去清除内存。所以说，java的垃圾回收是幕后的，简单到只需要我们触发关键词就可以完成清除内存的目的。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;虚拟机栈&quot;&gt;虚拟机栈&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　首先，我们先看一段代码：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;
-public class Demo {
-
-    public int math() {
-        int a = 1;
-        int b = 2;
-        int c = (a + b) * 10;
-        return c;
-    }
-
-    public static void main(String[] args) {
-        Demo demo = new Demo();
-        demo.math();
-    }
-}
-
-/*
-java -c Demo.java后，会生成Demo.class
-javap -c Demo，进行反编译，结果如下，让我们来分析一下这段程序就可以了解大概虚拟机栈的原理了。
-*/
-
-Compiled from &quot;Demo.java&quot;
-public class Demo {
-  public Demo();
-    Code:
-       0: aload_0
-       1: invokespecial #1                  // Method java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
-       4: return
-
-  public int math();
-    Code:
-       0: iconst_1//push
-       1: istore_1
-       2: iconst_2
-       3: istore_2
-       4: iload_1
-       5: iload_2
-       6: iadd
-       7: bipush        10
-       9: imul
-      10: istore_3
-      11: iload_3
-      12: ireturn
-
-  public static void main(java.lang.String[]);
-    Code:
-       0: new           #2                  // class Demo
-       3: dup
-       4: invokespecial #3                  // Method &quot;&amp;lt;init&amp;gt;&quot;:()V
-       7: astore_1
-       8: aload_1
-       9: invokevirtual #4                  // Method math:()I
-      12: pop
-      13: return
-}
-
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　经过反编译后，我们可以看到虚拟机的代码了。那么，分别是什么意思呢？我们可以参考&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html#jvms-6.5.istore&quot;&gt;手册&lt;/a&gt;来分析，分析的过程我在图片中给出了。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08fc9bd285061080bc0e18d21220a5082801300138e51c.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;编译过程分析&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　在图中的最后，我们看到ireturn语句，他的意思就是将结果返回。具体返回到那里呢，程序会去程序计数器中查找上一个栈帧的地址，结果就是返回给这个栈帧的。原理是，这段代码是首先调用的main函数，然后调用的math方法。所以，程序计数器会保存着这个关系，同样每段代码的顺序也会被程序计数器记录住。也就说，线程中程序运行到了哪里和从哪运行的都会在这个地方记录着。如果我们考虑多线程的情况，在一个线程运行过程中cpu的时间片到了，于是cpu把下一个时间片分给了新的线程。这个时候程序计数器也会记录住前一个线程运行到了哪里，新的线程从原先旧的线程中何时开始的，结束完成后还需要跳回旧线程中继续执行代码。&lt;/p&gt;
-
-&lt;p&gt;如果我们把程序改成这样：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public class Demo {
-
-    public int math() {
-        int a = 1;
-        int b = 2;
-        Object obj = new Object(); //加入个实例
-        int c = (a + b) * 10;
-        return c;
-    }
-
-    public static void main(String[] args) {
-        Demo demo = new Demo();
-        demo.math();
-    }
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;我们通过&lt;code&gt;javap -v Demo&lt;/code&gt;来看看,可以看到输出的信息比上边的多了很多。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;Classfile Demo.class
-  Last modified 2021-5-11; size 599 bytes
-  MD5 checksum b0253c6a0b3c51e6d1a72e8cc76da634
-  Compiled from &quot;Demo.java&quot;
-public class Demo
-  minor version: 0
-  major version: 52
-  flags: ACC_PUBLIC, ACC_SUPER
-Constant pool:
-   #1 = Methodref          #2.#28         // java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
-   #2 = Class              #29            // java/lang/Object
-   #3 = Class              #30            // Demo
-   #4 = Methodref          #3.#28         // Demo.&quot;&amp;lt;init&amp;gt;&quot;:()V
-   #5 = Methodref          #3.#31         // Demo.math:()I
-   #6 = Utf8               &amp;lt;init&amp;gt;
-   #7 = Utf8               ()V
-   #8 = Utf8               Code
-   #9 = Utf8               LineNumberTable
-  #10 = Utf8               LocalVariableTable
-  #11 = Utf8               this
-  #12 = Utf8               LDemo;
-  #13 = Utf8               math
-  #14 = Utf8               ()I
-  #15 = Utf8               a
-  #16 = Utf8               I
-  #17 = Utf8               b
-  #18 = Utf8               obj
-  #19 = Utf8               Ljava/lang/Object;
-  #20 = Utf8               c
-  #21 = Utf8               main
-  #22 = Utf8               ([Ljava/lang/String;)V
-  #23 = Utf8               args
-  #24 = Utf8               [Ljava/lang/String;
-  #25 = Utf8               demo
-  #26 = Utf8               SourceFile
-  #27 = Utf8               Demo.java
-  #28 = NameAndType        #6:#7          // &quot;&amp;lt;init&amp;gt;&quot;:()V
-  #29 = Utf8               java/lang/Object
-  #30 = Utf8               Demo
-  #31 = NameAndType        #13:#14        // math:()I
-{
-  public Demo();
-    descriptor: ()V
-    flags: ACC_PUBLIC
-    Code:
-      stack=1, locals=1, args_size=1
-         0: aload_0
-         1: invokespecial #1                  // Method java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
-         4: return
-      LineNumberTable:
-        line 6: 0
-      LocalVariableTable:
-        Start  Length  Slot  Name   Signature
-            0       5     0  this   LDemo;
-
-  public int math();
-    descriptor: ()I
-    flags: ACC_PUBLIC
-    Code:
-      stack=2, locals=5, args_size=1
-         0: iconst_1
-         1: istore_1
-         2: iconst_2
-         3: istore_2
-         4: new           #2                  // class java/lang/Object
-         7: dup
-         8: invokespecial #1                  // Method java/lang/Object.&quot;&amp;lt;init&amp;gt;&quot;:()V
-        11: astore_3
-        12: iload_1
-        13: iload_2
-        14: iadd
-        15: bipush        10
-        17: imul
-        18: istore        4
-        20: iload         4
-        22: ireturn
-      LineNumberTable:
-        line 9: 0
-        line 10: 2
-        line 11: 4
-        line 12: 12
-        line 13: 20
-      LocalVariableTable:
-        Start  Length  Slot  Name   Signature
-            0      23     0  this   LDemo;
-            2      21     1     a   I
-            4      19     2     b   I
-           12      11     3   obj   Ljava/lang/Object;
-           20       3     4     c   I
-
-  public static void main(java.lang.String[]);
-    descriptor: ([Ljava/lang/String;)V
-    flags: ACC_PUBLIC, ACC_STATIC
-    Code:
-      stack=2, locals=2, args_size=1
-         0: new           #3                  // class Demo
-         3: dup
-         4: invokespecial #4                  // Method &quot;&amp;lt;init&amp;gt;&quot;:()V
-         7: astore_1
-         8: aload_1
-         9: invokevirtual #5                  // Method math:()I 
-        12: pop
-        13: return
-      LineNumberTable:
-        line 17: 0
-        line 18: 8
-        line 19: 13
-      LocalVariableTable:
-        Start  Length  Slot  Name   Signature
-            0      14     0  args   [Ljava/lang/String;
-            8       6     1  demo   LDemo;
-}
-SourceFile: &quot;Demo.java&quot;
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　因为上边的输出太多，本来我想写在代码旁边用注释的形式备注，但是因为顺序是跳跃的，所以用这种方法不太好解释。所以，我还是准备写在下边，因为这样的形式可以保证时间线清晰。&lt;/p&gt;
-
-&lt;p&gt;　　首先，我们发现在代码编译期，就有了&lt;code&gt;Constant pool&lt;/code&gt;常量池了。那常量池是什么呢？他是java文件被编译成.class文件时，存储这些class文件的资源库。其主要存放两大类常亮：&lt;code&gt;字面量&lt;/code&gt;（文本字符串、声明为final的常量值等）和&lt;code&gt;符号引用&lt;/code&gt;（有三类：类和接口的全限定名、字段的名称和描述符、方法的名称和描述符）。&lt;/p&gt;
-
-&lt;p&gt;　　除了常量池以外，还有个运行时常量池。运行时常量池是方法区的一部分，class文件中的常量池在类加载后进入方法区的运行时常量池存放。他具有动态性，为什么这么说呢？因为class文件一旦编译后，class常量池就确定了。但是运行时常量池在运行期间有可能有新的常量存入池中。&lt;/p&gt;
-
-&lt;p&gt;　　在main()中，我们看到&lt;code&gt;9: invokevirtual #5&lt;/code&gt;这行，这代表我们调用了constant pool中的#5。#5代表这是一个方法引用，在虚拟机栈的栈帧的局部变量表中，就会生成一个ref并指向方法区中的Demo.math()，通过符号引用就实现了直接引用。其他的同理。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;本地方法栈&quot;&gt;本地方法栈&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　本地方法栈和虚拟机方法栈看起来感觉很像是不是？没错，其实就是很像，只是本地方法栈是由本地系统控制的方法栈。作为java程序员你并不能看到这个栈实际发生了什么，因为系统属于底层，底层是由C写的。那java什么时候会触发系统级的指令呢？让我们看下thread的实现吧。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    //src.zip/java/lang/Thread
-    public class Thread implements Runnable {
-    
-        …………
-        
-        private native void start0();
-        
-        public static native Thread currentThread();
-        
-        public static native void yield();
-        
-        …………
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　我们可以看到很多个native修饰的方法，java中会用这个关键词来修饰那些调用底层C方法的方法。本地方法栈就是为了这些方法而存在的。意思就是通过系统级方法来实现java想要实现的功能，所以本地方法栈被设计到了JVM中。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;jmm-java内存模型&quot;&gt;JMM Java内存模型&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　Java内存模型是共享内存的并发模型，线程之间主要通过读-写共享变量（堆内存中的实例域，静态域和数组元素）来完成隐式通信。&lt;/p&gt;
-
-&lt;p&gt;　　Java 内存模型（JMM）控制 Java 线程之间的通信，决定一个线程对共享变量的写入何时对另一个线程可见。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a4fbd2850610b1b90d18c305208b042801300138f63c.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;内存模型1&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　计算机在高速的 CPU 和相对低速的存储设备之间使用高速缓存，作为内存和处理器之间的缓冲。将运算需要使用到的数据复制到缓存中，让运算能快速运行，当运算结束后再从缓存同步回内存之中。在多处理器的系统中(或者单处理器多核的系统)，每个处理器内核都有自己的高速缓存，它们有共享同一主内存(Main Memory)。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致。为此，需要各个处理器访问缓存时都遵循一些协议，在读写时要根据协议进行操作，来维护缓存的一致性。&lt;/p&gt;
-
-&lt;p&gt;　　Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量（线程共享的变量）存储到内存中取出变量这样的底层细节。Java内存模型中规定了所有的比那两都存储在主内存中，每条线程还有自己的工作内存，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存中的变量。&lt;/p&gt;
-
-&lt;p&gt;　　不同的线程之间是无法直接访问互相的内存中的变量的，线程间的通讯一般有两种方式：1.通过消息传递。2.通过内存共享。java线程间的铜线采用的是共享内存的方式，线程，主内存和工作内存的交互关系如下图所示：&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08e3c9d3850610eecc0518b70720b2042801300138b0e702.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;内存模型2&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;重排序和happens-before规则&quot;&gt;重排序和happens-before规则&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　在执行程序时为了提高性能，编译器和处理器尝尝会对指令做重排序。重排序分三种类型：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;编译器优化的重排序。编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。&lt;/li&gt;
-  &lt;li&gt;指令集并行的重排序。现代处理器采用了指令集秉性技术（Instruction-Level Parallelism, ILP）来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。&lt;/li&gt;
-  &lt;li&gt;内存系统的重排序。由于处理器使用缓存和读/写缓冲器，这使得加载和存储操作看上去可能是在乱序执行。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　从java源代码到最终实际执行的指令序列，会分别经理下面三种重排序：&lt;/p&gt;
-
-&lt;p&gt;源代码 -》 编译器优化重排序 -》 指令集重排序 -》 内存系统重排序 -》 最终执行的指令&lt;/p&gt;
-
-&lt;p&gt;　　JMM属于语言级的内存模型，它确保在不同的编译器和不同的处理平台之上，通过禁止特定类型的编译器重排序和处理器重排序，为程序员提供一致的内存可见性保证。&lt;/p&gt;
-
-&lt;p&gt;　　happens-before是从JDK5开始的，java内存模型提出了happens-before的概念，通过这个概念来阐述操作之间的内存可见性。&lt;/p&gt;
-
-&lt;p&gt;　　如果一个操作执行的结果需要对另一个操作可见，那么这两个操作数之间必须存在happes-before关系。这里提到的两个操作既可以是在一个线程之内，也可以是在不同线程之间。&lt;/p&gt;
-
-&lt;p&gt;　　&lt;strong&gt;这里的“可见性”是指当一条线程修改了这个变量的值，新值对于其他线程来说是可以立即得知的&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;　　如果A happens-before B，那么Java内存模型将向程序员保证-A操作的结果将对B可见，且A的执行顺序排在B之前。&lt;/p&gt;
-
-&lt;p&gt;　　重要的happens-before规则如下：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;程序顺序规则：一个线程中的每个操作，happens-before于该线程中任意后续操作。&lt;/li&gt;
-  &lt;li&gt;监视器规则：对一个监视器锁的解锁，happes-before于随后对这个监视器锁的加锁。&lt;/li&gt;
-  &lt;li&gt;volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读。&lt;/li&gt;
-  &lt;li&gt;传递性：如果A happes-before B，且B happens-beforeC，那么A happens-before C。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　下图是happes-before与JMM的关系：&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08dadbd3850610c9aa0818cf0620f2042801300138a5aa03.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;JMM内存模型&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　volatile可以说是JVM提供的最轻量级的同步机制，当一个变量定义为volatile之后，它将具备两种特性：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;保证此变量对所有线程的可见性。&lt;/strong&gt;而普通变量不能做到这一点，普通变量1的值在线程间传递均需要通过主内存来完成。volatile虽然保证了可见性，但是java里面的运算并非原子操作，导致volatile变量的运算在并发下一样是不安全的。而synchronized关键字则是由“一个变量在同一时刻只允许一条线程对其进行lock操作”这条规则获得线程安全的。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;禁止指令重排序优化。&lt;/strong&gt;普通的变量仅仅会保证在该方法的执行过程中所有依赖赋值结果的地方都能获取到正确的结果。而不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;堆的内存划分及gc垃圾回收&quot;&gt;堆的内存划分及GC垃圾回收&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　在我之前写过关于堆及GC的文章，请参考&lt;a href=&quot;https://naffan.cn/tech/2020/01/27/01.html&quot;&gt;拿饭网对java垃圾回收大杂烩&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;jvm优化&quot;&gt;JVM优化&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;一般来说survior区不够大或者占用量达到50%，就会把一些对象放到老年区。通过设置合理的eden区，survivor区及使用率，可以将年轻对象保存在年轻代，从而避免full GC，使用&lt;code&gt;-Xmn&lt;/code&gt;设置年轻代的大小。&lt;/li&gt;
-  &lt;li&gt;对于占用内存比较多的大对象，一般会选择在老年代分配内存。如果在年轻代给大对象分配内存，年轻代内存不够了，就要在eden区移动大量对象到老年代，然后这些移动的对象可能很快消亡，因此导致full GC。通过设置参数：&lt;code&gt;-XX:petenureSizeThreshold=1000000&lt;/code&gt;，单位为B，标明对象大小超过1M时，在老年代分配内存空间。&lt;/li&gt;
-  &lt;li&gt;一般情况下，年轻对象放在eden区，当第一次GC后，如果对象还存活，放到survivor区，此后，每GC一次，年龄增加1，当对象的年龄达到阈值（64位机，最多15），就被放到老年代。这个阈值可以通过&lt;code&gt;-XX:MaxTenuringThreshold&lt;/code&gt;设置。如果想让对象留在年轻代，可以设置比较大的阈值。（通过查看openjdk能够得知对象头文件中有4位决定阈值。所以，这个是跟机器位数有关系的。）&lt;/li&gt;
-  &lt;li&gt;设置对小堆和最大堆：&lt;code&gt;-Xmx&lt;/code&gt;和&lt;code&gt;-Xms&lt;/code&gt;稳定的堆大小对垃圾回收是有利的，获得一个稳定的对大小的方法是将这两个设置设成一样的数字，这样的话可以使GC的次数减少。&lt;/li&gt;
-  &lt;li&gt;一个不稳定的堆并非毫无用处。在系统不需要使用大内存的时候，压缩堆空间，使得GC每次应对一个较小的堆空间，加快单次GC次数。基于这种考虑，JVM提供两个参数，用于压缩和扩展堆空间。（1）&lt;code&gt;-XX:MinHeapFreeRatio&lt;/code&gt; 参数用于设置堆空间的最小空闲比率。默认值是40，当堆空间的空闲内存比率小于40，JVM便会扩展堆空间。（2）&lt;code&gt;-XX:MaxHeapFreeRatio&lt;/code&gt; 参数用于设置堆空间的最大空闲比率。默认值是70， 当堆空间的空闲内存比率大于70，JVM便会压缩堆空间。（3）当-Xmx和-Xmx相等时，上面两个参数无效。&lt;/li&gt;
-  &lt;li&gt;通过增大吞吐量提高系统性能，可以通过设置并行垃圾回收收集器。（1）&lt;code&gt;-XX:+UseParallelGC&lt;/code&gt;:年轻代使用并行垃圾回收收集器。这是一个关注吞吐量的收集器，可以尽可能的减少垃圾回收时间。（2）&lt;code&gt;-XX:+UseParallelOldGC&lt;/code&gt;:设置老年代使用并行垃圾回收收集器。&lt;/li&gt;
-  &lt;li&gt;尝试使用大的内存分页：使用大的内存分页增加CPU的内存寻址能力，从而系统性能。&lt;code&gt;-XX:+LargePageSizeInBytes&lt;/code&gt;设置内存页的大小。&lt;/li&gt;
-  &lt;li&gt;使用非占用的垃圾收集器。&lt;code&gt;-XX:UseConcMarkSweepGC&lt;/code&gt;老年代使用CMS收集器降低停顿。&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;-XX:SurvivorRatio=3&lt;/code&gt;，代表年轻代中的分配比例：survivor:eden = 2:3。&lt;/li&gt;
-  &lt;li&gt;JVM性能调优工具：(1)jps(2)jstack(3)jmap(4)jhat(5)jstat(6)visualVM&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;参考文章：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://javatutorial.net/jvm-explained&quot;&gt;jvm-explained&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;https://segmentfault.com/a/1190000014395186&quot;&gt;JVM 完整深入解析&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html#jvms-6.5.istore&quot;&gt;javaSe8手册&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/czwbig/p/11127124.html&quot;&gt;Java内存区域（运行时数据区域）和内存模型（JMM）&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot,jvm" /><summary type="html">Java虚拟机</summary></entry></feed>
+&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry></feed>
