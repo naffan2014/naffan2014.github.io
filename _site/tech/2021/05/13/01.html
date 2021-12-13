@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>common-pool对象池学习 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="common-pool对象池学习" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="问如果你要设计一个池化对象，你会怎么做？" />
+<meta property="og:description" content="问如果你要设计一个池化对象，你会怎么做？" />
+<link rel="canonical" href="https://naffan.cn/tech/2021/05/13/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2021/05/13/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-13T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="common-pool对象池学习" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2021/05/13/01.html","headline":"common-pool对象池学习","dateModified":"2021-05-13T00:00:00+08:00","datePublished":"2021-05-13T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2021/05/13/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"问如果你要设计一个池化对象，你会怎么做？","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">common-pool对象池学习</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2021年05月13日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<blockquote>
+  <p>问如果你要设计一个池化对象，你会怎么做？</p>
+</blockquote>
+
+<p>　　设计一个T类型的池子，把T类型的资源都放到池子中。资源负责资源的事情，池子负责管理资源。管理池子要做到资源数量的管理，资源状态的管理，资源创建和销毁，线程安全，资源记录。还要考虑到复用的可能。</p>
+
+<p>　　让我们看看common-pool2的组成部分吧：</p>
+<ul>
+  <li>ObjectPool: 存取和状态管理的实现。我们直接操作的线程池就是在这里定义的。这里定义的是如何获取和释放对象等操作。至于具体创建对象的代码，是由PooledObjectFactory来负责的。</li>
+  <li>PooledObject: 将真正的资源进行封装，封装的过程中添加一些附加信息，比如状态信息，时间等信息。这些信息方便再操作连接资源时完成特定的操作。</li>
+  <li>PooledObjectFactory:创建，初始化，销毁对象的具体实现的地方。</li>
+</ul>
+
+<p><img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08e792838506108fff0318c10420d0022801300138d233.png" src="/images/default.jpg" alt="池化技术" /></p>
+
+<pre><code class="language-java">//一个简单的池结果。它继承了Closeable接口，也就是说是可以关闭的数据源或目标。T是实际存在于池中的类型。
+public interface ObjectPool&lt;T&gt; extends Closeable{
+    
+    //通过PooledObjectFactory创建对象或者通过其他机制放入空闲池对象。addObject也用来预热空闲池。
+    void addObject() throws Exception, IllegalStateException,
+            UnsupportedOperationException;
+            
+    //传入参数count，调用count次addObject。 方法的类型是default，也就是说这个方法直接实现方法体，不用实现者实现这个方法。
+    default void addObjects(final int count) throws Exception {
+        for (int i = 0; i &lt; count; i++) {
+            addObject();
+        }
+    }
+    
+    /*
+    从对象池中获取一个实例。
+    创建的实例要不是通过PooledObjectFactory中makeObject()新建出来的，要不就是用了前一个已经被PooledObjectFactory中activateObject()和PooledObjectFactory中validateObject()的空闲对象。
+    activateObject()和validateObject()这两个方法需要在不同的池类型文件中自己去实现。
+    */
+    T borrowObject() throws Exception, NoSuchElementException,
+            IllegalStateException;
+    
+    //清除随机对象放回到池中作为空闲对象。释放这个对象的相关引用资源。在clear之前一定是经过PooledObjectFacotry的destroyObject()过。
+     void clear() throws Exception, UnsupportedOperationException;
+     
+    //继承自Closeable接口，负责关闭并释放有关联系的系统资源。如果之前已经关闭了， 则调用此方法无效。
+    @Override
+    void close();
+    
+    //返回当前有多少实例从池对象中被借出了。如果返回的是负数代表这个信息不可用。
+    int getNumActive();
+    
+    //返回当前当前池中有多少空闲对象。这个值是一个近似值，因为他只代表还没有创建成新资源的被借走的对象。我理解的是还没有被分配内存地址（allocate）。
+    int getNumIdle();
+    
+    /*
+    使池中对象失效
+    按照约定，参数obj必已经被borrwoObject()或者被一个定义在子实现类中定义的方法实现了获取逻辑的对象。如果失败了就返回异常
+    */
+     void invalidateObject(T obj) throws Exception;
+     
+     //比上面多了一个DestoryMode。DestoryMode是个枚举，分别为普通摧毁和被禁的摧毁。最终调用的是PooledObjectFactory的destoryObject()。但不知为啥，我发现其实mode参数最终没有用上……。往下看，看到工厂的destoryObject（）
+     default void invalidateObject(final T obj, final DestroyMode mode) throws Exception {
+        invalidateObject(obj);
+    }
+    
+    /*
+    返回一个池对象中的实例。同invalidateObject()
+    异常中会抛出IllegalStateException。原因是如果有任何（把除了已经被分配内存的有状态的资源，即被借出了的。或者返回一个对象超过一次以上或者返回一个从未被借出过的对象）操作就会触发这个异常
+    */
+     void returnObject(T obj) throws Exception;
+}
+</code></pre>
+
+<pre><code class="language-java">/*
+用来定义池对象的一个wrapper 接口，用于跟踪对象的附加信息，比如状态、创建时间、使用时间等。这个类的实现必须是线程安全的。
+*/
+public interface PooledObject&lt;T&gt; extends Comparable&lt;PooledObject&lt;T&gt;&gt; {
+
+    //返回被包装的实际对象
+    T getObject();
+
+    //返回该对象的创建时间
+    long getCreateTime();
+    
+    //以毫秒为单位获得该对象最后在活动状态中使用的时间(它可能仍然处于活动状态，在这种情况下后续调用将返回一个增加的值)。
+    long getActiveTimeMillis();
+
+    //借出的次数
+    default long getBorrowedCount() {
+        return -1;
+    }
+
+    //空闲时间
+    long getIdleTimeMillis();
+
+    //上次借用时间
+    long getLastBorrowTime();
+
+    //上次归还时间
+    long getLastReturnTime();
+
+     /**
+     * 返回上次使用时间的一个估计值,如果Pooled Object实现了TrackedUse接口
+     * 那么返回值将是TrackedUse.getLastUsed()和getLastBorrowTime()的较大者，
+     * 否则返回值和getLastBorrowTime()相等
+     */
+    long getLastUsedTime();
+
+     /*
+     因为接口继承了Comparable接口。所以这个接口需要实现自己的排序逻辑。
+     默认是按照空闲时间排序的。
+     */
+    @Override
+    int compareTo(PooledObject&lt;T&gt; other);
+
+    @Override
+    boolean equals(Object obj);
+
+    @Override
+    int hashCode();
+
+    @Override
+    String toString();
+
+    //尝试将池对象置于PooledObjectState.EVICTION状态，即收回
+    boolean startEvictionTest();
+
+     //是否完成了收回测试
+    boolean endEvictionTest(Deque&lt;PooledObject&lt;T&gt;&gt; idleQueue);
+
+    //分配内存，这个比较重要。因为连接池中的资源被分配后才能算真正的解除。分配内存的过程中可能会出现抢占资源的情况，所以会发生异常。反正，最终返回ture/false来代表是否分配内存成功，即完成了borrow，状态改为PooledObjectState.ALLOCATED
+    boolean allocate();
+
+    //与上面一个方法作用相反,将PooledObjectState.ALLOCATED置为PooledObjectState.IDLE
+    boolean deallocate();
+
+    //将对象置为PooledObjectState.INVALID无效状态
+    void invalidate();
+
+    //设置是否记录对象使用的堆栈信息,可用于池泄漏时问题追溯
+    void setLogAbandoned(boolean logAbandoned);
+
+     /*
+     设置记录堆栈信息时的策略，是全量还是只记泄露的信息。
+     设置为false时，泄露信息只包括调用类的信息而不是方法名。
+     设置为数字时，制使用包含完整堆栈跟踪信息的堆栈遍历机制；否则，如果可能，使用更快的实现。
+     参数是自common-pool2-2.7.0开始有的。
+     */
+    default void setRequireFullStackTrace(final boolean requireFullStackTrace) {
+        // noop
+    }
+
+     //记录当前对象最后一次使用的堆栈信息
+    void use();
+
+    //打印对象的调用堆栈信息
+    void printStackTrace(PrintWriter writer);
+
+    //返回对象目前的状态
+    PooledObjectState getState();
+
+    //标记该对象发生了泄漏
+    void markAbandoned();
+
+    //标记该对象正在被归还到对象池
+    void markReturning();
+}
+</code></pre>
+
+<pre><code class="language-java">/*
+这个接口主要提供给ObjectPool接口使用。因为这个接口定义了池中对象的生命周期相关的所有方法。
+按照约定，以下情况ObjectPool会代理到PooledObjectFactory中：
+1.不论何时创建一个实例调用makeObject()时
+2.当实例在借出之前，已经处于passivated，每次实例在调用activateObject时
+3.当一个实例被激活时。当一个实例已经返回到池里并且正在做检查，又在passivated（卸载）之前时。当acitvated实例且确定能被借出时
+4.每个实例返回到连接池后，在调用passivateObject()时
+5.当实例正在从池中销毁时，destoryObject()调用时
+
+这个工厂必须确保线程安全，工厂只需要ObjectPool保证操作的实际类型和工厂一致即可。
+*/
+public interface PooledObjectFactory&lt;T&gt; {
+  
+   //创建一个资源实例，这个资源实例可以被封装起来。
+  PooledObject&lt;T&gt; makeObject() throws Exception;
+
+   /*
+   销毁一个不再被池子需要的实例。用的销毁模式是normal。
+   实现了这个方法的类需要注意的是：方法内没有任何保证资源处于什么状态和实现的方法如何去处理非预期的errors
+   所以，实现者需要考虑到对象没有被摧毁，即被垃圾收集器忘掉了，从而永远储存在了内存中。
+   */
+  void destroyObject(PooledObject&lt;T&gt; p) throws Exception;
+
+   //同上，只是采用了DestoryMode模式。但是其实感觉是mode根本没用用上。。。
+  default void destroyObject(final PooledObject&lt;T&gt; p, final DestroyMode mode) throws Exception {
+      destroyObject(p);
+  }
+
+  //确保实例能够安全的返回到池子里
+  boolean validateObject(PooledObject&lt;T&gt; p);
+
+   //重新初始化池返回的实例
+  void activateObject(PooledObject&lt;T&gt; p) throws Exception;
+
+   //卸载要返回到空闲对象池的实例
+  void passivateObject(PooledObject&lt;T&gt; p) throws Exception;
+}
+</code></pre>
+
+<p>　　至此，我分析完了三个接口。三个接口各司其职，互相协助。我用一张我画的图片来描述的话，一个管对象的打包，一个管对象的创建，一个管对象的进出口。用jedis举例的话就是，jedis资源打包成封装格式，封装格式被工厂创建，创建成真正使用的资源。这些资源再被借出或者归还。多么的形象哈哈。</p>
+
+<p><img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08eede83850610aaa80818b90e20b8082801300138e0f401.jpeg" src="/images/default.jpg" alt="我画的" /></p>
+
+<p>　　下面这张图是这三个接口相关的关系。
+<img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08cbdf83850610abd30818850620bb032801300138af8401.png" src="/images/default.jpg" alt="我画的" /></p>
+
+<p>　　另外，上面的接口都用到了对象的状态，对象状态如下：</p>
+<pre><code class="language-java">public enum PooledObjectState {
+    /**
+     * 在队列中,未被使用,空闲状态。调用allocate()方法后对象应该被置于该状态
+     */
+    IDLE,
+
+    /**
+     * 已分配,在使用中,调用allocate()方法后应该讲对象置于该状态
+     */
+    ALLOCATED,
+
+    /**
+     * 在队列中, 当前正在测试，可能会被回收。在此状态被借出后状态回被置为EVICTION_RETURN_TO_HEAD
+     */
+    EVICTION,
+
+    /**
+     * 不在队列中。当借用该对象时发现对象，发现正在进行回收测试，故将EVICTION更
+     * 改EVICTION_RETURN_TO_HEAD，表明曾经在回收过程中被借出，在回收完后它应该从新添加到队列的头部。
+     */
+    EVICTION_RETURN_TO_HEAD,
+
+    /**
+     * 在队列中,目前正在进行校验
+     */
+    VALIDATION,
+
+    /**
+     * 不在队列中，当前正在验证。当对象从池中被借出，
+     * 在配置了testOnBorrow的情况下，对像从队列移除和进行预分配的时候会进行验证(借用时校验)
+     */
+    VALIDATION_PREALLOCATED,
+
+   /**
+     * 不在队列中，正在进行验证。从池中借出对象时，发现对象正在进行校验，并将对象状态改为该状态
+     */
+    VALIDATION_RETURN_TO_HEAD,
+
+    /**
+     *无效的，并且将要或已经被销毁。
+     */
+    INVALID,
+
+    /**
+     * 泄漏的
+     */
+    ABANDONED,
+
+    /**
+     *归还中,调用markReturning()方法会将对象状态改为此状态，表明正在归还一个对象
+     */
+    RETURNING
+}
+
+</code></pre>
+
+<p>参考链接：</p>
+<ul>
+  <li><a href="https://blog.csdn.net/qq447995687/article/details/80413227">commons-pool2源码走读(一)</a></li>
+  <li><a href="https://blog.csdn.net/liyantianmin/article/details/86591742">common-pool对象池</a></li>
+</ul>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2021/05/12/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2021/05/15/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2021/05/13/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

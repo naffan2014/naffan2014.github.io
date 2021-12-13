@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>通过命令行获取NAS 320L权限 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="通过命令行获取NAS 320L权限" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。" />
+<meta property="og:description" content="　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。" />
+<link rel="canonical" href="https://naffan.cn/tech/2017/03/24/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2017/03/24/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-03-24T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="通过命令行获取NAS 320L权限" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2017/03/24/01.html","headline":"通过命令行获取NAS 320L权限","dateModified":"2017-03-24T00:00:00+08:00","datePublished":"2017-03-24T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2017/03/24/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">通过命令行获取NAS 320L权限</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2017年03月24日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<p>　　5年前买的DLINK的NAS一直在被我用来当做NFS用。当时买回来这货就是看中了可以和远程迅雷绑定，可以是实现在任何地只要知道下载链接就可以通过远程迅雷将下载任务直接拖拽到家中的NAS中，这样我在上班的同时，就可以利用家里的网络下载一些自己喜欢的电影，等到家了以后就可以直接用平板通过SMB协议访问到NAS上，这样就可以直接看电影了。其实这东西还挺好用，给我这几年的生活带来了很大的快乐，但是就是总会有意想不到的事情发生。这玩意在16年中旬的时候坏过一次，拿到DLINK客服那里想修一下，结果发现这货早就停产了，只能从总部发一个新的回来供我置换，并收我160元置换费。我只是怕麻烦，又因为自己已经熟悉了这个产品了所以就答应了他们的提议。可没成想换回来以后发生了一件让我到现在都很头疼的事情，那就是远程迅雷这套脚本增加了安全机制了。貌似是DLINK和迅雷在这款产品上有了分歧，迅雷不让用户在smb协议下直接删除所下载下来的文件了，如果想下载还必须登入他们的远程下载网站去删除。这样让我非常恼火，远程迅雷的用户体验本来就不好，却还逼着用户访问他们网站去删除已经存在自己NAS中的资料。</p>
+
+<p>　　就因为这个问题刚开始我还以为是人家客服给我换回来的是一个残次品而我又亲自找他们去了一趟，后来不成我还给他们总部的客服打电话，最后给我转到了他们的高级技术人员才真正证实了这件事不是DLINK的问题，而是迅雷在安装到NAS上的脚本做了些文章。</p>
+
+<p>　　接下来我就说说来龙去脉吧。当我想删除NAS上的文件时，总是有报错信息。</p>
+
+<p><img src="https://ooo.0o0.ooo/2017/03/24/58d4011869c21.jpg" alt="" /></p>
+
+<p>　　就光凭这种报错信息我很难发现是哪里的权限出了问题，但是优先想到的就是NAS上有什么权限。于是我还特意登录了NAS的浏览器后台去设置了我的用户组。但是，通过很多次测试根本就没有用处。也就是说问题不出在应用层面上的权限问题。而后台中的用户组其实是针对访问内容时的用户设计的。</p>
+
+<p><img src="https://ooo.0o0.ooo/2017/03/24/58d4011884114.jpg" alt="" /></p>
+
+<p>　　接下来我就想看看，到底底层给我返回的是什么状态码，好让我能够有目的性的去排查。结果，我通过wireshark找到了真正原因。</p>
+
+<p><img src="https://ooo.0o0.ooo/2017/03/24/58d40118b9a96.jpg" alt="" /></p>
+
+<p>　　看到SMB条目下边的 nas NT Status: STATUS_ACCESS_DENIED (0xc0000022)错误代码了吧。这就说明了一切的问题。是由于NAS中的权限配置的原因造成的，而罪魁祸首肯定是迅雷的脚本做的怪。</p>
+
+<p>　　好了，问题确定了，我们就要想方设法的去获取NAS的权限。NAS的系统是UNIX的，所以我们需要用ssh区连接。但是，我在连接的时候出现了问题。问题是这样的，在windows上用putty就可以ssh到NAS上，但是在mac上我用ssh就不能够连接上。后来，通过查询报错信息，在网上搜了一下发现了问题所在。</p>
+
+<p><img src="https://ooo.0o0.ooo/2017/03/24/58d40118580dd.jpg" alt="" /></p>
+
+<p>　　错误提示说不能与nas进行联通，原因是没有找到匹配的宿主key，而且服务器的宿主协议只接受ssh-dss(DSA)。将这段话作为关键词在搜索引擎上搜了一下，果然找到了这个错误提示的响应的解决办法。</p>
+
+<p><img src="https://ooo.0o0.ooo/2017/03/24/58d4011876a07.jpg" alt="" /></p>
+
+<p>　　这说的是openSSH 7.0或者更高版本的应用是默认关闭这个公钥算法的，因为这个算法太容易破解了。而后，这篇文章<a href="http://cache.baiducontent.com/c?m=9d78d513d99f1cb8589ccb2d4b478d3d450197634d8d8d5439c39339ca3310564717a5f065750704a29121205df95e5d9ae73605200351f1c19fd30acabbe3757bdc7074671df65613a00eafba07649b37912afeaf6ff0bb8064d2efc6949f0a5c9015433897f1f8471d518f2ae71446bee4ce14541e4aaded4734a2066a77c87613e70ceee0453441dea8&amp;p=ce71c64ad48911a05bed9122544191&amp;newp=8033d315d9c041aa1bbe9b7c527a82231610db2151d6d501298ffe0cc4241a1a1a3aecbf26291b04d1ce786405a44257e9fa3274360234f1f689df08d2ecce7e6c&amp;user=baidu&amp;fm=sc&amp;query=no+matching+host+key+type+found%2E+Their+offer%3A+ssh%2Ddss&amp;qid=b4c9b66f00047dfc&amp;p1=2">《OpenSSH Legacy Options》</a>也给出了响应的答案。按照帮助文档的提示下，我迅速的登录到了NAS的系统中，并且获取到了NAS的管理员权限。</p>
+
+<p><img src="https://ooo.0o0.ooo/2017/03/24/58d40118855b1.jpg" alt="" /></p>
+
+<p>　　之后，就是要找到迅雷的脚本了，我想这个脚本应该不难找也不难改，无非就是一个.sh的文件而已。等到下次我研究出来，再发一篇文章上来。</p>
+
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/thinking/2017/03/22/1.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/thinking/2017/04/04/1.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2017/03/24/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

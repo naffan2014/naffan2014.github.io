@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>MAC下配置php环境遇到的费解问题 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="MAC下配置php环境遇到的费解问题" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
+<meta property="og:description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
+<link rel="canonical" href="https://naffan.cn/tech/2017/06/15/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2017/06/15/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-06-15T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MAC下配置php环境遇到的费解问题" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2017/06/15/01.html","headline":"MAC下配置php环境遇到的费解问题","dateModified":"2017-06-15T00:00:00+08:00","datePublished":"2017-06-15T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2017/06/15/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">MAC下配置php环境遇到的费解问题</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2017年06月15日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<p><img src="http://kupai-open.essintra.ejucloud.cn/6a6fac86-fda8-4d94-8e86-051f1befa32e.png" alt="" /></p>
+
+<p>　　就在昨天晚上突然起了雅兴看了个大型网站redis队列应用的视频，正巧上班的时候和一位同事聊起了这个话题，突然发现曾经的理解有些偏差，所以正好趁这个机会自己练一下。谁成想刚开始动手就遇到了问题。</p>
+
+<p>　　我家中的MAC很久没用来编程了，一直都是用我班上的MAC编程。刚写完准备测试一下，结果打开localhost运行后，竟然显示的是”It works”。我回忆了一下我曾经对这台电脑做过的调整，我也没有重装过啊。两年前用它来写php程序还是好好的啊，怎么一下子就不行了呢？我脑子蒙了一下，这不是服务器的默认页面吗？nginx什么时候用”It works”来显示默认页面了呢？打开文件的路径怎么显示404啊？</p>
+
+<p>　　蒙蒙的我想一下应该如何开始排查问题。第一步先brew services stop nginx。再刷新localhost后，还是”It works”。擦，一种不好的预感油然而生，这是apache的默认页面好不啦。。。我记得我曾经删过MAC自带的apache和php的啊，怎么apache自己又装回来了？突然我意识到我曾经升级过MAC的版本。马上用terminal打开/etc/apache2，发现了apache又重新安装回来了，这个时候我才意识到MAC更新版本以后apache和php又重新安装回来了，而且还都使用了默认配置。可是我又一想，我工作用的MAC也升级了啊，怎么工作的电脑没有被重新配置啊。这让我百思不得其解，算了不想那么多了，先解决这个问题并重新配置吧。</p>
+
+<p>　　接下来，我需要做的就是关闭默认的apache。</p>
+
+<p>sudo apachectl stop</p>
+
+<p>　　刷新localhost，apache还运行着。。。再刷新一下，服务停止了。再刷新下，apache又运行了，再刷新又停了。我去，这个问题真诡异，上网搜了下问题也没有人遇到过。</p>
+
+<p>　　打开nginx后，还是这鸟样。那我看下nginx的配置吧，nginx配置怎么被还原了啊，而且还指定到了8080端口。那我localhost:8080看看什么样子，一切正常啊。我再打localhost后，apache服务真正停止了，难道这还有缓存啊。。。</p>
+
+<p>　　打开phpinfo.php发现，php解析不了了。应该是配置被还原造成的，不行重新配置servers吧。</p>
+
+<pre><code class="language-nginx">server {
+        listen       8080;
+        server_name  localhost;
+        root /Library/WebServer/Documents;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        
+        location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+</code></pre>
+
+<p>　　在配置上边的配置的时候，因为有一段时间没有配置有些淡忘了，所以刚开始配置的时候出现了几个问题，特此我在这里写一下。</p>
+
+<p><strong>1.listen       80</strong></p>
+
+<p>　　如果这样配置的话，在重启nginx的时候回提示permission denied。这是因为MAC认为1000以下的端口是不能够被除了管理员以外的人配置的。我曾试过改成80端口，但是brew services start nginx以后，nginx显示的是黄色，这说明nginx的启动有问题。后来再一想就为了每次打localhost不打80不是特别值当的，既然系统不建议用80端口，那么我就从了吧，我也没什么大项目会在这台机子上做，也就是运行一些简单的测试代码，打8080就打吧。</p>
+
+<p><strong>2.fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name</strong></p>
+
+<p>　　这句话的意思是引导php-fpm解释所要运行的文件。$document_root是root /Library/WebServer/Documents的变量。如果你这样做的话，nginx会将错误的路径引导至php-fpm，就会出现“File not found”。这也是nginx配置新手经常错的地方。</p>
+
+<p><strong>3.root /Library/WebServer/Documents</strong></p>
+
+<p>　　这个就是指定当前服务的根目录。我们应该将其放在server模块底下，原因是根目录是整个配置的全局变量，所有的请求都可以被代理到这个地址上。当然，你可以将其放到location中，但是如果你有多个location的话，你不得不在每一个location中指定root。所以，我们才将其放到server中，之后用$document_root来引用。</p>
+
+<p><strong>4.autoindex on</strong></p>
+
+<p>　　这个命令式开启目录索引，nginx默认是不开启的。如果你网站有默认的index.html，nginx就只会展示index.html。如果没有index.html就会用目录索引来展示</p>
+
+<p>　　nginx配置完毕了，服务也能够正常运作起来了，接下来就是php了。在配置php的时候我发现cli的php可以和cgi的配置不同，也就是说可以两者分别指定不同的php.ini。而且，cli的php.ini更改后不需要重启php服务就可以更新服务。这是因为cli是独立的服务不依托于服务器，只有cgi依托于服务器所以更新了php.ini后需要重启服务。</p>
+
+<p>　　我们可以通过运行php –ini来查看cli读取的php.ini。phpinfo.php可以用来查看服务的php.ini情况。</p>
+
+<p>　　在关闭apache之前，我曾想过就用apache吧，但是我竟然找不到MAC自带的php是安装在哪里了。后来发现也许是apache中的libphp5.so扩展来解释php的。这种方式给我带来的不方便的地方就是以后我想给php添加扩展的时候不知道如何操作。</p>
+
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2017/06/04/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/life/2017/09/28/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2017/06/15/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>
