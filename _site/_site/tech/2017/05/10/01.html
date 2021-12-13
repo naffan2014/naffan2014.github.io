@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>MYSQL性能优化 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="MYSQL性能优化" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="优化简介" />
+<meta property="og:description" content="优化简介" />
+<link rel="canonical" href="https://naffan.cn/tech/2017/05/10/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2017/05/10/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-05-10T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MYSQL性能优化" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2017/05/10/01.html","headline":"MYSQL性能优化","dateModified":"2017-05-10T00:00:00+08:00","datePublished":"2017-05-10T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2017/05/10/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"优化简介","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">MYSQL性能优化</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2017年05月10日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<h2 id="优化简介">优化简介</h2>
+
+<p>　　我们可以通过show status语句查询mysql数据库的性能。</p>
+
+<pre><code class="language-mysql">show status like 'value';
+</code></pre>
+<p>　　其中，value参数是常用的几个统计参数，这些参数介绍如下：</p>
+
+<ul>
+  <li>connections:连接mysql服务器的次数；</li>
+  <li>uptime:mysql服务器的上线时间；</li>
+  <li>slow_queries:慢查询的次数；</li>
+  <li>Com_select:查询操作的次数；</li>
+  <li>Com_insert:插入操作的次数；</li>
+  <li>Com_update:更新操作的次数；</li>
+  <li>Com_delete:删除操作的次数；</li>
+</ul>
+
+<p>　　mysql中存在查询InnoDB类型的表的一些参数：</p>
+
+<ul>
+  <li>Innodb_rows_read:select语句查询的记录数；</li>
+  <li>Innodb_rows_inserted:insert插入的记录数；</li>
+  <li>Innodb_rows_update:update更新的记录数；</li>
+  <li>Innodb_rows_deleted:delete删除的记录数；</li>
+</ul>
+
+<p>　　通过这些参数可以分析mysql的性能，根据分析结果，进行相应的性能优化。</p>
+
+<h2 id="优化查询">优化查询</h2>
+
+<p>　　通过对查询语句的分析，可以了解查询语句的执行情况，我们可以通过EXPLAIN和DESCRIBE来分析查询语句</p>
+
+<pre><code class="language-mysql">explain select 语句
+</code></pre>
+<p>　　结果中：</p>
+
+<ul>
+  <li>id:表示select语句的编号；</li>
+  <li>select_type:表示select语句的类型，这个参数有几个常用的取值，simple表示简单查询，其中不包括连接查询和子查询；primary表示主查询，或者是最外层的语句；union表示连接查询的第二个或后面的查询语句；</li>
+  <li>table:表示查询的表；</li>
+  <li>type:表示标的连接类型。这个参数有几个常用的取值，system表示表中只有一条记录；const表示表中有多条记录，但只从表中查询一条记录；all表示对表进行了完整的扫描；eq_ref表示多表连接时，后面的表使用了unique或者primary key；ref表示多表查询时，后面的表使用了普通索引；unique_subquery表示子查询中使用了unique或者primary key；index_subquery表示子查询中使用了普通索引；range表示查询语句中给出了查询范围；index表示对表中的索引进行了完整的扫描；</li>
+  <li>possible_keys:表示查询中可能使用的索引；</li>
+  <li>key:表示查询使用到的索引；</li>
+  <li>key_len:表示索引字段的长度；</li>
+  <li>ref:表示使用哪个列或常数于索引一起来查询记录；</li>
+  <li>rows:表示查询的元组个数；</li>
+  <li>filtered:表示按照条件过滤的元组个数	的百分比；</li>
+  <li>extra:表示查询过程的附件信息。这个参数有几个常用的取值，using where表示查询使用了where语句来处理的；using temporary表示使用了内部临时（基于内存）表；using filesort表示这是order by语句的结果；using index表示使用到了索引，没有直接访问整个表数据；using join buffer表示在连接查询时没有使用索引，并且需要连接缓冲区来存储中间的结果；impossible where表示where条件时没有找到符合的数据；select tables optimized away表示仅通过使用索引从聚合函数中返回一行数据；distinct表示找到一行数据后就停止了搜索；index merges表示使用了超过一个的索引时候，并以以下格式中的一个展现出来：
+    <ul>
+      <li>using sort_union(…)</li>
+      <li>using union(…)</li>
+      <li>using intersect(…)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><code>以上三个的区别我会在以后的测试中展现出来。</code></p>
+
+<p>　　DESCRIBE语句（DESC）的使用方法与EXPLAIN语句是一样的。这两者的分析结果也是一样的。DESCRIBE语句的形式如：</p>
+
+<pre><code class="language-mysql">describe select 语句；
+</code></pre>
+
+<p>　　在使用索引进行查询的过程中，有些时候即使查询时使用的是索引，但是索引并没有起作用。所以我们需要注意到几点情况：</p>
+
+<ul>
+  <li>使用like的时候，如果匹配字符串的第一个字符为%,索引是不会被使用的，如果不在第一个位置，索引就会被使用</li>
+  <li>在使用多列索引时，只有查询条件中使用了这些字段中第一个字段时，索引才会被使用</li>
+  <li>如果查询语句只有OR关键字时，如果OR前后的两个条件都是索引时，查询中将使用索引。如果前后有一个条件的列不是索引，那么查询中将不使用索引</li>
+</ul>
+
+<h2 id="优化插入记录的速度">优化插入记录的速度</h2>
+
+<p>1.禁用索引</p>
+
+<p>　　插入记录时，mysql会根据表的索引对插入的记录进行排序。如果插入大量数据时，这些排序会降低插入记录的速度。为了解决这个情况，再插入记录之前应该先禁用索引。</p>
+
+<pre><code class="language-mysql">alter table 表名 disable keys;
+</code></pre>
+
+<p>　　当数据都被插入以后，应该重新开启索引</p>
+
+<pre><code class="language-mysql">alter table 表名 enbale keys;
+</code></pre>
+
+<p>　　这块知识的应用，我已经在前边的文章有了对这块知识的应用：<a href="http://naffan.cn/tech/2017/05/09/01.html">《如何向MYSQL插入大量数据，千万级数据以及亿级数据的方法和性能》</a></p>
+
+<p>2.禁用唯一性检查</p>
+
+<p>　　插入数据时，mysql会对插入的记录进行唯一性校验。这种校验也会降低插入记录的速度。可以在插入记录之前禁用唯一性检验。等到记录插入完毕后再开启。</p>
+
+<pre><code class="language-mysql">set unique_checks=0;
+</code></pre>
+
+<p>　　重新开启唯一性检查</p>
+
+<pre><code class="language-mysql">set unique_checks=1;
+</code></pre>
+<p>3.优化insert语句</p>
+
+<p>　　一般在批量插入数据的时候，会优先想到用多个insert语句去插入数据。但是，其实如果将所有的数据汇聚成一条insert语句，将会减少与数据库的连接等操作。</p>
+
+<h2 id="分析表检查表和优化表">分析表、检查表和优化表</h2>
+<p>　　分析表主要作用是分析关键字的分布。</p>
+
+<pre><code class="language-mysql">analyze table 表名1[,表名2...];
+</code></pre>
+
+<p>　　检查表主要作用是检查表是否存在错误。</p>
+
+<pre><code class="language-mysql">check table 表名1[,表名2...][option];
+</code></pre>
+<p>　　option参数有5个参数：</p>
+
+<ol>
+  <li>quick</li>
+  <li>fast</li>
+  <li>changed</li>
+  <li>medium</li>
+  <li>extended</li>
+</ol>
+
+<p>　　这5个参数的执行效率依次降低。option选项只对MyISAM类型的表有效，对Innodb类型的表无效。同时还要注意这个执行过程会给表叫上只读锁。</p>
+
+<p>　　优化表主要作用是消除删除或更新造成的空间浪费。</p>
+
+<pre><code class="language-mysql">optimize table 表名1[,表名2...]；
+</code></pre>
+
+<p>　　如果一个表使用了TEXT或者BLOB这样的数据类型，那么更新、删除等操作就会造成磁盘空间的浪费。</p>
+
+<h2 id="优化mysql的参数">优化mysql的参数</h2>
+
+<p>　　mysql中比较重要的配置参数都在my.cnf或者my.ini文件的[mysqld]组中。下面对几个重要的参数进行详细介绍：</p>
+
+<ul>
+  <li>key_buffer_size:表示索引缓存的大小。这个值越大，使用索引进行查询的速度越快。</li>
+  <li>table_cache:表示同时打开的表的个数。这个值越大，能够同时同时打开的表的个数越多。这个值不是越大越好，因为同时打开的表太多会影响操作系统的性能。</li>
+  <li>query_cache_size:表示查询缓存区的大小。使用查询缓存区可以提高查询的速度，这种方式只适用于修改操作少且经常执行相同的查询操作的情况；其默认值为0.当取值为2时，只有select语句中使用了sql_cache关键字，查询缓存区才会使用。例如，select sql_cache * from score</li>
+  <li>query_cache_type:表示查询缓存区的开启状态。其取值为0时表示关闭，取值为1时表示开器，取值为2时表示按要求使用查询缓存区。</li>
+  <li>max_connections:表示数据库的最大连接数。这个连接数不是越大越好，因为这些连接会浪费内存的资源。</li>
+  <li>sort_buffer_size:表示排序缓存区的大小。这个值越大，进行排序的速度越快。</li>
+  <li>read_buffer_size:表示为每个线程保留的缓冲区的大小。当线程需要从表中连续读取记录时需要用到这个缓冲区。set session read_buffer_size=n可以临时设置该参数的值。</li>
+  <li>read_rnd_buffer_size:表示为每个线程保留的缓冲区的大小，与read_buffer_size相似。但主要用于存储按特定顺序读取出来的记录。也可以用set session read_rnd_buffer_size=n来临时设置该参数的值。</li>
+  <li>innodb_buffer_pool_size:表示innodb类型的表和索引的最大缓存。这个值越大，查询的速度就会越快。但这个值太大了会影响操作系统的性能。</li>
+  <li>innodb_flush_log_at_trx_commit:表示何时缓冲区的数据写入日志文件，并且将日志文件写入磁盘中。该参数有3个值，分别是0、1和2.值为0时表示每隔1秒将数据写入日志文件并将日志文件写入磁盘；值为1时表示每次提交事务时将数据写入日志文件并将日志文件写入磁盘；值为2时表示每次提交事务时将数据写入日志文件，每隔1秒将日志文件写入磁盘。该参数的默认值为1.这个默认值是最全最合理的。</li>
+</ul>
+
+<p>　　合理的配置这些参数可以提高mysql服务器的性能。除以上参数外，还有innodb_log_buffer_size、innodb_log_file_size等参数。如果想要了解更多的参数的话，应该去手册中进行查看。</p>
+
+<p>本文参考：</p>
+
+<ul>
+  <li><a href="https://book.douban.com/subject/5450806/">《mysql入门很简单》</a></li>
+</ul>
+
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2017/05/09/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2017/05/21/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2017/05/10/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

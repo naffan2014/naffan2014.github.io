@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>实现jekyll分类目录 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="实现jekyll分类目录" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
+<meta property="og:description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
+<link rel="canonical" href="https://naffan.cn/tech/2017/04/15/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2017/04/15/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-04-15T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="实现jekyll分类目录" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2017/04/15/01.html","headline":"实现jekyll分类目录","dateModified":"2017-04-15T00:00:00+08:00","datePublished":"2017-04-15T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2017/04/15/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">实现jekyll分类目录</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2017年04月15日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<p><img src="https://ooo.0o0.ooo/2017/04/15/58f1026a213b8.png" alt="jekyllserve" /></p>
+
+<p>　　首先，感谢作者sverrirs的开源项目<a href="https://github.com/sverrirs/jekyll-paginate-v2">jekyll-paginate-v2</a></p>
+
+<p>　　自打我这个博客建立到现在已经有半年的时光了，从简单的jekyll本机跑起来，到实现各种rb的插件，再到部署到github-pages服务器上，然后又研究了如何让page可以实现插件功能，之后又发现百度蜘蛛抓被github-pages禁止后转向了CDN服务，现如今又解决了jekyll的分类的分页。可以说，从现在开始我的博客终于实现了作为一个博客的最基础的功能。当刚才实现了分类的分页让我欣喜若狂，我终于不用担心着自己的文章多的只能在一个html中不够地方展现了。</p>
+
+<p>　　接下来介绍一下实现方法吧，现在都夜里1点了，今天（周六）早上还要上班呢，赶紧在睡觉之前把这篇文章写完吧。</p>
+
+<p>　　jekyll-paginate-v2是一个专给jekyll博客系统开发出的一个分页类，他继承了jekyll的原始paginator方法，并且将每个目录中的paginator.posts替换成YAML中所指定的聚合类（collectoion,category,tag），最终达到只要在YAML中规定好目录的所属分类即可实现分类中的分页效果。</p>
+
+<p>　　由于，jekyll的源代码中是不支持分类的分页的，可以从官方的<a href="http://jekyll.com.cn/docs/pagination/#note">说明文档</a>中看到：</p>
+
+<pre><code>不支持对“标签”和“类别”分页
+分页功能仅仅遍历文章列表并计算出结果，并无读取 YAML 头信息，现在不支持对“标签”和“类别”分页。
+</code></pre>
+
+<p>　　就因为jekyll本身不支持这样的操作，所以引来了很多的开发者致力于实现这个功能，虽然很多开发者都在试图开发出这个功能，但是也许是因为jekyll过于小众，所以从进展上来说，没有一个可以兼容的实现此功能的。但是，16年12月sverrirs却开发出了jekyll-paginate-v2分页类，终于实现了这个功能。其实，我也是半年以后才发现他这个插件的。通过它的帮助文档，虽然有一些小小的问题，但是最终还是实现了我梦寐以求的功能。不得不说这个开发者为我们jekyll用户造福了。</p>
+
+<p>　　就像说明文档说的一样，我们只需要安装好了这个插件，然后在_config.yml以及Gemfile中配置完成即可以应用了。然后，你再在每个分类index.html页面中规定好YAML信息就可以最终实现了。</p>
+
+<p>　　比如，我的<strong>深思默想</strong>分类，thinking是这个分类的文件夹，置于root下，然后在这个文件夹中建立index.html，index.html中配置即可。</p>
+
+<pre><code>---
+title: 拿饭-沈思默想
+pagination: 
+  enabled: true
+  category: thinking
+---
+</code></pre>
+
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/thinking/2017/04/09/1.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2017/05/09/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2017/04/15/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

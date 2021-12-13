@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>sentinel中的滑动窗口算法实现 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="sentinel中的滑动窗口算法实现" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="　　在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。" />
+<meta property="og:description" content="　　在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。" />
+<link rel="canonical" href="https://naffan.cn/tech/2020/04/25/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2020/04/25/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-25T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="sentinel中的滑动窗口算法实现" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2020/04/25/01.html","headline":"sentinel中的滑动窗口算法实现","dateModified":"2020-04-25T00:00:00+08:00","datePublished":"2020-04-25T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2020/04/25/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"　　在上篇《sentinel的几个实体分析》的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">sentinel中的滑动窗口算法实现</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2020年04月25日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>目录</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">StatisticSlot</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">几种Node</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">ArrayMetric</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">BucketLeapArray</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><p>　　在上篇<a href="https://www.naffan.cn/tech/2020/03/01/01.html">《sentinel的几个实体分析》</a>的Node和Metric中，我没有花太长的时间研究。因为sentinel是如何进行qps等指标的统计的，跟StaticNode和Metric有很大的关系。所以，我想单拿出来写一篇。首先，确定一点就是sentinel是基于滑动窗口算法来实现的。</p>
+
+<p>　　在上一篇<a href="https://www.naffan.cn/tech/2020/04/04/01.html">《sentinel降级背后的原理解析》</a>已经分析了sentinel是如何驱动的。在里面提到了有很多的slot按照顺序依次排列并运行的。所以，我们先来看一看这些数据是按照什么路径获取到的。那么，首先我们知道StatisticSlot是进行统计的。所以我们就要看看他的entry方法</p>
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-1">StatisticSlot</h1>
+  </li>
+</ul>
+
+<pre>
+  <code class="language-java">//A processor slot that dedicates to real time statistics.
+@Spi(order = Constants.ORDER_STATISTIC_SLOT)
+public class StatisticSlot extends AbstractLinkedProcessorSlot&lt;DefaultNode&gt; {
+     @Override
+    public void entry(Context context, ResourceWrapper resourceWrapper, DefaultNode node, int count,
+                      boolean prioritized, Object... args) throws Throwable {
+        try {
+            // 触发下一个slot的entry()
+            fireEntry(context, resourceWrapper, node, count, prioritized, args);
+            //能往下执行就说明没有被限流或者降级
+            // Request passed, add thread count and pass count.
+            node.increaseThreadNum();
+            node.addPassRequest(count);
+
+            …………
+        } catch (PriorityWaitException ex) {
+            node.increaseThreadNum();
+           …………            }
+        } catch (BlockException e) {
+            // Blocked, set block exception to current entry.
+            context.getCurEntry().setBlockError(e);
+
+            // Add block count.
+            node.increaseBlockQps(count);
+            …………
+        } catch (Throwable e) {
+            // Unexpected internal error, set error to current entry.
+            context.getCurEntry().setError(e);
+
+            throw e;
+        }
+    }
+    
+    …………
+}
+</code>
+</pre>
+
+<p>　　从上面代码，我们可知</p>
+
+<ol>
+  <li>通过node中的当前的实时统计指标信息进行规则校验</li>
+  <li>如果通过了校验，则重新更新node中的实时指标数据</li>
+  <li>如果被block了或者出现异常了，则更新node中block的指标或异常指标</li>
+</ol>
+
+<p>　　从上面的代码中，可以清晰的看到所有的实时指标都是在node中进行的。我们以qps的指标进行分析，看sentinel是怎么统计出qps的。</p>
+
+<hr />
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-2">几种Node</h1>
+  </li>
+</ul>
+
+<pre>
+  <code class="language-java">
+//DefaultNode继承了StatisticNode实现了Node
+public class DefaultNode extends StatisticNode {
+
+    /**
+     * Associated cluster node.
+     */
+    private ClusterNode clusterNode;
+    …………
+    
+    //下面两句其实执行的方法都是一个。但是一个属于DefaultNode，一个属于ClusterNode。DefaultNode指向了ClusterNode
+    @Override
+    public void addPassRequest(int count) {
+        //调用StatisticNode的
+        super.addPassRequest(count);
+        //ClusterNode没有定义这个方法，向父类找，在StaticsticNode中找到了
+        this.clusterNode.addPassRequest(count);
+    }
+    
+    …………
+}
+</code>
+</pre>
+
+<p>　　DefaultNode和ClusterNode有一些区别。</p>
+
+<p>　　DefaultNode是保存着某个resource的某个context的实时指标。每个DefaultNode都指向一个ClusterNode，</p>
+
+<p>　　ClusterNode是保存着某个resource在所有的context中实时指标的总和。同样的resource会共享同一个ClusterNode，不管它在那个context中。</p>
+
+<p>　　上面说了，最终都是执行的StatisticNode对象的addPassRequest方法：</p>
+
+<pre>
+  <code class="language-java">public class StatisticNode implements Node {
+    
+    //虽然用的是ArrayMetric。但是真正构造的却是OccupiableBucketLeapArray
+     private transient volatile Metric rollingCounterInSecond = new ArrayMetric(SampleCountProperty.SAMPLE_COUNT,
+        IntervalProperty.INTERVAL);
+
+    private transient Metric rollingCounterInMinute = new ArrayMetric(60, 60 * 1000, false);
+
+    ……
+    
+    //都是Metric的类型。所以我们应该去Metric看看
+    @Override
+    public void addPassRequest(int count) {
+        rollingCounterInSecond.addPass(count); //下面几个列子改造的数据结构，再返回这里向下看。
+        //应该去看OccupiableBucketLeapArray.addPass()。但是OccupiableBucketLeapArray没有这个方法，所以就向上看他的父亲的addPass()
+        rollingCounterInMinute.addPass(count);
+    }
+
+    ……
+}
+</code>
+</pre>
+
+<hr />
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-3">ArrayMetric</h1>
+  </li>
+</ul>
+
+<pre>
+  <code class="language-java">/*
+采用BucketLeapArray结构的基础指标结构
+*/
+public class ArrayMetric implements Metric {
+    
+    //这块要求了MetricBucekt。MetricBucket是记录着一段时间内的所有指标（pass,block等等）
+    private final LeapArray&lt;MetricBucket&gt; data;
+    
+    //构造函数，我们要看看OccupiableBucketLeapArray这个结构
+    public ArrayMetric(int sampleCount, int intervalInMs) {
+        this.data = new OccupiableBucketLeapArray(sampleCount, intervalInMs);
+    }
+
+    public ArrayMetric(int sampleCount, int intervalInMs, boolean enableOccupy) {
+        if (enableOccupy) {
+            this.data = new OccupiableBucketLeapArray(sampleCount, intervalInMs);
+        } else {
+            //还要看看这个结构，有什么区别
+            this.data = new BucketLeapArray(sampleCount, intervalInMs);
+        }
+    }
+
+}
+
+    //data是LeapArray
+    @Override
+    public void addPass(int count) {
+        //调用OccupiableBucketLeapArray的currentWindow()。但是OccupiableBucketLeapArray没有，他父亲LeapArray有。
+        WindowWrap&lt;MetricBucket&gt; wrap = data.currentWindow();
+        //通过窗口策略，会把通过的窗口内的counters中的PASS值增加count次
+        wrap.value().addPass(count);
+    }
+    
+    ………………
+</code>
+</pre>
+
+<pre>
+  <code class="language-java">public class MetricBucket {
+
+    //所有信息存在这里的。LongAdder也是原子的
+    private final LongAdder[] counters;
+
+    private volatile long minRt;
+
+    public MetricBucket() {
+        //在构造的时候，就按照这个枚举来定义counters不同数组了。（PASS,BLOCK,EXCEPTION,SUCCESS,RT,OCCUPIED_PASS）。之后计算QPS也是通过这个类的方法得到的
+        MetricEvent[] events = MetricEvent.values();
+        this.counters = new LongAdder[events.length];
+        for (MetricEvent event : events) {
+            counters[event.ordinal()] = new LongAdder();
+        }
+        initMinRt();
+    }
+    …………
+}
+</code>
+</pre>
+
+<hr />
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-4">BucketLeapArray</h1>
+  </li>
+</ul>
+
+<pre>
+  <code class="language-java">
+public class OccupiableBucketLeapArray extends LeapArray&lt;MetricBucket&gt; {
+
+    private final FutureBucketLeapArray borrowArray;
+    
+      //这个FutureBucketLeapArray又是个啥？
+      public OccupiableBucketLeapArray(int sampleCount, int intervalInMs) {
+        // This class is the original "CombinedBucketArray".
+        super(sampleCount, intervalInMs);
+        this.borrowArray = new FutureBucketLeapArray(sampleCount, intervalInMs);
+    }
+    
+    ……
+}
+
+</code>
+</pre>
+
+<p>　　接着往下</p>
+
+<pre>
+  <code class="language-java">
+//一种只服务于future buckets的BucketLeapArray
+public class FutureBucketLeapArray extends LeapArray&lt;MetricBucket&gt; {
+
+    public FutureBucketLeapArray(int sampleCount, int intervalInMs) {
+        // 调用的这里。
+        super(sampleCount, intervalInMs);
+    }
+
+    @Override
+    public MetricBucket newEmptyBucket(long time) {
+        return new MetricBucket();
+    }
+
+    @Override
+    protected WindowWrap&lt;MetricBucket&gt; resetWindowTo(WindowWrap&lt;MetricBucket&gt; w, long startTime) {
+        // Update the start time and reset value.
+        w.resetTo(startTime);
+        w.value().reset();
+        return w;
+    }
+
+    @Override
+    public boolean isWindowDeprecated(long time, WindowWrap&lt;MetricBucket&gt; windowWrap) {
+        // Tricky: will only calculate for future.
+        return time &gt;= windowWrap.windowStart();
+    }
+}
+
+</code>
+</pre>
+
+<p>　　调用了父构造方法。</p>
+
+<pre>
+  <code class="language-java">
+//基本的统计数据结构
+public abstract class LeapArray&lt;T&gt; {
+    //以毫秒为单位的时间窗口
+    protected int windowLengthInMs;
+    // 采样窗口的个数
+    protected int sampleCount;
+    // 以毫秒为单位的时间间隔
+    protected int intervalInMs;
+    // 以秒为单位的时间间隔
+    private double intervalInSecond;
+
+    //定义一个原子数组， 采样的时间窗口数组
+    protected final AtomicReferenceArray&lt;WindowWrap&lt;T&gt;&gt; array;
+
+    /**
+     * The conditional (predicate) update lock is used only when current bucket is deprecated.
+     */
+    private final ReentrantLock updateLock = new ReentrantLock();
+     
+     /*
+     sampleCount = intervalInMs / windowLengthInMs 例如 1000/500 = 2。
+     通过这个代码，我们了解到时间窗口是2个。
+     */
+    public LeapArray(int sampleCount, int intervalInMs) {
+        AssertUtil.isTrue(sampleCount &gt; 0, "bucket count is invalid: " + sampleCount);
+        AssertUtil.isTrue(intervalInMs &gt; 0, "total time interval of the sliding window should be positive");
+        AssertUtil.isTrue(intervalInMs % sampleCount == 0, "time span needs to be evenly divided");
+
+        this.windowLengthInMs = intervalInMs / sampleCount; //2
+        this.intervalInMs = intervalInMs; //1000
+        this.intervalInSecond = intervalInMs / 1000.0; // 1
+        this.sampleCount = sampleCount; //2
+
+        this.array = new AtomicReferenceArray&lt;&gt;(sampleCount);
+    }
+
+
+    public WindowWrap&lt;T&gt; currentWindow() {
+        return currentWindow(TimeUtil.currentTimeMillis());
+    }
+    
+   …………
+
+}
+</code>
+</pre>
+
+<p>　　这样ArrayMetric中就构造出了一个包含类内变量data 为LeapArray<metricbucket>的数组来了，最终以ArrayMetric返回。</metricbucket></p>
+
+<p>　　然后，程序会一路进行下去，直到要进行实时的数据统计调用了，这里就是窗口算法的体现了。</p>
+
+<pre>
+  <code class="language-java">    /*
+    这个方法极其重要。窗口算法的体现
+    */
+    public WindowWrap&lt;T&gt; currentWindow(long timeMillis) {
+        if (timeMillis &lt; 0) {
+            return null;
+        }
+        
+        //计算出时间的哈希值。因为array数组的长度是2出值只可能是 0 和 1.作为时间窗口数组array中的索引。
+        int idx = calculateTimeIdx(timeMillis);
+        //计算当前的毫秒其实值。 例如当前是12：10.303，出值为12：00.000。当然是按照毫秒计算的
+        long windowStart = calculateWindowStart(timeMillis);
+
+         /*
+         一个循环。通过时间窗口的值。
+         一共有三种情况。
+         1.bucket是空，创建一个bucket并且cas更新循环的数组
+         2.bucket更新了，就把更新的返回
+         3.bucket失效了，重置当前的bucket并且清空所有的时效bucket
+         这个while的动机要理解一下，其实就是为了在第3步更新完后再去调第2步用的。没其他的什么意义。你会发现1，2最终都是return，也就是直接从循环中结束外面的方法了。
+         */
+        while (true) {
+            //第一次肯定是null
+            WindowWrap&lt;T&gt; old = array.get(idx);
+            if (old == null) {
+                //先创建一个新的
+                WindowWrap&lt;T&gt; window = new WindowWrap&lt;T&gt;(windowLengthInMs, windowStart, newEmptyBucket(timeMillis));
+                if (array.compareAndSet(idx, null, window)) {
+                    // 给原子数组idx位置设置为新的window，直接返回
+                    return window;
+                } else {
+                    // 如果当前数组idx位不空，就不更新。让当前线程让出时间片，进入waitting()状态
+                    Thread.yield();
+                }
+            } else if (windowStart == old.windowStart()) {
+                 //新的时间和已存在的时间窗口的时间一致，就直接返回已存在
+                return old;
+            } else if (windowStart &gt; old.windowStart()) {
+                 /*
+                 如果当前时间大于已存在窗口的时间，那就意味着当前的已经失效。我们必须重置当前的时间。
+                 因为重置和清除操作需要保证原子性，所以我们用了更新锁来保证bucket更新的正确性。
+                 更新锁是有条件的（小范围）并且只有在bucket已经失效的时候才能发挥作用，所以大多场景下这不会导致性能的丢失
+                 */
+                if (updateLock.tryLock()) {
+                    try {
+                        //更新为新的时间
+                        return resetWindowTo(old, windowStart);
+                    } finally {
+                        updateLock.unlock();
+                    }
+                } else {
+                    //如果没有获得锁那么就等待。
+                    Thread.yield();
+                }
+            } else if (windowStart &lt; old.windowStart()) {
+                // 如果当前时间小于已存在的时间，一般不可能走到这里。如果走就返回一个新的。
+                return new WindowWrap&lt;T&gt;(windowLengthInMs, windowStart, newEmptyBucket(timeMillis));
+            }
+        }
+    }
+
+</code>
+</pre>
+
+<p>　　至此，就算出了QPS通过的，阻塞的，总数等指标了。上面的代码调用顺序不是线性的，简单的线性阅读肯定不能够掌握这里面的算法。就在我写这篇分析的时候，分析代码的时候都是跳来跳去，很容易把自己绕晕。所以，还是建议跟随者代码debug时，参照上面所说的进行阅读。这样效果要比较好。</p>
+
+<p>　　上面的发生时机，我来分析下。因为slot的排列顺序是这样的：</p>
+
+<pre>
+  <code># Sentinel default ProcessorSlots
+com.alibaba.csp.sentinel.slots.nodeselector.NodeSelectorSlot
+com.alibaba.csp.sentinel.slots.clusterbuilder.ClusterBuilderSlot
+com.alibaba.csp.sentinel.slots.logger.LogSlot
+com.alibaba.csp.sentinel.slots.statistic.StatisticSlot
+com.alibaba.csp.sentinel.slots.block.authority.AuthoritySlot
+com.alibaba.csp.sentinel.slots.system.SystemSlot
+com.alibaba.csp.sentinel.slots.block.flow.FlowSlot
+com.alibaba.csp.sentinel.slots.block.degrade.DegradeSlot
+</code>
+</pre>
+
+<p>　　然后，根据调用栈来看。如图：</p>
+
+<p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08b7eabd850610f1ce0618960420870328013001388bd701.png" src="/images/default.jpg" alt="调用栈" />
+</p>
+
+<p>　　可以看到，滑动窗口发生的时间是在统计阶段。还没有到限流或者熔断的阶段。</p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2020/04/04/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/thinking/2020/05/16/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2020/04/25/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

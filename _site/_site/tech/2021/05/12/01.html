@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>池化技术 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="池化技术" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="一种优化连接的方案，各种地方都有可能用到这种技术" />
+<meta property="og:description" content="一种优化连接的方案，各种地方都有可能用到这种技术" />
+<link rel="canonical" href="https://naffan.cn/tech/2021/05/12/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2021/05/12/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-12T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="池化技术" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2021/05/12/01.html","headline":"池化技术","dateModified":"2021-05-12T00:00:00+08:00","datePublished":"2021-05-12T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2021/05/12/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"一种优化连接的方案，各种地方都有可能用到这种技术","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">池化技术</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2021年05月12日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>目录</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">概念</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">数据库连接池</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">线程池</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">总结</span></a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg" src="/images/default.jpg" alt="池化技术" />
+</p>
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-1">概念</h1>
+  </li>
+</ul>
+
+<p>　　池化技术就是把一些能复用的实例放在一起，一般指的是内存里，而池这个概念也是一个虚拟的概念。这样做的好处是省去了每次消耗在新建、销毁这些实例的时间，从而提高了整体服务性能。在开发中，我们经常遇到的就是数据库的连接池和多线程的线程池。连接池的管理是核心。</p>
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-2">数据库连接池</h1>
+  </li>
+</ul>
+
+<p>　　数据库包括关系型数据库和非关系型数据库两种。关系型数据库指的是mysql，非关系型数据库指的是redis。</p>
+
+<p>　　mysql连接池有两个重要的配置：最小连接数和最大连接数。</p>
+
+<ol>
+  <li>如果当前连接数小于最小连接数，则创建新的连接处理请求。</li>
+  <li>如果连接池中有空闲连接，则使用空闲连接。
+3。 如果没有空闲连接，并且当前连接数小于最大连接数，则继续创建新的连接。这等价于建立一个新的连接。这些连接使用完成不会立马清除，而是放在池中等待复用最终空闲超过一段时间后自动释放。</li>
+  <li>如果当前连接数大于等于最大连接数，并且没有空闲连接了，则进入等待队列，在超时时间内等待空闲连接。</li>
+  <li>超时之后，则提示超时失败。获取数据库连接失败。</li>
+</ol>
+
+<p>　　redis连接池有3个重要的配置：最大连接数，最小空闲数，最大空闲数</p>
+
+<ol>
+  <li>当前连接小于最大连接数，则创建新的连接处理请求。</li>
+  <li>当前连接数大于等于最大连接数，超出的连接进入等待队列<code>LinkedBlockingDeque</code>，判断是否开启<code>blockWhenExhausted</code>，是则等待获取连接，否则抛错连接池已耗尽。</li>
+  <li>当前连接数小于最小空闲数，则预热最小空闲数连接。</li>
+  <li>当前连接数大于最大空闲数，则强制销毁这些多出来的连接。</li>
+</ol>
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-3">线程池</h1>
+  </li>
+</ul>
+
+<p>　　JDK1.5中引入的ThreadPoolExecutor就是一种线程池的实现，它有两个重要的参数：coreThreadCount和maxThreadCount。这两个参数控制着线程池的执行过程。</p>
+
+<ol>
+  <li>如果当前线程数少于coreThreadCount时，则创建新的线程处理请求。</li>
+  <li>如果当前线程数大于coreThreadCount则将超出的任务进队列，由当前空闲的线程执行。</li>
+  <li>当队列中的任务对接满时，则继续创建线程，直到maxThreadCount。</li>
+  <li>当前线程数达到maxThreadCount时还有新的任务，就将其按照抛弃策略进行抛弃。</li>
+</ol>
+
+<p>
+  <img class="lazy post-img" data-original="https://tva1.sinaimg.cn/large/0082zybpgy1gc7xbdxj67j30wk0ouqb3.jpg" src="/images/default.jpg" alt="JDK线程池提交任务示意图" />
+</p>
+
+<ul>
+  <li>
+    <h1 id="tocAnchor-1-4">总结</h1>
+  </li>
+</ul>
+
+<p>　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。</p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/tech/2021/05/11/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2021/05/13/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2021/05/12/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>

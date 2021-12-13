@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>借助DDD思想，实践出质量检测系统 | 拿饭网</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="借助DDD思想，实践出质量检测系统" />
+<meta name="author" content="张一帆" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="DDD 是 Domain-Driven Design 的缩写。其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。" />
+<meta property="og:description" content="DDD 是 Domain-Driven Design 的缩写。其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。" />
+<link rel="canonical" href="https://naffan.cn/tech/2021/09/12/01.html" />
+<meta property="og:url" content="https://naffan.cn/tech/2021/09/12/01.html" />
+<meta property="og:site_name" content="拿饭网" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-09-12T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="借助DDD思想，实践出质量检测系统" />
+<meta name="twitter:site" content="@naffan2011" />
+<meta name="twitter:creator" content="@张一帆" />
+<meta property="fb:admins" content="张一帆" />
+<meta property="article:publisher" content="张一帆" />
+<meta property="fb:app_id" content="100002835701051" />
+<script type="application/ld+json">
+{"url":"https://naffan.cn/tech/2021/09/12/01.html","headline":"借助DDD思想，实践出质量检测系统","dateModified":"2021-09-12T00:00:00+08:00","datePublished":"2021-09-12T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2021/09/12/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"DDD 是 Domain-Driven Design 的缩写。其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="https://www.naffan.cn/favicon.ico">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/hc.css" rel="stylesheet">
+<link href="/css/highlight/github-gist.css" rel="stylesheet">
+<!--baidu站长统计-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?c875589e505f2bef54c6b37e8a527e39";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif] d-->
+    <!-- Bootstrap core JavaScript-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/hc.js"></script>
+<script src="/js/jquery.lazyload.js"></script>
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="nav-toggle"><i class="fa fa-bars fa-2x"></i> naffan</div>
+    <div id = "wrapper">
+      <div class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">拿饭网</p>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+      <li><a href="/tech/index.html">技术总结</a></li>
+      <li><a href="/life/index.html">生活闲杂</a></li>
+      <li><a href="/thinking/index.html">沈思默想</a></li>
+      <li><a href="/economy/index.html">经济杂谈</a></li>
+      <li><a href="/books/index.html">阅读书籍</a></li>
+      <li><a href="/links/index.html">精彩链接</a></li>
+      <li><a href="/about/index.html">关于本人</a></li> 
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand"><a href="/"><h1 class="brand">拿饭网</h1></a><h3>一个属于自己的博客网站</h3></li>
+    <iframe width="100%" height="70" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=100&fansRow=2&ptype=1&speed=0&skin=7&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1941183154&verifier=1df81c39&colors=f7f7f7,f7f7f7,666666,0082cb,ecfbfd&dpc=1"></iframe>
+    <hr />
+    <!-- <li><a href="/list/index.html">文章列表</a></li> -->
+    <li><a href="/tech/index.html">技术总结</a></li>
+    <li><a href="/life/index.html">生活闲杂</a></li>
+    <li><a href="/thinking/index.html">沈思默想</a></li>
+    <li><a href="/economy/index.html">经济杂谈</a></li>
+    <li><a href="/books/index.html">阅读书籍</a></li>
+    <li><a href="/links/index.html">精彩链接</a></li>
+    <li><a href="/about/index.html">关于本人</a></li> 
+    <hr>
+  </ul>
+</div>
+
+      <div class="container">
+        <link rel="stylesheet" href="/css/toc.css" type="text/css" media="screen">
+<link rel="stylesheet" href="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" type="text/css">
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+<script src="/js/jquery.toc.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+      $("img.lazy").lazyload({effect: "fadeIn"});
+  });
+</script>
+ <script type="text/javascript">
+    $(function() {
+      $('#toc').toc({
+        showAlways:true,
+        renderIn:'#renderIn',
+        contentsText:"Legenda",
+        hideText:'Collapse',
+        showText:'Expand',
+        showCollapsed:true
+      });
+    });
+    </script>
+<div id="article">
+	<div class="article-title">借助DDD思想，实践出质量检测系统</div>
+	<p class="meta">
+		<small>&nbsp;<i class="fa fa-user-circle" aria-hidden="true"></i>
+			  
+			 	张一帆
+			 
+		 </small>
+		<small>&nbsp;<i class="fa fa-calendar-o" aria-hidden="true"></i> 2021年09月12日</small>
+	</p> 
+	<hr/>
+	<div  class="post">
+		<div id="toc-container">
+  <table class="toc" id="toc">
+    <tbody>
+      <tr>
+        <td>
+          <div id="toctitle">
+            <h2>目录</h2>
+          </div>
+          <ul>
+            <li class="toc_level-1 toc_section-1">
+              <a href="#tocAnchor-1-1"><span class="tocnumber">1</span> <span class="toctext">前言</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-2">
+              <a href="#tocAnchor-1-2"><span class="tocnumber">2</span> <span class="toctext">项目背景</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-3">
+              <a href="#tocAnchor-1-3"><span class="tocnumber">3</span> <span class="toctext">架构思想</span></a>
+            </li>
+            <li class="toc_level-1 toc_section-4">
+              <a href="#tocAnchor-1-4"><span class="tocnumber">4</span> <span class="toctext">领域设计实践</span></a>
+              <ul>
+                <li class="toc_level-2 toc_section-5">
+                  <a href="#tocAnchor-1-4-1"><span class="tocnumber">4.1</span> <span class="toctext">构建统一领域语言</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-6">
+                  <a href="#tocAnchor-1-4-2"><span class="tocnumber">4.2</span> <span class="toctext">业务分析与建模</span></a>
+                </li>
+                <li class="toc_level-2 toc_section-7">
+                  <a href="#tocAnchor-1-4-3"><span class="tocnumber">4.3</span> <span class="toctext">领域建模</span></a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div><blockquote>
+  <p><strong>DDD 是 Domain-Driven Design 的缩写。</strong>其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。</p>
+</blockquote>
+
+<h1 id="tocAnchor-1-1">前言</h1>
+
+<p>　　大屏项目借助链家门店中的终端设备（比如电视，pad等），构建智慧门店各场景的解决方案，助力门店业务发展。同时，协同交易签约场景打造居住服务中心智慧标杆，提供全新体验并优化签约流程。</p>
+
+<p>　　我们希望借助大屏深挖签约过程中更有价值的需求点，比如在签约过程中会录音录像（经过客业双方授权）。我们借助录制的视频可以保存下来作为客业（客户业主）双方斡旋时的证据，也能联合内部AI能力借助ASR转化来检测签约经理在服务环节中的关键讲解进而提升签约经理的服务质量。于是，我们就对此需求进行了立项，立项通过后进入了开发环节。</p>
+
+<h1 id="tocAnchor-1-2">项目背景</h1>
+
+<p>　　首先，简单介绍下项目交互和情况。实际发生签约时，客业及经纪人落座签约室进行签约过程。签约过程包括但不限于接待、斡旋、风险视频播放、起草合同等环节。每个环节的切换都是由签约经理通过电视进行操控的，所以每个环节的打点时间是有的，就可以和录音录像连动起来了。环节如图所示：</p>
+
+<p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08f786d38c0610acf30518e30620a0032801300138eb8802.png" src="/images/default.jpg" alt="架构图" />
+</p>
+
+<p>　　接着简要描述一下项目需求：</p>
+
+<ul>
+  <li>一个签约场景需要进行的环节有很多，每个环节内需要做的质量检测条目也很多。</li>
+  <li>需要一个工作流系统，承接上游下发过来的质检时间点和质检规则。根据质检规则发送给AI侧进行ASR。</li>
+  <li>需要一个工作流系统，转化上游质检环节的数据，下发给实际处理视频的系统进行ffmpeg处理。</li>
+  <li>需要一个操作ffmpeg脚本的服务，负责制作音视频。</li>
+  <li>未来可能会有更多的扩展业务需要进行质量检测。</li>
+</ul>
+
+<h1 id="tocAnchor-1-3">架构思想</h1>
+
+<p>　　然后，说下项目的架构设计思想。成熟的架构设计应该遵循简单，可复用的原则去设计。我们应该将整个项目优先进行切分，划分出不同的领域去设计。在这里我们可以简单的理解领域为专注的一件事情。在我们的这个项目中就划分出了两个领域，一个是工作流，一个是ffmpeg音视频制作系统。工作流系统专注于将上游业务下发的任务通过转化和编排等步骤切分出不同的底层可理解的任务，如拼接，转码等，再发送给视频处理系统去处理。ffmpeg音视频制作系统关注ffmpeg领域，只关心音视频制作等逻辑。ffmepg系统为底层系统，只对接工作流系统。如果将来接入方越来越多的话，因为只有工作流是对接系统，所以底层的ffmpeg可以与业务解耦，能够提供更灵活的支持。如下图所示：</p>
+
+<p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08bb85ce8c0610fdec0318a40820f3032801300138c4c102.png" src="/images/default.jpg" alt="项目的架构" />
+</p>
+
+<h1 id="tocAnchor-1-4">领域设计实践</h1>
+
+<p>　　从以上的需求描述来看，设计的概念较多，也有一定的业务复杂性，而且此次需求是质检系统从0到1的过程，我们决定使用领域驱动设计的方法论来解决业务复杂性问题，以及未来系统的可扩展性、可维护性。我在其中负责的是底层ffmpeg的服务。</p>
+
+<h2 id="tocAnchor-1-4-1">构建统一领域语言</h2>
+
+<p>　　由于需求涉及到的很多概念，为保证左后程序运行结果符合业务预期，需要对这些概念进行在限定语义下的无歧义的描述，就是构建统一的领域语言。这个步骤需要项目组全体成员达成共识，项目的正确性依赖于此。基于本次需求，我们规定了以下这些概念的具体含义：</p>
+
+<ul>
+  <li>任务：指制作视频时的各种动作类型的任务；</li>
+  <li>动作：指一个任务下需要进行的各种动作；</li>
+  <li>
+    <ul>
+      <li>下载：指从S3上进行下载</li>
+      <li>上传：指上传至S3（批量同理）</li>
+      <li>拼接：音视频文件拼接动作</li>
+      <li>转码：音视频文件的转码动作</li>
+      <li>剪切：通过业务指定的打点时间，剪切出音视频片段</li>
+      <li>空源：指一个视频为黑屏，声音为无声的视频或者音频</li>
+    </ul>
+  </li>
+  <li>方案：由一个任务和一组动作组成的集合</li>
+  <li>匹配：一个任务匹配动作的方案集</li>
+  <li>ffmpeg命令：通过不同的参数运行ffmpeg可以实现对音视频的操作</li>
+</ul>
+
+<h2 id="tocAnchor-1-4-2">业务分析与建模</h2>
+
+<p>　　以上的概念统一有助于接下来要进行的业务分析，在业务分析中主要的关注点在业务的相关概念、隐含概念以及这些概念之间的关系上，这些关系包括依赖、关联、聚合、组合等。</p>
+
+<p>　　对于业务分析，可以使用多种方式进行，比如用例分析法、UserStory、事件风暴等。这个具体看团队对于哪种方式比较熟悉。我们采用用例分析法，就是对于业务描述、梳理出各种情况下的用户用例。此次需求中有三个模块的用例：</p>
+
+<ul>
+  <li>任务模块；</li>
+  <li>动作匹配配置模块；</li>
+  <li>动作组装命令策略模块；</li>
+</ul>
+
+<p>　　这里先来进行动作配置模块的用例分析：</p>
+
+<ul>
+  <li>生成动作列表，校验任务状态；</li>
+  <li>生成动作策略方案，从配置列表按照任务进行过滤；</li>
+  <li>生成动作匹配集，每个任务根据传入的参数筛选匹配符合的动作；</li>
+  <li>……</li>
+</ul>
+
+<p>　　具体更多的详细用例这里不再展示，业务用例的列举越全面详细，由它构建的模型就会越准确，在列举用例的过程中要依据产品的PRD（如果有），但不能照搬PRD，要对PRD的内容进行归纳总结抽象，发现其中隐含的模型概念，比如这里的动作匹配策略的概念在PRD中没有显示的表现，但是隐藏在业务执行的过程中。</p>
+
+<p>　　当用例列举完善后，需要在这些用例中总结抽象出业务模型以及模型之间的关系。对于分析用例，简单来说有以下三个基本方法论：</p>
+
+<ul>
+  <li>提取实体，识别名词定位出实体；</li>
+  <li>添加关联，识别动词添加实体和实体质检的关联；</li>
+  <li>添加属性，识别形容词添加实体属性；</li>
+</ul>
+
+<p>　　对于上述过程，它不是一蹴而就的，而是一步一步的发现用例，画出相关的模型图，然后再次发现隐含的用例或模型，修改模型图，它是一个迭代而产生的模型图。在迭代的过程中，依然要对相关模型进行统一语言的构建。</p>
+
+<h3 id="匹配配置模型分析">匹配配置模型分析</h3>
+
+<p>　　此项目的难点就是对于音视频处理任务的类型较多，而且每种类型的任务的场景不同，ffmpeg需要采用的命令行参数也不同，涉及到的规则很是复杂。如下面的规则示例：</p>
+
+<ul>
+  <li>拼接 &amp;&amp; A场景 &amp;&amp; 兼容模式 &amp;&amp; 电视摄像头采集 &amp;&amp; ……</li>
+  <li>拼接 &amp;&amp; B场景 &amp;&amp; 高画质模式 &amp;&amp; 安防摄像头采集 &amp;&amp; ……</li>
+</ul>
+
+<p>　　类似这样的规则需求里面有很多种，未来会频繁的修改添加，所以如何对其进行建模使其可配置可扩展至关重要。对与这样的规则，我们把它抽象为规则、条件表达式、ffmpeg命令参数这样的统一概念，一个方案对应一个表达式，一个表达式由一个或者多个ffmpeg命令参数组成。模型图如下所示：</p>
+
+<p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08a3aad48c0610fb9c05188a0a20ee042801300138fac803.png" src="/images/default.jpg" alt="模型图1" />
+</p>
+
+<p>　　这样的模型可以使ffmpeg命令和方案配置解耦，方便未来扩展更多的ffmpeg命令以及进行方案的配置，条件表达式可以使用方案引擎进行解析。</p>
+
+<h3 id="组装ffmpeg命令策略模型分析">组装ffmpeg命令策略模型分析</h3>
+
+<p>　　对于ffmpeg命令策略模型的设计不但依赖上面的匹配配置模型，还要考虑到不同命令参数对最终音视频的影响。目前项目涉及的任务类型只涉及到质检场景的视频拼接、剪切及转码。在未来规划中，还会对其他场景及任务类型的支持，所以这里需要对其进行可扩展的设计：抽象出场景的概念。</p>
+
+<p>　　基于以上的模型构建，主要分为三个模块：场景、方案、ffmpeg命令参数。想要完成ffmpeg命令策略模型的设计就需要对这三个模块的信息和算法进行编写，我们还需要在设计的同时让他们保持相互解耦，方便未来对算法进行迭代优化。基于此，整个业务模型图如下所示：</p>
+
+<p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08e9bad48c0610e6960918a80920f20828013001389cd803.png" src="/images/default.jpg" alt="模型图2" />
+</p>
+
+<h2 id="tocAnchor-1-4-3">领域建模</h2>
+
+<p>　　基于以上的业务分析与建模、接下来要进行相关领域模型的建模。领域模型构建的关注点主要在于实体、值对象、聚合、领域服务和库的定义。</p>
+
+<ol>
+  <li>
+    <p>实体、值对象分析</p>
+
+    <p>首先要对业务模型中的每个概念进行领域建模、领域模型中最主要的就是实体和值对象，他们的区别有两点：</p>
+
+    <ul>
+      <li>实体是有唯一ID的，而且在业务中是有生命周期的，就是它会有一些状态变化；</li>
+      <li>值对象也可以有唯一的ID，但是它是无状态的，是在程序运行过程中是不可变的；</li>
+    </ul>
+
+    <p>根据以上的原则，可以对上述概念进行领域建模。</p>
+
+    <ul>
+      <li>对于任务这个概念，他是有唯一ID的，在任务处理过程中它是会改变状态的，所以它应该是实体。</li>
+      <li>对于动作这个概念，它是由唯一ID的，在处理过程中它不会改变状态，所以他应该是值对象。</li>
+      <li>对于场景这个概念，他是有唯一ID的，在任务处理过程中它是不会改变状态的，所以它应该是值对象。</li>
+      <li>对于匹配来说，有唯一ID，在处理过程中一旦创建就不会改变，构建为值对象。</li>
+      <li>对于方案来说，同上。</li>
+      <li>对于方案集来说，在处理过程中它需要维护方案的ffmpeg参数，是否为最优方案等相关状态，所以他是实体。</li>
+      <li>对于匹配策略来说，有唯一ID，在处理过程中不可变，构建为值对象。对于他所包含的参数规则，筛选规则，方案匹配规则都应该是值对象。</li>
+    </ul>
+  </li>
+  <li>
+    <p>聚合的划分</p>
+
+    <p>聚合这个概念是一个抽象的概念，它在代码中没有具体的类模型去承载，但是聚合的划分对于代码逻辑的内聚性至关重要。聚合可以理解为领域模型之间的一种代码约束，比如不同聚合之间的模型不可以直接调用，需要通过聚合根进行聚合间的交互。</p>
+
+    <p>对于上述模型来说，可以看出来有任务、场景、ffmpeg命令策略这三个聚合。其他的模型与这三个聚合一起构成这个ffmpeg模块聚合。对于ffmpeg命令策略这个聚合，它的内部有匹配规则这个聚合，规则由于有多种类型，所以它是一个抽象类；规则聚合包括表达式这个小聚合，表达式聚合又包含了ffmpeg命令聚合</p>
+  </li>
+  <li>
+    <p>工厂、库、领域服务分析</p>
+  </li>
+</ol>
+
+<p>​	实体和值对象是领域模型中比较重要的两个模型，剩下的工厂、库、领域服务这些对象是为了维护以上两个模型的生命周期而产生的模型。</p>
+
+<ul>
+  <li>工厂：正如它的名字，主要维护模型的创建工作。有两种形式来创建工厂，一个是通过构造方法充当模型的工厂方法；如果模型构建比较复杂，就需要创建一个工厂类来承载创建模型的工作。对于上述模型，需要为任务、场景、ffmpeg命令这三个聚合创建工厂类，因为他们够在相对来说比较复杂。</li>
+  <li>库：库的概念主要是用来调用基础设施层来获取持久化数据以及进行数据持久化。这里服务者需要从第三方接口获取数据，需要构建一个库对象；测录需要从数据库获取，构建一个库对象；</li>
+  <li>领域服务：对于领域服务，它主要承载聚合之间的交互逻辑，如果发现有一个逻辑设计多个聚合，它没有一个主体，不适合放在其中的摸一个聚合中，这时需要构建一个领域服务来承载这部分逻辑。比如上面木星中的方案生成逻辑，它涉及任务、场景、ffmpeg这三个聚合，所以应为其创建一个领域服务来承载方案生成以及最优化方案的成圣逻辑。对于领域服务，不能随便滥用，不然会变成一个业务逻辑的打你团。</li>
+</ul>
+
+<ol>
+  <li>领域模型</li>
+</ol>
+
+<p>　　基于以上的分析，我们可以构建出如下的领域模型图：</p>
+
+<p>
+  <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/0895a3dd8c06108de80518d0062093062801300138e75c.png" src="/images/default.jpg" alt="领域模型" />
+</p>
+
+<p>　　以上模型基本和业务分析出的模型类似，我们为其确立了具体模型归属，划分了相关的聚合，添加了相应的辅助领域模型。在构建这个模型时，依然要随时丰富相关的用例case，不断完善领域模型。</p>
+
+		<!--分享按钮 开始-->
+		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+			<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+			<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+		</div>
+		<script>
+			window._bd_share_config={
+				"common":{
+					"bdSnsKey":{},
+					"bdText":"",
+					"bdMini":"2",
+					"bdPic":"",
+					"bdStyle":"0",
+					"bdSize":"16"
+				},
+				"share":{},
+				"image":{
+					"viewList":["qzone","tsina","tqq","renren","weixin"],
+					"viewText":"分享到：","viewSize":"16"
+				},
+				"selectShare":{
+					"bdContainerClass":null,
+					"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]
+				}};
+				with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		<!--分享按钮 结束-->
+		<hr>
+		<div>
+			<ul class="pager">
+
+ 	<li class="previous"><a href="/life/2021/06/30/01.html">&larr; 前一篇</a></li>
+
+
+
+	<li class="next"><a href="/tech/2021/11/25/01.html">后一篇 &rarr;</a></li>
+
+</ul>
+
+		</div>
+	</div>
+	<!--PC和WAP自适应版-->
+<div id="SOHUCS" sid="/tech/2021/09/12/01.html"></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cysGfqald'; 
+var conf = 'prod_bd33a87b5e12ce2566d15909589be5f9'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 1000) {
+var head = document.getElementsByTagName('head')[0]||document.head||document.documentElement;
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.charset = 'utf-8';
+script.id = 'changyan_mobile_js';
+script.src = 'https://cy-cdn.kuaizhan.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+head.appendChild(script);
+} else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://cy-cdn.kuaizhan.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+</div>
+
+
+      </div>
+      <div class="container">
+  <footer>
+	  <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-93033182-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <p>
+      &copy; 2021 拿饭网 &middot;
+      <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
+      <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
+    </p>
+  </footer>
+</div>
+
+    </div>
+  </body>
+</html>
