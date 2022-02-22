@@ -11,8 +11,8 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。" />
 <meta property="og:description" content="　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。" />
-<link rel="canonical" href="https://naffan.cn/tech/2021/05/07/01.html" />
-<meta property="og:url" content="https://naffan.cn/tech/2021/05/07/01.html" />
+<link rel="canonical" href="http://localhost:4000/tech/2021/05/07/01.html" />
+<meta property="og:url" content="http://localhost:4000/tech/2021/05/07/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-05-07T00:00:00+08:00" />
@@ -24,7 +24,7 @@
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"url":"https://naffan.cn/tech/2021/05/07/01.html","headline":"spring-data-redis中的Jackson2JsonRedisSerializer研读","dateModified":"2021-05-07T00:00:00+08:00","datePublished":"2021-05-07T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://naffan.cn/tech/2021/05/07/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/tech/2021/05/07/01.html","headline":"spring-data-redis中的Jackson2JsonRedisSerializer研读","dateModified":"2021-05-07T00:00:00+08:00","datePublished":"2021-05-07T00:00:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2021/05/07/01.html"},"author":{"@type":"Person","name":"张一帆"},"description":"　　spring-data-redis是springboot的一个对redis的封装包。它是springFramework的一个默认的redis驱动jar包。spring已经在这个jar包里面封装了redis各种功能。其中的redisSerializer接口就是用来序列化存入redis数据格式的一种策略。spring官根据不同种情况已经为我们内置了很多序列化器，我们可以通过查看有哪些类实现了redisSerializer接口就可以得知。下面我就总结一下我对其中一种策略-jackson2Json的序列策略的研读。","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -466,7 +466,7 @@ head.appendChild(script);
 
 	</script>
     <p>
-      &copy; 2021 拿饭网 &middot;
+      &copy; 2022 拿饭网 &middot;
       <script src="https://s13.cnzz.com/z_stat.php?id=1272020504&web_id=1272020504" language="JavaScript"></script> &middot;
       <a href="https://beian.miit.gov.cn">京ICP备16029491号-4</a>
     </p>

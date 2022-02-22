@@ -1,4 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://naffan.cn/feed.xml" rel="self" type="application/atom+xml" /><link href="https://naffan.cn/" rel="alternate" type="text/html" /><updated>2021-12-12T23:53:36+08:00</updated><id>https://naffan.cn/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">Async和Transactional注解使用时的动态代理问题</title><link href="https://naffan.cn/tech/2021/12/11/01.html" rel="alternate" type="text/html" title="Async和Transactional注解使用时的动态代理问题" /><published>2021-12-11T00:00:00+08:00</published><updated>2021-12-11T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/12/11/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/12/11/01.html">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-22T22:56:27+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">Arduino由哪些元件组成？它是怎么运转起来的？</title><link href="http://localhost:4000/tech/2022/02/22/1.html" rel="alternate" type="text/html" title="Arduino由哪些元件组成？它是怎么运转起来的？" /><published>2022-02-22T00:00:00+08:00</published><updated>2022-02-22T00:00:00+08:00</updated><id>http://localhost:4000/tech/2022/02/22/1</id><content type="html" xml:base="http://localhost:4000/tech/2022/02/22/1.html">&lt;p&gt;Hello，大家好。2022春节前和同事聊天的时候聊到了硬件方面的知识，同事说他们大学的时候参加电子竞赛时用的是一款叫Arduino的板子进行开发的，他还说学校里组织的竞赛都是用的Arduino。我立刻起了兴趣，于是上网找了一些关于Arduino的文章，看完以后我的兴趣是越来越浓了。以前在写程序的时候一直想能够造一些东西出来，但是苦于自己的方向是后端，所以做出来的东西均是服务相关的产品。然而，Arduino一下子让我这名后端工程师豁然开朗，各种未来的黑科技在我脑中冒了出来，于是我打算深入了解一下Arduino啦。&lt;/p&gt;
+
+&lt;p&gt;首先，万里之行始于足下，我需要了解Arduino到底是什么，它是由什么组成的。简单来说，它是一个物理硬件，包括一个电路板和不同的电子元件组合起来。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fasset.ibanquan.com%2Fimage%2F5c120b0b53f4e37756003331%2Fs.jpeg%3Fv%3D1544686347&amp;amp;refer=http%3A%2F%2Fasset.ibanquan.com&amp;amp;app=2002&amp;amp;size=f9999,10000&amp;amp;q=a80&amp;amp;n=0&amp;amp;g=0n&amp;amp;fmt=jpeg?sec=1648114128&amp;amp;t=4ddfcfcddd6b07b802906a44eff2817a&quot; src=&quot;/images/default.jpg&quot; alt=&quot;Arduino&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上面这个图，是Arduino各元件的中文解释。大概可以看得出USB接口是可以和计算机进行交互的，DC插头是交流电入口，两边的端口负责外置元件的供电和控制信号，最长的那个芯片肯定是这款板子的大脑。上面的指示灯可以帮助我们来确认各种状态。接下来，让我们先从它的大脑-ATMEGA328P说起吧！但是在说之前，我先声明下本人并不是硬件工程师，以下总结的皆是本人通过学习和探究所得的。如有不对，一定是看的网站写的不对！&lt;/p&gt;
+
+&lt;p&gt;Q:ATMEGA328P是啥？&lt;/p&gt;
+
+&lt;p&gt;A:可以先看下面的参考文献链接。它是一个ATMEL公司研发的8位（8-bit）的精简指令(RISC)为基础的单片机，它结合着32KB大的可同时读写的ISP闪存，同时包括了1024B EEPROM，2KB SRAM等等。&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://www.microchip.com/content/dam/mchp/mrt-dam/ic-images/spdip/28-lead-m3x/ATmega328P-M3X-Regular.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;ATMEGA328P&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Q：什么是单片机？&lt;/p&gt;
+
+&lt;p&gt;A:单片机就是一个微信的CPU。单片机也叫单片微控制器。&lt;/p&gt;
+
+&lt;p&gt;Q：单片机能用来做什么？&lt;/p&gt;
+
+&lt;p&gt;A:通过把程序烧录到芯片里面，通过控制不同的外围电路实现不同产品的功能。&lt;/p&gt;
+
+&lt;p&gt;Q：你刚才说的那些ISP,EEPROM,SRAM都是干什么的？&lt;/p&gt;
+
+&lt;p&gt;A：其实这些东西在刚学Arduino时并不需要了解的，因为之后的学习中会涉及到背后的原理，到时候自然就会碰到这些概念。不过可以先提一下，这些涉及到硬件上的存储以及代码的刷新等功能。&lt;/p&gt;
+
+&lt;p&gt;Q：我看网络上很多单片机都有提到51单片机和STM单片机和AVR单片机。这些有什么区别么？&lt;/p&gt;
+
+&lt;p&gt;A：首先我们要明白的是，单片机是一种技术，他们的功能都和其内部的芯片息息相关。所以，这三种单片机的区别你可以暂时理解为，他们的制造商不同，采用的规格不同，所以功能上有些许的差异。&lt;/p&gt;
+
+&lt;p&gt;Q：什么是芯片？&lt;/p&gt;
+
+&lt;p&gt;A：芯片是由电路板和集成电路组合起来的。&lt;/p&gt;
+
+&lt;p&gt;Q：什么是电路板，什么是集成电路呢？&lt;/p&gt;
+
+&lt;p&gt;A：电路板就是那种绿油油的板子，电路板使用来走电路用的。集成电路是由各种电子元件按照一定规格组合起来的电路器件。将制作好的集成电路压在走好线的电路板上就形成了一个芯片。&lt;/p&gt;
+
+&lt;p&gt;Q：所以说，51单片机和STM单片机和AVR单片机的区别主要在厂商制作芯片的不同而不同啦？&lt;/p&gt;
+
+&lt;p&gt;A：是的，没错。如果想了解芯片之间的不同的话，就需要去了解芯片中的微处理架构和指令架构了。这些知识更深有点偏底层了，会越讲越深。这里就举个例子，像刚才说的RISC就是适合于移动办公的指令集架构。一般移动设备使用这个芯片。相对于精简指令集还有个对应的指令集叫CISC（复杂指令集），复杂指令集多应用于桌面系统。&lt;/p&gt;
+
+&lt;p&gt;参考文献：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.microchip.com/en-us/product/ATMEGA328P&quot;&gt;ATMEGA328P官方网站&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="c,Arduino" /><summary type="html">Hello，大家好。2022春节前和同事聊天的时候聊到了硬件方面的知识，同事说他们大学的时候参加电子竞赛时用的是一款叫Arduino的板子进行开发的，他还说学校里组织的竞赛都是用的Arduino。我立刻起了兴趣，于是上网找了一些关于Arduino的文章，看完以后我的兴趣是越来越浓了。以前在写程序的时候一直想能够造一些东西出来，但是苦于自己的方向是后端，所以做出来的东西均是服务相关的产品。然而，Arduino一下子让我这名后端工程师豁然开朗，各种未来的黑科技在我脑中冒了出来，于是我打算深入了解一下Arduino啦。</summary></entry><entry><title type="html">Async和Transactional注解使用时的动态代理问题</title><link href="http://localhost:4000/tech/2021/12/11/01.html" rel="alternate" type="text/html" title="Async和Transactional注解使用时的动态代理问题" /><published>2021-12-11T00:00:00+08:00</published><updated>2021-12-11T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/12/11/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/12/11/01.html">&lt;blockquote&gt;
   &lt;p&gt;代理是指由被委托人接受委托人的委托全权去办理一件事情，在办理这件事情的过程中委托人会限制被委托人的行事边界。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -54,7 +99,7 @@ Empty set (0.00 sec)
 +----+-------------+-----------+--------+
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;通过断点时的堆栈信息，我们发现实际调用beta()的是&lt;code&gt; Galaxy$$FastClassBySpringCGLIB$$76b76f24&lt;/code&gt;方法。&lt;/p&gt;
+&lt;p&gt;　　通过断点时的堆栈信息，我们发现实际调用beta()的是&lt;code&gt; Galaxy$$EnhancerBySpringCGLIB$$76b76f24&lt;/code&gt;方法。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;beta:44, Galaxy (com.example.service.galaxy)
 alpha:31, Galaxy (com.example.service.galaxy)
@@ -395,7 +440,7 @@ public class UserService {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;　　最终，也符合预期。最后，至于注解的时序原理等我有时间研究一下再写出来。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">代理是指由被委托人接受委托人的委托全权去办理一件事情，在办理这件事情的过程中委托人会限制被委托人的行事边界。</summary></entry><entry><title type="html">聊聊我使用ffmpeg时总结的最佳实践</title><link href="https://naffan.cn/tech/2021/11/25/01.html" rel="alternate" type="text/html" title="聊聊我使用ffmpeg时总结的最佳实践" /><published>2021-11-25T00:00:00+08:00</published><updated>2021-11-25T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/11/25/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/11/25/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　最终，也符合预期。最后，至于注解的时序原理等我有时间研究一下再写出来。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java,springboot" /><summary type="html">代理是指由被委托人接受委托人的委托全权去办理一件事情，在办理这件事情的过程中委托人会限制被委托人的行事边界。</summary></entry><entry><title type="html">聊聊我使用ffmpeg时总结的最佳实践</title><link href="http://localhost:4000/tech/2021/11/25/01.html" rel="alternate" type="text/html" title="聊聊我使用ffmpeg时总结的最佳实践" /><published>2021-11-25T00:00:00+08:00</published><updated>2021-11-25T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/11/25/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/11/25/01.html">&lt;blockquote&gt;
   &lt;p&gt;FFmpeg is the leading multimedia framework, able to &lt;strong&gt;decode&lt;/strong&gt;, &lt;strong&gt;encode&lt;/strong&gt;, &lt;strong&gt;transcode&lt;/strong&gt;, &lt;strong&gt;mux&lt;/strong&gt;, &lt;strong&gt;demux&lt;/strong&gt;, &lt;strong&gt;stream&lt;/strong&gt;, &lt;strong&gt;filter&lt;/strong&gt; and &lt;strong&gt;play&lt;/strong&gt; pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure &lt;a href=&quot;http://fate.ffmpeg.org/&quot;&gt;FATE&lt;/a&gt; across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -676,7 +721,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
   &lt;li&gt;-video_track_timescale 设置视频tbn，tbn是容器的时间基准。经过测试，他的作用是如果设置的过大视频就会以几倍速的速度快速播放。如果设置的小就会以原来的几分之一的速度播放。最终，会造成和音频流不同步。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;　　因为，空源视频是放在所有视频之前的，所以tbn这个值一定要设置好。因为后面的所有视频都以它为基准进行拼接。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ffmpeg" /><summary type="html">FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure FATE across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.</summary></entry><entry><title type="html">借助DDD思想，实践出质量检测系统</title><link href="https://naffan.cn/tech/2021/09/12/01.html" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" /><published>2021-09-12T00:00:00+08:00</published><updated>2021-09-12T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/09/12/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/09/12/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　因为，空源视频是放在所有视频之前的，所以tbn这个值一定要设置好。因为后面的所有视频都以它为基准进行拼接。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="ffmpeg" /><summary type="html">FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passes our testing infrastructure FATE across Linux, Mac OS X, Microsoft Windows, the BSDs, Solaris, etc. under a wide variety of build environments, machine architectures, and configurations.</summary></entry><entry><title type="html">借助DDD思想，实践出质量检测系统</title><link href="http://localhost:4000/tech/2021/09/12/01.html" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" /><published>2021-09-12T00:00:00+08:00</published><updated>2021-09-12T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/09/12/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/09/12/01.html">&lt;blockquote&gt;
   &lt;p&gt;&lt;strong&gt;DDD 是 Domain-Driven Design 的缩写。&lt;/strong&gt;其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -845,11 +890,11 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
 
 &lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/0895a3dd8c06108de80518d0062093062801300138e75c.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;领域模型&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;　　以上模型基本和业务分析出的模型类似，我们为其确立了具体模型归属，划分了相关的聚合，添加了相应的辅助领域模型。在构建这个模型时，依然要随时丰富相关的用例case，不断完善领域模型。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="系统" /><summary type="html">DDD 是 Domain-Driven Design 的缩写。其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。</summary></entry><entry><title type="html">我在贝壳的第一次活水</title><link href="https://naffan.cn/life/2021/06/30/01.html" rel="alternate" type="text/html" title="我在贝壳的第一次活水" /><published>2021-06-30T00:00:00+08:00</published><updated>2021-06-30T00:00:00+08:00</updated><id>https://naffan.cn/life/2021/06/30/01</id><content type="html" xml:base="https://naffan.cn/life/2021/06/30/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　以上模型基本和业务分析出的模型类似，我们为其确立了具体模型归属，划分了相关的聚合，添加了相应的辅助领域模型。在构建这个模型时，依然要随时丰富相关的用例case，不断完善领域模型。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="系统" /><summary type="html">DDD 是 Domain-Driven Design 的缩写。其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。</summary></entry><entry><title type="html">我在贝壳的第一次活水</title><link href="http://localhost:4000/life/2021/06/30/01.html" rel="alternate" type="text/html" title="我在贝壳的第一次活水" /><published>2021-06-30T00:00:00+08:00</published><updated>2021-06-30T00:00:00+08:00</updated><id>http://localhost:4000/life/2021/06/30/01</id><content type="html" xml:base="http://localhost:4000/life/2021/06/30/01.html">&lt;blockquote&gt;
   &lt;p&gt;得志不得意，失意不失志&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;随着4月的晋升失败，给我带来的是又一次打击。本来2020年10月的第一次晋升失败以后，经过2个月在java的项目上的锤炼，我又建立起了很足的信心。因为，在2020年底我自己一人做出的项目平均每天的请求量在80万，qps50。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="链家,活水" /><summary type="html">得志不得意，失意不失志</summary></entry><entry><title type="html">拿饭网对java的classLoader分析</title><link href="https://naffan.cn/tech/2021/06/15/01.html" rel="alternate" type="text/html" title="拿饭网对java的classLoader分析" /><published>2021-06-15T00:00:00+08:00</published><updated>2021-06-15T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/06/15/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/06/15/01.html">&lt;ul&gt;
+&lt;p&gt;随着4月的晋升失败，给我带来的是又一次打击。本来2020年10月的第一次晋升失败以后，经过2个月在java的项目上的锤炼，我又建立起了很足的信心。因为，在2020年底我自己一人做出的项目平均每天的请求量在80万，qps50。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="链家,活水" /><summary type="html">得志不得意，失意不失志</summary></entry><entry><title type="html">拿饭网对java的classLoader分析</title><link href="http://localhost:4000/tech/2021/06/15/01.html" rel="alternate" type="text/html" title="拿饭网对java的classLoader分析" /><published>2021-06-15T00:00:00+08:00</published><updated>2021-06-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/06/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/06/15/01.html">&lt;ul&gt;
   &lt;li&gt;
     &lt;h1 id=&quot;类加载机制&quot;&gt;类加载机制&lt;/h1&gt;
   &lt;/li&gt;
@@ -989,7 +1034,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
   &lt;li&gt;类加载的委派关系也发生了变动，当平台及应用程序类加载器收到类加载请求，在委派给父加载器加载前，要先判断该类是否能够归属到某一个系统模块中，如果可以找到这样的归属关系，就要优先委派给负责哪个模块的加载器完成加载。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08d3bea0860610a791181880082080062801300138d28f01.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;jdk9双亲委派模型&quot; /&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">类加载机制</summary></entry><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="https://naffan.cn/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>https://naffan.cn/thinking/2021/05/22/01</id><content type="html" xml:base="https://naffan.cn/thinking/2021/05/22/01.html">&lt;blockquote&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08d3bea0860610a791181880082080062801300138d28f01.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;jdk9双亲委派模型&quot; /&gt;&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">类加载机制</summary></entry><entry><title type="html">赛格广场晃动，原因竟然是共振</title><link href="http://localhost:4000/thinking/2021/05/22/01.html" rel="alternate" type="text/html" title="赛格广场晃动，原因竟然是共振" /><published>2021-05-22T00:00:00+08:00</published><updated>2021-05-22T00:00:00+08:00</updated><id>http://localhost:4000/thinking/2021/05/22/01</id><content type="html" xml:base="http://localhost:4000/thinking/2021/05/22/01.html">&lt;blockquote&gt;
   &lt;p&gt;赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1054,7 +1099,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
 
 &lt;p&gt;　　在航天航空中，宇航员升天时会与宇宙飞船产生共振。我们国家英雄杨利伟就曾说：“2003年10月15日上午9时整，火箭尾部发出巨大的轰鸣声，几百吨高能燃料开始燃烧，8台发动机同时喷出炽热的火焰，高温高速的气体，几秒钟就把发射台下的上千吨水化为蒸汽。火箭和飞船总重达到487吨，当推力让这个庞然大物升起时，大漠颤抖、天空轰鸣。火箭逐步地加速，我感到压力在渐渐增加。因为这种负荷我们训练时承受过，我的身体感受还挺好，觉得没啥问题。但就在火箭上升到三四十公里的高度时，火箭和飞船开始急剧抖动，产生了共振。这让我感到非常痛苦。人体对10赫兹以下的低频振动非常敏感，它会让人的内脏产生共振。而这时不单单是低频振动的问题，还是这个新的振动要叠加在大约6G的一个负荷上。这种叠加太可怕了，我们从来没有进行过这种训练。我担心的意外还是发生了。”&lt;/p&gt;
 
-&lt;p&gt;　　在现实生活中，我们周边还会有许许多多的共振现象。要解决共振其实很简单，只要找到物体共振频率，在此频率上减小激励力就能够避免共振了。对于高楼大厦来说，一般都是用类似阻尼器的装置来减小共振。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="共振" /><summary type="html">赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。</summary></entry><entry><title type="html">敬给我最尊重的老板，贝壳董事长-左晖</title><link href="https://naffan.cn/life/2021/05/20/01.html" rel="alternate" type="text/html" title="敬给我最尊重的老板，贝壳董事长-左晖" /><published>2021-05-20T00:00:00+08:00</published><updated>2021-05-20T00:00:00+08:00</updated><id>https://naffan.cn/life/2021/05/20/01</id><content type="html" xml:base="https://naffan.cn/life/2021/05/20/01.html">&lt;blockquote&gt;
+&lt;p&gt;　　在现实生活中，我们周边还会有许许多多的共振现象。要解决共振其实很简单，只要找到物体共振频率，在此频率上减小激励力就能够避免共振了。对于高楼大厦来说，一般都是用类似阻尼器的装置来减小共振。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="thinking" /><category term="共振" /><summary type="html">赛格广场，位于深圳市交通干道深南中路与华强北路交汇处，由深圳赛格集团投资兴建，是深圳市跨世纪的标志性建筑。总高355.8米，总建筑层79层，地上75层，地下4层，总建筑面积达17万平方米。</summary></entry><entry><title type="html">敬给我最尊重的老板，贝壳董事长-左晖</title><link href="http://localhost:4000/life/2021/05/20/01.html" rel="alternate" type="text/html" title="敬给我最尊重的老板，贝壳董事长-左晖" /><published>2021-05-20T00:00:00+08:00</published><updated>2021-05-20T00:00:00+08:00</updated><id>http://localhost:4000/life/2021/05/20/01</id><content type="html" xml:base="http://localhost:4000/life/2021/05/20/01.html">&lt;blockquote&gt;
   &lt;p&gt;我们这个时代企业经营者的宿命，就是要去干烟花背后的真正提升基础服务品质的苦活、累活。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1068,7 +1113,7 @@ video:20986kB audio:2629kB subtitle:0kB other streams:0kB global headers:0kB mux
 
 &lt;p&gt;　　经过这几年的工作，从入职php，到改为写go，再到现在的java。感觉这几年对语言的转型让我对语言已经有深刻的理解了。目前我正在做自己负责的业务，并且一直致力于学习。在2020年10月，和21年4月，我得到了部门给我的晋升机会。虽然通过自己的努力，最终没有晋级成功。但是，两次折磨的过程让我重新认识到了我目前缺乏的东西，第一次是技术，但是在第二次评委已经不说我技术问题了，而是产品高度。在接下来的工作和生活中，我将以提高我的这个能力为前提努力的认真工作。左晖先生的精神，会激励着我，一直向前。&lt;/p&gt;
 
-&lt;p&gt;　　今天下午3点，在得知左晖先生离开后，我心情难以平复，本来未来可期，本来还有一番事业等待着他带领我们一起航行，可是就这样戛然而止，希望左晖先生一路走好，后面还有大S帮您完成您的愿望，我们会一起努力!&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="链家,癌症" /><summary type="html">我们这个时代企业经营者的宿命，就是要去干烟花背后的真正提升基础服务品质的苦活、累活。</summary></entry><entry><title type="html">redis连接池源码分析</title><link href="https://naffan.cn/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/15/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
+&lt;p&gt;　　今天下午3点，在得知左晖先生离开后，我心情难以平复，本来未来可期，本来还有一番事业等待着他带领我们一起航行，可是就这样戛然而止，希望左晖先生一路走好，后面还有大S帮您完成您的愿望，我们会一起努力!&lt;/p&gt;</content><author><name>张一帆</name></author><category term="life" /><category term="链家,癌症" /><summary type="html">我们这个时代企业经营者的宿命，就是要去干烟花背后的真正提升基础服务品质的苦活、累活。</summary></entry><entry><title type="html">redis连接池源码分析</title><link href="http://localhost:4000/tech/2021/05/15/01.html" rel="alternate" type="text/html" title="redis连接池源码分析" /><published>2021-05-15T00:00:00+08:00</published><updated>2021-05-15T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/15/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/15/01.html">&lt;p&gt;　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。&lt;/p&gt;
 
 &lt;p&gt;　　你在开发时，可以通过jedis连接redis。jedis支持直连模式和连接池模式。&lt;/p&gt;
 
@@ -1455,7 +1500,7 @@ public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledO
 &lt;p&gt;参考资料：&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_42340670/article/details/106876879&quot;&gt;对象池：commons-pool2源码解析：GenericObjectPool的borrowObject方法&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="https://naffan.cn/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/13/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/13/01.html">&lt;blockquote&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="http://localhost:4000/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/13/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/13/01.html">&lt;blockquote&gt;
   &lt;p&gt;问如果你要设计一个池化对象，你会怎么做？&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1727,64 +1772,4 @@ public interface PooledObjectFactory&amp;lt;T&amp;gt; {
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/qq447995687/article/details/80413227&quot;&gt;commons-pool2源码走读(一)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/liyantianmin/article/details/86591742&quot;&gt;common-pool对象池&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry><entry><title type="html">池化技术</title><link href="https://naffan.cn/tech/2021/05/12/01.html" rel="alternate" type="text/html" title="池化技术" /><published>2021-05-12T00:00:00+08:00</published><updated>2021-05-12T00:00:00+08:00</updated><id>https://naffan.cn/tech/2021/05/12/01</id><content type="html" xml:base="https://naffan.cn/tech/2021/05/12/01.html">&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08a3a3f5840610fee80b18b90e20b8082801300138d074.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;概念&quot;&gt;概念&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　池化技术就是把一些能复用的实例放在一起，一般指的是内存里，而池这个概念也是一个虚拟的概念。这样做的好处是省去了每次消耗在新建、销毁这些实例的时间，从而提高了整体服务性能。在开发中，我们经常遇到的就是数据库的连接池和多线程的线程池。连接池的管理是核心。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;数据库连接池&quot;&gt;数据库连接池&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　数据库包括关系型数据库和非关系型数据库两种。关系型数据库指的是mysql，非关系型数据库指的是redis。&lt;/p&gt;
-
-&lt;p&gt;　　mysql连接池有两个重要的配置：最小连接数和最大连接数。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;如果当前连接数小于最小连接数，则创建新的连接处理请求。&lt;/li&gt;
-  &lt;li&gt;如果连接池中有空闲连接，则使用空闲连接。
-3。 如果没有空闲连接，并且当前连接数小于最大连接数，则继续创建新的连接。这等价于建立一个新的连接。这些连接使用完成不会立马清除，而是放在池中等待复用最终空闲超过一段时间后自动释放。&lt;/li&gt;
-  &lt;li&gt;如果当前连接数大于等于最大连接数，并且没有空闲连接了，则进入等待队列，在超时时间内等待空闲连接。&lt;/li&gt;
-  &lt;li&gt;超时之后，则提示超时失败。获取数据库连接失败。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;　　redis连接池有3个重要的配置：最大连接数，最小空闲数，最大空闲数&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;当前连接小于最大连接数，则创建新的连接处理请求。&lt;/li&gt;
-  &lt;li&gt;当前连接数大于等于最大连接数，超出的连接进入等待队列&lt;code&gt;LinkedBlockingDeque&lt;/code&gt;，判断是否开启&lt;code&gt;blockWhenExhausted&lt;/code&gt;，是则等待获取连接，否则抛错连接池已耗尽。&lt;/li&gt;
-  &lt;li&gt;当前连接数小于最小空闲数，则预热最小空闲数连接。&lt;/li&gt;
-  &lt;li&gt;当前连接数大于最大空闲数，则强制销毁这些多出来的连接。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;线程池&quot;&gt;线程池&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　JDK1.5中引入的ThreadPoolExecutor就是一种线程池的实现，它有两个重要的参数：coreThreadCount和maxThreadCount。这两个参数控制着线程池的执行过程。&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;如果当前线程数少于coreThreadCount时，则创建新的线程处理请求。&lt;/li&gt;
-  &lt;li&gt;如果当前线程数大于coreThreadCount则将超出的任务进队列，由当前空闲的线程执行。&lt;/li&gt;
-  &lt;li&gt;当队列中的任务对接满时，则继续创建线程，直到maxThreadCount。&lt;/li&gt;
-  &lt;li&gt;当前线程数达到maxThreadCount时还有新的任务，就将其按照抛弃策略进行抛弃。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://tva1.sinaimg.cn/large/0082zybpgy1gc7xbdxj67j30wk0ouqb3.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;JDK线程池提交任务示意图&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;h1 id=&quot;总结&quot;&gt;总结&lt;/h1&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;　　连接池和线程池在开发过程中并不陌生，但是想真正弄懂他们还是需要借助阅读源码的帮助。在使用上如果遇到了一些困惑的话，可以查阅相关资料或者探索源码如何解决的。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="java" /><summary type="html">一种优化连接的方案，各种地方都有可能用到这种技术</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry></feed>
