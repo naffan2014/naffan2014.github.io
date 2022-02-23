@@ -1,0 +1,37 @@
+---
+title: 拿饭-拍摄剧本
+pagination: 
+  enabled: true
+  category: drama
+---
+<div class="container" style="width:95%;">
+  <div id="article">
+    <center><h1>拍摄剧本</h1></center>
+    <ul class="posts">
+      {% for post in paginator.posts %}
+        <li>
+          <span>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            <time class="pull-right post-list"><h4>{{ post.date | date: "%D"  }}</h4></time>
+          </span>
+        </li>
+    {% endfor %}
+    </ul>
+    <center>
+    <ul class="pagination">
+      {% if paginator.previous_page %}
+        <li><a href="{{ paginator.previous_page_path | prepend: site.baseurl }}">上一页</a></li>
+      {% endif %}
+      {% if paginator.page_trail %}
+        {% for trail in paginator.page_trail %}
+          <li {% if page.url == trail.path %}class="active"{% endif %}>
+              <a href="{{ trail.path | prepend: site.baseurl }}" title="{{trail.title}}">{{ trail.num }}</a>
+          </li>
+        {% endfor %}
+      {% endif %}
+      {% if paginator.next_page %}
+        <li><a href="{{ paginator.next_page_path | prepend: site.baseurl }}">下一页</a></li>
+      {% endif %}
+    </ul>
+  </center>
+</div>
