@@ -1,49 +1,197 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-22T22:56:27+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">Arduino由哪些元件组成？它是怎么运转起来的？</title><link href="http://localhost:4000/tech/2022/02/22/1.html" rel="alternate" type="text/html" title="Arduino由哪些元件组成？它是怎么运转起来的？" /><published>2022-02-22T00:00:00+08:00</published><updated>2022-02-22T00:00:00+08:00</updated><id>http://localhost:4000/tech/2022/02/22/1</id><content type="html" xml:base="http://localhost:4000/tech/2022/02/22/1.html">&lt;p&gt;Hello，大家好。2022春节前和同事聊天的时候聊到了硬件方面的知识，同事说他们大学的时候参加电子竞赛时用的是一款叫Arduino的板子进行开发的，他还说学校里组织的竞赛都是用的Arduino。我立刻起了兴趣，于是上网找了一些关于Arduino的文章，看完以后我的兴趣是越来越浓了。以前在写程序的时候一直想能够造一些东西出来，但是苦于自己的方向是后端，所以做出来的东西均是服务相关的产品。然而，Arduino一下子让我这名后端工程师豁然开朗，各种未来的黑科技在我脑中冒了出来，于是我打算深入了解一下Arduino啦。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-02-23T17:22:47+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">拿饭网</title><subtitle>拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle><author><name>张一帆</name></author><entry><title type="html">Arduino由哪些元件组成？它是怎么运转起来的？</title><link href="http://localhost:4000/tech/2022/02/22/1.html" rel="alternate" type="text/html" title="Arduino由哪些元件组成？它是怎么运转起来的？" /><published>2022-02-22T00:00:00+08:00</published><updated>2022-02-22T00:00:00+08:00</updated><id>http://localhost:4000/tech/2022/02/22/1</id><content type="html" xml:base="http://localhost:4000/tech/2022/02/22/1.html">&lt;p&gt;　　Hello，大家好。2022春节前和同事聊天的时候聊到了硬件方面的知识，同事说他们大学的时候参加电子竞赛时用的是一款叫Arduino的板子进行开发的，他还说学校里组织的竞赛都是用的Arduino。我立刻起了兴趣，于是上网找了一些关于Arduino的文章，看完以后我的兴趣是越来越浓了。以前在写程序的时候一直想能够造一些东西出来，但是苦于自己的方向是后端，所以做出来的东西均是服务相关的产品。然而，Arduino一下子让我这名后端工程师豁然开朗，各种未来的黑科技在我脑中冒了出来，于是我打算深入了解一下Arduino啦。&lt;/p&gt;
 
-&lt;p&gt;首先，万里之行始于足下，我需要了解Arduino到底是什么，它是由什么组成的。简单来说，它是一个物理硬件，包括一个电路板和不同的电子元件组合起来。&lt;/p&gt;
+&lt;p&gt;　　首先，万里之行始于足下，我需要了解Arduino到底是什么，它是由什么组成的。简单来说，它是一个物理硬件，包括一个电路板和不同的电子元件组合起来。&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fasset.ibanquan.com%2Fimage%2F5c120b0b53f4e37756003331%2Fs.jpeg%3Fv%3D1544686347&amp;amp;refer=http%3A%2F%2Fasset.ibanquan.com&amp;amp;app=2002&amp;amp;size=f9999,10000&amp;amp;q=a80&amp;amp;n=0&amp;amp;g=0n&amp;amp;fmt=jpeg?sec=1648114128&amp;amp;t=4ddfcfcddd6b07b802906a44eff2817a&quot; src=&quot;/images/default.jpg&quot; alt=&quot;Arduino&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fasset.ibanquan.com%2Fimage%2F5c120b0b53f4e37756003331%2Fs.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;Arduino&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;上面这个图，是Arduino各元件的中文解释。大概可以看得出USB接口是可以和计算机进行交互的，DC插头是交流电入口，两边的端口负责外置元件的供电和控制信号，最长的那个芯片肯定是这款板子的大脑。上面的指示灯可以帮助我们来确认各种状态。接下来，让我们先从它的大脑-ATMEGA328P说起吧！但是在说之前，我先声明下本人并不是硬件工程师，以下总结的皆是本人通过学习和探究所得的。如有不对，一定是看的网站写的不对！&lt;/p&gt;
+&lt;p&gt;　　上面这个图，是Arduino各元件的中文解释。大概可以看得出USB接口是可以和计算机进行交互的，DC插头是交流电入口，两边的端口负责外置元件的供电和控制信号，最长的那个芯片肯定是这款板子的大脑。上面的指示灯可以帮助我们来确认各种状态。接下来，让我们先从它的大脑-ATMEGA328P说起吧！但是在说之前，我先声明下本人并不是硬件工程师，以下总结的皆是本人通过学习和探究所得的。如有不对，一定是看的网站写的不对！&lt;/p&gt;
 
-&lt;p&gt;Q:ATMEGA328P是啥？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;ATMEGA328P是啥？&lt;/p&gt;
 
-&lt;p&gt;A:可以先看下面的参考文献链接。它是一个ATMEL公司研发的8位（8-bit）的精简指令(RISC)为基础的单片机，它结合着32KB大的可同时读写的ISP闪存，同时包括了1024B EEPROM，2KB SRAM等等。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;可以先看下面的参考文献链接。它是一个ATMEL公司研发的8位（8-bit）的精简指令(RISC)为基础的单片机，它结合着32KB大的可同时读写的ISP闪存，同时包括了1024B EEPROM，2KB SRAM等等。
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://www.microchip.com/content/dam/mchp/mrt-dam/ic-images/spdip/28-lead-m3x/ATmega328P-M3X-Regular.jpg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;ATMEGA328P&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Q：什么是单片机？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;什么是单片机？&lt;/p&gt;
 
-&lt;p&gt;A:单片机就是一个微信的CPU。单片机也叫单片微控制器。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;单片机就是一个微信的CPU。单片机也叫单片微控制器。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Q：单片机能用来做什么？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;单片机能用来做什么？&lt;/p&gt;
 
-&lt;p&gt;A:通过把程序烧录到芯片里面，通过控制不同的外围电路实现不同产品的功能。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;通过把程序烧录到芯片里面，通过控制不同的外围电路实现不同产品的功能。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Q：你刚才说的那些ISP,EEPROM,SRAM都是干什么的？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;你刚才说的那些ISP,EEPROM,SRAM都是干什么的？&lt;/p&gt;
 
-&lt;p&gt;A：其实这些东西在刚学Arduino时并不需要了解的，因为之后的学习中会涉及到背后的原理，到时候自然就会碰到这些概念。不过可以先提一下，这些涉及到硬件上的存储以及代码的刷新等功能。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;其实这些东西在刚学Arduino时并不需要了解的，因为之后的学习中会涉及到背后的原理，到时候自然就会碰到这些概念。不过可以先提一下，这些涉及到硬件上的存储以及代码的刷新等功能。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Q：我看网络上很多单片机都有提到51单片机和STM单片机和AVR单片机。这些有什么区别么？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;我看网络上很多单片机都有提到51单片机和STM单片机和AVR单片机。这些有什么区别么？
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;A：首先我们要明白的是，单片机是一种技术，他们的功能都和其内部的芯片息息相关。所以，这三种单片机的区别你可以暂时理解为，他们的制造商不同，采用的规格不同，所以功能上有些许的差异。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;首先我们要明白的是，单片机是一种技术，他们的功能都和其内部的芯片息息相关。所以，这三种单片机的区别你可以暂时理解为，他们的制造商不同，采用的规格不同，所以功能上有些许的差异。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Q：什么是芯片？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;什么是芯片？&lt;/p&gt;
 
-&lt;p&gt;A：芯片是由电路板和集成电路组合起来的。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;芯片是由电路板和集成电路组合起来的。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Q：什么是电路板，什么是集成电路呢？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;什么是电路板，什么是集成电路呢？&lt;/p&gt;
 
-&lt;p&gt;A：电路板就是那种绿油油的板子，电路板使用来走电路用的。集成电路是由各种电子元件按照一定规格组合起来的电路器件。将制作好的集成电路压在走好线的电路板上就形成了一个芯片。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;电路板就是那种绿油油的板子，电路板使用来走电路用的。集成电路是由各种电子元件按照一定规格组合起来的电路器件。将制作好的集成电路压在走好线的电路板上就形成了一个芯片。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Q：所以说，51单片机和STM单片机和AVR单片机的区别主要在厂商制作芯片的不同而不同啦？&lt;/p&gt;
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;所以说，51单片机和STM单片机和AVR单片机的区别主要在厂商制作芯片的不同而不同啦？&lt;/p&gt;
 
-&lt;p&gt;A：是的，没错。如果想了解芯片之间的不同的话，就需要去了解芯片中的微处理架构和指令架构了。这些知识更深有点偏底层了，会越讲越深。这里就举个例子，像刚才说的RISC就是适合于移动办公的指令集架构。一般移动设备使用这个芯片。相对于精简指令集还有个对应的指令集叫CISC（复杂指令集），复杂指令集多应用于桌面系统。&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;是的，没错。如果想了解芯片之间的不同的话，就需要去了解芯片中的微处理架构和指令架构了。这些知识更深有点偏底层了，会越讲越深。这里就举个例子，像刚才说的RISC就是适合于移动办公的指令集架构。一般移动设备使用这个芯片。相对于精简指令集还有个对应的指令集叫CISC（复杂指令集），复杂指令集多应用于桌面系统。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　我们说完了Arduino的大脑之后，再接着说说它的心脏-晶振。在上图中没有标明晶振，晶振其实就是USB转串口芯片的下面的那个银色标有T16.000的元件。因为晶振给芯片提供了时钟信号，所以说晶振是芯片的心脏。&lt;/p&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;什么是晶振？&lt;/p&gt;
+
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;晶振就是以石英石为原料的元件，它能提供时钟信号。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;为什么晶振能够提供时钟信号呢？&lt;/p&gt;
+
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;因为晶振可以产生固定频率的振动哈。因为有了频率振动所以就有了时间的功能。这样芯片就能将时钟作为时间的参考。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;频率是什么？&lt;/p&gt;
+
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;频率的定义是在单位时间内物体重复运动的次数。这是个物理概念哈。晶振在通电以后，会产生固定的频率振动。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;晶振为什么会产生振动的频率？&lt;/p&gt;
+
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;这其实跟石英晶体的物理特性有关，石英晶体有一种特性，如果在它上面施加压力，响应施力的方向就会产生一定的点位。相反的，如果施加电场，就会使晶体发生形变。如果施加的是交变电场，晶体就会产生机械振动，机械形变振动又会产生交变电场，尽管这种交变电场的电压极其微弱，但其振动频率是十分稳定的。当外加交变电压的频率与晶片的固有频率（与切割后的晶片尺寸有关，晶体愈薄，切割难度越大，谐振频率越高）相等时，机械振动的幅度将急剧增加，这种现象称为“压电谐振”。就是因为压电谐振才会产生振动的。可以看看下面的参考文献，我引用了一段bilibili的视频，从视频里你能清楚的看到晶振发生震动的细节。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　接下来，我们再看看为它提供能量的电源吧。Arduino一共有三个可供电源接入的地方。一个是DC插头，一个是USB接口，一个是GND+VIN排针脚处。DC插头适配的是直径为2.1mm插头的电源，USB接口外接的是PC，外接电池可以插入GND+VIN针脚。&lt;/p&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;安全电压是多少？&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;官方说推荐输入电压是6-20V，极限输入电压是7-12V。也就是说，电路板可以安全的接6-20V的外部电源，但是如果你低于7V或者超过12V就会出现问题，低的话电路会不稳，高的话稳压器会过热，会烧坏电路板的。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;当有电流瞬时保障时有什么保护措施么？&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;目前，在板子上有一个可以防止USB瞬间电流过大的保护器，就是图中的自恢复保险丝。他可以防止USB带来的过流电流烧毁板子。至于DC的保护应该在变压器上做的吧？如果是直接接引脚的话，应该没有保护吧？这块还不太确定，等之后确定了再回来补充吧。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　最后，让我们再说说板子上的两个种端口，一个是模拟端口，一个是数字端口。数字端口中包括14个接口，模拟端口中包括5个接口。顾名思义，数字端口就是用来通信数字信号的，模拟端口就是通信模拟信号的，哈。&lt;/p&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;模拟信号和数字信号的区别是什么？&lt;/p&gt;
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;如果你在百度直接搜索的话一定会找到类似“模拟信号：时间连续，幅值连续。数字信号：时间离散，幅值离散。”这样的回答。这样的回答真的是太抽象了，一点不适合人类的理解。根据我的学习，模拟信号就是真实世界物理物体振动产生的，人类为了记录这些信号起先是通过将这些振动转换在黑胶唱片上的（通过一些物理的手段，因为传递了振动，所以可以通过针刻在黑胶盘上），这种记录形式能够记录模拟信号。更多知识可以看看下边的参考文献。然而，因为技术的发展，通过更紧密的仪器慢慢的就能收集到更多的信号了，但是物理上很难找到极为精密的介质，所以科学家们将模拟信号转换成了数字信号，模拟信号通过采样，量化手段转换成了只有1和0来表示的信号，就叫做数字信号。希望我这么说大家能够明白了。具体里面的细节我可以以后再说，但这已经跟这个文章的主题没有关系了。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;font color=&quot;red&quot;&gt;Q:&lt;/font&gt;
+&lt;p&gt;那能说说这两个端口都是干什么的么？&lt;/p&gt;
+
+&lt;font color=&quot;blue&quot;&gt;A:&lt;/font&gt;
+&lt;pre&gt;&lt;code&gt;模拟端口（A1到A5）用来接收外部元件传过来的模拟信号的。数字端口中的（引脚3、5、6、9、10、11）即可以当数字信号输入输出，又可以当模拟信号的输出。其它引脚都可以输入输出。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;　　到这里，我们就对Arduino关键的元件进行了说明，Arduino有了大脑，心脏，动力，输入输出，就能够转起来了。&lt;/p&gt;
 
 &lt;p&gt;参考文献：&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.microchip.com/en-us/product/ATMEGA328P&quot;&gt;ATMEGA328P官方网站&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="c,Arduino" /><summary type="html">Hello，大家好。2022春节前和同事聊天的时候聊到了硬件方面的知识，同事说他们大学的时候参加电子竞赛时用的是一款叫Arduino的板子进行开发的，他还说学校里组织的竞赛都是用的Arduino。我立刻起了兴趣，于是上网找了一些关于Arduino的文章，看完以后我的兴趣是越来越浓了。以前在写程序的时候一直想能够造一些东西出来，但是苦于自己的方向是后端，所以做出来的东西均是服务相关的产品。然而，Arduino一下子让我这名后端工程师豁然开朗，各种未来的黑科技在我脑中冒了出来，于是我打算深入了解一下Arduino啦。</summary></entry><entry><title type="html">Async和Transactional注解使用时的动态代理问题</title><link href="http://localhost:4000/tech/2021/12/11/01.html" rel="alternate" type="text/html" title="Async和Transactional注解使用时的动态代理问题" /><published>2021-12-11T00:00:00+08:00</published><updated>2021-12-11T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/12/11/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/12/11/01.html">&lt;blockquote&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.bilibili.com/video/BV1gf4y1B7MK/&quot;&gt;全网第一份拆解无源晶振的视频，想知道晶振内部结构吗？&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.bilibili.com/video/BV1Do4y1f7zZ/&quot;&gt;一分钟看懂晶振的工作原理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_40407893/article/details/100929676&quot;&gt;Arduino 解读系列（1）数字接口／模拟接口&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/42466881&quot;&gt;黑胶唱片是如何录制声音的&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="c,Arduino" /><summary type="html">　　Hello，大家好。2022春节前和同事聊天的时候聊到了硬件方面的知识，同事说他们大学的时候参加电子竞赛时用的是一款叫Arduino的板子进行开发的，他还说学校里组织的竞赛都是用的Arduino。我立刻起了兴趣，于是上网找了一些关于Arduino的文章，看完以后我的兴趣是越来越浓了。以前在写程序的时候一直想能够造一些东西出来，但是苦于自己的方向是后端，所以做出来的东西均是服务相关的产品。然而，Arduino一下子让我这名后端工程师豁然开朗，各种未来的黑科技在我脑中冒了出来，于是我打算深入了解一下Arduino啦。</summary></entry><entry><title type="html">《瞌睡虫学编程》第一集剧本</title><link href="http://localhost:4000/drama/2022/02/18/1.html" rel="alternate" type="text/html" title="《瞌睡虫学编程》第一集剧本" /><published>2022-02-18T00:00:00+08:00</published><updated>2022-02-18T00:00:00+08:00</updated><id>http://localhost:4000/drama/2022/02/18/1</id><content type="html" xml:base="http://localhost:4000/drama/2022/02/18/1.html">&lt;p&gt;时间：2022年2月18日
+地点：
+人物：
+A：孙
+B：帆&lt;/p&gt;
+
+&lt;p&gt;一、地铁，车厢内&lt;/p&gt;
+
+&lt;p&gt;1车厢外地铁进站，A入，排队。地铁呼啸而来，车门打开。
+2车厢内A走进来，背过身抓好扶手，打开airpods，带上耳机
+3近景侧脸，撩起头发，带上耳机。车厢内的嘈杂声褪去，想起悠扬的音乐
+4兜里，掏出手机，打开
+5快速搜索：“硬件学习   零基础”。点击第一个结果，展示
+6全景A沉浸在看手机中经过一天的辛苦工作，她又打开手机开始查阅自己感兴趣的内容……7车厢外到站，走出车厢，坐电梯，刷卡8地铁站外A走出地铁站&lt;/p&gt;
+
+&lt;p&gt;二、回家路上&lt;/p&gt;
+
+&lt;p&gt;1进景天冷，搓搓手，呼口哈气，做出冷的表情，搓搓耳朵。
+2远景等红灯，绿灯后，前行
+3远景前行往旁边看去4进景卖吃的的地方5远景进去买一份晚饭老板，xxx怎么卖？&lt;/p&gt;
+
+&lt;p&gt;三、家、卧室&lt;/p&gt;
+
+&lt;p&gt;正常景吃的还完好的摆在桌上（场景四的位置！！）。电脑是开着的状态，google上还展示着搜索结果。A慢慢从从椅子上醒来。关机，站起来，走出。B：A睡觉啦!A:  来啦!&lt;/p&gt;
+
+&lt;p&gt;四、家&lt;/p&gt;
+
+&lt;p&gt;1厕所，外进厕所，开灯，关门，换衣服。厕所镜子上透出曼妙身材老公，帮我拿下睡衣好吗？
+2书房，近景拿着食物，走到椅子旁近景放下食物（这块先拍！！！），按下电脑开关，启动电脑，吃东西电脑启动声音近景打开浏览器，输入google.com，搜索”arduino”（电脑鼠标从此不要再动）喊出，我要买一个arduino！近景arduino盒子砸在脑子上，掉在桌上arduino盒子在桌子上抽出，arduino，左右观察。喊老公，过来看看。
+3正常景A单手拍，一手拿arduino，拍B走进来B：呦，你还懂这个那？A:嗯，可不是B拿过来，观察参看对话一&lt;/p&gt;
+
+&lt;p&gt;对话一：
+B：你知道Arduino是用来做什么的么？&lt;/p&gt;
+
+&lt;p&gt;A：我只知道好像这东西能够控制不同的硬件。&lt;/p&gt;
+
+&lt;p&gt;B:是的，你说的没错，但其实咱们现实中用到的设备其实大多数都是51单片机去实现的。arduino只是让你将编程和真正硬件效果能够有个直观感受用的。&lt;/p&gt;
+
+&lt;p&gt;A:那我也能用它做出来点什么吧？&lt;/p&gt;
+
+&lt;p&gt;B:嗯，当然能，现在它有好多配套的原件或者配套的模块可以购买。基本上什么都能做出来。&lt;/p&gt;
+
+&lt;p&gt;A:你刚才说的51单片机是什么？&lt;/p&gt;
+
+&lt;p&gt;B：哦，他是因特尔生产的一个芯片，51是8051的缩写，这个是芯片的型号。我再给你普及下知识吧。&lt;/p&gt;
+
+&lt;p&gt;芯片是由电路板和集成电路组成的。电路板就是那些绿绿的板子，集成电路就是将电子器件按照一定工艺制造在一起，形成的具有一定功能的微型结构。&lt;/p&gt;
+
+&lt;p&gt;A：那电子器件是什么？&lt;/p&gt;
+
+&lt;p&gt;B：晶体管、电阻、电容和电感之类的。&lt;/p&gt;
+
+&lt;p&gt;A：那arduino只是适合学习吧？&lt;/p&gt;
+
+&lt;p&gt;B：是的，因为很多底层的东西arduino都帮助开发者封装了，开发者在学习的时候直接去用就行了，免去了自己花时间去了解背后的原理了。&lt;/p&gt;
+
+&lt;p&gt;A: 这样说的话，是不是代表我可以快速上手呀？&lt;/p&gt;
+
+&lt;p&gt;B：那是必须的，咱只需要下一个arduino IDE就行。他里面有各种示例，通过示例学习就行了。&lt;/p&gt;</content><author><name>张一帆</name></author><category term="drama" /><category term="瞌睡虫学编程" /><summary type="html">时间：2022年2月18日 地点： 人物： A：孙 B：帆</summary></entry><entry><title type="html">Async和Transactional注解使用时的动态代理问题</title><link href="http://localhost:4000/tech/2021/12/11/01.html" rel="alternate" type="text/html" title="Async和Transactional注解使用时的动态代理问题" /><published>2021-12-11T00:00:00+08:00</published><updated>2021-12-11T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/12/11/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/12/11/01.html">&lt;blockquote&gt;
   &lt;p&gt;代理是指由被委托人接受委托人的委托全权去办理一件事情，在办理这件事情的过程中委托人会限制被委托人的行事边界。&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -475,7 +623,7 @@ public class UserService {
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffprobe 1_1637395707\&amp;amp;88966_1637395335_1637395635.mp4 -hide_banner
 [aac @ 0x7f846a808600] Input buffer exhausted before END element found
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395335_1637395635.mp4&apos;:
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '1_1637395707&amp;amp;88966_1637395335_1637395635.mp4':
   Metadata:
     major_brand     : mp42
     minor_version   : 0
@@ -523,9 +671,9 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395
 &lt;p&gt;合并的时候还会遇到不同视频片段中有不同类型，不同采样率，不同通道的音频流。FFmpeg会自动的选择一个值来进行处理。另外，还有一些值是不能被FFmpeg自动填充的。还是需要人为的指定。另外，如果每段视频片段拥有不同的帧率，我们在最终结果视频制作时一定要设定个值，否则制作出来的视频就会按照每段自己的帧率进行合并了，这样的结果就是视频卡顿。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffmpeg -i opening.mkv -i episode.mkv -i ending.mkv -filter_complex \
-  &apos;[0:0] [0:1] [0:2] [1:0] [1:1] [1:2] [2:0] [2:1] [2:2]
-   concat=n=3:v=1:a=2 [v] [a1] [a2]&apos; \
-  -map &apos;[v]&apos; -map &apos;[a1]&apos; -map &apos;[a2]&apos; output.mkv
+  '[0:0] [0:1] [0:2] [1:0] [1:1] [1:2] [2:0] [2:1] [2:2]
+   concat=n=3:v=1:a=2 [v] [a1] [a2]' \
+  -map '[v]' -map '[a1]' -map '[a2]' output.mkv
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这个bash脚本的具体意思，怎么使。我看到了一篇CSDN上的文章，直接在这里做个&lt;a href=&quot;https://blog.csdn.net/xiaoluer/article/details/81136478&quot;&gt;传送门&lt;/a&gt;。&lt;/p&gt;
@@ -539,9 +687,9 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;1_1637395707&amp;amp;88966_1637395
 &lt;p&gt;　　如果他们的duration不同，那就会产生伪影（这个伪影，是翻译软件的翻译，我出现过这个问题，形象讲就是还在说话但是画面不动了。）&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# 文件名为file，内容为
-file &apos;/mnt/share/file-1.mp4&apos;
-file &apos;/mnt/share/file 2.mp4&apos;
-file &apos;/mnt/share/file 3.mp4&apos;
+file '/mnt/share/file-1.mp4'
+file '/mnt/share/file 2.mp4'
+file '/mnt/share/file 3.mp4'
 
 # ffmpg -y -f concat -i file  output.mp4 
 &lt;/code&gt;&lt;/pre&gt;
@@ -585,7 +733,7 @@ file &apos;/mnt/share/file 3.mp4&apos;
 &lt;p&gt;如果想直接拼接的话，采用concat protocol的方案，最终拼接出来的mp4和第一个视频一模一样。以下两个视频均是同样设备和参数采集的视频a.mp4和b.mp4。两个mp4拼接出来的视频为abd.mp4&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# ffprobe a.mp4 -hide_banner
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;a.mp4&apos;:
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'a.mp4':
   Metadata:
     major_brand     : isom
     minor_version   : 512
@@ -603,7 +751,7 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;a.mp4&apos;:
       
       
 # ffprobe b.mp4 -hide_banner
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;b.mp4&apos;:
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'b.mp4':
   Metadata:
     major_brand     : isom
     minor_version   : 512
@@ -621,7 +769,7 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;b.mp4&apos;:
       
 # ffmpeg -y -i &quot;concat:a.mp4|b.mp4&quot; abd.mp4
 [mov,mp4,m4a,3gp,3g2,mj2 @ 0x7f9575c0fa40] Found duplicated MOOV Atom. Skipped it
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from &apos;concat:a.mp4|b.mp4&apos;:
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'concat:a.mp4|b.mp4':
   Metadata:
     encoder         : Lavf59.4.101
     major_brand     : isom
@@ -644,7 +792,7 @@ Press [q] to stop, [?] for help
 [libx264 @ 0x7f95768062c0] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
 [libx264 @ 0x7f95768062c0] profile High, level 3.1, 4:2:0, 8-bit
 [libx264 @ 0x7f95768062c0] 264 - core 164 r3065 ae03d92 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=18 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=6 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
-Output #0, mp4, to &apos;abd.mp4&apos;:
+Output #0, mp4, to 'abd.mp4':
   Metadata:
     compatible_brands: isomiso2avc1mp41
     major_brand     : isom
@@ -1500,276 +1648,4 @@ public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledO
 &lt;p&gt;参考资料：&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_42340670/article/details/106876879&quot;&gt;对象池：commons-pool2源码解析：GenericObjectPool的borrowObject方法&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry><entry><title type="html">common-pool对象池学习</title><link href="http://localhost:4000/tech/2021/05/13/01.html" rel="alternate" type="text/html" title="common-pool对象池学习" /><published>2021-05-13T00:00:00+08:00</published><updated>2021-05-13T00:00:00+08:00</updated><id>http://localhost:4000/tech/2021/05/13/01</id><content type="html" xml:base="http://localhost:4000/tech/2021/05/13/01.html">&lt;blockquote&gt;
-  &lt;p&gt;问如果你要设计一个池化对象，你会怎么做？&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;　　设计一个T类型的池子，把T类型的资源都放到池子中。资源负责资源的事情，池子负责管理资源。管理池子要做到资源数量的管理，资源状态的管理，资源创建和销毁，线程安全，资源记录。还要考虑到复用的可能。&lt;/p&gt;
-
-&lt;p&gt;　　让我们看看common-pool2的组成部分吧：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;ObjectPool: 存取和状态管理的实现。我们直接操作的线程池就是在这里定义的。这里定义的是如何获取和释放对象等操作。至于具体创建对象的代码，是由PooledObjectFactory来负责的。&lt;/li&gt;
-  &lt;li&gt;PooledObject: 将真正的资源进行封装，封装的过程中添加一些附加信息，比如状态信息，时间等信息。这些信息方便再操作连接资源时完成特定的操作。&lt;/li&gt;
-  &lt;li&gt;PooledObjectFactory:创建，初始化，销毁对象的具体实现的地方。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08e792838506108fff0318c10420d0022801300138d233.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;池化技术&quot; /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;//一个简单的池结果。它继承了Closeable接口，也就是说是可以关闭的数据源或目标。T是实际存在于池中的类型。
-public interface ObjectPool&amp;lt;T&amp;gt; extends Closeable{
-    
-    //通过PooledObjectFactory创建对象或者通过其他机制放入空闲池对象。addObject也用来预热空闲池。
-    void addObject() throws Exception, IllegalStateException,
-            UnsupportedOperationException;
-            
-    //传入参数count，调用count次addObject。 方法的类型是default，也就是说这个方法直接实现方法体，不用实现者实现这个方法。
-    default void addObjects(final int count) throws Exception {
-        for (int i = 0; i &amp;lt; count; i++) {
-            addObject();
-        }
-    }
-    
-    /*
-    从对象池中获取一个实例。
-    创建的实例要不是通过PooledObjectFactory中makeObject()新建出来的，要不就是用了前一个已经被PooledObjectFactory中activateObject()和PooledObjectFactory中validateObject()的空闲对象。
-    activateObject()和validateObject()这两个方法需要在不同的池类型文件中自己去实现。
-    */
-    T borrowObject() throws Exception, NoSuchElementException,
-            IllegalStateException;
-    
-    //清除随机对象放回到池中作为空闲对象。释放这个对象的相关引用资源。在clear之前一定是经过PooledObjectFacotry的destroyObject()过。
-     void clear() throws Exception, UnsupportedOperationException;
-     
-    //继承自Closeable接口，负责关闭并释放有关联系的系统资源。如果之前已经关闭了， 则调用此方法无效。
-    @Override
-    void close();
-    
-    //返回当前有多少实例从池对象中被借出了。如果返回的是负数代表这个信息不可用。
-    int getNumActive();
-    
-    //返回当前当前池中有多少空闲对象。这个值是一个近似值，因为他只代表还没有创建成新资源的被借走的对象。我理解的是还没有被分配内存地址（allocate）。
-    int getNumIdle();
-    
-    /*
-    使池中对象失效
-    按照约定，参数obj必已经被borrwoObject()或者被一个定义在子实现类中定义的方法实现了获取逻辑的对象。如果失败了就返回异常
-    */
-     void invalidateObject(T obj) throws Exception;
-     
-     //比上面多了一个DestoryMode。DestoryMode是个枚举，分别为普通摧毁和被禁的摧毁。最终调用的是PooledObjectFactory的destoryObject()。但不知为啥，我发现其实mode参数最终没有用上……。往下看，看到工厂的destoryObject（）
-     default void invalidateObject(final T obj, final DestroyMode mode) throws Exception {
-        invalidateObject(obj);
-    }
-    
-    /*
-    返回一个池对象中的实例。同invalidateObject()
-    异常中会抛出IllegalStateException。原因是如果有任何（把除了已经被分配内存的有状态的资源，即被借出了的。或者返回一个对象超过一次以上或者返回一个从未被借出过的对象）操作就会触发这个异常
-    */
-     void returnObject(T obj) throws Exception;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/*
-用来定义池对象的一个wrapper 接口，用于跟踪对象的附加信息，比如状态、创建时间、使用时间等。这个类的实现必须是线程安全的。
-*/
-public interface PooledObject&amp;lt;T&amp;gt; extends Comparable&amp;lt;PooledObject&amp;lt;T&amp;gt;&amp;gt; {
-
-    //返回被包装的实际对象
-    T getObject();
-
-    //返回该对象的创建时间
-    long getCreateTime();
-    
-    //以毫秒为单位获得该对象最后在活动状态中使用的时间(它可能仍然处于活动状态，在这种情况下后续调用将返回一个增加的值)。
-    long getActiveTimeMillis();
-
-    //借出的次数
-    default long getBorrowedCount() {
-        return -1;
-    }
-
-    //空闲时间
-    long getIdleTimeMillis();
-
-    //上次借用时间
-    long getLastBorrowTime();
-
-    //上次归还时间
-    long getLastReturnTime();
-
-     /**
-     * 返回上次使用时间的一个估计值,如果Pooled Object实现了TrackedUse接口
-     * 那么返回值将是TrackedUse.getLastUsed()和getLastBorrowTime()的较大者，
-     * 否则返回值和getLastBorrowTime()相等
-     */
-    long getLastUsedTime();
-
-     /*
-     因为接口继承了Comparable接口。所以这个接口需要实现自己的排序逻辑。
-     默认是按照空闲时间排序的。
-     */
-    @Override
-    int compareTo(PooledObject&amp;lt;T&amp;gt; other);
-
-    @Override
-    boolean equals(Object obj);
-
-    @Override
-    int hashCode();
-
-    @Override
-    String toString();
-
-    //尝试将池对象置于PooledObjectState.EVICTION状态，即收回
-    boolean startEvictionTest();
-
-     //是否完成了收回测试
-    boolean endEvictionTest(Deque&amp;lt;PooledObject&amp;lt;T&amp;gt;&amp;gt; idleQueue);
-
-    //分配内存，这个比较重要。因为连接池中的资源被分配后才能算真正的解除。分配内存的过程中可能会出现抢占资源的情况，所以会发生异常。反正，最终返回ture/false来代表是否分配内存成功，即完成了borrow，状态改为PooledObjectState.ALLOCATED
-    boolean allocate();
-
-    //与上面一个方法作用相反,将PooledObjectState.ALLOCATED置为PooledObjectState.IDLE
-    boolean deallocate();
-
-    //将对象置为PooledObjectState.INVALID无效状态
-    void invalidate();
-
-    //设置是否记录对象使用的堆栈信息,可用于池泄漏时问题追溯
-    void setLogAbandoned(boolean logAbandoned);
-
-     /*
-     设置记录堆栈信息时的策略，是全量还是只记泄露的信息。
-     设置为false时，泄露信息只包括调用类的信息而不是方法名。
-     设置为数字时，制使用包含完整堆栈跟踪信息的堆栈遍历机制；否则，如果可能，使用更快的实现。
-     参数是自common-pool2-2.7.0开始有的。
-     */
-    default void setRequireFullStackTrace(final boolean requireFullStackTrace) {
-        // noop
-    }
-
-     //记录当前对象最后一次使用的堆栈信息
-    void use();
-
-    //打印对象的调用堆栈信息
-    void printStackTrace(PrintWriter writer);
-
-    //返回对象目前的状态
-    PooledObjectState getState();
-
-    //标记该对象发生了泄漏
-    void markAbandoned();
-
-    //标记该对象正在被归还到对象池
-    void markReturning();
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;/*
-这个接口主要提供给ObjectPool接口使用。因为这个接口定义了池中对象的生命周期相关的所有方法。
-按照约定，以下情况ObjectPool会代理到PooledObjectFactory中：
-1.不论何时创建一个实例调用makeObject()时
-2.当实例在借出之前，已经处于passivated，每次实例在调用activateObject时
-3.当一个实例被激活时。当一个实例已经返回到池里并且正在做检查，又在passivated（卸载）之前时。当acitvated实例且确定能被借出时
-4.每个实例返回到连接池后，在调用passivateObject()时
-5.当实例正在从池中销毁时，destoryObject()调用时
-
-这个工厂必须确保线程安全，工厂只需要ObjectPool保证操作的实际类型和工厂一致即可。
-*/
-public interface PooledObjectFactory&amp;lt;T&amp;gt; {
-  
-   //创建一个资源实例，这个资源实例可以被封装起来。
-  PooledObject&amp;lt;T&amp;gt; makeObject() throws Exception;
-
-   /*
-   销毁一个不再被池子需要的实例。用的销毁模式是normal。
-   实现了这个方法的类需要注意的是：方法内没有任何保证资源处于什么状态和实现的方法如何去处理非预期的errors
-   所以，实现者需要考虑到对象没有被摧毁，即被垃圾收集器忘掉了，从而永远储存在了内存中。
-   */
-  void destroyObject(PooledObject&amp;lt;T&amp;gt; p) throws Exception;
-
-   //同上，只是采用了DestoryMode模式。但是其实感觉是mode根本没用用上。。。
-  default void destroyObject(final PooledObject&amp;lt;T&amp;gt; p, final DestroyMode mode) throws Exception {
-      destroyObject(p);
-  }
-
-  //确保实例能够安全的返回到池子里
-  boolean validateObject(PooledObject&amp;lt;T&amp;gt; p);
-
-   //重新初始化池返回的实例
-  void activateObject(PooledObject&amp;lt;T&amp;gt; p) throws Exception;
-
-   //卸载要返回到空闲对象池的实例
-  void passivateObject(PooledObject&amp;lt;T&amp;gt; p) throws Exception;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;　　至此，我分析完了三个接口。三个接口各司其职，互相协助。我用一张我画的图片来描述的话，一个管对象的打包，一个管对象的创建，一个管对象的进出口。用jedis举例的话就是，jedis资源打包成封装格式，封装格式被工厂创建，创建成真正使用的资源。这些资源再被借出或者归还。多么的形象哈哈。&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08eede83850610aaa80818b90e20b8082801300138e0f401.jpeg&quot; src=&quot;/images/default.jpg&quot; alt=&quot;我画的&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　下面这张图是这三个接口相关的关系。
-&lt;img class=&quot;lazy post-img&quot; data-original=&quot;https://p.ljcdn.com/v1/raw/p/image-distinguish/08cbdf83850610abd30818850620bb032801300138af8401.png&quot; src=&quot;/images/default.jpg&quot; alt=&quot;我画的&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;　　另外，上面的接口都用到了对象的状态，对象状态如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;public enum PooledObjectState {
-    /**
-     * 在队列中,未被使用,空闲状态。调用allocate()方法后对象应该被置于该状态
-     */
-    IDLE,
-
-    /**
-     * 已分配,在使用中,调用allocate()方法后应该讲对象置于该状态
-     */
-    ALLOCATED,
-
-    /**
-     * 在队列中, 当前正在测试，可能会被回收。在此状态被借出后状态回被置为EVICTION_RETURN_TO_HEAD
-     */
-    EVICTION,
-
-    /**
-     * 不在队列中。当借用该对象时发现对象，发现正在进行回收测试，故将EVICTION更
-     * 改EVICTION_RETURN_TO_HEAD，表明曾经在回收过程中被借出，在回收完后它应该从新添加到队列的头部。
-     */
-    EVICTION_RETURN_TO_HEAD,
-
-    /**
-     * 在队列中,目前正在进行校验
-     */
-    VALIDATION,
-
-    /**
-     * 不在队列中，当前正在验证。当对象从池中被借出，
-     * 在配置了testOnBorrow的情况下，对像从队列移除和进行预分配的时候会进行验证(借用时校验)
-     */
-    VALIDATION_PREALLOCATED,
-
-   /**
-     * 不在队列中，正在进行验证。从池中借出对象时，发现对象正在进行校验，并将对象状态改为该状态
-     */
-    VALIDATION_RETURN_TO_HEAD,
-
-    /**
-     *无效的，并且将要或已经被销毁。
-     */
-    INVALID,
-
-    /**
-     * 泄漏的
-     */
-    ABANDONED,
-
-    /**
-     *归还中,调用markReturning()方法会将对象状态改为此状态，表明正在归还一个对象
-     */
-    RETURNING
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考链接：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/qq447995687/article/details/80413227&quot;&gt;commons-pool2源码走读(一)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/liyantianmin/article/details/86591742&quot;&gt;common-pool对象池&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="pool,java" /><summary type="html">问如果你要设计一个池化对象，你会怎么做？</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>张一帆</name></author><category term="tech" /><category term="redis,java" /><summary type="html">　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。</summary></entry></feed>
