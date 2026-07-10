@@ -207,7 +207,6 @@ exclude:
   - publish-gh-pages.sh
   - Gemfile
   - Gemfile.lock
-  - CNAME
 
 jekyll-archives:
   enabled: [categories, tags]
