@@ -34,17 +34,37 @@ else
   echo ">> 无未提交改动"
 fi
 
-# 3. 用 subtree 把 _site 内容推到 origin/$BRANCH
-# 先 split 出 _site 对应的 commit,再 push。历史不一致时用 --force 强推。
+# 3. 把 _site 内容推到 origin/$BRANCH
+# _site 在 .gitignore 里,git subtree split 看不到工作区改动。
+# 改用临时索引 + work-tree=_site 的方式:
+#   - 用独立索引文件,避免污染 docs 分支的索引
+#   - 把 _site 当作 work-tree,add 全部内容(根级文件就是 _site 里的文件)
+#   - 用 commit-tree 创建 commit,parent 指向 origin/$BRANCH
+#   - 推到 origin/$BRANCH
 echo ">> 推送 _site 到 origin/$BRANCH"
-SPLIT_SHA="$(git subtree split --prefix=_site)"
-if [ -z "$SPLIT_SHA" ]; then
-  echo "!! subtree split 失败,终止"
+REMOTE_SHA="$(git rev-parse origin/$BRANCH 2>/dev/null || true)"
+TMP_INDEX="$(mktemp)"
+trap 'rm -f "$TMP_INDEX"' EXIT
+
+# 在独立索引里,把 _site 目录作为根 add 进来
+GIT_INDEX_FILE="$TMP_INDEX" git --work-tree="_site" add -A
+TREE_SHA="$(GIT_INDEX_FILE="$TMP_INDEX" git write-tree)"
+if [ -z "$TREE_SHA" ]; then
+  echo "!! 构建提交树失败,终止"
   exit 1
 fi
-if ! git push origin "$SPLIT_SHA:$BRANCH"; then
+
+COMMIT_MSG="publish _site at $(date -u +%FT%TZ) from docs@$(git rev-parse --short HEAD)"
+if [ -n "$REMOTE_SHA" ]; then
+  NEW_SHA="$(git commit-tree "$TREE_SHA" -p "$REMOTE_SHA" -m "$COMMIT_MSG")"
+else
+  NEW_SHA="$(git commit-tree "$TREE_SHA" -m "$COMMIT_MSG")"
+fi
+
+echo ">> 新 commit: $NEW_SHA (parent: ${REMOTE_SHA:-<none>})"
+if ! git push origin "$NEW_SHA:$BRANCH"; then
   echo ">> 普通推送失败(可能是历史不一致),改用强推"
-  git push --force origin "$SPLIT_SHA:$BRANCH"
+  git push --force origin "$NEW_SHA:$BRANCH"
 fi
 
 # 4. 清理本地构建产物(只清空内容,保留目录——匿名卷挂载点不能删)
