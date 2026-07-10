@@ -6,11 +6,14 @@ _site/
 .git
 .github
 .docker/
-Gemfile.lock.bak
+.bundle
+vendor
+node_modules/
 *.log
 jmeter.log
-node_modules/
-# 这些脚本/文档不进主镜像(由 docker-push.sh 单独处理)
+Gemfile.lock.bak
+
+# 这些脚本/文档不进主镜像(由 docker-compose 挂载使用)
 docker-push.sh
 publish-gh-pages.sh
 README.md

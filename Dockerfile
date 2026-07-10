@@ -1,4 +1,4 @@
-# Jekyll 博客构建/预览镜像
+# Jekyll 博客构建/预览镜像(Chirpy 主题)
 # 用法见 docker-compose.yml
 FROM ruby:3.3-slim
 
@@ -7,14 +7,19 @@ RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g; s|security.debian.org|mirrors
 
 # 安装 jekyll 依赖的系统包
 # - build-essential: 编译 native gem 扩展 (nokogiri/ffi/eventmachine 等)
-# - git: subtree split 发布需要
+# - git: publish-gh-pages.sh 发布需要,以及 Chirpy 的 lastmod hook 需要
 # - openssh-client: publish 容器走 SSH remote 推送需要 ssh 命令
 # - ca-certificates: bundle install 拉 https gems
+# - imagemagick: Chirpy 生成文章封面/缩略图需要
+# - jq: Chirpy 部署辅助脚本(可选,不影响核心功能)
+# - nodejs: Chirpy 部分前端资产构建可能需要(可选)
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential \
       git \
       openssh-client \
       ca-certificates \
+      imagemagick \
+      jq \
     && rm -rf /var/lib/apt/lists/*
 
 # 工作目录

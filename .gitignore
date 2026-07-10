@@ -1,7 +1,31 @@
+# Bundler cache
+.bundle
+vendor
+
+# Jekyll cache
 .jekyll-cache
-.sass-cache
 .jekyll-metadata
-_posts/media
-_site/
-Gemfile.lock.bak
-.docker/
+_site
+
+# RubyGems
+*.gem
+
+# NPM dependencies
+node_modules
+package-lock.json
+
+# IDE configurations
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+
+# Misc
+_sass/vendors
+assets/js/dist
+
+# Hidden system files
+*~
+.DS_Store
+Thumbs.db
