@@ -1,0 +1,25 @@
+
+
+{
+  "name": "拿饭网",
+  "short_name": "拿饭网",
+  "description": "拿饭网是一个私人博客系统,采用 jekyll 博客系统部署在 GitHub-Pages 服务上。拿饭网内的文章均出自作者,作者以技术为导向同时兼顾自己的生活与对经济的观点。",
+  "icons": [
+    {
+      "src": "/assets/img/favicons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/favicons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/index.html",
+  "theme_color": "#2a1e6b",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
+
