@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>WdatePicker手册 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="WdatePicker手册" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="这里是这款js插件的官网地址：http://www.my97.net" />
-<meta property="og:description" content="这里是这款js插件的官网地址：http://www.my97.net" />
+<meta name="twitter:description" property="og:description" content="这里是这款js插件的官网地址：http://www.my97.net" />
 <link rel="canonical" href="http://localhost:4000/tech/2016/09/07/1.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2016/09/07/1.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2016-09-07T00:00:00+08:00" />
+<meta property="article:modified_time" content="2016-09-07T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="WdatePicker手册" />
+<meta name="twitter:title" content="WdatePicker手册" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/09/07/1.html"},"description":"这里是这款js插件的官网地址：http://www.my97.net","datePublished":"2016-09-07T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2016/09/07/1.html","headline":"WdatePicker手册","dateModified":"2016-09-07T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2016-09-07T00:00:00+08:00","datePublished":"2016-09-07T00:00:00+08:00","description":"这里是这款js插件的官网地址：http://www.my97.net","headline":"WdatePicker手册","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/09/07/1.html"},"url":"http://localhost:4000/tech/2016/09/07/1.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -191,31 +192,47 @@ var _hmt = _hmt || [];
 
 <p>限制日期的范围是 2006-09-10到2008-12-20</p>
 
-<pre>
-  <code>&lt;input id="d411" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',minDate: '2006-09-10', maxDate: '2008-12-20' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d411" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',minDate: '2006-09-10', maxDate: '2008-12-20' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>限制日期的范围是 2008-3-8 11:30:00 到 2008-3-10 20:59:30</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '2008-03-08 11:30:00', maxDate: '2008-03-10 20:59:30' })" value="2008-03-09 11:00:00"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt: 'yyyy-MM-dd HH:mm:ss', minDate: '2008-03-08 11:30:00', maxDate: '2008-03-10 20:59:30' })" value="2008-03-09 11:00:00"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>限制日期的范围是 2008年2月 到 2008年10月</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d413" onfocus="WdatePicker({dateFmt: 'yyyy年M月', minDate: '2008-2', maxDate: '2008-10' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d413" onfocus="WdatePicker({dateFmt: 'yyyy年M月', minDate: '2008-2', maxDate: '2008-10' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>限制日期的范围是 8:00:00 到 11:30:00</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d414" onfocus="WdatePicker({dateFmt: 'H:mm:ss', minDate: '8:00:00', maxDate: '11:30:00' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d414" onfocus="WdatePicker({dateFmt: 'H:mm:ss', minDate: '8:00:00', maxDate: '11:30:00' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <ul>
   <li>
@@ -251,39 +268,59 @@ var _hmt = _hmt || [];
 
 <p>只能选择今天以前的日期(包括今天)</p>
 
-<pre>
-  <code>&lt;input id="d421" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',maxDate: '%y-%M-%d' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d421" class="Wdate" type="text" onfocus="WdatePicker({skin:'whyGreen',maxDate: '%y-%M-%d' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>使用了运算表达式 只能选择今天以后的日期(不包括今天)</p>
 
-<pre>
-  <code>&lt;input id="d422" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-#{%d+1}' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d422" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-#{%d+1}' })"/&gt;
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>只能选择本月的日期1号至本月最后一天</p>
 
-<pre>
-  <code>&lt;input id="d423" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-01', maxDate: '%y-%M-%ld' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d423" class="Wdate" type="text" onfocus="WdatePicker({minDate: '%y-%M-01', maxDate: '%y-%M-%ld' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>只能选择今天7:00:00至明天21:00:00的日期</p>
 
-<pre>
-  <code>&lt;input id="d424" class="Wdate" type="text" onfocus="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',minDate: '%y-%M-%d 7:00:00', maxDate: '%y-%M-#{%d+1} 21:00:00' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d424" class="Wdate" type="text" onfocus="WdatePicker({dateFmt:'yyyy-M-d H:mm:ss',minDate: '%y-%M-%d 7:00:00', maxDate: '%y-%M-#{%d+1} 21:00:00' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>使用了运算表达式 只能选择 20小时前 至 30小时后 的日期</p>
 
-<pre>
-  <code>&lt;input id="d425" class="Wdate" type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate: '%y-%M-%d #{%H-20}:%m:%s' ,maxDate: '%y-%M-%d #{%H+30}:%m:%s' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d425" class="Wdate" type="text" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate: '%y-%M-%d #{%H-20}:%m:%s' ,maxDate: '%y-%M-%d #{%H+30}:%m:%s' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <ul>
   <li>
@@ -299,18 +336,26 @@ var _hmt = _hmt || [];
 
 <p>合同有效期从</p>
 
-<pre>
-  <code>&lt;input id="d4311" class="Wdate" type="text" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4312\')||\'2020-10-01\'}' })"/&gt; 
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d4311" class="Wdate" type="text" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4312\')||\'2020-10-01\'}' })"/&gt; 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>到</p>
 
-<pre>
-  <code>&lt;input id="d4312" class="Wdate" type="text" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4311\')}' ,maxDate:'2020-10-01' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d4312" class="Wdate" type="text" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4311\')}' ,maxDate:'2020-10-01' })"/&gt;
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>注意: 两个日期的日期格式必须相同</p>
 
@@ -334,17 +379,25 @@ var _hmt = _hmt || [];
 
 <p>日期从</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d4321" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4322\',{d:-3});}' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d4321" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4322\',{d:-3});}' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>到</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d4322" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4321\',{d:3});}' })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d4322" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4321\',{d:3});}' })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>使用 $dp.$D 函数 可以将日期框中的值,加上定义的日期差量:</p>
 
@@ -368,17 +421,25 @@ var _hmt = _hmt || [];
 
 <p>住店日期从</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d4331" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4332\',{M:-3,d:-2})||$dp.$DV(\'2020-4-3\',{M:-3,d:-2})} '})"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d4331" onFocus="WdatePicker({maxDate: '#F{$dp.$D(\'d4332\',{M:-3,d:-2})||$dp.$DV(\'2020-4-3\',{M:-3,d:-2})} '})"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>到</p>
 
-<pre>
-  <code>&lt;input type="text" class="Wdate" id="d4332" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4331\',{M:3,d:2});} ',maxDate: '2020-4-3 '})"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input type="text" class="Wdate" id="d4332" onFocus="WdatePicker({minDate: '#F{$dp.$D(\'d4331\',{M:3,d:2});} ',maxDate: '2020-4-3 '})"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>注意:</p>
 
@@ -402,8 +463,10 @@ var _hmt = _hmt || [];
 
 <p>自动转到随机生成的一天,当然,此示例没有实际的用途,只是为演示目的</p>
 
-<pre>
-  <code>&lt;script&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;script&gt;
 //返回一个随机的日期
 function randomDate(){
 var Y = 2000 + Math.round(Math.random() * 10);
@@ -414,7 +477,9 @@ return Y+'-'+M+'-'+D;
 &lt;/script&gt;
 &lt;input type="text" class="Wdate" id="d434" onFocus="var date=randomDate();WdatePicker({minDate:date,maxDate:date}) "/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <ul>
   <li>
@@ -426,17 +491,25 @@ return Y+'-'+M+'-'+D;
 
 <p>禁用 周六 所对应的日期</p>
 
-<pre>
-  <code>&lt;input id="d441" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [6] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d441" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [6] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>通过position属性,自定义弹出位置</p>
 
-<pre>
-  <code>&lt;input id="d442" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [0,6] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d442" type="text" class="Wdate" onFocus="WdatePicker({disabledDays: [0,6] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <ul>
   <li>
@@ -476,19 +549,27 @@ return Y+'-'+M+'-'+D;
 
 <p>禁用 每个月份的 5日 15日 25日</p>
 
-<pre>
-  <code>&lt;input id="d451" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['5$'] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d451" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['5$'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>注意 : ‘5$’ 表示以 5 结尾 注意 $ 的用法</p>
 
 <p>禁用 所有早于2000-01-01的日期</p>
 
-<pre>
-  <code>&lt;input id="d452" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['^19'] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d452" type="text" class="Wdate" onFocus="WdatePicker({disabledDates: ['^19'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>注意: ‘^19’ 表示以 19 开头 注意 ^ 的用法</p>
 
@@ -498,26 +579,38 @@ return Y+'-'+M+'-'+D;
 
 <p>本示例本月可用日期分隔成五段 分别是: 1-3 8-10 16-24 26,27 29-月末</p>
 
-<pre>
-  <code>&lt;input id="d453" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d453" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>min/maxDate disabledDays disabledDates 配合使用 即使在要求非常苛刻的情况下也能满足需求</p>
 
-<pre>
-  <code>&lt;input id="d454" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] ,disabledDays: [1,3,6] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d454" type="text" class="Wdate" onFocus="WdatePicker({minDate: '%y-%M-01' ,maxDate: '%y-%M-%ld' ,disabledDates: ['0[4-7]$','1[1-5]$','2[58]$'] ,disabledDays: [1,3,6] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>禁用前一个小时和后一个小时内所有时间 使用 %y %M %d %H %m %s 等变量</p>
 
 <p>鼠标点击 小时输入框时,你会发现当然时间对应的前一个小时和后一个小时是灰色的</p>
 
-<pre>
-  <code>&lt;input id="d2a25" type="text" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',disabledDates: ['%y-%M-%d #{%H-1}\:..\:..','%y-%M-%d #{%H+1}\:..\:..'] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d2a25" type="text" class="Wdate" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',disabledDates: ['%y-%M-%d #{%H-1}\:..\:..','%y-%M-%d #{%H+1}\:..\:..'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>注意: %y %M %d等详见动态变量表</p>
 
@@ -527,8 +620,10 @@ return Y+'-'+M+'-'+D;
 
 <p>打开小时选择框,你会发现有一个小时被禁用的,而且每次禁用的小时都不同</p>
 
-<pre>
-  <code>&lt;script&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;script&gt;
 function randomH(){
 //产生一个随机的数字 0-23 
 var H = Math.round(Math.random() * 23);
@@ -539,7 +634,9 @@ return '^'+H;
 &lt;/script&gt;
 &lt;input type="text" class="Wdate" id="d456" onFocus="WdatePicker({dateFmt:'HH:mm:ss',disabledDates: ['#F{randomH()}'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <ul>
   <li>
@@ -553,10 +650,14 @@ return '^'+H;
 
 <p>只启用 每个月份的 5日 15日 25日</p>
 
-<pre>
-  <code>&lt;input id="d46" type="text" class="Wdate" onFocus="WdatePicker({opposite: true ,disabledDates: ['5$'] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d46" type="text" class="Wdate" onFocus="WdatePicker({opposite: true ,disabledDates: ['5$'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>注意 : ‘5$’ 表示以 5 结尾 注意 $ 的用法</p>
 
@@ -576,17 +677,25 @@ return '^'+H;
 
 <p>高亮每周 周一 周五</p>
 
-<pre>
-  <code>&lt;input id="d471" type="text" class="Wdate" onFocus="WdatePicker({specialDays: [1,5] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d471" type="text" class="Wdate" onFocus="WdatePicker({specialDays: [1,5] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>高亮每月 1号 15号</p>
 
-<pre>
-  <code>&lt;input id="d472" type="text" class="Wdate" onFocus="WdatePicker({specialDates: ['....-..-01','....-..-15'] })"/&gt;
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>&lt;input id="d472" type="text" class="Wdate" onFocus="WdatePicker({specialDates: ['....-..-01','....-..-15'] })"/&gt;
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 
 		<!--分享按钮 开始-->

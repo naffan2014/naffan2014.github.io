@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>MYSQL中浮点类型的区别 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="MYSQL中浮点类型的区别" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
-<meta property="og:description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
+<meta name="twitter:description" property="og:description" content="拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。" />
 <link rel="canonical" href="http://localhost:4000/tech/2017/05/23/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2017/05/23/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2017-05-23T00:00:00+08:00" />
+<meta property="article:modified_time" content="2017-05-23T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="MYSQL中浮点类型的区别" />
+<meta name="twitter:title" content="MYSQL中浮点类型的区别" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2017/05/23/01.html"},"description":"拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。","datePublished":"2017-05-23T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2017/05/23/01.html","headline":"MYSQL中浮点类型的区别","dateModified":"2017-05-23T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2017-05-23T00:00:00+08:00","datePublished":"2017-05-23T00:00:00+08:00","description":"拿饭网是一个私人博客系统，采用jekyll博客系统部署在GitHub-Pages服务上。拿饭网内的文章均出自作者，作者以技术为导向同时兼顾自己的生活与对经济的观点。","headline":"MYSQL中浮点类型的区别","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2017/05/23/01.html"},"url":"http://localhost:4000/tech/2017/05/23/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -147,8 +148,8 @@ var _hmt = _hmt || [];
 
 <p>　　decimal(M,N)，其中M代表位数的总和，N代表小数点的位数，不足则补零，超出的则用四舍五入的方式进位到小数点N位，举个例子：</p>
 
-<pre><code>decimal(5,3)。
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>decimal(5,3)。
+</code></pre></div></div>
 
 <p>　该字段可以存储decimal类型的字段，字符总数为5位，小数点3位。也就是说这个字段可以存储任何5个数字以及3个小数，所以存储范围是-99.999~99.999。通过测试，我们可以总结一下几个规律：</p>
 
