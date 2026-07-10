@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>publish-gh-pages.sh解读 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="publish-gh-pages.sh解读" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="　　我怕经过很长时间以后想要修改某些东西，需要修改下这个脚本，然而忘记了怎么做。所以，打算对这个脚本进行注释。" />
-<meta property="og:description" content="　　我怕经过很长时间以后想要修改某些东西，需要修改下这个脚本，然而忘记了怎么做。所以，打算对这个脚本进行注释。" />
+<meta name="twitter:description" property="og:description" content="　　我怕经过很长时间以后想要修改某些东西，需要修改下这个脚本，然而忘记了怎么做。所以，打算对这个脚本进行注释。" />
 <link rel="canonical" href="http://localhost:4000/tech/2016/11/28/2.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2016/11/28/2.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2016-11-28T00:00:00+08:00" />
+<meta property="article:modified_time" content="2016-11-28T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="publish-gh-pages.sh解读" />
+<meta name="twitter:title" content="publish-gh-pages.sh解读" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/11/28/2.html"},"description":"　　我怕经过很长时间以后想要修改某些东西，需要修改下这个脚本，然而忘记了怎么做。所以，打算对这个脚本进行注释。","datePublished":"2016-11-28T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2016/11/28/2.html","headline":"publish-gh-pages.sh解读","dateModified":"2016-11-28T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2016-11-28T00:00:00+08:00","datePublished":"2016-11-28T00:00:00+08:00","description":"　　我怕经过很长时间以后想要修改某些东西，需要修改下这个脚本，然而忘记了怎么做。所以，打算对这个脚本进行注释。","headline":"publish-gh-pages.sh解读","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/11/28/2.html"},"url":"http://localhost:4000/tech/2016/11/28/2.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -141,53 +142,53 @@ var _hmt = _hmt || [];
 	<div  class="post">
 		<p>　　我怕经过很长时间以后想要修改某些东西，需要修改下这个脚本，然而忘记了怎么做。所以，打算对这个脚本进行注释。</p>
 
-<pre><code class="language-bash">#!/bin/bash    //bash脚本必须有这个
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash    //bash脚本必须有这个</span>
 
 //定义一个函数，下面用的都是这个
-function exe_cmd() { 
-    echo $1 //打印出命令
-    eval $1 //执行这个命令
-}
+<span class="k">function </span>exe_cmd<span class="o">()</span> <span class="o">{</span> 
+    <span class="nb">echo</span> <span class="nv">$1</span> //打印出命令
+    <span class="nb">eval</span> <span class="nv">$1</span> //执行这个命令
+<span class="o">}</span>
 
-if [ $# -lt 1 ]; then    //如果没有参数，那么就打印用master分支
-    echo "Usage: sh $0 master"
-fi
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span><span class="nt">-lt</span> 1 <span class="o">]</span><span class="p">;</span> <span class="k">then</span>    //如果没有参数，那么就打印用master分支
+    <span class="nb">echo</span> <span class="s2">"Usage: sh </span><span class="nv">$0</span><span class="s2"> master"</span>
+<span class="k">fi
 
-branch=$1  //运行脚本第一个参数为要目标分支，如果没有就用master
-if [ -z "$branch" ]; then
-    branch='master'
-fi
+</span><span class="nv">branch</span><span class="o">=</span><span class="nv">$1</span>  //运行脚本第一个参数为要目标分支，如果没有就用master
+<span class="k">if</span> <span class="o">[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$branch</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nv">branch</span><span class="o">=</span><span class="s1">'master'</span>
+<span class="k">fi
 
-exe_cmd "jekyll build" //运行jekyll build编译
-if [ ! -d '_site' ];then //如果没有_site文件夹
-    echo "not content to be published"
-    exit
-fi
+</span>exe_cmd <span class="s2">"jekyll build"</span> //运行jekyll build编译
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="s1">'_site'</span> <span class="o">]</span><span class="p">;</span><span class="k">then</span> //如果没有_site文件夹
+    <span class="nb">echo</span> <span class="s2">"not content to be published"</span>
+    <span class="nb">exit
+</span><span class="k">fi
 
-exe_cmd "git commit -a -m 'jekyll build'" //提交git
-exe_cmd "git branch -D $branch" //删除master
-error_code=$?   //获取错误代码
-if [ $error_code != 0 ]; then //如果有错误
-    echo 'Delete branch $branch fail.'   
-    exit
-fi
+</span>exe_cmd <span class="s2">"git commit -a -m 'jekyll build'"</span> //提交git
+exe_cmd <span class="s2">"git branch -D </span><span class="nv">$branch</span><span class="s2">"</span> //删除master
+<span class="nv">error_code</span><span class="o">=</span><span class="nv">$?</span>   //获取错误代码
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$error_code</span> <span class="o">!=</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then</span> //如果有错误
+    <span class="nb">echo</span> <span class="s1">'Delete branch $branch fail.'</span>   
+    <span class="nb">exit
+</span><span class="k">fi
 
-exe_cmd "git checkout -b $branch" //从当前的分支复制并跳转到新建分支
-error_code=$?
-if [ $error_code != 0 ];then  
-    echo 'Switch branch $branch fail.' //切分支失败
-    exit
-else
+</span>exe_cmd <span class="s2">"git checkout -b </span><span class="nv">$branch</span><span class="s2">"</span> //从当前的分支复制并跳转到新建分支
+<span class="nv">error_code</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$error_code</span> <span class="o">!=</span> 0 <span class="o">]</span><span class="p">;</span><span class="k">then  
+    </span><span class="nb">echo</span> <span class="s1">'Switch branch $branch fail.'</span> //切分支失败
+    <span class="nb">exit
+</span><span class="k">else</span>
 //filter-branch为重写历史
 //--subdirectory-filter _site/ 选择_site文件夹当做这个分支的根目录 
-// -f 忽略空文件
-    exe_cmd "git filter-branch --subdirectory-filter _site/ -f"
-    exe_cmd "git push --all --force origin"//提交到远程 force表示强退
-    exe_cmd "rm -Rf _site/" //删除_site目录
-    exe_cmd "git checkout docs" //切回docs分支
-fi
+// <span class="nt">-f</span> 忽略空文件
+    exe_cmd <span class="s2">"git filter-branch --subdirectory-filter _site/ -f"</span>
+    exe_cmd <span class="s2">"git push --all --force origin"</span>//提交到远程 force表示强退
+    exe_cmd <span class="s2">"rm -Rf _site/"</span> //删除_site目录
+    exe_cmd <span class="s2">"git checkout docs"</span> //切回docs分支
+<span class="k">fi</span>
 
-</code></pre>
+</code></pre></div></div>
 
 		<!--分享按钮 开始-->
 		<div class="bdsharebuttonbox" style="margin-left:auto;margin-right:2px;width:140px;">

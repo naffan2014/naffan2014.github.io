@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>拿饭网对java垃圾回收大杂烩 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="拿饭网对java垃圾回收大杂烩" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="概念" />
-<meta property="og:description" content="概念" />
+<meta name="twitter:description" property="og:description" content="概念" />
 <link rel="canonical" href="http://localhost:4000/tech/2020/01/27/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2020/01/27/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-01-27T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-01-27T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="拿饭网对java垃圾回收大杂烩" />
+<meta name="twitter:title" content="拿饭网对java垃圾回收大杂烩" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2020/01/27/01.html"},"description":"概念","datePublished":"2020-01-27T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2020/01/27/01.html","headline":"拿饭网对java垃圾回收大杂烩","dateModified":"2020-01-27T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2020-01-27T00:00:00+08:00","datePublished":"2020-01-27T00:00:00+08:00","description":"概念","headline":"拿饭网对java垃圾回收大杂烩","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2020/01/27/01.html"},"url":"http://localhost:4000/tech/2020/01/27/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,7 +178,7 @@ var _hmt = _hmt || [];
   </li>
 </ul>
 
-<p>　　<code>垃圾回收</code>(Garbage Collection,GC)是一种在堆内存中找出哪些对象在被使用，哪些对象没有被使用，并且通过一种机制能够把后者持有的内存进行回收。</p>
+<p>　　<code class="language-plaintext highlighter-rouge">垃圾回收</code>(Garbage Collection,GC)是一种在堆内存中找出哪些对象在被使用，哪些对象没有被使用，并且通过一种机制能够把后者持有的内存进行回收。</p>
 
 <hr />
 
@@ -207,23 +208,27 @@ var _hmt = _hmt || [];
 
 <p>　　这种算法有种弊端，两个对象互相引用。那么，他们的引用计数器永远不能为0.也就是说，这两个对象就会常驻在内存中。GC永远也不可能清楚他俩。通过下面的例子，我们可以看到object1和object2虽然已经被赋值为null了，但是当方法结束时，因为其都有一个对方的引用，所以这两个对象并不会被GC发现</p>
 
-<pre>
-  <code class="language-java">
-public class Main {
-    public static void main(String[] args) {
-        MyObject object1 = new MyObject();
-        MyObject object2 = new MyObject();
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">MyObject</span> <span class="n">object1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span>
+        <span class="nc">MyObject</span> <span class="n">object2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyObject</span><span class="o">();</span>
           
-        object1.object = object2;
-        object2.object = object1;
+        <span class="n">object1</span><span class="o">.</span><span class="na">object</span> <span class="o">=</span> <span class="n">object2</span><span class="o">;</span>
+        <span class="n">object2</span><span class="o">.</span><span class="na">object</span> <span class="o">=</span> <span class="n">object1</span><span class="o">;</span>
           
-        object1 = null;
-        object2 = null;
-    }
-}
+        <span class="n">object1</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">object2</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <ul>
   <li>跟搜索算法（可达性分析算法）</li>
@@ -327,10 +332,10 @@ public class Main {
 <p>区域划分：</p>
 
 <blockquote>
-  <p>年轻代（<code>Young Generation</code>）</p>
+  <p>年轻代（<code class="language-plaintext highlighter-rouge">Young Generation</code>）</p>
   <ol>
     <li>所有新生成的对象首先都是放在年轻代的。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象。</li>
-    <li>新生代内存按照<code>8:1</code>的比例分为一个eden区和一个大块的 survivor(由survivor1+survivor2组成)区。每次新生代中可用内存空间为整个新生代内存的90%，剩下的10%会被“浪费”。大部分对象在Eden区中生成。回收时先将eden区存活对象复制到一个survivor1区，然后清空eden区，当这个survivor1区也存放满了时，则将eden区和survivor1区存活对象复制到另一个survivor2区，然后清空eden和这个survivor1区，此时survivor1区是空的，然后将survivor1区和survivor2区交换，即保持survivor2区为空， 如此往复。</li>
+    <li>新生代内存按照<code class="language-plaintext highlighter-rouge">8:1</code>的比例分为一个eden区和一个大块的 survivor(由survivor1+survivor2组成)区。每次新生代中可用内存空间为整个新生代内存的90%，剩下的10%会被“浪费”。大部分对象在Eden区中生成。回收时先将eden区存活对象复制到一个survivor1区，然后清空eden区，当这个survivor1区也存放满了时，则将eden区和survivor1区存活对象复制到另一个survivor2区，然后清空eden和这个survivor1区，此时survivor1区是空的，然后将survivor1区和survivor2区交换，即保持survivor2区为空， 如此往复。</li>
     <li>当survivor2区不足以存放eden和survivor1的存活对象时，就将存活对象直接存放到老年代。若是老年代也满了就会触发一次Full GC，也就是新生代、老年代都进行回收。</li>
     <li>新生代发生的GC也叫做Minor GC。Minor GC发生频率比较高(不一定等Eden区满了才触发,随时可能触发。)。</li>
   </ol>
@@ -343,9 +348,9 @@ public class Main {
 <hr />
 
 <blockquote>
-  <p>年老代（<code>Old Generation</code>）</p>
+  <p>年老代（<code class="language-plaintext highlighter-rouge">Old Generation</code>）</p>
   <ol>
-    <li>在年轻代中经历了<code>N</code>次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</li>
+    <li>在年轻代中经历了<code class="language-plaintext highlighter-rouge">N</code>次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</li>
     <li>内存比新生代也大很多(大概比例是1:2)，当老年代内存满时触发Major GC即Full GC。Full GC发生频率比较低，老年代对象存活时间比较长，存活率标记高。</li>
   </ol>
 </blockquote>
@@ -353,16 +358,16 @@ public class Main {
 <hr />
 
 <blockquote>
-  <p>持久代（<code>Permanent Generation</code>）
+  <p>持久代（<code class="language-plaintext highlighter-rouge">Permanent Generation</code>）
 用于存放静态文件，如Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。</p>
 </blockquote>
 
-<p>产生<code>Full GC</code>的原因：</p>
+<p>产生<code class="language-plaintext highlighter-rouge">Full GC</code>的原因：</p>
 
 <ol>
   <li>老年代被写满。</li>
   <li>持久代别写满。</li>
-  <li><code>System.gc()</code>被显示调用。</li>
+  <li><code class="language-plaintext highlighter-rouge">System.gc()</code>被显示调用。</li>
   <li>上一次GC之后HEAP的各域分配策略动态变化。（不理解）</li>
 </ol>
 
@@ -374,52 +379,64 @@ public class Main {
   </li>
 </ul>
 
-<p>　　实际开发过程中，我们对<code>new</code>出来的对象也会根据重要程度，有个等级划分。有些必须用到的对象，我们希望它在其被引用的周期内能一直存在；没那么重要的对象，当内存不足时能够让位。由此，java对引用划分为4种：Strong,weak,soft,phantom。</p>
+<p>　　实际开发过程中，我们对<code class="language-plaintext highlighter-rouge">new</code>出来的对象也会根据重要程度，有个等级划分。有些必须用到的对象，我们希望它在其被引用的周期内能一直存在；没那么重要的对象，当内存不足时能够让位。由此，java对引用划分为4种：Strong,weak,soft,phantom。</p>
 
 <p>1.strong References（强引用）</p>
 
-<p>　　代码中普遍存在的类似<code>MyClass obj = new MyClass()</code>这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉被引用的对象。</p>
+<p>　　代码中普遍存在的类似<code class="language-plaintext highlighter-rouge">MyClass obj = new MyClass()</code>这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉被引用的对象。</p>
 
 <p>　　</p>
-<pre>
-  <code class="language-java">    //obj是刚刚创建创建的MyClass实例的强引用，目前obj不会被回收
-    MyClass obj = new MyClass ();          
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>    <span class="c1">//obj是刚刚创建创建的MyClass实例的强引用，目前obj不会被回收</span>
+    <span class="nc">MyClass</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MyClass</span> <span class="o">();</span>          
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　只有当强引用的变量指向null时才会被回收。</p>
 
 <p>　　</p>
-<pre>
-  <code class="language-java">    //obj不在是任何实例的引用了，所以MyClass类型的obj对象现在可以被回收
-    obj = null; 
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>    <span class="c1">//obj不在是任何实例的引用了，所以MyClass类型的obj对象现在可以被回收</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>
   <img class="lazy" data-original="https://media.geeksforgeeks.org/wp-content/uploads/Strong-References-in-java.png" src="/images/default.jpg" alt="7" />
 </p>
 
-<pre>
-  <code class="language-java">    // Java program to illustrate Strong reference
-    class Gfg
-    {
-        //Code..
-    }
-    public class Example
-    {
-        public static void main(String[] args)
-        {
-             //Strong Reference - by default
-            Gfg g = new Gfg();    
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>    <span class="c1">// Java program to illustrate Strong reference</span>
+    <span class="kd">class</span> <span class="nc">Gfg</span>
+    <span class="o">{</span>
+        <span class="c1">//Code..</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span>
+    <span class="o">{</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+        <span class="o">{</span>
+             <span class="c1">//Strong Reference - by default</span>
+            <span class="nc">Gfg</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Gfg</span><span class="o">();</span>    
               
-            //Now, object to which 'g' was pointing earlier is 
-            //eligible for garbage collection.
-            g = null; 
-        }
-    } 
+            <span class="c1">//Now, object to which 'g' was pointing earlier is </span>
+            <span class="c1">//eligible for garbage collection.</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> 
+        <span class="o">}</span>
+    <span class="o">}</span> 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>2.soft References（软引用）</p>
 
@@ -427,40 +444,44 @@ public class Main {
 
 <p>　　<img class="lazy" data-original="https://media.geeksforgeeks.org/wp-content/cdn-uploads/Soft-references-in-Java.png" src="/images/default.jpg" alt="8" /></p>
 
-<pre>
-  <code class="language-java">    //讲解弱引用的代码
-    import java.lang.ref.SoftReference;
-    class Gfg
-    {
-    	//code..
-    	public void x()
-    	{
-    		System.out.println("GeeksforGeeks");
-    	}
-    }
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>    <span class="c1">//讲解弱引用的代码</span>
+    <span class="kn">import</span> <span class="nn">java.lang.ref.SoftReference</span><span class="o">;</span>
+    <span class="kd">class</span> <span class="nc">Gfg</span>
+    <span class="o">{</span>
+    	<span class="c1">//code..</span>
+    	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">x</span><span class="o">()</span>
+    	<span class="o">{</span>
+    		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"GeeksforGeeks"</span><span class="o">);</span>
+    	<span class="o">}</span>
+    <span class="o">}</span>
     
-    public class Example
-    {
-    	public static void main(String[] args)
-    	{
-    		// Strong Reference
-    		Gfg g = new Gfg();	
-    		g.x();
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span>
+    <span class="o">{</span>
+    	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+    	<span class="o">{</span>
+    		<span class="c1">// Strong Reference</span>
+    		<span class="nc">Gfg</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Gfg</span><span class="o">();</span>	
+    		<span class="n">g</span><span class="o">.</span><span class="na">x</span><span class="o">();</span>
     		
-    		//创建指向Gfg类型对象的软引用，让g指向。
-    		SoftReference&lt;Gfg&gt; softref = new SoftReference&lt;Gfg&gt;(g);
+    		<span class="c1">//创建指向Gfg类型对象的软引用，让g指向。</span>
+    		<span class="nc">SoftReference</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;</span> <span class="n">softref</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SoftReference</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;(</span><span class="n">g</span><span class="o">);</span>
     	
-    		//让g可以被垃圾回收
-    		g = null;
+    		<span class="c1">//让g可以被垃圾回收</span>
+    		<span class="n">g</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
     		
-    		//现在可以从软引用中获取到g。调用g的方法依然ok
-    		g = softref.get();
+    		<span class="c1">//现在可以从软引用中获取到g。调用g的方法依然ok</span>
+    		<span class="n">g</span> <span class="o">=</span> <span class="n">softref</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
     		
-    		g.x();
-    	}
-    }
+    		<span class="n">g</span><span class="o">.</span><span class="na">x</span><span class="o">();</span>
+    	<span class="o">}</span>
+    <span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　下面是输出。可以看到第一次输出是强引用的时候，然后我们创建了个软引用，再把g指向null，让gc回收，最后我们再从软引用中获取g，通过调用g的方法仍然可以输出。这就说明了，软引用的变量在还没有发生OOM的时候，即使可以被回收了也不会被回收，知道OOM前才会。我们不妨模拟下OOM的情况，看看g会不会被回收哈。</p>
 
@@ -486,41 +507,45 @@ GeeksforGeeks
 　
 　<img class="lazy post-img" data-original="https://media.geeksforgeeks.org/wp-content/cdn-uploads/Weak-references-in-Java.png" src="/images/default.jpg" alt="9" /></p>
 
-<pre>
-  <code class="language-java">//用来讲解弱引用的例子
-import java.lang.ref.WeakReference;
-class Gfg
-{
-	//code
-	public void x()
-	{
-		System.out.println("GeeksforGeeks");
-	}
-}
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="c1">//用来讲解弱引用的例子</span>
+<span class="kn">import</span> <span class="nn">java.lang.ref.WeakReference</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">Gfg</span>
+<span class="o">{</span>
+	<span class="c1">//code</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">x</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"GeeksforGeeks"</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 
-public class Example
-{
-	public static void main(String[] args)
-	{
-	   //强引用
-		Gfg g = new Gfg();	
-		g.x();
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span>
+<span class="o">{</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+	<span class="o">{</span>
+	   <span class="c1">//强引用</span>
+		<span class="nc">Gfg</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Gfg</span><span class="o">();</span>	
+		<span class="n">g</span><span class="o">.</span><span class="na">x</span><span class="o">();</span>
 		
-		//创建指向Gfg类型对象的弱引用，让g指向。
-		WeakReference&lt;Gfg&gt; weakref = new WeakReference&lt;Gfg&gt;(g);
+		<span class="c1">//创建指向Gfg类型对象的弱引用，让g指向。</span>
+		<span class="nc">WeakReference</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;</span> <span class="n">weakref</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WeakReference</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;(</span><span class="n">g</span><span class="o">);</span>
 		
-		//让g可以被垃圾回收。但是只有在JVM需要内存时才会回收
-		g = null;
+		<span class="c1">//让g可以被垃圾回收。但是只有在JVM需要内存时才会回收</span>
+		<span class="n">g</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		
-		//现在可以从弱·引用中获取到g。调用g的方法依然ok
-		g = weakref.get();
+		<span class="c1">//现在可以从弱·引用中获取到g。调用g的方法依然ok</span>
+		<span class="n">g</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
 		
-		g.x();
-	}
-}
+		<span class="n">g</span><span class="o">.</span><span class="na">x</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>输出</p>
 
@@ -537,49 +562,53 @@ GeeksforGeeks
 
 <p>4.phantom References（虚引用)</p>
 
-<p>　　被虚引用引用的对象是可以被GC的。但是，从内存中移除之前JVM会将他们放到一个叫做<code>references queue</code>的队列里。 他们是通过被调用了finalize()后才会进到这个队列里的。Java 中的类 PhantomReference 表示虚引用。</p>
+<p>　　被虚引用引用的对象是可以被GC的。但是，从内存中移除之前JVM会将他们放到一个叫做<code class="language-plaintext highlighter-rouge">references queue</code>的队列里。 他们是通过被调用了finalize()后才会进到这个队列里的。Java 中的类 PhantomReference 表示虚引用。</p>
 
-<pre>
-  <code class="language-java">//讲解虚引用的代码
-import java.lang.ref.*;
-class Gfg
-{
-	//code
-	public void x()
-	{
-		System.out.println("GeeksforGeeks");
-	}
-}
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="c1">//讲解虚引用的代码</span>
+<span class="kn">import</span> <span class="nn">java.lang.ref.*</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">Gfg</span>
+<span class="o">{</span>
+	<span class="c1">//code</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">x</span><span class="o">()</span>
+	<span class="o">{</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"GeeksforGeeks"</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 
-public class Example
-{
-	public static void main(String[] args)
-	{
-		//强应用
-		Gfg g = new Gfg();	
-		g.x();
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span>
+<span class="o">{</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="c1">//强应用</span>
+		<span class="nc">Gfg</span> <span class="n">g</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Gfg</span><span class="o">();</span>	
+		<span class="n">g</span><span class="o">.</span><span class="na">x</span><span class="o">();</span>
 		
-		//构造引用队列
-		ReferenceQueue&lt;Gfg&gt; refQueue = new ReferenceQueue&lt;Gfg&gt;();
+		<span class="c1">//构造引用队列</span>
+		<span class="nc">ReferenceQueue</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;</span> <span class="n">refQueue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ReferenceQueue</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;();</span>
 
-		//构造Gfg类型的对象的虚引用。并由g指向
-		PhantomReference&lt;Gfg&gt; phantomRef = null;
+		<span class="c1">//构造Gfg类型的对象的虚引用。并由g指向</span>
+		<span class="nc">PhantomReference</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;</span> <span class="n">phantomRef</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		
-		phantomRef = new PhantomReference&lt;Gfg&gt;(g,refQueue);
+		<span class="n">phantomRef</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PhantomReference</span><span class="o">&lt;</span><span class="nc">Gfg</span><span class="o">&gt;(</span><span class="n">g</span><span class="o">,</span><span class="n">refQueue</span><span class="o">);</span>
 		
-		//g可以被回收了，但是，在从内存移除之前它都在refQueue中呆着
-		g = null;
+		<span class="c1">//g可以被回收了，但是，在从内存移除之前它都在refQueue中呆着</span>
+		<span class="n">g</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		
-		//虚引用会一直返回null的。
-		g = phantomRef.get();
+		<span class="c1">//虚引用会一直返回null的。</span>
+		<span class="n">g</span> <span class="o">=</span> <span class="n">phantomRef</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
 		
-		//相当于调用的是null.x()。会报NPE
-		g.x();
-	}
-}
+		<span class="c1">//相当于调用的是null.x()。会报NPE</span>
+		<span class="n">g</span><span class="o">.</span><span class="na">x</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　输出</p>
 
@@ -616,7 +645,7 @@ public class Example
   <li>Serial收集器</li>
 </ul>
 
-<p>　　最基本，发展历史最悠久的收集器，在JDK1.3.1之前是虚拟机新生代收集的唯一选择。他是个<code>单线程收集器</code>，所谓的单线程指的不是他只开一条线程去做垃圾收集，而是他必须暂停其他所有的工作线程，直到他手机结束，也就是<code>stop the world</code>。Serial收集器依然是<code>虚拟机运行在Client模式下的默认新生代收集器</code>，它简单而高效。</p>
+<p>　　最基本，发展历史最悠久的收集器，在JDK1.3.1之前是虚拟机新生代收集的唯一选择。他是个<code class="language-plaintext highlighter-rouge">单线程收集器</code>，所谓的单线程指的不是他只开一条线程去做垃圾收集，而是他必须暂停其他所有的工作线程，直到他手机结束，也就是<code class="language-plaintext highlighter-rouge">stop the world</code>。Serial收集器依然是<code class="language-plaintext highlighter-rouge">虚拟机运行在Client模式下的默认新生代收集器</code>，它简单而高效。</p>
 
 <p>
   <img class="lazy" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08b4a5c2850610f6c40518dd0320f8012801300138bbf203.png" src="/images/default.jpg" alt="11" />
@@ -626,7 +655,7 @@ public class Example
   <li>ParNew收集器</li>
 </ul>
 
-<p>　　是Serial的多线程版本，除了使用多条线程进行垃圾收集之外，其余行为包括Serial收集器可用的所有控制参数（-XX:SurvivorRatio、-XX:PretenureSizeThreshold、-XX:HandlePromotionFailure等）、收集算法、stop the world、对象分配规则、回收策略等都和serial收集器完全一样。<code>运行在Server模式下大的虚拟机中首选的新生代收集器，除了Serial以外，目前只有它能够与CMS配合工作。ParNew收集器使用-XX:+UseConcMarkSweepGC选项后的默认新生代收集器，也可以使用-XX:+UseParNewGC选项来强制指定它。</code></p>
+<p>　　是Serial的多线程版本，除了使用多条线程进行垃圾收集之外，其余行为包括Serial收集器可用的所有控制参数（-XX:SurvivorRatio、-XX:PretenureSizeThreshold、-XX:HandlePromotionFailure等）、收集算法、stop the world、对象分配规则、回收策略等都和serial收集器完全一样。<code class="language-plaintext highlighter-rouge">运行在Server模式下大的虚拟机中首选的新生代收集器，除了Serial以外，目前只有它能够与CMS配合工作。ParNew收集器使用-XX:+UseConcMarkSweepGC选项后的默认新生代收集器，也可以使用-XX:+UseParNewGC选项来强制指定它。</code></p>
 
 <p>
   <img class="lazy" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08cea5c2850610c08b0718ee0320fa012801300138db4e.png" src="/images/default.jpg" alt="12" />
@@ -638,7 +667,7 @@ public class Example
 
 <p>　　Parallel Scavenge收集器是一个新生代收集器，使用复制算法，并行的多线程收集器，</p>
 
-<p>　　<code>和ParNew最大的区别是：自适应调节策略。</code>虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量，这种调节方式称为GC自适应的调节策略（GC Ergonomics）</p>
+<p>　　<code class="language-plaintext highlighter-rouge">和ParNew最大的区别是：自适应调节策略。</code>虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量，这种调节方式称为GC自适应的调节策略（GC Ergonomics）</p>
 
 <ul>
   <li>Serial Old收集器</li>
@@ -660,7 +689,7 @@ public class Example
   <li>CMS收集器</li>
 </ul>
 
-<p>　　CMS（Concurrent Mark Sweep）收集器是一种<code>获取最短回收停顿时间为目的的收集器</code>。基于“标记-清除”算法。整个过程分为4个步骤：</p>
+<p>　　CMS（Concurrent Mark Sweep）收集器是一种<code class="language-plaintext highlighter-rouge">获取最短回收停顿时间为目的的收集器</code>。基于“标记-清除”算法。整个过程分为4个步骤：</p>
 
 <p>　　1.初始标记（initial mark）: stop the world，标记GC Roots能直接关联到的对象，速度快，t1</p>
 

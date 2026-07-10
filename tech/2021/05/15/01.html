@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>redis连接池源码分析 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="redis连接池源码分析" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。" />
-<meta property="og:description" content="　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。" />
+<meta name="twitter:description" property="og:description" content="　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。" />
 <link rel="canonical" href="http://localhost:4000/tech/2021/05/15/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2021/05/15/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-05-15T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-05-15T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="redis连接池源码分析" />
+<meta name="twitter:title" content="redis连接池源码分析" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2021/05/15/01.html"},"description":"　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。","datePublished":"2021-05-15T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2021/05/15/01.html","headline":"redis连接池源码分析","dateModified":"2021-05-15T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2021-05-15T00:00:00+08:00","datePublished":"2021-05-15T00:00:00+08:00","description":"　　我们在开发的时候经常会用到redis。java中首选的redis客户端是jedis。jedis封装了redis的所有功能，并且提供了更多额外好用的功能。","headline":"redis连接池源码分析","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2021/05/15/01.html"},"url":"http://localhost:4000/tech/2021/05/15/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -147,13 +148,13 @@ var _hmt = _hmt || [];
   <li>直连模式：</li>
 </ul>
 
-<pre><code class="language-java"> public static void main(String[] arg){
-        //1个实例
-        Jedis jedis = new Jedis("127.0.0.1",6379,100);
-        jedis.incr("threadSafe");
-        jedis.close();
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">arg</span><span class="o">){</span>
+        <span class="c1">//1个实例</span>
+        <span class="nc">Jedis</span> <span class="n">jedis</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Jedis</span><span class="o">(</span><span class="s">"127.0.0.1"</span><span class="o">,</span><span class="mi">6379</span><span class="o">,</span><span class="mi">100</span><span class="o">);</span>
+        <span class="n">jedis</span><span class="o">.</span><span class="na">incr</span><span class="o">(</span><span class="s">"threadSafe"</span><span class="o">);</span>
+        <span class="n">jedis</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 <p><img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/089f91fe840610d38104189b092092042801300138f312.png" src="/images/default.jpg" alt="直连" /></p>
 
 <p>　　你不应该将一个redis实例共享给不同线程，时用时消的用法会造成产生很多的socket和tcp连接，即浪费时间又耗费资源，也提高了服务不可用的风险。如果你只是在本机环境或者使用者相对少的环境中使用，这种模式比较适宜。但是，如果你需要大量使用redis时，应该采用连接池模式。</p>
@@ -162,17 +163,17 @@ var _hmt = _hmt || [];
   <li>连接池模式：</li>
 </ul>
 
-<pre><code class="language-java">    public static void main(String[] arg){
-        JedisPool pool = new JedisPool(new JedisPoolConfig(),"localhost");
-        try (Jedis jedis = pool.getResource()) {
-            jedis.set("foo", "bar");
-            String foobar = jedis.get("foo");
-            jedis.zadd("sose", 0, "car"); jedis.zadd("sose", 0, "bike"); 
-            Set&lt;String&gt; sose = jedis.zrange("sose", 0, -1);
-        }
-        pool.close();
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">arg</span><span class="o">){</span>
+        <span class="nc">JedisPool</span> <span class="n">pool</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JedisPool</span><span class="o">(</span><span class="k">new</span> <span class="nc">JedisPoolConfig</span><span class="o">(),</span><span class="s">"localhost"</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">(</span><span class="nc">Jedis</span> <span class="n">jedis</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="na">getResource</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">jedis</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"foo"</span><span class="o">,</span> <span class="s">"bar"</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">foobar</span> <span class="o">=</span> <span class="n">jedis</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"foo"</span><span class="o">);</span>
+            <span class="n">jedis</span><span class="o">.</span><span class="na">zadd</span><span class="o">(</span><span class="s">"sose"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="s">"car"</span><span class="o">);</span> <span class="n">jedis</span><span class="o">.</span><span class="na">zadd</span><span class="o">(</span><span class="s">"sose"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="s">"bike"</span><span class="o">);</span> 
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">sose</span> <span class="o">=</span> <span class="n">jedis</span><span class="o">.</span><span class="na">zrange</span><span class="o">(</span><span class="s">"sose"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">pool</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p><img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08af91fe84061087a50a189b09208b052801300138b9f703.png" src="/images/default.jpg" alt="连接池" /></p>
 
@@ -180,36 +181,36 @@ var _hmt = _hmt || [];
 
 <p>　　我的上一篇<a href="https://www.naffan.cn/tech/2021/05/12/01.html">池化技术</a>已经提到过连接池的概念，所以这篇文章是我想记录并分享我所学习到的jedis连接池的知识。通过上一段代码我们看到当jedisPool实例化以后，我们从pool中通过getResource来获取一个jedis实例。那么我们的代码研究就从这里开始。</p>
 
-<pre><code class="language-java">    //jedis-3.6.0.jar/redis/clients/jedis/jedisPool.class
-    public Jedis getResource() {
-        //调用父集getResource
-        Jedis jedis = (Jedis)super.getResource();
-        //将当前实例暴露出dataSource，供后续redis操作使用
-        jedis.setDataSource(this);
-        return jedis;
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//jedis-3.6.0.jar/redis/clients/jedis/jedisPool.class</span>
+    <span class="kd">public</span> <span class="nc">Jedis</span> <span class="nf">getResource</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//调用父集getResource</span>
+        <span class="nc">Jedis</span> <span class="n">jedis</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Jedis</span><span class="o">)</span><span class="kd">super</span><span class="o">.</span><span class="na">getResource</span><span class="o">();</span>
+        <span class="c1">//将当前实例暴露出dataSource，供后续redis操作使用</span>
+        <span class="n">jedis</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">jedis</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-java">    //jedis-3.6.0.jar/redis/clients/jedis/client/util/Pool.class
-    //genericObjectPool是ObjectPool的实现，ObjectPool是common.pool2中关于池化对象的接口。其中定义了几个标准的对象方法，这些方法就是管理池的核心方法。
-    protected GenericObjectPool&lt;T&gt; internalPool;
-    ……
-    public T getResource() {
-        try {
-            //通过调用common.pool2中的borrowObject，完成对jedis实例的借取。
-            return this.internalPool.borrowObject();
-            //如果出现了异常了，按照异常的分类进行处理。
-        } catch (NoSuchElementException var2) {
-            if (null == var2.getCause()) {
-                throw new JedisExhaustedPoolException("Could not get a resource since the pool is exhausted", var2);
-            } else {
-                throw new JedisException("Could not get a resource from the pool", var2);
-            }
-        } catch (Exception var3) {
-            throw new JedisConnectionException("Could not get a resource from the pool", var3);
-        }
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//jedis-3.6.0.jar/redis/clients/jedis/client/util/Pool.class</span>
+    <span class="c1">//genericObjectPool是ObjectPool的实现，ObjectPool是common.pool2中关于池化对象的接口。其中定义了几个标准的对象方法，这些方法就是管理池的核心方法。</span>
+    <span class="kd">protected</span> <span class="nc">GenericObjectPool</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">internalPool</span><span class="o">;</span>
+    <span class="err">……</span>
+    <span class="kd">public</span> <span class="no">T</span> <span class="nf">getResource</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">//通过调用common.pool2中的borrowObject，完成对jedis实例的借取。</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">internalPool</span><span class="o">.</span><span class="na">borrowObject</span><span class="o">();</span>
+            <span class="c1">//如果出现了异常了，按照异常的分类进行处理。</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">NoSuchElementException</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="kc">null</span> <span class="o">==</span> <span class="n">var2</span><span class="o">.</span><span class="na">getCause</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">JedisExhaustedPoolException</span><span class="o">(</span><span class="s">"Could not get a resource since the pool is exhausted"</span><span class="o">,</span> <span class="n">var2</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">JedisException</span><span class="o">(</span><span class="s">"Could not get a resource from the pool"</span><span class="o">,</span> <span class="n">var2</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">JedisConnectionException</span><span class="o">(</span><span class="s">"Could not get a resource from the pool"</span><span class="o">,</span> <span class="n">var3</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>　　在common-pool2中，对象池的核心接口叫做ObjectPool，他定义了对象池的实现的行为。</p>
 <ol>
@@ -225,17 +226,17 @@ var _hmt = _hmt || [];
 
 <p>　　在common-pool2中，objectPool的核心实现类就是GenericObjectPool。</p>
 
-<pre><code class="language-java">    //commons-pool2.jar/org/apache/commons/pool2/impl/GenericObjectedPool
-    @Override
-    public T borrowObject() throws Exception {
-        //getMaxWaitMillis()是BaseGenericObjectPool中设定的volatile类型的值，代表最长等待时间（毫秒），配置文件中的"maxWait"
-        return borrowObject(getMaxWaitMillis());
-    }
-</code></pre>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//commons-pool2.jar/org/apache/commons/pool2/impl/GenericObjectedPool</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="no">T</span> <span class="nf">borrowObject</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="c1">//getMaxWaitMillis()是BaseGenericObjectPool中设定的volatile类型的值，代表最长等待时间（毫秒），配置文件中的"maxWait"</span>
+        <span class="k">return</span> <span class="nf">borrowObject</span><span class="o">(</span><span class="n">getMaxWaitMillis</span><span class="o">());</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>　　接下来我们来分析下borrowObject方法，刚才说过borrowObject是实现了ObjectPool。那么先看一下这个接口中对borrowObject的描述。</p>
 
-<pre><code class="language-java">    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * Obtains an instance from this pool.
      * &lt;p&gt;
      * Instances returned from this method will have been either newly created
@@ -265,33 +266,33 @@ var _hmt = _hmt || [];
      * @throws NoSuchElementException
      *              when the pool is exhausted and cannot or will not return
      *              another instance.
-     */
-     /*
+     */</span>
+     <span class="cm">/*
      这个method返回实例，这个实例将是一个被makeObject()创建的对象，或者是一个之前就是idle并且经过activateObject()激活过的并且经过validatedObject()验证过的对象。
      根据约定，客户端必须调用过returenObject(),invalidateObject()或者一个在子类中实现了归还逻辑的方法后归还。
      这个方法在池子耗尽时的表现没有指明具体如何处理（尽管他有可能被他的实现制定过。）
-     */
-    T borrowObject() throws Exception, NoSuchElementException,
-            IllegalStateException;
-</code></pre>
+     */</span>
+    <span class="no">T</span> <span class="nf">borrowObject</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">,</span> <span class="nc">NoSuchElementException</span><span class="o">,</span>
+            <span class="nc">IllegalStateException</span><span class="o">;</span>
+</code></pre></div></div>
 
 <p>　　接着我们再来看看这个方法的具体实现。</p>
 
-<pre><code class="language-java">    //commons-pool2.jar/org/apache/commons/pool2/impl/GenericObjectPool.class
-    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//commons-pool2.jar/org/apache/commons/pool2/impl/GenericObjectPool.class</span>
+    <span class="cm">/**
      * Equivalent to &lt;code&gt;{@link #borrowObject(long)
      * borrowObject}({@link #getMaxWaitMillis()})&lt;/code&gt;.
      * &lt;p&gt;
      * {@inheritDoc}
      * &lt;/p&gt;
-     */
-     //通过获取配置中MaxWait配置，当做传输调用重载的方法。
-    @Override
-    public T borrowObject() throws Exception {
-        return borrowObject(getMaxWaitMillis());
-    }
+     */</span>
+     <span class="c1">//通过获取配置中MaxWait配置，当做传输调用重载的方法。</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="no">T</span> <span class="nf">borrowObject</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">borrowObject</span><span class="o">(</span><span class="n">getMaxWaitMillis</span><span class="o">());</span>
+    <span class="o">}</span>
     
-    /**
+    <span class="cm">/**
      * Borrows an object from the pool using the specific waiting time which only
      * applies if {@link #getBlockWhenExhausted()} is true.
      * &lt;p&gt;
@@ -339,172 +340,172 @@ var _hmt = _hmt || [];
      *
      * @throws Exception if an object instance cannot be returned due to an
      *                   error
-     */
-     /*
+     */</span>
+     <span class="cm">/*
      当getBlockWhenExhausted()返回true时，需要提供等待时间从对象池中借出对象，
      如果有1个或多个空闲实例的话，就通过getLifo()方法，也就是先进先出的策略选择由哪个空闲实例承接工作。如果激活失败了，或者testOnBorrow设置为true并且检测失败了，这个实例就会销毁，接下来由下一个可用实例进行承接。这个流程一直持续，直到没有可用的实例可供使用或者没有空闲实例可供使用。
      如果在对象池中没有空闲实例了，接下来的走向取决于maxTotal,getBlockWhenExhausted()和传进来的等待时间参数决定。如果当前对象池中的实力数量小于maxtotal，一个新的实例将被创建，激活并且检测最终返回给调用者。如果检测失败，一个NoSuchElementException异常将被抛出。
      如果对象池已经占满了（也就是说没有可用的空闲实例并且没有容量可以被创建），这个方法要不堵塞（如果getBlockWhenExhausted设置为true的情况下才会堵塞）要不就抛出一个NoSuchElementException（相反getBlockWhenExhausted为false的情况）异常。具体阻塞的时间跟传入的borrowMaxWaitMillis时间大小有关。（还记得刚才说的maxWait的设置么？）
      当对象池已经耗尽，多个调用线程将被同时堵塞，他们一起等待可用的jedis实例接客。接客的规则采用公平算法。其实就是先到先被接~哈哈
-     */
-    public T borrowObject(final long borrowMaxWaitMillis) throws Exception {
-        //这一步就是检查一下对象池的状态，如果之前已经关闭了，就会抛出IllegalStateException异常。
-        assertOpen();
-        //移除已经被抛弃的实例
-        final AbandonedConfig ac = this.abandonedConfig;
-        if (ac != null &amp;&amp; ac.getRemoveAbandonedOnBorrow() &amp;&amp;
-                (getNumIdle() &lt; 2) &amp;&amp;
-                (getNumActive() &gt; getMaxTotal() - 3) ) {
-            /*
+     */</span>
+    <span class="kd">public</span> <span class="no">T</span> <span class="nf">borrowObject</span><span class="o">(</span><span class="kd">final</span> <span class="kt">long</span> <span class="n">borrowMaxWaitMillis</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="c1">//这一步就是检查一下对象池的状态，如果之前已经关闭了，就会抛出IllegalStateException异常。</span>
+        <span class="n">assertOpen</span><span class="o">();</span>
+        <span class="c1">//移除已经被抛弃的实例</span>
+        <span class="kd">final</span> <span class="nc">AbandonedConfig</span> <span class="n">ac</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">abandonedConfig</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">ac</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">ac</span><span class="o">.</span><span class="na">getRemoveAbandonedOnBorrow</span><span class="o">()</span> <span class="o">&amp;&amp;</span>
+                <span class="o">(</span><span class="n">getNumIdle</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+                <span class="o">(</span><span class="n">getNumActive</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">getMaxTotal</span><span class="o">()</span> <span class="o">-</span> <span class="mi">3</span><span class="o">)</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="cm">/*
             被抛弃的实例不为null
             borrow时去除被抛弃的实例
             空闲线程实例&lt;2
             当前活动的实例数量大于最大实例数量-3
-            */
-            removeAbandoned(ac);
-        }
-        //定义一个PooledObject类型的对象，T是真正的实例对象。如jedis，db等。
-        PooledObject&lt;T&gt; p = null;
+            */</span>
+            <span class="n">removeAbandoned</span><span class="o">(</span><span class="n">ac</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">//定义一个PooledObject类型的对象，T是真正的实例对象。如jedis，db等。</span>
+        <span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-        // Get local copy of current config so it is consistent for entire
-        // method execution
-        /*
+        <span class="c1">// Get local copy of current config so it is consistent for entire</span>
+        <span class="c1">// method execution</span>
+        <span class="cm">/*
         获取一个本地的拷贝，这个拷贝是目前的配置。这样就能够保证整体的一致性。
         这个getBlockWhenExhausted()最终是获取的一个volatile类型的值，这个值是从配置中获取的，代表当线程池满时，是否对新来的任务给予堵塞。但是，我们得注意volatile这个类型了，而且设计者在这个地方单独获取出来这个值，肯定是为了什么。接着往下看吧。
-        */
-        final boolean blockWhenExhausted = getBlockWhenExhausted();
-        //是否为新建，请区别于created。为什么仅在这里定义了变量而没有初始化呢？
-        boolean create;
-        //当前的毫秒，用来就算
-        final long waitTime = System.currentTimeMillis();
-        //循环开始，第一次p=null开始循环
-        while (p == null) {
-            //初始化create=false，代表目前这个线程不是新建的。
-            create = false;
-            /*
+        */</span>
+        <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">blockWhenExhausted</span> <span class="o">=</span> <span class="n">getBlockWhenExhausted</span><span class="o">();</span>
+        <span class="c1">//是否为新建，请区别于created。为什么仅在这里定义了变量而没有初始化呢？</span>
+        <span class="kt">boolean</span> <span class="n">create</span><span class="o">;</span>
+        <span class="c1">//当前的毫秒，用来就算</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">waitTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="c1">//循环开始，第一次p=null开始循环</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">p</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//初始化create=false，代表目前这个线程不是新建的。</span>
+            <span class="n">create</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="cm">/*
             private final LinkedBlockingDeque&lt;PooledObject&lt;T&gt;&gt; idleObjects;
             idleObjects是一个阻塞有序队列，队列的类型是刚才的封装类型，封装的是实际的资源。从名字上可以看出，这里叫做空闲对象组
             可以看到，从空闲对象组里拿出第一个元素。pollFirst()是LinkedBlockingDeque.java中的方法。就是通过操作节点来把第一个节点删除并返回。
-            */
-            p = idleObjects.pollFirst();
-            //如果p为空代表弹出的是null，说明没有空闲。那就创建一个新的对象。
-            if (p == null) {
-                p = create();
-                //p可能会创建失败，创建失败的时候 create=false。 创建成功create=true
-                if (p != null) {
-                    create = true;
-                }
-            }
-            //如果设置了对象池耗尽后堵塞等待的标示
-            if (blockWhenExhausted) {
-                if (p == null) {
-                    //p没有创建成功
-                    if (borrowMaxWaitMillis &lt; 0) {
-                        //如果没有设置为-1，只有这种情况会符合小于0.所以就直接从空闲对象组中获取第一个有效的空闲对象。这个方法有锁的实现，所以这块可能会一直堵塞着直到有一个空闲对象可以使用。
-                        p = idleObjects.takeFirst();
-                    } else {
-                    //如果设置等待时间了，就在这段时间里获取。超过了就返回null
-                        p = idleObjects.pollFirst(borrowMaxWaitMillis,
-                                TimeUnit.MILLISECONDS);
-                    }
-                }
-                //到这里如果还是空，就说明没等待到空闲的资源了。所以就要报异常了。
-                if (p == null) {
-                    throw new NoSuchElementException(
-                            "Timeout waiting for idle object");
-                }
-            } else {
-                //如果没有设置blockWhenExhausted标示且p是null，那真是获取不到资源了，因为池子已经被占满了。
-                if (p == null) {
-                    throw new NoSuchElementException("Pool exhausted");
-                }
-            }
-            /*
+            */</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">idleObjects</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">();</span>
+            <span class="c1">//如果p为空代表弹出的是null，说明没有空闲。那就创建一个新的对象。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">create</span><span class="o">();</span>
+                <span class="c1">//p可能会创建失败，创建失败的时候 create=false。 创建成功create=true</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">create</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="c1">//如果设置了对象池耗尽后堵塞等待的标示</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">blockWhenExhausted</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">//p没有创建成功</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">borrowMaxWaitMillis</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c1">//如果没有设置为-1，只有这种情况会符合小于0.所以就直接从空闲对象组中获取第一个有效的空闲对象。这个方法有锁的实现，所以这块可能会一直堵塞着直到有一个空闲对象可以使用。</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">idleObjects</span><span class="o">.</span><span class="na">takeFirst</span><span class="o">();</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="c1">//如果设置等待时间了，就在这段时间里获取。超过了就返回null</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">idleObjects</span><span class="o">.</span><span class="na">pollFirst</span><span class="o">(</span><span class="n">borrowMaxWaitMillis</span><span class="o">,</span>
+                                <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="c1">//到这里如果还是空，就说明没等待到空闲的资源了。所以就要报异常了。</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nf">NoSuchElementException</span><span class="o">(</span>
+                            <span class="s">"Timeout waiting for idle object"</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">//如果没有设置blockWhenExhausted标示且p是null，那真是获取不到资源了，因为池子已经被占满了。</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nf">NoSuchElementException</span><span class="o">(</span><span class="s">"Pool exhausted"</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="cm">/*
             到这里其实p应该不是null了，说明肯定是有资源了。有可能是获得了空闲资源或是创建了一个新的资源。这个时候就要让系统给他分配内存了。跟进allocate()代码中，发现这是一个synchronized方法，保证了线程安全。（这块会有线程安全问题。为什么呢？）方法体判断了当前池状态（空闲状态或者测试中状态）然后更改状态位，置lastBorrowTime,lastUseTime,borrowedCount++等，然后返回boolean。
             我们可以推算出，当前的池资源状态可能会被另一个线程改写。有一种情况就是，空闲的连接还需要进行test和validate才能够正确分配。但是如果在test或validate阶段失败了，那线程就不能够被分配资源了，因为前后状态不一致了。所以需要allocate的同步操作来保证当时的空闲资源不被改写。
-            */
-            if (!p.allocate()) {
-                //没有成功分配资源，当然p就应该置为null，等待重新进行遍历。
-                p = null;
-            }
-            //到这里，分配成功的p应该进行校验阶段了。没有成功分配的p目前还是null，所以跳过下面的判断。
-            if (p != null) {
-                //从这开始p是有资源了
-                try {
-                    /*
+            */</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">p</span><span class="o">.</span><span class="na">allocate</span><span class="o">())</span> <span class="o">{</span>
+                <span class="c1">//没有成功分配资源，当然p就应该置为null，等待重新进行遍历。</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">//到这里，分配成功的p应该进行校验阶段了。没有成功分配的p目前还是null，所以跳过下面的判断。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">//从这开始p是有资源了</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="cm">/*
                     private final PooledObjectFactory&lt;T&gt; factory;
                     通过池工厂（PooledObjectFactory.java）对返回来的实例重新初始化。因为PooledObjectFactory是个接口。所以，我以Jedis为T进行解析（JedisFactory.java），别的实际类型会有不同的行为，但是基本差不多。
         这个方法里就是获取了BinaryJedis，判断当前的库是不是库0.如果不是就就简单做个select操作。如果是的话什么都不做。
                     这块的设计有一个小心思，就是作者用这种代码结构来给开发者留出了很大的实现空间。
-                    */
-                    factory.activateObject(p);
-                } catch (final Exception e) {
-                    //激活异常
-                    try {
-                        //摧毁对象，释放资源
-                        destroy(p, DestroyMode.NORMAL);
-                    } catch (final Exception e1) {
-                        // 摧毁的程序都报异常了，我可管不了了。采取鸵鸟算法。
-                    }
-                    //help GC
-                    p = null;
-                    //如果是新建的资源，就说明分配成功，但是激活失败。抛个错吧。
-                    if (create) {
-                        final NoSuchElementException nsee = new NoSuchElementException(
-                                "Unable to activate object");
-                        //用什么错误原因呢？就用上面这个吧
-                        nsee.initCause(e);
-                        throw nsee;
-                    }
-                }
-                /*
+                    */</span>
+                    <span class="n">factory</span><span class="o">.</span><span class="na">activateObject</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">//激活异常</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="c1">//摧毁对象，释放资源</span>
+                        <span class="n">destroy</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="nc">DestroyMode</span><span class="o">.</span><span class="na">NORMAL</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="nc">Exception</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="c1">// 摧毁的程序都报异常了，我可管不了了。采取鸵鸟算法。</span>
+                    <span class="o">}</span>
+                    <span class="c1">//help GC</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="c1">//如果是新建的资源，就说明分配成功，但是激活失败。抛个错吧。</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">create</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="kd">final</span> <span class="nc">NoSuchElementException</span> <span class="n">nsee</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">NoSuchElementException</span><span class="o">(</span>
+                                <span class="s">"Unable to activate object"</span><span class="o">);</span>
+                        <span class="c1">//用什么错误原因呢？就用上面这个吧</span>
+                        <span class="n">nsee</span><span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+                        <span class="k">throw</span> <span class="n">nsee</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+                <span class="cm">/*
                 如果分配成功了， 激活也成功了，并且开启了TestOnBorrow，逻辑进来再让我蹂躏下吧。如果失败了跳过这个逻辑吧。
                 testOnBorrow的目的是不论资源是否是从池子里借的，都要在返回钱进行一次验证。如果失败了资源会被清除出池子并且毁掉。然后再向池对象尝试借一次。
-                */
-                if (p != null &amp;&amp; getTestOnBorrow()) {
-                    boolean validate = false;
-                    Throwable validationThrowable = null;
-                    try {
-                    /*
+                */</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">getTestOnBorrow</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="kt">boolean</span> <span class="n">validate</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="nc">Throwable</span> <span class="n">validationThrowable</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                    <span class="cm">/*
                     我依然以JedisFactory.java分析吧。
                     依然是首先获取一个BinaryJedis资源。判断连接的Port和设置的port是否相等。判断连接的host和设置额host是否相等。相等就返回true。否则就返回false。
-                    */
-                        validate = factory.validateObject(p);
-                    } catch (final Throwable t) {
-                        PoolUtils.checkRethrow(t);
-                        validationThrowable = t;
-                    }
-                    //如果检查没有通过依然是摧毁。如果是新建的就报错。和上面激活的流程一样。
-                    if (!validate) {
-                        try {
-                            destroy(p, DestroyMode.NORMAL);
-                            destroyedByBorrowValidationCount.incrementAndGet();
-                        } catch (final Exception e) {
-                            // Ignore - validation failure is more important
-                        }
-                        p = null;
-                        if (create) {
-                            final NoSuchElementException nsee = new NoSuchElementException(
-                                    "Unable to validate object");
-                            nsee.initCause(validationThrowable);
-                            throw nsee;
-                        }
-                    }
-                }
-            }
-        }
-        //恭喜获得了一个有效的p资源。然后统计一下数据吧，比如消耗时间。
-        updateStatsBorrow(p, System.currentTimeMillis() - waitTime);
-        //返回吧。记住返回的是一个PooledObject对象。真正的资源需要通过getObject(）获取。
-        return p.getObject();
-    }
-</code></pre>
+                    */</span>
+                        <span class="n">validate</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="na">validateObject</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="nc">Throwable</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="nc">PoolUtils</span><span class="o">.</span><span class="na">checkRethrow</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+                        <span class="n">validationThrowable</span> <span class="o">=</span> <span class="n">t</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="c1">//如果检查没有通过依然是摧毁。如果是新建的就报错。和上面激活的流程一样。</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="n">validate</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="n">destroy</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="nc">DestroyMode</span><span class="o">.</span><span class="na">NORMAL</span><span class="o">);</span>
+                            <span class="n">destroyedByBorrowValidationCount</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">();</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">final</span> <span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="c1">// Ignore - validation failure is more important</span>
+                        <span class="o">}</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">create</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="kd">final</span> <span class="nc">NoSuchElementException</span> <span class="n">nsee</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">NoSuchElementException</span><span class="o">(</span>
+                                    <span class="s">"Unable to validate object"</span><span class="o">);</span>
+                            <span class="n">nsee</span><span class="o">.</span><span class="na">initCause</span><span class="o">(</span><span class="n">validationThrowable</span><span class="o">);</span>
+                            <span class="k">throw</span> <span class="n">nsee</span><span class="o">;</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="c1">//恭喜获得了一个有效的p资源。然后统计一下数据吧，比如消耗时间。</span>
+        <span class="n">updateStatsBorrow</span><span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">waitTime</span><span class="o">);</span>
+        <span class="c1">//返回吧。记住返回的是一个PooledObject对象。真正的资源需要通过getObject(）获取。</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="na">getObject</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 
 <p>　　至此，看懂了jedis是如何从连接池中拿到资源的了。这里面经常有一些线程安全的判断，这也是难点所在，因为池化技术最重要的功能就是对线程资源的管理与利用。所以，代码中用了很多sychronize方法。不光这些，作者还要考虑到资源的释放和销毁还有扩展。</p>
 
 <p>　　最后看到了getObject()方法。为什么作者不直接暴露资源呢？为什么还要包一层呢？接下来我来分析一下吧。PooledObject是一个接口，我们先看看接口的描述是什么。详情看我的之前一篇文章<a href="https://www.naffan.cn/tech/2021/05/13/01.html">common-pool对象池学习</a></p>
 
-<pre><code class="language-java">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * Defines the wrapper that is used to track the additional information, such as
  * state, for the pooled objects.
  * &lt;p&gt;
@@ -514,14 +515,14 @@ var _hmt = _hmt || [];
  * @param &lt;T&gt; the type of object in the pool
  *
  * @since 2.0
- */
- /*
+ */</span>
+ <span class="cm">/*
  定义一个封装结构，这个封装结构使用来记录额外信息的。比如池资源的状态等。
  实现这个接口的class文件必须是线程安全的。（为什么呢？）
  
- */
-public interface PooledObject&lt;T&gt; extends Comparable&lt;PooledObject&lt;T&gt;&gt; {}
-</code></pre>
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">Comparable</span><span class="o">&lt;</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;&gt;</span> <span class="o">{}</span>
+</code></pre></div></div>
 
 <p>参考资料：</p>
 <ul>

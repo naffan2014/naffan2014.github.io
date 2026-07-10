@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>Javascript捕捉(capturing)与冒泡(bubbling)的区别 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="Javascript捕捉(capturing)与冒泡(bubbling)的区别" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。" />
-<meta property="og:description" content="　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。" />
+<meta name="twitter:description" property="og:description" content="　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。" />
 <link rel="canonical" href="http://localhost:4000/tech/2016/12/10/1.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2016/12/10/1.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2016-12-10T00:00:00+08:00" />
+<meta property="article:modified_time" content="2016-12-10T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Javascript捕捉(capturing)与冒泡(bubbling)的区别" />
+<meta name="twitter:title" content="Javascript捕捉(capturing)与冒泡(bubbling)的区别" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/12/10/1.html"},"description":"　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。","datePublished":"2016-12-10T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2016/12/10/1.html","headline":"Javascript捕捉(capturing)与冒泡(bubbling)的区别","dateModified":"2016-12-10T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2016-12-10T00:00:00+08:00","datePublished":"2016-12-10T00:00:00+08:00","description":"　　今天，当我在做nodejs的时候刚巧碰到了javascript的冒泡机制。曾经，我是有看过这方面的知识。但是，已经好久没有碰触javascript的内部原理了。所以，有些淡忘了。我又重新做了下研究并记录于此。","headline":"Javascript捕捉(capturing)与冒泡(bubbling)的区别","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2016/12/10/1.html"},"url":"http://localhost:4000/tech/2016/12/10/1.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -175,20 +176,20 @@ var _hmt = _hmt || [];
 
 <p>　　也就是我想通过调用函数时通过传递参数的形式传送到定义好的函数时，当刷新页面的时候页面会将alert输出出来。于是我就查了一下原因，找到了参考中的第五篇文章。看完作者的文章以后我有个疑惑，我觉得作者对js的理解并不是很深（虽然我也不是很深吧）。因为，我们知道js的匿名函数如果后面增加了一个括号的话，意思就是要立刻执行。那么这个我想这个立即执行的原因应该是跟js的编译机制有关系，js在对编码进行编译的时候会将这样的函数调用立即进行调用的。当我写到这的时候我去百度搜索了一下我印象中的几篇博客，但是没有找到我曾看到的那段话。下次吧，我等下次再看js编译顺序的文章时再过来进行补完吧，关键词大概就是javascript闭包之类的。</p>
 
-<p><code>以下写于 2017/04/26</code></p>
+<p><code class="language-plaintext highlighter-rouge">以下写于 2017/04/26</code></p>
 
 <p>　　今天，又看到了一篇w3c的文章<a href="https://www.quirksmode.org/js/events_order.html">Event order</a>，然后回忆起自己曾经写过一篇类似的文章，就又重新找到了这里，突然发现当时写的有些简陋了，所以就想再做一些补充。</p>
 
 <p>　　让我们先看一个图：</p>
 
-<pre><code>-----------------------------------
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-----------------------------------
 | element1                        |
 |   -------------------------     |
 |   |element2               |     |
 |   -------------------------     |
 |                                 |
 -----------------------------------
-</code></pre>
+</code></pre></div></div>
 
 <p>　　如果两个元素都绑定了onclick事件，我在点击element2的时候，element1和element2都会响应我的onclick事件，那么哪个事件在先，哪个事件在后呢？让我们用个例子看看吧。</p>
 
@@ -199,7 +200,7 @@ var _hmt = _hmt || [];
   <li>捕获事件</li>
 </ul>
 
-<pre><code>               | |
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>               | |
 ---------------| |-----------------
 | element1     | |                |
 |   -----------| |-----------     |
@@ -207,12 +208,12 @@ var _hmt = _hmt || [];
 |   -------------------------     |
 |        Event CAPTURING          |
 -----------------------------------
-</code></pre>
+</code></pre></div></div>
 <ul>
   <li>冒泡事件</li>
 </ul>
 
-<pre><code>               / \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>               / \
 ---------------| |-----------------
 | element1     | |                |
 |   -----------| |-----------     |
@@ -220,7 +221,7 @@ var _hmt = _hmt || [];
 |   -------------------------     |
 |        Event BUBBLING           |
 -----------------------------------
-</code></pre>
+</code></pre></div></div>
 
 <p>　　这和我最上面的两个类型相互呼应。</p>
 
@@ -232,7 +233,7 @@ var _hmt = _hmt || [];
   <li>w3c 模型</li>
 </ul>
 
-<pre><code>                 | |  / \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                 | |  / \
 -----------------| |--| |-----------------
 | element1       | |  | |                |
 |   -------------| |--| |-----------     |
@@ -240,7 +241,7 @@ var _hmt = _hmt || [];
 |   --------------------------------     |
 |        W3C event model                 |
 ------------------------------------------
-</code></pre>
+</code></pre></div></div>
 <p>　　作为一个开发者，我们可以选择想要使用发生机制。我们可以通过 addEventListener() 的最后一个参数true/false来抉择我们想要的方式。如果选择true的话那么就是捕捉，如果选择false的话就是冒泡。默认为false。</p>
 
 <p>　　让我们来看看第二种情况：
@@ -250,14 +251,14 @@ var _hmt = _hmt || [];
 
 <p>　　有兴趣的同学，可以自己写个例子尝试一下</p>
 
-<pre><code>element1.addEventListener('click',doSomething2,true)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>element1.addEventListener('click',doSomething2,true)
 element2.addEventListener('click',doSomething,false)
-</code></pre>
+</code></pre></div></div>
 <p>与</p>
 
-<pre><code>element1.addEventListener('click',doSomething2,false)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>element1.addEventListener('click',doSomething2,false)
 element2.addEventListener('click',doSomething,false)
-</code></pre>
+</code></pre></div></div>
 <p>的区别吧。</p>
 
 <p>　　其实，现如今开发者不会将太多的注意力放在什么时候使用捕捉还是冒泡模式。当然也就不会关心那些事件类型可以用来冒泡了，他们更想的是我想实现哪个地方点击出效果，哪些地方不出效果，也就是不同事件彼此分开来。但是，这种想法在将来有可能会成真。然而，对于目前来说还不可能，所以我们还是需要闹清楚这些区别的。因为，在将来的某个时候也许你就会被这个问题弄得焦头烂额滴。</p>
@@ -266,13 +267,13 @@ element2.addEventListener('click',doSomething,false)
 
 <p>　　在微软浏览器中我们可以采用：</p>
 
-<pre><code>window.event.cancelBubble = true
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>window.event.cancelBubble = true
+</code></pre></div></div>
 
 <p>　　在W3C浏览器中我们可以采用：</p>
 
-<pre><code>e.stopPropagation()
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>e.stopPropagation()
+</code></pre></div></div>
 
 <p>　　让我们来看一个例子吧：</p>
 
@@ -280,10 +281,10 @@ element2.addEventListener('click',doSomething,false)
 
 <p>　　在这个例子中，我将ele1和ele2同时绑定了一个叫abc的方法。并且在abc中设置了</p>
 
-<pre><code class="language-javascript">  if (!e) var e = window.event;
-  e.cancelBubble = true;
-  if (e.stopPropagation) e.stopPropagation();
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">e</span><span class="p">)</span> <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">cancelBubble</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">)</span> <span class="nx">e</span><span class="p">.</span><span class="nf">stopPropagation</span><span class="p">();</span>
+</code></pre></div></div>
 
 <p>　　这三行就是说不论是在微软的浏览器中还是在w3c的浏览器中，我都关闭了冒泡事件。表现出来的效果就是，当我点击456的时候，他只会打印出一个1。也就是说ele1的abc方法没有触发。用这种办法，我们就可以实现我想点击哪个元素，那个元素就给我回应，其他的别回应我。</p>
 
@@ -295,22 +296,22 @@ element2.addEventListener('click',doSomething,false)
 
 <p>　　当我们点击456的时候就会打印出：</p>
 
-<pre><code class="language-html">&lt;div id="ele2"&gt;456&lt;/div&gt;
-</code></pre>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"ele2"</span><span class="nt">&gt;</span>456<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
 <p>　　当我们点击123的时候就会打印出：</p>
 
-<pre><code class="language-html">&lt;div id="ele1"&gt;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"ele1"</span><span class="nt">&gt;</span>
   123
-  &lt;div id="ele2"&gt;456&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"ele2"</span><span class="nt">&gt;</span>456<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
 
 <p>　　好了，到了这里我想我已经总结明白了关于javascript的捕捉和冒泡的全部知识要点了。下面就让我来说说上面之前写的时候留下的问题。</p>
 
 <p>　　通过刚刚我举得例子，带有abc方法的那两个。如果我们把代码改一下。如果是这样：</p>
 
-<pre><code class="language-javascript">ele1.addEventListener('click',abc(),false);
-</code></pre>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ele1</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span><span class="nf">abc</span><span class="p">(),</span><span class="kc">false</span><span class="p">);</span>
+</code></pre></div></div>
 <p>　　那么，一旦我们刷新页面就会调用abc方法了。然后，当我点击ele1的时候就不会再起作用了。具体为什么，当然是abc后面的那个()了。任何函数只要加了后面的（），代表的就是立即运行，一切与之相关的方法，他都不会参加。因为立刻运行以后方法就从内存中消失了，之后的addEventListener绑定给ele1的click事件指向的就是一个空指针了，所以就不好使了。具体原理我想应该是event loop的关系。我还没有太仔细看loop的相关知识，也许等我看完以后再来解释一下也不迟呢。</p>
 
 <p>本文参考：</p>

@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>redis外网访问相关设置 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="redis外网访问相关设置" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="1 . 我的redis服务用的redis配置文件在哪里？" />
-<meta property="og:description" content="1 . 我的redis服务用的redis配置文件在哪里？" />
+<meta name="twitter:description" property="og:description" content="1 . 我的redis服务用的redis配置文件在哪里？" />
 <link rel="canonical" href="http://localhost:4000/tech/2019/03/12/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2019/03/12/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-03-12T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-03-12T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="redis外网访问相关设置" />
+<meta name="twitter:title" content="redis外网访问相关设置" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/12/01.html"},"description":"1 . 我的redis服务用的redis配置文件在哪里？","datePublished":"2019-03-12T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2019/03/12/01.html","headline":"redis外网访问相关设置","dateModified":"2019-03-12T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2019-03-12T00:00:00+08:00","datePublished":"2019-03-12T00:00:00+08:00","description":"1 . 我的redis服务用的redis配置文件在哪里？","headline":"redis外网访问相关设置","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/12/01.html"},"url":"http://localhost:4000/tech/2019/03/12/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -143,13 +144,13 @@ var _hmt = _hmt || [];
 
 <p>答：我用的是centos系统，我知道redis是通过yum安装的，那么我需要通过</p>
 
-<pre><code>[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -qa | grep redis
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -qa | grep redis
 redis-3.2.12-2.el7.x86_64
-</code></pre>
+</code></pre></div></div>
 
 <p>　　这样，我就知道了我装的redis版本，进而我能够知道redis用的配置文件。</p>
 
-<pre><code>[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -ql redis-3.2.12-2.el7.x86_64
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@iZ2ze33uzthv7txm85m303Z ~]# rpm -ql redis-3.2.12-2.el7.x86_64
 /etc/logrotate.d/redis
 /etc/redis-sentinel.conf
 /etc/redis.conf     （*）
@@ -185,7 +186,7 @@ redis-3.2.12-2.el7.x86_64
 /var/lib/redis
 /var/log/redis
 /var/run/redis
-</code></pre>
+</code></pre></div></div>
 
 <p>2 . 如何更改该redis配置，可以打开外网访问？还要更改下密码以保证安全性。</p>
 
@@ -201,14 +202,14 @@ redis-3.2.12-2.el7.x86_64
 
 <p>答：centos 7开始，使用systemd代替daemon了，所以管理系统服务的命令全部由systemctl命令代替。</p>
 
-<pre><code>systemctl start redis //如果遇到问题就用systemctl status来查看问题原因
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systemctl start redis //如果遇到问题就用systemctl status来查看问题原因
+</code></pre></div></div>
 
 <p>4 . 防火墙还会挡住外网访问6379端口，怎么办？</p>
 
 <p>答：这个跟iptable的规则有关了，运维工程师们总是跟iptable打交道，我们只需要知道怎么用即可。</p>
 
-<pre><code>[root@iZ2ze33uzthv7txm85m303Z ~]# iptables -nvL   //查看目前服务的端口
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@iZ2ze33uzthv7txm85m303Z ~]# iptables -nvL   //查看目前服务的端口
 Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
  pkts bytes target     prot opt in     out     source               destination         
 7704K 1142M ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
@@ -240,17 +241,17 @@ Chain DOCKER (1 references)
 Chain DOCKER-ISOLATION (1 references)
  pkts bytes target     prot opt in     out     source               destination         
  764K  624M RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0 
-</code></pre>
+</code></pre></div></div>
 
 <p>　　目前，我已经放开了服务器的6379端口外网访问，所以结果中会有6379条目。正常来说，新配环境的时候，6379是没有的，所以我们需要添加上。</p>
 
-<pre><code>iptables -I INPUT 4 -p tcp -m state --state NEW -m tcp --dport 6379 -j ACCEPT
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables -I INPUT 4 -p tcp -m state --state NEW -m tcp --dport 6379 -j ACCEPT
+</code></pre></div></div>
 
 <p>　　之后，还需要保存</p>
 
-<pre><code> service iptables save
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> service iptables save
+</code></pre></div></div>
 
 <p>　　然后我们再通过查看语句就能看到6379了。至此我们配置完成了redis的外网访问及权限安全了。</p>
 

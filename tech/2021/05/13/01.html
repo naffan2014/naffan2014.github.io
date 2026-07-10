@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>common-pool对象池学习 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="common-pool对象池学习" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="问如果你要设计一个池化对象，你会怎么做？" />
-<meta property="og:description" content="问如果你要设计一个池化对象，你会怎么做？" />
+<meta name="twitter:description" property="og:description" content="问如果你要设计一个池化对象，你会怎么做？" />
 <link rel="canonical" href="http://localhost:4000/tech/2021/05/13/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2021/05/13/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-05-13T00:00:00+08:00" />
+<meta property="article:modified_time" content="2021-05-13T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="common-pool对象池学习" />
+<meta name="twitter:title" content="common-pool对象池学习" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2021/05/13/01.html"},"description":"问如果你要设计一个池化对象，你会怎么做？","datePublished":"2021-05-13T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2021/05/13/01.html","headline":"common-pool对象池学习","dateModified":"2021-05-13T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2021-05-13T00:00:00+08:00","datePublished":"2021-05-13T00:00:00+08:00","description":"问如果你要设计一个池化对象，你会怎么做？","headline":"common-pool对象池学习","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2021/05/13/01.html"},"url":"http://localhost:4000/tech/2021/05/13/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,157 +155,157 @@ var _hmt = _hmt || [];
 
 <p><img class="lazy post-img" data-original="https://p.ljcdn.com/v1/hdic.t_m/p/image-distinguish/08e792838506108fff0318c10420d0022801300138d233.png" src="/images/default.jpg" alt="池化技术" /></p>
 
-<pre><code class="language-java">//一个简单的池结果。它继承了Closeable接口，也就是说是可以关闭的数据源或目标。T是实际存在于池中的类型。
-public interface ObjectPool&lt;T&gt; extends Closeable{
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//一个简单的池结果。它继承了Closeable接口，也就是说是可以关闭的数据源或目标。T是实际存在于池中的类型。</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ObjectPool</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">Closeable</span><span class="o">{</span>
     
-    //通过PooledObjectFactory创建对象或者通过其他机制放入空闲池对象。addObject也用来预热空闲池。
-    void addObject() throws Exception, IllegalStateException,
-            UnsupportedOperationException;
+    <span class="c1">//通过PooledObjectFactory创建对象或者通过其他机制放入空闲池对象。addObject也用来预热空闲池。</span>
+    <span class="kt">void</span> <span class="nf">addObject</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">,</span> <span class="nc">IllegalStateException</span><span class="o">,</span>
+            <span class="nc">UnsupportedOperationException</span><span class="o">;</span>
             
-    //传入参数count，调用count次addObject。 方法的类型是default，也就是说这个方法直接实现方法体，不用实现者实现这个方法。
-    default void addObjects(final int count) throws Exception {
-        for (int i = 0; i &lt; count; i++) {
-            addObject();
-        }
-    }
+    <span class="c1">//传入参数count，调用count次addObject。 方法的类型是default，也就是说这个方法直接实现方法体，不用实现者实现这个方法。</span>
+    <span class="k">default</span> <span class="kt">void</span> <span class="nf">addObjects</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">count</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">addObject</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
     
-    /*
+    <span class="cm">/*
     从对象池中获取一个实例。
     创建的实例要不是通过PooledObjectFactory中makeObject()新建出来的，要不就是用了前一个已经被PooledObjectFactory中activateObject()和PooledObjectFactory中validateObject()的空闲对象。
     activateObject()和validateObject()这两个方法需要在不同的池类型文件中自己去实现。
-    */
-    T borrowObject() throws Exception, NoSuchElementException,
-            IllegalStateException;
+    */</span>
+    <span class="no">T</span> <span class="nf">borrowObject</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">,</span> <span class="nc">NoSuchElementException</span><span class="o">,</span>
+            <span class="nc">IllegalStateException</span><span class="o">;</span>
     
-    //清除随机对象放回到池中作为空闲对象。释放这个对象的相关引用资源。在clear之前一定是经过PooledObjectFacotry的destroyObject()过。
-     void clear() throws Exception, UnsupportedOperationException;
+    <span class="c1">//清除随机对象放回到池中作为空闲对象。释放这个对象的相关引用资源。在clear之前一定是经过PooledObjectFacotry的destroyObject()过。</span>
+     <span class="kt">void</span> <span class="nf">clear</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">,</span> <span class="nc">UnsupportedOperationException</span><span class="o">;</span>
      
-    //继承自Closeable接口，负责关闭并释放有关联系的系统资源。如果之前已经关闭了， 则调用此方法无效。
-    @Override
-    void close();
+    <span class="c1">//继承自Closeable接口，负责关闭并释放有关联系的系统资源。如果之前已经关闭了， 则调用此方法无效。</span>
+    <span class="nd">@Override</span>
+    <span class="kt">void</span> <span class="nf">close</span><span class="o">();</span>
     
-    //返回当前有多少实例从池对象中被借出了。如果返回的是负数代表这个信息不可用。
-    int getNumActive();
+    <span class="c1">//返回当前有多少实例从池对象中被借出了。如果返回的是负数代表这个信息不可用。</span>
+    <span class="kt">int</span> <span class="nf">getNumActive</span><span class="o">();</span>
     
-    //返回当前当前池中有多少空闲对象。这个值是一个近似值，因为他只代表还没有创建成新资源的被借走的对象。我理解的是还没有被分配内存地址（allocate）。
-    int getNumIdle();
+    <span class="c1">//返回当前当前池中有多少空闲对象。这个值是一个近似值，因为他只代表还没有创建成新资源的被借走的对象。我理解的是还没有被分配内存地址（allocate）。</span>
+    <span class="kt">int</span> <span class="nf">getNumIdle</span><span class="o">();</span>
     
-    /*
+    <span class="cm">/*
     使池中对象失效
     按照约定，参数obj必已经被borrwoObject()或者被一个定义在子实现类中定义的方法实现了获取逻辑的对象。如果失败了就返回异常
-    */
-     void invalidateObject(T obj) throws Exception;
+    */</span>
+     <span class="kt">void</span> <span class="nf">invalidateObject</span><span class="o">(</span><span class="no">T</span> <span class="n">obj</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
      
-     //比上面多了一个DestoryMode。DestoryMode是个枚举，分别为普通摧毁和被禁的摧毁。最终调用的是PooledObjectFactory的destoryObject()。但不知为啥，我发现其实mode参数最终没有用上……。往下看，看到工厂的destoryObject（）
-     default void invalidateObject(final T obj, final DestroyMode mode) throws Exception {
-        invalidateObject(obj);
-    }
+     <span class="c1">//比上面多了一个DestoryMode。DestoryMode是个枚举，分别为普通摧毁和被禁的摧毁。最终调用的是PooledObjectFactory的destoryObject()。但不知为啥，我发现其实mode参数最终没有用上……。往下看，看到工厂的destoryObject（）</span>
+     <span class="k">default</span> <span class="kt">void</span> <span class="nf">invalidateObject</span><span class="o">(</span><span class="kd">final</span> <span class="no">T</span> <span class="n">obj</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">DestroyMode</span> <span class="n">mode</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="n">invalidateObject</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+    <span class="o">}</span>
     
-    /*
+    <span class="cm">/*
     返回一个池对象中的实例。同invalidateObject()
     异常中会抛出IllegalStateException。原因是如果有任何（把除了已经被分配内存的有状态的资源，即被借出了的。或者返回一个对象超过一次以上或者返回一个从未被借出过的对象）操作就会触发这个异常
-    */
-     void returnObject(T obj) throws Exception;
-}
-</code></pre>
+    */</span>
+     <span class="kt">void</span> <span class="nf">returnObject</span><span class="o">(</span><span class="no">T</span> <span class="n">obj</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-java">/*
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
 用来定义池对象的一个wrapper 接口，用于跟踪对象的附加信息，比如状态、创建时间、使用时间等。这个类的实现必须是线程安全的。
-*/
-public interface PooledObject&lt;T&gt; extends Comparable&lt;PooledObject&lt;T&gt;&gt; {
+*/</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">Comparable</span><span class="o">&lt;</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;&gt;</span> <span class="o">{</span>
 
-    //返回被包装的实际对象
-    T getObject();
+    <span class="c1">//返回被包装的实际对象</span>
+    <span class="no">T</span> <span class="nf">getObject</span><span class="o">();</span>
 
-    //返回该对象的创建时间
-    long getCreateTime();
+    <span class="c1">//返回该对象的创建时间</span>
+    <span class="kt">long</span> <span class="nf">getCreateTime</span><span class="o">();</span>
     
-    //以毫秒为单位获得该对象最后在活动状态中使用的时间(它可能仍然处于活动状态，在这种情况下后续调用将返回一个增加的值)。
-    long getActiveTimeMillis();
+    <span class="c1">//以毫秒为单位获得该对象最后在活动状态中使用的时间(它可能仍然处于活动状态，在这种情况下后续调用将返回一个增加的值)。</span>
+    <span class="kt">long</span> <span class="nf">getActiveTimeMillis</span><span class="o">();</span>
 
-    //借出的次数
-    default long getBorrowedCount() {
-        return -1;
-    }
+    <span class="c1">//借出的次数</span>
+    <span class="k">default</span> <span class="kt">long</span> <span class="nf">getBorrowedCount</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    //空闲时间
-    long getIdleTimeMillis();
+    <span class="c1">//空闲时间</span>
+    <span class="kt">long</span> <span class="nf">getIdleTimeMillis</span><span class="o">();</span>
 
-    //上次借用时间
-    long getLastBorrowTime();
+    <span class="c1">//上次借用时间</span>
+    <span class="kt">long</span> <span class="nf">getLastBorrowTime</span><span class="o">();</span>
 
-    //上次归还时间
-    long getLastReturnTime();
+    <span class="c1">//上次归还时间</span>
+    <span class="kt">long</span> <span class="nf">getLastReturnTime</span><span class="o">();</span>
 
-     /**
+     <span class="cm">/**
      * 返回上次使用时间的一个估计值,如果Pooled Object实现了TrackedUse接口
      * 那么返回值将是TrackedUse.getLastUsed()和getLastBorrowTime()的较大者，
      * 否则返回值和getLastBorrowTime()相等
-     */
-    long getLastUsedTime();
+     */</span>
+    <span class="kt">long</span> <span class="nf">getLastUsedTime</span><span class="o">();</span>
 
-     /*
+     <span class="cm">/*
      因为接口继承了Comparable接口。所以这个接口需要实现自己的排序逻辑。
      默认是按照空闲时间排序的。
-     */
-    @Override
-    int compareTo(PooledObject&lt;T&gt; other);
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">other</span><span class="o">);</span>
 
-    @Override
-    boolean equals(Object obj);
+    <span class="nd">@Override</span>
+    <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">);</span>
 
-    @Override
-    int hashCode();
+    <span class="nd">@Override</span>
+    <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">();</span>
 
-    @Override
-    String toString();
+    <span class="nd">@Override</span>
+    <span class="nc">String</span> <span class="nf">toString</span><span class="o">();</span>
 
-    //尝试将池对象置于PooledObjectState.EVICTION状态，即收回
-    boolean startEvictionTest();
+    <span class="c1">//尝试将池对象置于PooledObjectState.EVICTION状态，即收回</span>
+    <span class="kt">boolean</span> <span class="nf">startEvictionTest</span><span class="o">();</span>
 
-     //是否完成了收回测试
-    boolean endEvictionTest(Deque&lt;PooledObject&lt;T&gt;&gt; idleQueue);
+     <span class="c1">//是否完成了收回测试</span>
+    <span class="kt">boolean</span> <span class="nf">endEvictionTest</span><span class="o">(</span><span class="nc">Deque</span><span class="o">&lt;</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;&gt;</span> <span class="n">idleQueue</span><span class="o">);</span>
 
-    //分配内存，这个比较重要。因为连接池中的资源被分配后才能算真正的解除。分配内存的过程中可能会出现抢占资源的情况，所以会发生异常。反正，最终返回ture/false来代表是否分配内存成功，即完成了borrow，状态改为PooledObjectState.ALLOCATED
-    boolean allocate();
+    <span class="c1">//分配内存，这个比较重要。因为连接池中的资源被分配后才能算真正的解除。分配内存的过程中可能会出现抢占资源的情况，所以会发生异常。反正，最终返回ture/false来代表是否分配内存成功，即完成了borrow，状态改为PooledObjectState.ALLOCATED</span>
+    <span class="kt">boolean</span> <span class="nf">allocate</span><span class="o">();</span>
 
-    //与上面一个方法作用相反,将PooledObjectState.ALLOCATED置为PooledObjectState.IDLE
-    boolean deallocate();
+    <span class="c1">//与上面一个方法作用相反,将PooledObjectState.ALLOCATED置为PooledObjectState.IDLE</span>
+    <span class="kt">boolean</span> <span class="nf">deallocate</span><span class="o">();</span>
 
-    //将对象置为PooledObjectState.INVALID无效状态
-    void invalidate();
+    <span class="c1">//将对象置为PooledObjectState.INVALID无效状态</span>
+    <span class="kt">void</span> <span class="nf">invalidate</span><span class="o">();</span>
 
-    //设置是否记录对象使用的堆栈信息,可用于池泄漏时问题追溯
-    void setLogAbandoned(boolean logAbandoned);
+    <span class="c1">//设置是否记录对象使用的堆栈信息,可用于池泄漏时问题追溯</span>
+    <span class="kt">void</span> <span class="nf">setLogAbandoned</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">logAbandoned</span><span class="o">);</span>
 
-     /*
+     <span class="cm">/*
      设置记录堆栈信息时的策略，是全量还是只记泄露的信息。
      设置为false时，泄露信息只包括调用类的信息而不是方法名。
      设置为数字时，制使用包含完整堆栈跟踪信息的堆栈遍历机制；否则，如果可能，使用更快的实现。
      参数是自common-pool2-2.7.0开始有的。
-     */
-    default void setRequireFullStackTrace(final boolean requireFullStackTrace) {
-        // noop
-    }
+     */</span>
+    <span class="k">default</span> <span class="kt">void</span> <span class="nf">setRequireFullStackTrace</span><span class="o">(</span><span class="kd">final</span> <span class="kt">boolean</span> <span class="n">requireFullStackTrace</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// noop</span>
+    <span class="o">}</span>
 
-     //记录当前对象最后一次使用的堆栈信息
-    void use();
+     <span class="c1">//记录当前对象最后一次使用的堆栈信息</span>
+    <span class="kt">void</span> <span class="nf">use</span><span class="o">();</span>
 
-    //打印对象的调用堆栈信息
-    void printStackTrace(PrintWriter writer);
+    <span class="c1">//打印对象的调用堆栈信息</span>
+    <span class="kt">void</span> <span class="nf">printStackTrace</span><span class="o">(</span><span class="nc">PrintWriter</span> <span class="n">writer</span><span class="o">);</span>
 
-    //返回对象目前的状态
-    PooledObjectState getState();
+    <span class="c1">//返回对象目前的状态</span>
+    <span class="nc">PooledObjectState</span> <span class="nf">getState</span><span class="o">();</span>
 
-    //标记该对象发生了泄漏
-    void markAbandoned();
+    <span class="c1">//标记该对象发生了泄漏</span>
+    <span class="kt">void</span> <span class="nf">markAbandoned</span><span class="o">();</span>
 
-    //标记该对象正在被归还到对象池
-    void markReturning();
-}
-</code></pre>
+    <span class="c1">//标记该对象正在被归还到对象池</span>
+    <span class="kt">void</span> <span class="nf">markReturning</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
-<pre><code class="language-java">/*
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
 这个接口主要提供给ObjectPool接口使用。因为这个接口定义了池中对象的生命周期相关的所有方法。
 按照约定，以下情况ObjectPool会代理到PooledObjectFactory中：
 1.不论何时创建一个实例调用makeObject()时
@@ -314,34 +315,34 @@ public interface PooledObject&lt;T&gt; extends Comparable&lt;PooledObject&lt;T&g
 5.当实例正在从池中销毁时，destoryObject()调用时
 
 这个工厂必须确保线程安全，工厂只需要ObjectPool保证操作的实际类型和工厂一致即可。
-*/
-public interface PooledObjectFactory&lt;T&gt; {
+*/</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PooledObjectFactory</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
   
-   //创建一个资源实例，这个资源实例可以被封装起来。
-  PooledObject&lt;T&gt; makeObject() throws Exception;
+   <span class="c1">//创建一个资源实例，这个资源实例可以被封装起来。</span>
+  <span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">makeObject</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
 
-   /*
+   <span class="cm">/*
    销毁一个不再被池子需要的实例。用的销毁模式是normal。
    实现了这个方法的类需要注意的是：方法内没有任何保证资源处于什么状态和实现的方法如何去处理非预期的errors
    所以，实现者需要考虑到对象没有被摧毁，即被垃圾收集器忘掉了，从而永远储存在了内存中。
-   */
-  void destroyObject(PooledObject&lt;T&gt; p) throws Exception;
+   */</span>
+  <span class="kt">void</span> <span class="nf">destroyObject</span><span class="o">(</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">p</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
 
-   //同上，只是采用了DestoryMode模式。但是其实感觉是mode根本没用用上。。。
-  default void destroyObject(final PooledObject&lt;T&gt; p, final DestroyMode mode) throws Exception {
-      destroyObject(p);
-  }
+   <span class="c1">//同上，只是采用了DestoryMode模式。但是其实感觉是mode根本没用用上。。。</span>
+  <span class="k">default</span> <span class="kt">void</span> <span class="nf">destroyObject</span><span class="o">(</span><span class="kd">final</span> <span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">p</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">DestroyMode</span> <span class="n">mode</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+      <span class="n">destroyObject</span><span class="o">(</span><span class="n">p</span><span class="o">);</span>
+  <span class="o">}</span>
 
-  //确保实例能够安全的返回到池子里
-  boolean validateObject(PooledObject&lt;T&gt; p);
+  <span class="c1">//确保实例能够安全的返回到池子里</span>
+  <span class="kt">boolean</span> <span class="nf">validateObject</span><span class="o">(</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">p</span><span class="o">);</span>
 
-   //重新初始化池返回的实例
-  void activateObject(PooledObject&lt;T&gt; p) throws Exception;
+   <span class="c1">//重新初始化池返回的实例</span>
+  <span class="kt">void</span> <span class="nf">activateObject</span><span class="o">(</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">p</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
 
-   //卸载要返回到空闲对象池的实例
-  void passivateObject(PooledObject&lt;T&gt; p) throws Exception;
-}
-</code></pre>
+   <span class="c1">//卸载要返回到空闲对象池的实例</span>
+  <span class="kt">void</span> <span class="nf">passivateObject</span><span class="o">(</span><span class="nc">PooledObject</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">p</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>　　至此，我分析完了三个接口。三个接口各司其职，互相协助。我用一张我画的图片来描述的话，一个管对象的打包，一个管对象的创建，一个管对象的进出口。用jedis举例的话就是，jedis资源打包成封装格式，封装格式被工厂创建，创建成真正使用的资源。这些资源再被借出或者归还。多么的形象哈哈。</p>
 
@@ -351,61 +352,61 @@ public interface PooledObjectFactory&lt;T&gt; {
 <img class="lazy post-img" data-original="https://p.ljcdn.com/v1/raw/p/image-distinguish/08cbdf83850610abd30818850620bb032801300138af8401.png" src="/images/default.jpg" alt="我画的" /></p>
 
 <p>　　另外，上面的接口都用到了对象的状态，对象状态如下：</p>
-<pre><code class="language-java">public enum PooledObjectState {
-    /**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="nc">PooledObjectState</span> <span class="o">{</span>
+    <span class="cm">/**
      * 在队列中,未被使用,空闲状态。调用allocate()方法后对象应该被置于该状态
-     */
-    IDLE,
+     */</span>
+    <span class="no">IDLE</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      * 已分配,在使用中,调用allocate()方法后应该讲对象置于该状态
-     */
-    ALLOCATED,
+     */</span>
+    <span class="no">ALLOCATED</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      * 在队列中, 当前正在测试，可能会被回收。在此状态被借出后状态回被置为EVICTION_RETURN_TO_HEAD
-     */
-    EVICTION,
+     */</span>
+    <span class="no">EVICTION</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      * 不在队列中。当借用该对象时发现对象，发现正在进行回收测试，故将EVICTION更
      * 改EVICTION_RETURN_TO_HEAD，表明曾经在回收过程中被借出，在回收完后它应该从新添加到队列的头部。
-     */
-    EVICTION_RETURN_TO_HEAD,
+     */</span>
+    <span class="no">EVICTION_RETURN_TO_HEAD</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      * 在队列中,目前正在进行校验
-     */
-    VALIDATION,
+     */</span>
+    <span class="no">VALIDATION</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      * 不在队列中，当前正在验证。当对象从池中被借出，
      * 在配置了testOnBorrow的情况下，对像从队列移除和进行预分配的时候会进行验证(借用时校验)
-     */
-    VALIDATION_PREALLOCATED,
+     */</span>
+    <span class="no">VALIDATION_PREALLOCATED</span><span class="o">,</span>
 
-   /**
+   <span class="cm">/**
      * 不在队列中，正在进行验证。从池中借出对象时，发现对象正在进行校验，并将对象状态改为该状态
-     */
-    VALIDATION_RETURN_TO_HEAD,
+     */</span>
+    <span class="no">VALIDATION_RETURN_TO_HEAD</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      *无效的，并且将要或已经被销毁。
-     */
-    INVALID,
+     */</span>
+    <span class="no">INVALID</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      * 泄漏的
-     */
-    ABANDONED,
+     */</span>
+    <span class="no">ABANDONED</span><span class="o">,</span>
 
-    /**
+    <span class="cm">/**
      *归还中,调用markReturning()方法会将对象状态改为此状态，表明正在归还一个对象
-     */
-    RETURNING
-}
+     */</span>
+    <span class="no">RETURNING</span>
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>参考链接：</p>
 <ul>

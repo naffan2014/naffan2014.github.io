@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>sentinel降级背后的原理解析 | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="sentinel降级背后的原理解析" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="介绍" />
-<meta property="og:description" content="介绍" />
+<meta name="twitter:description" property="og:description" content="介绍" />
 <link rel="canonical" href="http://localhost:4000/tech/2020/04/04/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2020/04/04/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-04-04T00:00:00+08:00" />
+<meta property="article:modified_time" content="2020-04-04T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="sentinel降级背后的原理解析" />
+<meta name="twitter:title" content="sentinel降级背后的原理解析" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2020/04/04/01.html"},"description":"介绍","datePublished":"2020-04-04T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2020/04/04/01.html","headline":"sentinel降级背后的原理解析","dateModified":"2020-04-04T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2020-04-04T00:00:00+08:00","datePublished":"2020-04-04T00:00:00+08:00","description":"介绍","headline":"sentinel降级背后的原理解析","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2020/04/04/01.html"},"url":"http://localhost:4000/tech/2020/04/04/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -224,173 +225,177 @@ var _hmt = _hmt || [];
 
 <p>　　在sentinel-demo模块中有很多不同的样例，我们找到FlowQpsDemo，看看限流的样例。限流有很多种类的限流，先找qps限流的类来看。</p>
 
-<pre>
-  <code class="language-java">/*
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="cm">/*
 有一个TimeTicker线程在做统计，每1秒钟做一次。有N个RunTask线程在模拟请求，被访问的business code被资源key保护着，根据规则，每秒只允许20个请求通过。
-*/
-public class FlowQpsDemo {
+*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FlowQpsDemo</span> <span class="o">{</span>
 
-    //key是qps江流的隔离名称
-    private static final String KEY = "abc";
+    <span class="c1">//key是qps江流的隔离名称</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">KEY</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
 
-    /*
+    <span class="cm">/*
     全局共享三个变量
     使用原子整形类型变量记录通过，拦截及总体数量。
     利用AtomicInteger就是因为原子性的特性，可以帮助我们防止多线程的安全问题。
-    */
-    private static AtomicInteger pass = new AtomicInteger();
-    private static AtomicInteger block = new AtomicInteger();
-    private static AtomicInteger total = new AtomicInteger();
+    */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">AtomicInteger</span> <span class="n">pass</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicInteger</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">AtomicInteger</span> <span class="n">block</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicInteger</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">AtomicInteger</span> <span class="n">total</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicInteger</span><span class="o">();</span>
 
-    private static volatile boolean stop = false;
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="kt">boolean</span> <span class="n">stop</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
-    //线程总数
-    private static final int threadCount = 32;
+    <span class="c1">//线程总数</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">threadCount</span> <span class="o">=</span> <span class="mi">32</span><span class="o">;</span>
 
-    //时间为 100s
-    private static int seconds = 60 + 40;
+    <span class="c1">//时间为 100s</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">seconds</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">+</span> <span class="mi">40</span><span class="o">;</span>
 
-    public static void main(String[] args) throws Exception {
-        initFlowQpsRule();
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="n">initFlowQpsRule</span><span class="o">();</span>
 
-        tick();
-        // first make the system run on a very low condition
-        simulateTraffic();
+        <span class="n">tick</span><span class="o">();</span>
+        <span class="c1">// first make the system run on a very low condition</span>
+        <span class="n">simulateTraffic</span><span class="o">();</span>
 
-        System.out.println("===== begin to do flow control");
-        System.out.println("only 20 requests per second can pass");
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"===== begin to do flow control"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"only 20 requests per second can pass"</span><span class="o">);</span>
 
-    }
+    <span class="o">}</span>
 
-    /*
+    <span class="cm">/*
     初始化限流规则
-    */
-    private static void initFlowQpsRule() {
-        List&lt;FlowRule&gt; rules = new ArrayList&lt;FlowRule&gt;();
-        FlowRule rule1 = new FlowRule();
-        rule1.setResource(KEY);
-        //设置qps最大值20个
-        rule1.setCount(20);
-        //设置限流类型：根据qps
-        rule1.setGrade(RuleConstant.FLOW_GRADE_QPS);
-        //需要被限制的应用名称。default代表允许全部应用
-        rule1.setLimitApp("default");
-        rules.add(rule1);
-        FlowRuleManager.loadRules(rules);
-    }
+    */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">initFlowQpsRule</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">FlowRule</span><span class="o">&gt;</span> <span class="n">rules</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">FlowRule</span><span class="o">&gt;();</span>
+        <span class="nc">FlowRule</span> <span class="n">rule1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FlowRule</span><span class="o">();</span>
+        <span class="n">rule1</span><span class="o">.</span><span class="na">setResource</span><span class="o">(</span><span class="no">KEY</span><span class="o">);</span>
+        <span class="c1">//设置qps最大值20个</span>
+        <span class="n">rule1</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="mi">20</span><span class="o">);</span>
+        <span class="c1">//设置限流类型：根据qps</span>
+        <span class="n">rule1</span><span class="o">.</span><span class="na">setGrade</span><span class="o">(</span><span class="nc">RuleConstant</span><span class="o">.</span><span class="na">FLOW_GRADE_QPS</span><span class="o">);</span>
+        <span class="c1">//需要被限制的应用名称。default代表允许全部应用</span>
+        <span class="n">rule1</span><span class="o">.</span><span class="na">setLimitApp</span><span class="o">(</span><span class="s">"default"</span><span class="o">);</span>
+        <span class="n">rules</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">rule1</span><span class="o">);</span>
+        <span class="nc">FlowRuleManager</span><span class="o">.</span><span class="na">loadRules</span><span class="o">(</span><span class="n">rules</span><span class="o">);</span>
+    <span class="o">}</span>
     
-    //模拟请求。并发32个线程运行 RunTask()任务
-    private static void simulateTraffic() {
-        for (int i = 0; i &lt; threadCount; i++) {
-            Thread t = new Thread(new RunTask());
-            t.setName("simulate-traffic-Task");
-            t.start();
-        }
-    }
+    <span class="c1">//模拟请求。并发32个线程运行 RunTask()任务</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">simulateTraffic</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">threadCount</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">Thread</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">RunTask</span><span class="o">());</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"simulate-traffic-Task"</span><span class="o">);</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    //启动一个线程来运行TimerTask()任务。
-    private static void tick() {
-        Thread timer = new Thread(new TimerTask());
-        timer.setName("sentinel-timer-task");
-        timer.start();
-    }
+    <span class="c1">//启动一个线程来运行TimerTask()任务。</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">tick</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Thread</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">TimerTask</span><span class="o">());</span>
+        <span class="n">timer</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"sentinel-timer-task"</span><span class="o">);</span>
+        <span class="n">timer</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+    <span class="o">}</span>
 
-    //记录相关事件时间耗时的，tick()调用的所以就运行1次。
-    static class TimerTask implements Runnable {
+    <span class="c1">//记录相关事件时间耗时的，tick()调用的所以就运行1次。</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TimerTask</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
 
-        @Override
-        public void run() {
-            long start = System.currentTimeMillis();
-            System.out.println("begin to statistic!!!");
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"begin to statistic!!!"</span><span class="o">);</span>
 
-            long oldTotal = 0;
-            long oldPass = 0;
-            long oldBlock = 0;
-            /*
+            <span class="kt">long</span> <span class="n">oldTotal</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">oldPass</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">oldBlock</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="cm">/*
             循环。
             
-            */
-            while (!stop) {
-                try {
-                    //1秒执行一次
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                }
-                //全局总数量
-                long globalTotal = total.get();
-                //一秒内的全部数量
-                long oneSecondTotal = globalTotal - oldTotal;
-                //
-                oldTotal = globalTotal;
+            */</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stop</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c1">//1秒执行一次</span>
+                    <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="o">}</span>
+                <span class="c1">//全局总数量</span>
+                <span class="kt">long</span> <span class="n">globalTotal</span> <span class="o">=</span> <span class="n">total</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+                <span class="c1">//一秒内的全部数量</span>
+                <span class="kt">long</span> <span class="n">oneSecondTotal</span> <span class="o">=</span> <span class="n">globalTotal</span> <span class="o">-</span> <span class="n">oldTotal</span><span class="o">;</span>
+                <span class="c1">//</span>
+                <span class="n">oldTotal</span> <span class="o">=</span> <span class="n">globalTotal</span><span class="o">;</span>
 
-                long globalPass = pass.get();
-                //一秒内通过的数量
-                long oneSecondPass = globalPass - oldPass;
-                oldPass = globalPass;
+                <span class="kt">long</span> <span class="n">globalPass</span> <span class="o">=</span> <span class="n">pass</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+                <span class="c1">//一秒内通过的数量</span>
+                <span class="kt">long</span> <span class="n">oneSecondPass</span> <span class="o">=</span> <span class="n">globalPass</span> <span class="o">-</span> <span class="n">oldPass</span><span class="o">;</span>
+                <span class="n">oldPass</span> <span class="o">=</span> <span class="n">globalPass</span><span class="o">;</span>
 
-                long globalBlock = block.get();
-                //一秒内拒绝的数量
-                long oneSecondBlock = globalBlock - oldBlock;
-                oldBlock = globalBlock;
+                <span class="kt">long</span> <span class="n">globalBlock</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+                <span class="c1">//一秒内拒绝的数量</span>
+                <span class="kt">long</span> <span class="n">oneSecondBlock</span> <span class="o">=</span> <span class="n">globalBlock</span> <span class="o">-</span> <span class="n">oldBlock</span><span class="o">;</span>
+                <span class="n">oldBlock</span> <span class="o">=</span> <span class="n">globalBlock</span><span class="o">;</span>
 
-                System.out.println(seconds + " send qps is: " + oneSecondTotal);
-                System.out.println(TimeUtil.currentTimeMillis() + ", total:" + oneSecondTotal
-                    + ", pass:" + oneSecondPass
-                    + ", block:" + oneSecondBlock);
-                //当时间耗尽时，停止循环
-                if (seconds-- &lt;= 0) {
-                    stop = true;
-                }
-            }
-            //整个线程耗时
-            long cost = System.currentTimeMillis() - start;
-            System.out.println("time cost: " + cost + " ms");
-            System.out.println("total:" + total.get() + ", pass:" + pass.get()
-                + ", block:" + block.get());
-            System.exit(0);
-        }
-    }
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">seconds</span> <span class="o">+</span> <span class="s">" send qps is: "</span> <span class="o">+</span> <span class="n">oneSecondTotal</span><span class="o">);</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">TimeUtil</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="s">", total:"</span> <span class="o">+</span> <span class="n">oneSecondTotal</span>
+                    <span class="o">+</span> <span class="s">", pass:"</span> <span class="o">+</span> <span class="n">oneSecondPass</span>
+                    <span class="o">+</span> <span class="s">", block:"</span> <span class="o">+</span> <span class="n">oneSecondBlock</span><span class="o">);</span>
+                <span class="c1">//当时间耗尽时，停止循环</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">seconds</span><span class="o">--</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">stop</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="c1">//整个线程耗时</span>
+            <span class="kt">long</span> <span class="n">cost</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">start</span><span class="o">;</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"time cost: "</span> <span class="o">+</span> <span class="n">cost</span> <span class="o">+</span> <span class="s">" ms"</span><span class="o">);</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"total:"</span> <span class="o">+</span> <span class="n">total</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">+</span> <span class="s">", pass:"</span> <span class="o">+</span> <span class="n">pass</span><span class="o">.</span><span class="na">get</span><span class="o">()</span>
+                <span class="o">+</span> <span class="s">", block:"</span> <span class="o">+</span> <span class="n">block</span><span class="o">.</span><span class="na">get</span><span class="o">());</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    //
-    static class RunTask implements Runnable {
-        @Override
-        public void run() {
-            while (!stop) {
-                Entry entry = null;
+    <span class="c1">//</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">RunTask</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="n">stop</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">Entry</span> <span class="n">entry</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-                try {
-                    //进行限流，采用key。因为已经在上面的方法里设置了限流策略了，所以在这个线程中，会自动按照限流策略进行限流的。我们只需要对结果进行监控，然后执行之后逻辑即可。
-                    entry = SphU.entry(KEY);
-                    // 如果没有抛出异常的话，就说明通过了。就给pass+1
-                    pass.addAndGet(1);
-                } catch (BlockException e1) {
-                    获得了BlockExcepton就给block+1
-                    block.incrementAndGet();
-                } catch (Exception e2) {
-                    // 这个是在业务中抛出了异常了。需要对业务逻辑异常处理
-                } finally {
-                    //都会走到这里，给total+1
-                    total.incrementAndGet();
-                    //限流策略退出
-                    if (entry != null) {
-                        entry.exit();
-                    }
-                }
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c1">//进行限流，采用key。因为已经在上面的方法里设置了限流策略了，所以在这个线程中，会自动按照限流策略进行限流的。我们只需要对结果进行监控，然后执行之后逻辑即可。</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="nc">SphU</span><span class="o">.</span><span class="na">entry</span><span class="o">(</span><span class="no">KEY</span><span class="o">);</span>
+                    <span class="c1">// 如果没有抛出异常的话，就说明通过了。就给pass+1</span>
+                    <span class="n">pass</span><span class="o">.</span><span class="na">addAndGet</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">BlockException</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">获得了BlockExcepton就给block</span><span class="o">+</span><span class="mi">1</span>
+                    <span class="n">block</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">();</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e2</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// 这个是在业务中抛出了异常了。需要对业务逻辑异常处理</span>
+                <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+                    <span class="c1">//都会走到这里，给total+1</span>
+                    <span class="n">total</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">();</span>
+                    <span class="c1">//限流策略退出</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">entry</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">entry</span><span class="o">.</span><span class="na">exit</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
 
-                Random random2 = new Random();
-                try {
-                    //随机睡一会
-                    TimeUnit.MILLISECONDS.sleep(random2.nextInt(50));
-                } catch (InterruptedException e) {
-                    // ignore
-                }
-            }
-        }
-    }
-}
+                <span class="nc">Random</span> <span class="n">random2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Random</span><span class="o">();</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c1">//随机睡一会</span>
+                    <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="n">random2</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">50</span><span class="o">));</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// ignore</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　运行程序后，结果如下：</p>
 
@@ -419,7 +424,7 @@ only 20 requests per second can pass
 
 <p>　　可以看到，上面的结果中，pass的数量和我们设置的不一样。我们设定的是每秒可以pass的数量是20个。但是有很多的请求都是超过20个的。</p>
 
-<p>　　原因是<code>SphU.entry(KEY)</code>的内部是没有加锁的，所以就会在高并发的情况下，pass的数量就会高于20.由于pass、block、total是全局共享的，而多个RunTask()线程在执行SphU.entry(KEY)申请获取entry时，内部没有所保护，所以会存在pass的个数超过设定的阈值。</p>
+<p>　　原因是<code class="language-plaintext highlighter-rouge">SphU.entry(KEY)</code>的内部是没有加锁的，所以就会在高并发的情况下，pass的数量就会高于20.由于pass、block、total是全局共享的，而多个RunTask()线程在执行SphU.entry(KEY)申请获取entry时，内部没有所保护，所以会存在pass的个数超过设定的阈值。</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/sentinel-basic-demo-flow-qps-module.png" src="/images/default.jpg" alt="runTask模型" />
@@ -456,103 +461,115 @@ only 20 requests per second can pass
 
 <p>　　一切的开始让我们从SphU.entry()开始。</p>
 
-<pre>
-  <code class="language-java">public class SphU {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SphU</span> <span class="o">{</span>
 
-    ……
+    <span class="err">……</span>
     
-    /*
+    <span class="cm">/*
     为给定的resource记录统计数据并且执行方法检查
-    */
-    public static Entry entry(String name) throws BlockException {
-        return Env.sph.entry(name, EntryType.OUT, 1, OBJECTS0);
-    }
+    */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Entry</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BlockException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">Env</span><span class="o">.</span><span class="na">sph</span><span class="o">.</span><span class="na">entry</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="nc">EntryType</span><span class="o">.</span><span class="na">OUT</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="no">OBJECTS0</span><span class="o">);</span>
+    <span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
-<pre>
-  <code class="language-java">/*
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="cm">/*
 sentinel的环境类，这个类会触发所有的sentinel的初始化
 这个类有个特殊注意到的地方，为了防止程序上的deadlock。不能让其他的类的静态方法块或者静态变量不要指向这个类。
-*/
-public class Env {
+*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Env</span> <span class="o">{</span>
 
-    //主要是这块代码
-    public static final Sph sph = new CtSph();
+    <span class="c1">//主要是这块代码</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Sph</span> <span class="n">sph</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CtSph</span><span class="o">();</span>
 
-    static {
-        // If init fails, the process will exit.
-        InitExecutor.doInit();
-    }
-}
+    <span class="kd">static</span> <span class="o">{</span>
+        <span class="c1">// If init fails, the process will exit.</span>
+        <span class="nc">InitExecutor</span><span class="o">.</span><span class="na">doInit</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　SphU.entry中Env是一个类，我们知道在JVM的生命周期里，每个类都会被加载一次，而且加载的原则是懒加载。这个类中有个Sph类型的静态变量，指向了实例化后的CtSph()。也就是说Env.sph.entry()最终是调用了CtsSph.entry()。</p>
 
-<pre>
-  <code class="language-java">public class CtsSph {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CtsSph</span> <span class="o">{</span>
 
-    /*
+    <span class="cm">/*
     检查所有resource的限流规则
     每个唯一的resource会用一个ProcessorSlot做限流检查。同样的resource会用同样的ProcessorSlot。
     注意的是ProcessorSlot总数不能超过配置的MAX_SLOT_CHAIN_SIZE值。否则，所有的限流检查都会终止。也就是说同一时刻的所有请求都会通过，没有任何限流。
-    */
-    public Entry entry(ResourceWrapper resourceWrapper, int count, Object... args) throws BlockException {
-        return entryWithPriority(resourceWrapper, count, false, args);
-    }
+    */</span>
+    <span class="kd">public</span> <span class="nc">Entry</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BlockException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">entryWithPriority</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
     
-    /*
+    <span class="cm">/*
     这个方法是具体的实现，也是比较重要的。
-    */
-    private Entry entryWithPriority(ResourceWrapper resourceWrapper, int count, boolean prioritized, Object... args)
-        throws BlockException {
+    */</span>
+    <span class="kd">private</span> <span class="nc">Entry</span> <span class="nf">entryWithPriority</span><span class="o">(</span><span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="nc">BlockException</span> <span class="o">{</span>
         
-        //获取当前的上线文
-        Context context = ContextUtil.getContext();
-        if (context instanceof NullContext) {
-            // The {@link NullContext} indicates that the amount of context has exceeded the threshold,
-            // so here init the entry only. No rule checking will be done.
-            //NullContext代表的是上下文数量已经超过了阈值，所以这里初始化CtEntry，就是不会做任何限流检查。
-            return new CtEntry(resourceWrapper, null, context);
-        }
+        <span class="c1">//获取当前的上线文</span>
+        <span class="nc">Context</span> <span class="n">context</span> <span class="o">=</span> <span class="nc">ContextUtil</span><span class="o">.</span><span class="na">getContext</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="k">instanceof</span> <span class="nc">NullContext</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// The {@link NullContext} indicates that the amount of context has exceeded the threshold,</span>
+            <span class="c1">// so here init the entry only. No rule checking will be done.</span>
+            <span class="c1">//NullContext代表的是上下文数量已经超过了阈值，所以这里初始化CtEntry，就是不会做任何限流检查。</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">CtEntry</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        //如果没有上下文就给一个默认的上下文。
-        if (context == null) {
-            // Using default context.
-            context = InternalContextUtil.internalEnter(Constants.CONTEXT_DEFAULT_NAME);
-        }
+        <span class="c1">//如果没有上下文就给一个默认的上下文。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">context</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Using default context.</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="nc">InternalContextUtil</span><span class="o">.</span><span class="na">internalEnter</span><span class="o">(</span><span class="nc">Constants</span><span class="o">.</span><span class="na">CONTEXT_DEFAULT_NAME</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        // 开关，可以控制是否做限流检查
-        if (!Constants.ON) {
-            return new CtEntry(resourceWrapper, null, context);
-        }
+        <span class="c1">// 开关，可以控制是否做限流检查</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nc">Constants</span><span class="o">.</span><span class="na">ON</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">CtEntry</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        //这个比较重要,获取该资源对应的SlotChain
-        ProcessorSlot&lt;Object&gt; chain = lookProcessChain(resourceWrapper);
+        <span class="c1">//这个比较重要,获取该资源对应的SlotChain</span>
+        <span class="nc">ProcessorSlot</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">chain</span> <span class="o">=</span> <span class="n">lookProcessChain</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">);</span>
 
-         //slot chain超过了Constants.MAX_SLOT_CHAIN_SIZE。所以就是说没有限流检查
-        if (chain == null) {
-            return new CtEntry(resourceWrapper, null, context);
-        }
+         <span class="c1">//slot chain超过了Constants.MAX_SLOT_CHAIN_SIZE。所以就是说没有限流检查</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">chain</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">CtEntry</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        Entry e = new CtEntry(resourceWrapper, chain, context);
-        try {
-            // 执行Slot的entry方法
-            chain.entry(context, resourceWrapper, null, count, prioritized, args);
-        } catch (BlockException e1) {
-            // 抛出BlockExecption
-            e.exit(count, args);
-            throw e1;
-        } catch (Throwable e1) {
-            // This should not happen, unless there are errors existing in Sentinel internal.
-            RecordLog.info("Sentinel unexpected exception", e1);
-        }
-        return e;
-    }
-}
+        <span class="nc">Entry</span> <span class="n">e</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CtEntry</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">chain</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 执行Slot的entry方法</span>
+            <span class="n">chain</span><span class="o">.</span><span class="na">entry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">BlockException</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 抛出BlockExecption</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">count</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="n">e1</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// This should not happen, unless there are errors existing in Sentinel internal.</span>
+            <span class="nc">RecordLog</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"Sentinel unexpected exception"</span><span class="o">,</span> <span class="n">e1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　这个方法可以分为以下几个部分：</p>
 
@@ -572,32 +589,36 @@ public class Env {
 
 <p>　　我们先来看看ProcessorSlot到底是个什么东西。他是一个接口，详细的请看下面的程序解释。</p>
 
-<pre>
-  <code class="language-java">/*
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="cm">/*
 某些流程的容器，以及流程完成时的通知方式。
 
 直译的话就是处理器插槽，是sentinel实现限流降级、熔断降级、系统自适应降级等功能的切入点。Sentinel 提供的 ProcessorSlot 可以分为两类，一类是辅助完成资源指标数据统计的切入点，一类是实现降级功能的切入点。
-*/
-public interface ProcessorSlot&lt;T&gt; {
+*/</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ProcessorSlot</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    //slot的入口
-    void entry(Context context, ResourceWrapper resourceWrapper, T param, int count, boolean prioritized,
-               Object... args) throws Throwable;
+    <span class="c1">//slot的入口</span>
+    <span class="kt">void</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="no">T</span> <span class="n">param</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span>
+               <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span><span class="o">;</span>
 
 
-     //触发入entry
-    void fireEntry(Context context, ResourceWrapper resourceWrapper, Object obj, int count, boolean prioritized,
-                   Object... args) throws Throwable;
+     <span class="c1">//触发入entry</span>
+    <span class="kt">void</span> <span class="nf">fireEntry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span>
+                   <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span><span class="o">;</span>
                    
-     //slot的出口
-    void exit(Context context, ResourceWrapper resourceWrapper, int count, Object... args);
+     <span class="c1">//slot的出口</span>
+    <span class="kt">void</span> <span class="nf">exit</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">);</span>
 
-     //触发出entry
-    void fireExit(Context context, ResourceWrapper resourceWrapper, int count, Object... args);
-}
+     <span class="c1">//触发出entry</span>
+    <span class="kt">void</span> <span class="nf">fireExit</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">);</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　通过实现关系，我们可以看到这两类ProcessorSlot分别是：</p>
 
@@ -628,86 +649,98 @@ public interface ProcessorSlot&lt;T&gt; {
 
 <p>　　然后我们看看是如何将ProcessorSlot创建成链的：</p>
 
-<pre>
-  <code class="language-java"> //通过slot chain builder SPI提供的创建slot链的类
-public final class SlotChainProvider {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code> <span class="c1">//通过slot chain builder SPI提供的创建slot链的类</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">SlotChainProvider</span> <span class="o">{</span>
 
-    private static volatile SlotChainBuilder slotChainBuilder = null;
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="nc">SlotChainBuilder</span> <span class="n">slotChainBuilder</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 
-     /*
+     <span class="cm">/*
      加载和选择进程不是线程安全的，但是如果只是通过lookProcessChain()方法调用就可以，因为CtSph是带锁的。一会就能看到lookProcessChain这个方法了。这个方法是有synchronized的。
-     */
-    public static ProcessorSlotChain newSlotChain() {
-        if (slotChainBuilder != null) {
-            return slotChainBuilder.build();
-        }
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ProcessorSlotChain</span> <span class="nf">newSlotChain</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">slotChainBuilder</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">slotChainBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+        <span class="o">}</span>
 
-        //通过chain builder的SPI来实现代码和业务的隔离，也就是说通过配置文件来选择可用的builder.以此builder来创建ProcessorSlotChain
-        slotChainBuilder = SpiLoader.of(SlotChainBuilder.class).loadFirstInstanceOrDefault();
+        <span class="c1">//通过chain builder的SPI来实现代码和业务的隔离，也就是说通过配置文件来选择可用的builder.以此builder来创建ProcessorSlotChain</span>
+        <span class="n">slotChainBuilder</span> <span class="o">=</span> <span class="nc">SpiLoader</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">SlotChainBuilder</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">loadFirstInstanceOrDefault</span><span class="o">();</span>
 
-        if (slotChainBuilder == null) {
-            // Should not go through here.
-            //一般来说不应该为null，因为作者已经预留了文件在resources的META-INF中。但是为了万一，还是判断一下，给出个解决方案。
-            RecordLog.warn("[SlotChainProvider] Wrong state when resolving slot chain builder, using default");
-            slotChainBuilder = new DefaultSlotChainBuilder();
-        } else {
-            RecordLog.info("[SlotChainProvider] Global slot chain builder resolved: {}",
-                slotChainBuilder.getClass().getCanonicalName());
-        }
-        //返回，用选择的builder调用build方法，创建ProcessorSlotChain
-        return slotChainBuilder.build();
-    }
+        <span class="k">if</span> <span class="o">(</span><span class="n">slotChainBuilder</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Should not go through here.</span>
+            <span class="c1">//一般来说不应该为null，因为作者已经预留了文件在resources的META-INF中。但是为了万一，还是判断一下，给出个解决方案。</span>
+            <span class="nc">RecordLog</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"[SlotChainProvider] Wrong state when resolving slot chain builder, using default"</span><span class="o">);</span>
+            <span class="n">slotChainBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultSlotChainBuilder</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">RecordLog</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"[SlotChainProvider] Global slot chain builder resolved: {}"</span><span class="o">,</span>
+                <span class="n">slotChainBuilder</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getCanonicalName</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="c1">//返回，用选择的builder调用build方法，创建ProcessorSlotChain</span>
+        <span class="k">return</span> <span class="n">slotChainBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
 
-    private SlotChainProvider() {}
-}
+    <span class="kd">private</span> <span class="nf">SlotChainProvider</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　我很感兴趣slotChainBuilder，于是就去看了眼这个类。其实他是一个接口，接口中就一个build()方法。目前系统提供了两种实现，一个是DefaultSlotChainBuilder,一个是DemoSlotChainBuilder。这块对后续的增加留下了扩展性。主要体现的是<a href="https://www.jianshu.com/p/3d1c9ffb0a28">建造者模式</a>思想。</p>
 
-<pre>
-  <code class="language-java">public interface SlotChainBuilder {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SlotChainBuilder</span> <span class="o">{</span>
 
-     //构造 processor slot chain
-    ProcessorSlotChain build();
-}
+     <span class="c1">//构造 processor slot chain</span>
+    <span class="nc">ProcessorSlotChain</span> <span class="nf">build</span><span class="o">();</span>
+<span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　那接下来我选择DemoSlotChainBuilder看下怎么实现的。</p>
 
-<pre>
-  <code class="language-java">/*
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="cm">/*
 一个例子来讲述如何自定义建造一个slot chain
-*/
-@Spi
-public class DemoSlotChainBuilder implements SlotChainBuilder {
+*/</span>
+<span class="nd">@Spi</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DemoSlotChainBuilder</span> <span class="kd">implements</span> <span class="nc">SlotChainBuilder</span> <span class="o">{</span>
 
-    @Override
-    public ProcessorSlotChain build() {
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ProcessorSlotChain</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
 
-        ProcessorSlotChain chain = new DefaultProcessorSlotChain();
+        <span class="nc">ProcessorSlotChain</span> <span class="n">chain</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultProcessorSlotChain</span><span class="o">();</span>
 
-        List&lt;ProcessorSlot&gt; sortedSlotList = SpiLoader.of(ProcessorSlot.class).loadInstanceListSorted();
-        // 过滤掉降级
-        //demo不会被降级异常阻塞的
-        sortedSlotList.removeIf(o -&gt; DegradeSlot.class.equals(o.getClass()));
-        for (ProcessorSlot slot : sortedSlotList) {
-            if (!(slot instanceof AbstractLinkedProcessorSlot)) {
-                RecordLog.warn("The ProcessorSlot(" + slot.getClass().getCanonicalName() + ") is not an instance of AbstractLinkedProcessorSlot, can't be added into ProcessorSlotChain");
-                continue;
-            }
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ProcessorSlot</span><span class="o">&gt;</span> <span class="n">sortedSlotList</span> <span class="o">=</span> <span class="nc">SpiLoader</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">ProcessorSlot</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">loadInstanceListSorted</span><span class="o">();</span>
+        <span class="c1">// 过滤掉降级</span>
+        <span class="c1">//demo不会被降级异常阻塞的</span>
+        <span class="n">sortedSlotList</span><span class="o">.</span><span class="na">removeIf</span><span class="o">(</span><span class="n">o</span> <span class="o">-&gt;</span> <span class="nc">DegradeSlot</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">getClass</span><span class="o">()));</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">ProcessorSlot</span> <span class="n">slot</span> <span class="o">:</span> <span class="n">sortedSlotList</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!(</span><span class="n">slot</span> <span class="k">instanceof</span> <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nc">RecordLog</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"The ProcessorSlot("</span> <span class="o">+</span> <span class="n">slot</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getCanonicalName</span><span class="o">()</span> <span class="o">+</span> <span class="s">") is not an instance of AbstractLinkedProcessorSlot, can't be added into ProcessorSlotChain"</span><span class="o">);</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
 
-            chain.addLast((AbstractLinkedProcessorSlot&lt;?&gt;) slot);
-        }
+            <span class="n">chain</span><span class="o">.</span><span class="na">addLast</span><span class="o">((</span><span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;)</span> <span class="n">slot</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        return chain;
-    }
-}
+        <span class="k">return</span> <span class="n">chain</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　通过上面的演示，就创建除了一个slot chain了。返回的就是ProcessorSlotChain。</p>
 
@@ -719,73 +752,81 @@ public class DemoSlotChainBuilder implements SlotChainBuilder {
   </li>
 </ul>
 
-<pre>
-  <code class="language-java">
-//chanMap是一个原子map，map的key是ResourceWrapper封装类，value是ProcessorSlotChain
-private static volatile Map&lt;ResourceWrapper, ProcessorSlotChain&gt; chainMap
-        = new HashMap&lt;ResourceWrapper, ProcessorSlotChain&gt;();
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>
+<span class="c1">//chanMap是一个原子map，map的key是ResourceWrapper封装类，value是ProcessorSlotChain</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">ResourceWrapper</span><span class="o">,</span> <span class="nc">ProcessorSlotChain</span><span class="o">&gt;</span> <span class="n">chainMap</span>
+        <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">ResourceWrapper</span><span class="o">,</span> <span class="nc">ProcessorSlotChain</span><span class="o">&gt;();</span>
         
-/*
+<span class="cm">/*
 获取当前资源的ProcessorSlotChain，如果没有的话就创建一个ProcessorSlotChain出来
 同样的资源只要ResourceWrapper.equals(Object)相等，不论在不在同一个上下文中，都会全局共享同一个ProcessorSlotChain。
 还有就是ProcessorSlot的总数不能超过Constants#MAX_SLOT_CHAIN_SIZE否则会返回null
-*/
-ProcessorSlot&lt;Object&gt; lookProcessChain(ResourceWrapper resourceWrapper) {
-        //获取单向链表中的ProcessorSlotChain
-        ProcessorSlotChain chain = chainMap.get(resourceWrapper);
-        //chain是空的则进入，不为空就直接返回呗
-        if (chain == null) {
-            //这个就是刚才我在SlotChainProvider()方法中提到的。获取的话一定在lookProcessChain()中，因为有锁就保证了线程安全。
-            synchronized (LOCK) {
-                chain = chainMap.get(resourceWrapper);
-                //double check。因为在锁里了。在之前查到现在查的时间内，有可能加锁前chain被别的线程注入了，那这块就可能出问题的。
-                if (chain == null) {
-                    // 超过预设值了，返回null吧。
-                    if (chainMap.size() &gt;= Constants.MAX_SLOT_CHAIN_SIZE) {
-                        return null;
-                    }
+*/</span>
+<span class="nc">ProcessorSlot</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="nf">lookProcessChain</span><span class="o">(</span><span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//获取单向链表中的ProcessorSlotChain</span>
+        <span class="nc">ProcessorSlotChain</span> <span class="n">chain</span> <span class="o">=</span> <span class="n">chainMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">);</span>
+        <span class="c1">//chain是空的则进入，不为空就直接返回呗</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">chain</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//这个就是刚才我在SlotChainProvider()方法中提到的。获取的话一定在lookProcessChain()中，因为有锁就保证了线程安全。</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="no">LOCK</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">chain</span> <span class="o">=</span> <span class="n">chainMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">);</span>
+                <span class="c1">//double check。因为在锁里了。在之前查到现在查的时间内，有可能加锁前chain被别的线程注入了，那这块就可能出问题的。</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">chain</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// 超过预设值了，返回null吧。</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">chainMap</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="nc">Constants</span><span class="o">.</span><span class="na">MAX_SLOT_CHAIN_SIZE</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="o">}</span>
 
-                    //刚才已经分析过了是如何创建slot chain的了。但是我只是用了demoSlotBuilder讲的。这块因为是用默认的DefaultSlotChainBuilder。所以我还得贴一下DefaultSlotChainBuilder的代码在下面
-                    chain = SlotChainProvider.newSlotChain();
-                    Map&lt;ResourceWrapper, ProcessorSlotChain&gt; newMap = new HashMap&lt;ResourceWrapper, ProcessorSlotChain&gt;(
-                        chainMap.size() + 1);
-                    newMap.putAll(chainMap);
-                    newMap.put(resourceWrapper, chain);
-                    chainMap = newMap;
-                }
-            }
-        }
-        return chain;
-    }
+                    <span class="c1">//刚才已经分析过了是如何创建slot chain的了。但是我只是用了demoSlotBuilder讲的。这块因为是用默认的DefaultSlotChainBuilder。所以我还得贴一下DefaultSlotChainBuilder的代码在下面</span>
+                    <span class="n">chain</span> <span class="o">=</span> <span class="nc">SlotChainProvider</span><span class="o">.</span><span class="na">newSlotChain</span><span class="o">();</span>
+                    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">ResourceWrapper</span><span class="o">,</span> <span class="nc">ProcessorSlotChain</span><span class="o">&gt;</span> <span class="n">newMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">ResourceWrapper</span><span class="o">,</span> <span class="nc">ProcessorSlotChain</span><span class="o">&gt;(</span>
+                        <span class="n">chainMap</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+                    <span class="n">newMap</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">chainMap</span><span class="o">);</span>
+                    <span class="n">newMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">chain</span><span class="o">);</span>
+                    <span class="n">chainMap</span> <span class="o">=</span> <span class="n">newMap</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">chain</span><span class="o">;</span>
+    <span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
-<pre>
-  <code class="language-java">//默认的构建slot chain的建造者。请关注其中的SPI。
-@Spi(isDefault = true)
-public class DefaultSlotChainBuilder implements SlotChainBuilder {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="c1">//默认的构建slot chain的建造者。请关注其中的SPI。</span>
+<span class="nd">@Spi</span><span class="o">(</span><span class="n">isDefault</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultSlotChainBuilder</span> <span class="kd">implements</span> <span class="nc">SlotChainBuilder</span> <span class="o">{</span>
 
-    @Override
-    public ProcessorSlotChain build() {
-        ProcessorSlotChain chain = new DefaultProcessorSlotChain();
-        //采用SPI，那就看看META-INF中规定的processorSlot，看看有几种规则吧。贴在下面了
-        List&lt;ProcessorSlot&gt; sortedSlotList = SpiLoader.of(ProcessorSlot.class).loadInstanceListSorted();
-        //通过下面的列表我们知道了chain中依次加入了很多slot
-        for (ProcessorSlot slot : sortedSlotList) {
-            if (!(slot instanceof AbstractLinkedProcessorSlot)) {
-                RecordLog.warn("The ProcessorSlot(" + slot.getClass().getCanonicalName() + ") is not an instance of AbstractLinkedProcessorSlot, can't be added into ProcessorSlotChain");
-                continue;
-            }
-            //DefaultProcessorSlotChain中的addLast
-            chain.addLast((AbstractLinkedProcessorSlot&lt;?&gt;) slot);
-        }
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ProcessorSlotChain</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">ProcessorSlotChain</span> <span class="n">chain</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultProcessorSlotChain</span><span class="o">();</span>
+        <span class="c1">//采用SPI，那就看看META-INF中规定的processorSlot，看看有几种规则吧。贴在下面了</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ProcessorSlot</span><span class="o">&gt;</span> <span class="n">sortedSlotList</span> <span class="o">=</span> <span class="nc">SpiLoader</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">ProcessorSlot</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">loadInstanceListSorted</span><span class="o">();</span>
+        <span class="c1">//通过下面的列表我们知道了chain中依次加入了很多slot</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">ProcessorSlot</span> <span class="n">slot</span> <span class="o">:</span> <span class="n">sortedSlotList</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!(</span><span class="n">slot</span> <span class="k">instanceof</span> <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">))</span> <span class="o">{</span>
+                <span class="nc">RecordLog</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"The ProcessorSlot("</span> <span class="o">+</span> <span class="n">slot</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getCanonicalName</span><span class="o">()</span> <span class="o">+</span> <span class="s">") is not an instance of AbstractLinkedProcessorSlot, can't be added into ProcessorSlotChain"</span><span class="o">);</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">//DefaultProcessorSlotChain中的addLast</span>
+            <span class="n">chain</span><span class="o">.</span><span class="na">addLast</span><span class="o">((</span><span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;)</span> <span class="n">slot</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        return chain;
-    }
-}
+        <span class="k">return</span> <span class="n">chain</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <pre>
   <code class="language-txt">//文件名：sentinel/sentinel-core/src/main/resources/META-INF/services/com.alibaba.csp.sentinel.slotchain.ProcessorSlot
@@ -804,75 +845,79 @@ com.alibaba.csp.sentinel.slots.block.degrade.DegradeSlot
 
 <p>　　以上的这些slot已经被依次添加到了chain中了。然后调用DefaultProcessorSlotChain中的addLast完成责任链的创建。</p>
 
-<pre>
-  <code class="language-java">/*
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="cm">/*
 DefaultProcessorSlotChain的实现。他继承了ProcessorSlotChain，继承了AbstractLinkedProcessorSlot实现了ProcessorSlot。
 这一大坨的继承关系。其实仔细想想，也能明白。一个好的程序继承关系最多也就5层。不能再高了。再高了就不是一个好的设计方式了。
 ProcessorSlotChain是一个抽象类，比继承的对象多了两个方法，addFirst()和addLast()。这两个方法必须在继承类中具体实现。
-*/
-public class DefaultProcessorSlotChain extends ProcessorSlotChain {
+*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultProcessorSlotChain</span> <span class="kd">extends</span> <span class="nc">ProcessorSlotChain</span> <span class="o">{</span>
 
-    /*
+    <span class="cm">/*
     构造了一个first节点。并且重写了entry和exit方法。
     注意，这个变量指向的是他的父亲
-    */
-    AbstractLinkedProcessorSlot&lt;?&gt; first = new AbstractLinkedProcessorSlot&lt;Object&gt;() {
+    */</span>
+    <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;</span> <span class="n">first</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;()</span> <span class="o">{</span>
 
-        @Override
-        public void entry(Context context, ResourceWrapper resourceWrapper, Object t, int count, boolean prioritized, Object... args)
-            throws Throwable {
-            //调用父亲的fireEntry()。这个方法会在真正进入entry时触发。是由first节点进行触发。
-            super.fireEntry(context, resourceWrapper, t, count, prioritized, args);
-        }
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+            <span class="c1">//调用父亲的fireEntry()。这个方法会在真正进入entry时触发。是由first节点进行触发。</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">fireEntry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        @Override
-        public void exit(Context context, ResourceWrapper resourceWrapper, int count, Object... args) {
-            //调用父亲的fireExit()
-            super.fireExit(context, resourceWrapper, count, args);
-        }
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">exit</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//调用父亲的fireExit()</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">fireExit</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="o">}</span>
 
-    };
+    <span class="o">};</span>
     
-    //同理，构造一个end节点，初始值和first指向一致，下面有图。 
-    AbstractLinkedProcessorSlot&lt;?&gt; end = first;
+    <span class="c1">//同理，构造一个end节点，初始值和first指向一致，下面有图。 </span>
+    <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;</span> <span class="n">end</span> <span class="o">=</span> <span class="n">first</span><span class="o">;</span>
 
-    @Override
-    public void addFirst(AbstractLinkedProcessorSlot&lt;?&gt; protocolProcessor) {
-        protocolProcessor.setNext(first.getNext());
-        first.setNext(protocolProcessor);
-        if (end == first) {
-            end = protocolProcessor;
-        }
-    }
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addFirst</span><span class="o">(</span><span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;</span> <span class="n">protocolProcessor</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">protocolProcessor</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="n">first</span><span class="o">.</span><span class="na">getNext</span><span class="o">());</span>
+        <span class="n">first</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="n">protocolProcessor</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">end</span> <span class="o">==</span> <span class="n">first</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">protocolProcessor</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    /*
+    <span class="cm">/*
     插入到链表中，从链表尾开始插。
     注意，一个是赋值模型的next值。 一个是更新变量的引用。
-    */
-    @Override
-    public void addLast(AbstractLinkedProcessorSlot&lt;?&gt; protocolProcessor) {
-        //end的下一个节点指向变量传进来的slot。也就是first也指向了这个slot。注意这里的setNext方法。
-        end.setNext(protocolProcessor);
-        //end的指向更新，指向了新的slot
-        end = protocolProcessor;
-    }
+    */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addLast</span><span class="o">(</span><span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;</span> <span class="n">protocolProcessor</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//end的下一个节点指向变量传进来的slot。也就是first也指向了这个slot。注意这里的setNext方法。</span>
+        <span class="n">end</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="n">protocolProcessor</span><span class="o">);</span>
+        <span class="c1">//end的指向更新，指向了新的slot</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">protocolProcessor</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    /*
+    <span class="cm">/*
     这个是这个方法的setNext。父类也有一个setNext。
     像上面end.setNext()其实是调用的父亲的setNExt（）。不是这个方法。
     只有 this.setNext()或者setNext()才是用的这个方法。
-    */
-    @Override
-    public void setNext(AbstractLinkedProcessorSlot&lt;?&gt; next) {
-        addLast(next);
-    }
+    */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNext</span><span class="o">(</span><span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;?&gt;</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">addLast</span><span class="o">(</span><span class="n">next</span><span class="o">);</span>
+    <span class="o">}</span>
     
-    …………
+    <span class="err">…………</span>
 
-}
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　DefaultProcessorSlotChain中有两个AbstractLinkedProcessorSlot类型的变量：first和end，这就是链表的头结点和尾节点。</p>
 
@@ -882,7 +927,7 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-1.png" src="/images/default.jpg" alt="fist&amp;end" />
 </p>
 
-<p>　　当把第一个slot（<code>NodeSelectorSlot</code>）添加（<code>chain.addLast()</code>）到联表中。是这样的：</p>
+<p>　　当把第一个slot（<code class="language-plaintext highlighter-rouge">NodeSelectorSlot</code>）添加（<code class="language-plaintext highlighter-rouge">chain.addLast()</code>）到联表中。是这样的：</p>
 
 <p>
   <img class="lazy post-img" data-original="https://gitee.com/all_4_you/sentinel-tutorial/raw/master/sentinel-principle/sentinel-overall-introduce/images/slot-chain-2.png" src="/images/default.jpg" alt="fist&amp;end2" />
@@ -908,62 +953,78 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
 
 <p>　　回看entryWithPriority()方法。在创建玩成chain后。调用了这个方法：</p>
 
-<pre>
-  <code class="language-java">chain.entry(context, resourceWrapper, null, count, prioritized, args);
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="n">chain</span><span class="o">.</span><span class="na">entry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　这个方法最终调用的是</p>
 
-<pre>
-  <code class="language-java"> public class DefaultProcessorSlotChain extends ProcessorSlotChain {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultProcessorSlotChain</span> <span class="kd">extends</span> <span class="nc">ProcessorSlotChain</span> <span class="o">{</span>
 
-    …………
+    <span class="err">…………</span>
     
-    //其实这个方法最终调用的是first的transformEntry()
-    @Override
-    public void entry(Context context, ResourceWrapper resourceWrapper, Object t, int count, boolean prioritized, Object... args)
-        throws Throwable {
-        first.transformEntry(context, resourceWrapper, t, count, prioritized, args);
-    }
+    <span class="c1">//其实这个方法最终调用的是first的transformEntry()</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+        <span class="n">first</span><span class="o">.</span><span class="na">transformEntry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    …………
-}
+    <span class="err">…………</span>
+<span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　也就是说，DefaultProcessorSlotChain的entry实际是执行的first属性的transformEntry方法。</p>
 
 <p>　　而transformEntry方法会执行当前节点的entry方法，在DefaultProcessorSlotChain中first节点重写了entry方法，具体如下:</p>
 
-<pre>
-  <code class="language-java">public class DefaultProcessorSlotChain extends ProcessorSlotChain {
-        @Override
-        public void entry(Context context, ResourceWrapper resourceWrapper, Object t, int count, boolean prioritized, Object... args)
-            throws Throwable {
-            super.fireEntry(context, resourceWrapper, t, count, prioritized, args);
-        }
-}
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultProcessorSlotChain</span> <span class="kd">extends</span> <span class="nc">ProcessorSlotChain</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">.</span><span class="na">fireEntry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">t</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　我们看到，实际entry()又执行了super的fireEntry()。</p>
 
-<pre>
-  <code class="language-java">public abstract class AbstractLinkedProcessorSlot&lt;T&gt; implements ProcessorSlot&lt;T&gt; {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="nc">ProcessorSlot</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    @Override
-    public void fireEntry(Context context, ResourceWrapper resourceWrapper, Object obj, int count, boolean prioritized, Object... args)
-        throws Throwable {
-        if (next != null) {
-            //这个next指的就是下一个slot
-            next.transformEntry(context, resourceWrapper, obj, count, prioritized, args);
-        }
-    }
-}
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">fireEntry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//这个next指的就是下一个slot</span>
+            <span class="n">next</span><span class="o">.</span><span class="na">transformEntry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">obj</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　从这里看到，从fireEntry()中就开始传递执行entry了，这里会执行当前节点的下一个节点的transformEntry()。上面已经分析过了，transformEntry方法会触发当前节点的entry，也就是说fireEntry方法实际是触发了下一个节点的entry方法。具体的流程如下图所示：</p>
 
@@ -983,20 +1044,22 @@ public class DefaultProcessorSlotChain extends ProcessorSlotChain {
 
 <p>　　从上面得知，链表中在第一个位置的是NodeSelectorSlot。</p>
 
-<pre>
-  <code class="language-java">@Spi(isSingleton = false, order = Constants.ORDER_NODE_SELECTOR_SLOT)
-public class NodeSelectorSlot extends AbstractLinkedProcessorSlot&lt;Object&gt; {
+<div class="language-java highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code><span class="nd">@Spi</span><span class="o">(</span><span class="n">isSingleton</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">order</span> <span class="o">=</span> <span class="nc">Constants</span><span class="o">.</span><span class="na">ORDER_NODE_SELECTOR_SLOT</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NodeSelectorSlot</span> <span class="kd">extends</span> <span class="nc">AbstractLinkedProcessorSlot</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    /**
+    <span class="cm">/**
      * {@link DefaultNode}s of the same resource in different context.
-     */
-    private volatile Map&lt;String, DefaultNode&gt; map = new HashMap&lt;String, DefaultNode&gt;(10);
+     */</span>
+    <span class="kd">private</span> <span class="kd">volatile</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">DefaultNode</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">DefaultNode</span><span class="o">&gt;(</span><span class="mi">10</span><span class="o">);</span>
 
-    //关注这里。实际上调用的方法。 这个entry()方法的内部逻辑
-    @Override
-    public void entry(Context context, ResourceWrapper resourceWrapper, Object obj, int count, boolean prioritized, Object... args)
-        throws Throwable {
-        /*
+    <span class="c1">//关注这里。实际上调用的方法。 这个entry()方法的内部逻辑</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">entry</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="nc">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">prioritized</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+        <span class="cm">/*
          * It's interesting that we use context name rather resource name as the map key.
          *
          * Remember that same resource({@link ResourceWrapper#equals(Object)}) will share
@@ -1013,36 +1076,38 @@ public class NodeSelectorSlot extends AbstractLinkedProcessorSlot&lt;Object&gt; 
          * so what is the fastest way to get total statistics of the same resource?
          * The answer is all {@link DefaultNode}s with same resource name share one
          * {@link ClusterNode}. See {@link ClusterBuilderSlot} for detail.
-         */
-        DefaultNode node = map.get(context.getName());
-        if (node == null) {
-            synchronized (this) {
-                node = map.get(context.getName());
-                if (node == null) {
-                    node = new DefaultNode(resourceWrapper, null);
-                    HashMap&lt;String, DefaultNode&gt; cacheMap = new HashMap&lt;String, DefaultNode&gt;(map.size());
-                    cacheMap.putAll(map);
-                    cacheMap.put(context.getName(), node);
-                    map = cacheMap;
-                    // Build invocation tree
-                    ((DefaultNode) context.getLastNode()).addChild(node);
-                }
+         */</span>
+        <span class="nc">DefaultNode</span> <span class="n">node</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultNode</span><span class="o">(</span><span class="n">resourceWrapper</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+                    <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">DefaultNode</span><span class="o">&gt;</span> <span class="n">cacheMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">DefaultNode</span><span class="o">&gt;(</span><span class="n">map</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+                    <span class="n">cacheMap</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
+                    <span class="n">cacheMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">context</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">node</span><span class="o">);</span>
+                    <span class="n">map</span> <span class="o">=</span> <span class="n">cacheMap</span><span class="o">;</span>
+                    <span class="c1">// Build invocation tree</span>
+                    <span class="o">((</span><span class="nc">DefaultNode</span><span class="o">)</span> <span class="n">context</span><span class="o">.</span><span class="na">getLastNode</span><span class="o">()).</span><span class="na">addChild</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+                <span class="o">}</span>
 
-            }
-        }
-        context.setCurNode(node);
-        //调用下一个节点的entry()
-        fireEntry(context, resourceWrapper, node, count, prioritized, args);
-    }
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">context</span><span class="o">.</span><span class="na">setCurNode</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+        <span class="c1">//调用下一个节点的entry()</span>
+        <span class="n">fireEntry</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">node</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">prioritized</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
 
-    @Override
-    public void exit(Context context, ResourceWrapper resourceWrapper, int count, Object... args) {
-        fireExit(context, resourceWrapper, count, args);
-    }
-}
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">exit</span><span class="o">(</span><span class="nc">Context</span> <span class="n">context</span><span class="o">,</span> <span class="nc">ResourceWrapper</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="kt">int</span> <span class="n">count</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">fireExit</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">resourceWrapper</span><span class="o">,</span> <span class="n">count</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
 </code>
-</pre>
+    </pre>
+  </div>
+</div>
 
 <p>　　执行完业务逻辑处理后，调用了fireEntry()方法，由此触发了下一个节点的entry方法。此时我们就知道了sentinel的责任链就是这样传递的：每个Slot节点执行完自己的业务后，会调用fireEntry来触发下一个节点的entry方法。因为每个slot的逻辑都不太一样，所以这里就不展开了，我将来会写每个slot的分析的。</p>
 

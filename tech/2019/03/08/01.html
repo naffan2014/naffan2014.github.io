@@ -3,28 +3,29 @@
   <head>
     
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
+<!-- Begin Jekyll SEO tag v2.9.0 -->
 <title>git的rebase可以实现合并commit | 拿饭网</title>
-<meta name="generator" content="Jekyll v3.9.0" />
+<meta name="generator" content="Jekyll v4.4.1" />
 <meta property="og:title" content="git的rebase可以实现合并commit" />
 <meta name="author" content="张一帆" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。" />
-<meta property="og:description" content="　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。" />
+<meta name="twitter:description" property="og:description" content="　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。" />
 <link rel="canonical" href="http://localhost:4000/tech/2019/03/08/01.html" />
 <meta property="og:url" content="http://localhost:4000/tech/2019/03/08/01.html" />
 <meta property="og:site_name" content="拿饭网" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-03-08T00:00:00+08:00" />
+<meta property="article:modified_time" content="2019-03-08T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="git的rebase可以实现合并commit" />
+<meta name="twitter:title" content="git的rebase可以实现合并commit" />
 <meta name="twitter:site" content="@naffan2011" />
 <meta name="twitter:creator" content="@张一帆" />
 <meta property="fb:admins" content="张一帆" />
 <meta property="article:publisher" content="张一帆" />
 <meta property="fb:app_id" content="100002835701051" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/08/01.html"},"description":"　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。","datePublished":"2019-03-08T00:00:00+08:00","author":{"@type":"Person","name":"张一帆"},"@type":"BlogPosting","url":"http://localhost:4000/tech/2019/03/08/01.html","headline":"git的rebase可以实现合并commit","dateModified":"2019-03-08T00:00:00+08:00","@context":"https://schema.org"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"张一帆"},"dateModified":"2019-03-08T00:00:00+08:00","datePublished":"2019-03-08T00:00:00+08:00","description":"　　玩了那么多年的git了，现如今你只会add,commit,push,pull,merge，你都不好意思说你会git。chrrey-pick , filter branch, rebase等操作你还是需要盘一下的。","headline":"git的rebase可以实现合并commit","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tech/2019/03/08/01.html"},"url":"http://localhost:4000/tech/2019/03/08/01.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -147,8 +148,8 @@ var _hmt = _hmt || [];
 
 <p>　　我们可以从图中看到，我首先创建了一个test文件。我们将第一行写入并置为第一次提交。之后再插入第二行作为第二行提交。现在，我想把第二次提交和第一次提交合并。这样，就不会有人再知道我曾经有过第二次提交了。这个操作就是rebase</p>
 
-<pre><code>git rebase -i HEAD~2
-</code></pre>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase -i HEAD~2
+</code></pre></div></div>
 
 <p>　　我们用上面的命令，就可以将最近的两次提交合并到最早的提交。之后会出现一个界面。</p>
 
