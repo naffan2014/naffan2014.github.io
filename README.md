@@ -54,4 +54,39 @@
 * 增加微博小插件
 
 
+### 本地预览
+
+仓库使用双分支结构:`docs` 为源码分支,`master` 为 GitHub Pages 静态产物分支。
+
+```bash
+# 切到 docs 分支
+git checkout docs
+
+# 安装依赖(首次或 Gemfile 变更后)
+bundle install
+
+# 启动本地预览,访问 http://127.0.0.1:4000
+bundle exec jekyll serve
+```
+
+> 要求 Ruby 3.x+(已在 Ruby 4.0 + Jekyll 4.4 上验证)。
+
+### 发布到 GitHub Pages
+
+写完文章、提交到 `docs` 后,执行:
+
+```bash
+bash publish-gh-pages.sh
+```
+
+脚本会:
+
+1. `bundle exec jekyll build` 生成 `_site/`
+2. 若有未提交改动,自动 `git add -A` 并提交到 `docs`
+3. 用 `git subtree` 把 `_site/` 内容推送到 `origin/master`
+4. 清理本地 `_site/`
+
+注意必须用 `bash` 而不是 `sh` 执行,因为脚本用了 `set -o pipefail`。
+
+
 
