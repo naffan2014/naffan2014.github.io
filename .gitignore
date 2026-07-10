@@ -4,3 +4,4 @@
 _posts/media
 _site/
 Gemfile.lock.bak
+.docker/

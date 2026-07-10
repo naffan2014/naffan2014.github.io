@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby RUBY_VERSION
+# ruby RUBY_VERSION  # Docker 环境下 Ruby 版本由镜像决定,不强制约束
 
 # Hello! This is where you manage which Jekyll version is used to run.
 # When you want to use a different version, change it below, save the

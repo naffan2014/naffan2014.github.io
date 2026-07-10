@@ -58,6 +58,22 @@
 
 仓库使用双分支结构:`docs` 为源码分支,`master` 为 GitHub Pages 静态产物分支。
 
+#### 方式一:Docker(推荐,换电脑零配置)
+
+只需安装 Docker,无需关心 Ruby/Jekyll 版本:
+
+```bash
+# 切到 docs 分支
+git checkout docs
+
+# 启动本地预览,访问 http://localhost:4000
+docker compose up
+```
+
+首次会自动构建镜像(约 2-3 分钟),之后秒启。文件改动会自动重建并刷新浏览器(已启用 livereload)。
+
+#### 方式二:本地 Ruby 环境
+
 ```bash
 # 切到 docs 分支
 git checkout docs
@@ -76,6 +92,10 @@ bundle exec jekyll serve
 写完文章、提交到 `docs` 后,执行:
 
 ```bash
+# Docker 方式
+docker compose run --rm publish
+
+# 或本地 Ruby 方式
 bash publish-gh-pages.sh
 ```
 

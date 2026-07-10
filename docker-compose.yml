@@ -1,0 +1,51 @@
+# Jekyll 博客 Docker 编排
+# 用法:
+#   docker compose up              # 启动本地预览,访问 http://localhost:4000
+#   docker compose run --rm build  # 仅构建到 _site/
+#   docker compose run --rm publish # 构建并发布到 origin/master(需要 git 凭证)
+#
+# 首次运行会自动构建镜像(约 2-3 分钟)。
+
+services:
+  # 本地预览服务:启动后访问 http://localhost:4000
+  serve:
+    build: .
+    image: naffan-jekyll
+    container_name: naffan-jekyll-serve
+    ports:
+      - "4000:4000"
+    volumes:
+      # 挂载源码,文件改动实时重建
+      - .:/srv/jekyll
+    environment:
+      - JEKYLL_ENV=development
+    # --livereload 启用浏览器自动刷新
+    command: bundle exec jekyll serve --host 0.0.0.0 --port 4000 --livereload
+
+  # 仅构建:_site/ 输出到当前目录(供手动检查产物)
+  build:
+    image: naffan-jekyll
+    container_name: naffan-jekyll-build
+    volumes:
+      - .:/srv/jekyll
+    environment:
+      - JEKYLL_ENV=production
+    command: bundle exec jekyll build
+
+  # 构建+发布:执行 publish-gh-pages.sh
+  # 注意:发布需要容器内能推送 git。
+  # - 挂载 ~/.gitconfig 和 ~/.ssh 让容器复用宿主机的 git 凭证
+  # - 如果用 ssh-agent,启动前在宿主机执行 ssh-agent,并设 SSH_AUTH_SOCK
+  publish:
+    image: naffan-jekyll
+    container_name: naffan-jekyll-publish
+    volumes:
+      - .:/srv/jekyll
+      # 转发宿主机 git 配置和凭证
+      - ~/.gitconfig:/root/.gitconfig:ro
+      - ~/.ssh:/root/.ssh:ro
+      # ssh-agent 转发(可选,如使用 ssh-agent 解锁私钥)
+      - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
+    command: bash publish-gh-pages.sh
