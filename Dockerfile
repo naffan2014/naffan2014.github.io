@@ -8,10 +8,12 @@ RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g; s|security.debian.org|mirrors
 # 安装 jekyll 依赖的系统包
 # - build-essential: 编译 native gem 扩展 (nokogiri/ffi/eventmachine 等)
 # - git: subtree split 发布需要
+# - openssh-client: publish 容器走 SSH remote 推送需要 ssh 命令
 # - ca-certificates: bundle install 拉 https gems
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential \
       git \
+      openssh-client \
       ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
