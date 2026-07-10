@@ -8,9 +8,12 @@ set -euo pipefail
 BRANCH="${1:-master}"
 SOURCE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-# 1. 构建(先清理 _site 和缓存,避免残留导致偶发 ENOENT)
+# 1. 构建(先清理 _site 内容和缓存,避免残留导致偶发 ENOENT)
+# 注意:不删 _site 目录本身——publish 容器里它是匿名卷挂载点,删挂载点会报
+# "Device or resource busy"。只清空其内容即可。
 echo ">> jekyll build"
-rm -rf _site .jekyll-cache .jekyll-metadata
+rm -rf .jekyll-cache .jekyll-metadata
+find _site -mindepth 1 -delete 2>/dev/null || true
 if [ -f Gemfile ]; then
   bundle exec jekyll build
 else
@@ -44,7 +47,7 @@ if ! git push origin "$SPLIT_SHA:$BRANCH"; then
   git push --force origin "$SPLIT_SHA:$BRANCH"
 fi
 
-# 4. 清理本地构建产物
-rm -rf _site
+# 4. 清理本地构建产物(只清空内容,保留目录——匿名卷挂载点不能删)
+find _site -mindepth 1 -delete 2>/dev/null || true
 
 echo ">> 完成。当前分支: $(git rev-parse --abbrev-ref HEAD)"
