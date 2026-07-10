@@ -112,10 +112,10 @@ comments:
   # Giscus options › https://giscus.app
   giscus:
     repo: naffan2014/naffan2014.github.io
-    repo_id: # 在 https://giscus.app 生成后填入
-    category: Comments
-    category_id: # 在 https://giscus.app 生成后填入
-    mapping: pathname
+    repo_id: MDEwOlJlcG9zaXRvcnkzODQxOTI1Mw==
+    category: General
+    category_id: MDE4OkRpc2N1c3Npb25DYXRlZ29yeTMyNTQ3MTg2
+    mapping: title
     strict: 0
     input_position: bottom
     lang: zh-CN
