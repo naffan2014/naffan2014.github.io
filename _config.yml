@@ -25,7 +25,7 @@ social:
     - https://plus.google.com/113953531946938254396
     - http://www.linkedin.com/profile/view?id=AAMAAB25Ex8BUlOxXGwwZzg4lJDABOM_75yZZ9c
 ##Make sure to edit the above fields, especially for disqus.
-highlighter: pygments
+highlighter: rouge
 markdown: kramdown
 kramdown:
   input: GFM

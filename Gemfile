@@ -9,19 +9,8 @@ ruby RUBY_VERSION
 #
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
-gem "jekyll", "3.9"
-gem "liquid", "~> 4.0", ">= 4.0.4" # 4.0.3 在 Ruby 3.2+ 上调用已删除的 tainted?
+gem "jekyll", "~> 4.4"
 gem "webrick"
-gem "logger" # Ruby 4.0 移除了 default logger,jekyll 3.9 仍依赖
-gem "csv"    # Ruby 3.4+ 移除了 default csv,jekyll 3.9 仍依赖
-gem "base64" # safe_yaml 等依赖
-gem "bigdecimal"
-gem "benchmark"
-gem "pathname"
-gem "mutex_m"
-gem "drb"
-gem "connection_pool"
-gem "ruby2_keywords"
 
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 #gem "minima", "~> 2.0"
