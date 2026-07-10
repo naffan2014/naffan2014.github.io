@@ -1,41 +1,49 @@
 #!/bin/bash
+# 发布脚本:在 docs 分支构建 _site,推送到 origin/master (GitHub Pages)
+# 用法: sh publish-gh-pages.sh [master]
+# 用 git subtree 替代旧的 filter-branch,避免强推所有分支和删除本地 master。
 
-function exe_cmd() {
-    echo $1
-    eval $1
-}
+set -euo pipefail
 
-if [ $# -lt 1 ]; then
-    echo "Usage: sh $0 master"
-fi
+BRANCH="${1:-master}"
+SOURCE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-branch=$1
-if [ -z "$branch" ]; then
-    branch='master'
-fi
-
-exe_cmd "jekyll build"
-if [ ! -d '_site' ];then
-    echo "not content to be published"
-    exit
-fi
-
-exe_cmd "git commit -a -m 'jekyll build'"
-exe_cmd "git branch -D $branch"
-error_code=$?
-if [ $error_code != 0 ]; then
-    echo 'Delete branch $branch fail.'
-    exit
-fi
-
-exe_cmd "git checkout -b $branch"
-error_code=$?
-if [ $error_code != 0 ];then
-    echo 'Switch branch $branch fail.'
-    exit
+# 1. 构建
+echo ">> jekyll build"
+if [ -f Gemfile ]; then
+  bundle exec jekyll build
 else
-    exe_cmd "git filter-branch --subdirectory-filter _site/ -f"
-    exe_cmd "git push --all --force origin"
-    exe_cmd "rm -Rf _site/"
-    exe_cmd "git checkout docs"
+  jekyll build
 fi
+
+if [ ! -d "_site" ] || [ -z "$(ls -A _site 2>/dev/null)" ]; then
+  echo "!! _site 为空或不存在,终止"
+  exit 1
+fi
+
+# 2. 提交 docs 上的源码改动(包含新文件)
+if ! (git diff --quiet && git diff --cached --quiet); then
+  echo ">> 检测到未提交改动,先提交 docs"
+  git add -A
+  git commit -m "chore: commit before publish at $(date -u +%FT%TZ)"
+else
+  echo ">> 无未提交改动"
+fi
+
+# 3. 用 subtree 把 _site 内容推到 origin/$BRANCH
+# 先 split 出 _site 对应的 commit,再 push。历史不一致时用 --force 强推。
+echo ">> 推送 _site 到 origin/$BRANCH"
+SPLIT_SHA="$(git subtree split --prefix=_site)"
+if [ -z "$SPLIT_SHA" ]; then
+  echo "!! subtree split 失败,终止"
+  exit 1
+fi
+if ! git push origin "$SPLIT_SHA:$BRANCH"; then
+  echo ">> 普通推送失败(可能是历史不一致),改用强推"
+  git push --force origin "$SPLIT_SHA:$BRANCH"
+fi
+
+# 4. 清理本地构建产物
+rm -rf _site
+
+echo ">> 完成。当前分支: $(git rev-parse --abbrev-ref HEAD)"
