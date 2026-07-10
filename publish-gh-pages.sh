@@ -43,10 +43,11 @@ fi
 #   - 推到 origin/$BRANCH
 echo ">> 推送 _site 到 origin/$BRANCH"
 REMOTE_SHA="$(git rev-parse origin/$BRANCH 2>/dev/null || true)"
-TMP_INDEX="$(mktemp)"
+TMP_INDEX="$(mktemp -u)"
 trap 'rm -f "$TMP_INDEX"' EXIT
 
 # 在独立索引里,把 _site 目录作为根 add 进来
+# (TMP_INDEX 文件不存在时 git 会自动创建,不要用 mktemp 预创建空文件)
 GIT_INDEX_FILE="$TMP_INDEX" git --work-tree="_site" add -A
 TREE_SHA="$(GIT_INDEX_FILE="$TMP_INDEX" git write-tree)"
 if [ -z "$TREE_SHA" ]; then
