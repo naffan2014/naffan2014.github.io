@@ -1,16 +1,18 @@
 # Jekyll 博客 Docker 编排
 # 用法:
 #   docker compose up              # 启动本地预览,访问 http://localhost:4000
+#   docker compose up --build      # 强制重新构建镜像
 #   docker compose run --rm build  # 仅构建到 _site/
 #   docker compose run --rm publish # 构建并发布到 origin/master(需要 git 凭证)
 #
-# 首次运行会自动构建镜像(约 2-3 分钟)。
+# 镜像已发布到 Docker Hub: naffan2015/naffan-jekyll
+# 换电脑时 docker compose up 会自动拉取,无需本地构建。
 
 services:
   # 本地预览服务:启动后访问 http://localhost:4000
   serve:
-    build: .
-    image: naffan-jekyll
+    image: naffan2015/naffan-jekyll:latest
+    build: .  # 镜像本地不存在时才构建;--build 强制重建
     container_name: naffan-jekyll-serve
     ports:
       - "4000:4000"
@@ -24,7 +26,7 @@ services:
 
   # 仅构建:_site/ 输出到当前目录(供手动检查产物)
   build:
-    image: naffan-jekyll
+    image: naffan2015/naffan-jekyll:latest
     container_name: naffan-jekyll-build
     volumes:
       - .:/srv/jekyll
@@ -37,7 +39,7 @@ services:
   # - 挂载 ~/.gitconfig 和 ~/.ssh 让容器复用宿主机的 git 凭证
   # - 如果用 ssh-agent,启动前在宿主机执行 ssh-agent,并设 SSH_AUTH_SOCK
   publish:
-    image: naffan-jekyll
+    image: naffan2015/naffan-jekyll:latest
     container_name: naffan-jekyll-publish
     volumes:
       - .:/srv/jekyll

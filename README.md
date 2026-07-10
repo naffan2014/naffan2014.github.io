@@ -60,19 +60,60 @@
 
 #### 方式一:Docker(推荐,换电脑零配置)
 
-只需安装 Docker,无需关心 Ruby/Jekyll 版本:
+只需安装 Docker,无需关心 Ruby/Jekyll 版本。镜像已发布到 Docker Hub: [`naffan2015/naffan-jekyll`](https://hub.docker.com/r/naffan2015/naffan-jekyll)。
+
+##### 1. 安装 Docker
+
+| 系统 | 安装方式 |
+|---|---|
+| **macOS** | 下载 [Docker Desktop for Mac](https://docs.docker.com/desktop/install/mac-install/) → 安装后启动 Docker Desktop(菜单栏出现鲸鱼图标) |
+| **Windows** | 下载 [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/) → 安装后启动 Docker Desktop |
+| **Linux** | `curl -fsSL https://get.docker.com \| sh` 然后执行 `sudo systemctl start docker` |
+
+验证安装:
 
 ```bash
-# 切到 docs 分支
+docker --version
+docker compose version
+```
+
+##### 2. 国内网络配置(可选,但推荐)
+
+国内拉镜像慢或失败时,在 Docker Desktop → Settings → Docker Engine 里加镜像加速器:
+
+```json
+{
+  "registry-mirrors": [
+    "https://docker.1ms.run",
+    "https://docker.m.daocloud.io"
+  ]
+}
+```
+
+点 Apply & Restart。
+
+##### 3. 启动预览
+
+```bash
+git clone git@github.com:naffan2014/naffan2014.github.io.git
+cd naffan2014.github.io
 git checkout docs
 
 # 启动本地预览,访问 http://localhost:4000
 docker compose up
 ```
 
-首次会自动构建镜像(约 2-3 分钟),之后秒启。文件改动会自动重建并刷新浏览器(已启用 livereload)。
+首次会从 Docker Hub 拉镜像(约 300MB,几分钟),之后秒启。文件改动会自动重建并刷新浏览器(已启用 livereload)。
+
+> 如果改了 Dockerfile 或 Gemfile,需要重建镜像:`docker compose up --build`
+
+##### 4. 停止预览
+
+在运行 `docker compose up` 的终端按 `Ctrl+C`,或另开终端执行 `docker compose down`。
 
 #### 方式二:本地 Ruby 环境
+
+不想用 Docker 也可以直接装 Ruby:
 
 ```bash
 # 切到 docs 分支
@@ -107,6 +148,18 @@ bash publish-gh-pages.sh
 4. 清理本地 `_site/`
 
 注意必须用 `bash` 而不是 `sh` 执行,因为脚本用了 `set -o pipefail`。
+
+### 更新 Docker 镜像
+
+当修改了 `Dockerfile`、`Gemfile` 或 Ruby 版本时,需要重新构建并推送到 Docker Hub:
+
+```bash
+# 登录(首次)
+docker login -u naffan2015
+
+# 构建并推送
+bash docker-push.sh
+```
 
 
 

@@ -10,3 +10,7 @@ Gemfile.lock.bak
 *.log
 jmeter.log
 node_modules/
+# 这些脚本/文档不进主镜像(由 docker-push.sh 单独处理)
+docker-push.sh
+publish-gh-pages.sh
+README.md
