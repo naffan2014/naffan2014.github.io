@@ -43,6 +43,8 @@ services:
     container_name: naffan-jekyll-publish
     volumes:
       - .:/srv/jekyll
+      # 匿名卷隔离 _site:publish 构建和 rm -rf _site 都不会影响宿主机/serve
+      - /srv/jekyll/_site
       # 转发宿主机 git 配置和凭证
       - ~/.gitconfig:/root/.gitconfig:ro
       - ~/.ssh:/root/.ssh:ro

@@ -8,8 +8,9 @@ set -euo pipefail
 BRANCH="${1:-master}"
 SOURCE_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-# 1. 构建
+# 1. 构建(先清理 _site 和缓存,避免残留导致偶发 ENOENT)
 echo ">> jekyll build"
+rm -rf _site .jekyll-cache .jekyll-metadata
 if [ -f Gemfile ]; then
   bundle exec jekyll build
 else
