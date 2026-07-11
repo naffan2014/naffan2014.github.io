@@ -134,6 +134,9 @@ pwa:
     deny_paths:
 
 paginate: 10
+# 分页路径:带尾斜杠,让链接 /page2/ 与目录 page2/index.html 匹配。
+# 不带斜杠时,又拍云对象存储不做 301 重定向,会返回 503。
+paginate_path: /page:num/
 
 # 站点 base URL
 baseurl: ""
