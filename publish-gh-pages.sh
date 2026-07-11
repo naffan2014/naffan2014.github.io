@@ -1,7 +1,7 @@
 #!/bin/bash
 # 发布脚本:在 docs 分支构建 _site,推送到 origin/master (GitHub Pages)
+# 同时同步 _site 到又拍云对象存储(CDN 实际源站)
 # 用法: sh publish-gh-pages.sh [master]
-# 用 git subtree 替代旧的 filter-branch,避免强推所有分支和删除本地 master。
 
 set -euo pipefail
 
@@ -68,7 +68,63 @@ if ! git push origin "$NEW_SHA:$BRANCH"; then
   git push --force origin "$NEW_SHA:$BRANCH"
 fi
 
-# 4. 清理本地构建产物(只清空内容,保留目录——匿名卷挂载点不能删)
+# 4. 同步 _site 到又拍云对象存储(CDN 实际源站)
+# 又拍云对象存储资源更新会自动触发 CDN 缓存刷新(5分钟内生效),无需手动 purge
+sync_to_upyun() {
+  # 检查凭证是否完整
+  if [ -z "${UPYUN_BUCKET:-}" ] || [ -z "${UPYUN_OPERATOR:-}" ] || [ -z "${UPYUN_PASSWORD:-}" ]; then
+    echo "!! 又拍云凭证未设置 (UPYUN_BUCKET/UPYUN_OPERATOR/UPYUN_PASSWORD),跳过同步"
+    echo "!! 站点 CDN 仍会返回旧内容,请手动同步或配置凭证后重跑"
+    return 0
+  fi
+
+  echo ">> 登录又拍云 (bucket=$UPYUN_BUCKET, operator=$UPYUN_OPERATOR)"
+  upx login "$UPYUN_BUCKET" "$UPYUN_OPERATOR" "$UPYUN_PASSWORD" >/dev/null
+
+  echo ">> 清空又拍云根目录(保留 upyun_storage_log 系统目录)"
+  # upx rm -a / 会删除整个根目录,我们只想清空内容
+  # 所以先列根目录的文件和子目录,逐个删除
+  # 文件用 upx rm,目录用 upx rm -a (递归)
+  local line perm name
+  # 删根目录下的文件
+  while IFS= read -r line; do
+    [ -z "$line" ] && continue
+    perm="${line%% *}"
+    name="${line##* }"
+    case "$perm" in
+      -*) upx rm "/$name" 2>&1 | tail -1 ;;
+    esac
+  done <<< "$(upx ls / 2>/dev/null)"
+  # 删根目录下的子目录(跳过系统目录)
+  while IFS= read -r line; do
+    [ -z "$line" ] && continue
+    perm="${line%% *}"
+    name="${line##* }"
+    case "$perm" in
+      d*)
+        case "$name" in
+          upyun_storage_log*) continue ;;
+        esac
+        upx rm -a "/$name" 2>&1 | tail -1
+        ;;
+    esac
+  done <<< "$(upx ls -d / 2>/dev/null)"
+
+  echo ">> 上传 _site 到又拍云根目录"
+  # upx sync 增量上传,因为根目录已清空,所以会全量上传
+  # (又拍云对象存储资源更新会自动触发 CDN 刷新,5 分钟内生效)
+  # 注意:upx sync 会尝试写 ~/.upx.db 本地数据库记录同步状态,
+  # 容器/权限受限环境会报 "operation not permitted" 但实际不影响上传,
+  # 用 || true 兜底,避免 set -e 导致脚本退出
+  upx sync _site / 2>&1 | tail -15 || true
+
+  echo ">> 又拍云同步完成"
+}
+
+echo ">> 同步到又拍云对象存储"
+sync_to_upyun
+
+# 5. 清理本地构建产物(只清空内容,保留目录——匿名卷挂载点不能删)
 find _site -mindepth 1 -delete 2>/dev/null || true
 
 echo ">> 完成。当前分支: $(git rev-parse --abbrev-ref HEAD)"

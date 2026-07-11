@@ -38,6 +38,7 @@ services:
   # 注意:发布走 SSH remote,容器复用宿主机 ~/.ssh 私钥推送,无需密码。
   # - 不挂 ~/.gitconfig(里面有 macOS 专属的 osxkeychain helper,容器内不可用)
   # - git 身份用环境变量注入,用于 publish 脚本里的 docs 自动提交
+  # - 又拍云凭证从 .env 读取,同步 _site 到对象存储(CDN 实际源站)
   publish:
     image: naffan2015/naffan-jekyll:latest
     container_name: naffan-jekyll-publish
@@ -52,4 +53,8 @@ services:
       - GIT_AUTHOR_EMAIL=naffan2012@icloud.com
       - GIT_COMMITTER_NAME=naffan2014
       - GIT_COMMITTER_EMAIL=naffan2012@icloud.com
+      # 又拍云对象存储凭证(从 .env 文件读取,.env 已在 .gitignore)
+      - UPYUN_BUCKET=${UPYUN_BUCKET:-}
+      - UPYUN_OPERATOR=${UPYUN_OPERATOR:-}
+      - UPYUN_PASSWORD=${UPYUN_PASSWORD:-}
     command: bash publish-gh-pages.sh
