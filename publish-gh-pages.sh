@@ -81,42 +81,13 @@ sync_to_upyun() {
   echo ">> 登录又拍云 (bucket=$UPYUN_BUCKET, operator=$UPYUN_OPERATOR)"
   upx login "$UPYUN_BUCKET" "$UPYUN_OPERATOR" "$UPYUN_PASSWORD" >/dev/null
 
-  echo ">> 清空又拍云根目录(保留 upyun_storage_log 系统目录)"
-  # upx rm -a / 会删除整个根目录,我们只想清空内容
-  # 所以先列根目录的文件和子目录,逐个删除
-  # 文件用 upx rm,目录用 upx rm -a (递归)
-  local line perm name
-  # 删根目录下的文件
-  while IFS= read -r line; do
-    [ -z "$line" ] && continue
-    perm="${line%% *}"
-    name="${line##* }"
-    case "$perm" in
-      -*) upx rm "/$name" 2>&1 | tail -1 ;;
-    esac
-  done <<< "$(upx ls / 2>/dev/null)"
-  # 删根目录下的子目录(跳过系统目录)
-  while IFS= read -r line; do
-    [ -z "$line" ] && continue
-    perm="${line%% *}"
-    name="${line##* }"
-    case "$perm" in
-      d*)
-        case "$name" in
-          upyun_storage_log*) continue ;;
-        esac
-        upx rm -a "/$name" 2>&1 | tail -1
-        ;;
-    esac
-  done <<< "$(upx ls -d / 2>/dev/null)"
-
-  echo ">> 上传 _site 到又拍云根目录"
-  # upx sync 增量上传,因为根目录已清空,所以会全量上传
-  # (又拍云对象存储资源更新会自动触发 CDN 刷新,5 分钟内生效)
-  # 注意:upx sync 会尝试写 ~/.upx.db 本地数据库记录同步状态,
-  # 容器/权限受限环境会报 "operation not permitted" 但实际不影响上传,
-  # 用 || true 兜底,避免 set -e 导致脚本退出
-  upx sync _site / 2>&1 | tail -15 || true
+  echo ">> 同步 _site 到又拍云根目录 (--delete --strong)"
+  # 关键:必须用 --delete,否则远程已存在但本地没改动的文件(如旧的 index.html)
+  # 不会被覆盖,sync 增量比对 mtime 会跳过,导致首页等内容停留在旧版本。
+  # --strong 强一致模式,绕过 upx 本地 db 缓存,避免漏判。
+  # 注意:upx sync 会尝试写 ~/.upx.db,容器权限受限环境可能报
+  # "operation not permitted" 但实际不影响上传,用 || true 兜底。
+  upx sync --delete --strong _site / 2>&1 | tail -20 || true
 
   echo ">> 又拍云同步完成"
 }
