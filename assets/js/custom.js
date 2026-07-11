@@ -207,3 +207,49 @@
     scanAllImages();
   }, 3000);
 })();
+
+/* === 阅读进度条 === */
+(function () {
+  "use strict";
+
+  function initReadingProgress() {
+    if (document.getElementById("reading-progress-bar")) return;
+
+    var bar = document.createElement("div");
+    bar.id = "reading-progress-bar";
+    bar.className = "reading-progress-bar";
+    document.body.appendChild(bar);
+
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var scrollHeight = document.documentElement.scrollHeight;
+      var clientHeight = document.documentElement.clientHeight;
+      var max = scrollHeight - clientHeight;
+      var pct = max > 0 ? (scrollTop / max) * 100 : 0;
+      bar.style.width = pct + "%";
+      // 顶部时隐藏,避免遮挡导航
+      bar.style.opacity = scrollTop < 10 ? "0" : "1";
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(function () {
+          update();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initReadingProgress);
+  } else {
+    initReadingProgress();
+  }
+})();

@@ -1,6 +1,10 @@
 <!-- 自定义注入:在 Chirpy 主题基础上扩展破损图片占位等定制功能 -->
 
-<!-- 破损图片占位样式 -->
+<!-- 字体升级:思源宋体(正文)+ Inter(标题)+ JetBrains Mono(代码),用 font.im 镜像加速国内访问 -->
+<link rel="preconnect" href="https://fonts.font.im" crossorigin>
+<link rel="stylesheet" href="https://fonts.font.im/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap">
+
+<!-- 自定义样式:破损图占位 + 字体/进度条/卡片/代码块/引用块微调 -->
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
 
 <!-- 破损图片占位脚本(放在 head,捕获阶段监听 error,确保能拦截到所有 img) -->
