@@ -4,7 +4,7 @@
   <id>https://naffan.cn/</id>
   <title>拿饭网</title>
   <subtitle>拿饭网是一个私人博客系统,采用 jekyll 博客系统部署在 GitHub-Pages 服务上。拿饭网内的文章均出自作者,作者以技术为导向同时兼顾自己的生活与对经济的观点。</subtitle>
-  <updated>2026-07-11T14:00:33+08:00</updated>
+  <updated>2026-07-11T14:19:45+08:00</updated>
   <author>
     <name>张一帆</name>
     <uri>https://naffan.cn/</uri>
@@ -17,6 +17,30 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>博客换发新的活力</title>
+    <link href="https://naffan.cn/posts/2026-07-11-1/" rel="alternate" type="text/html" title="博客换发新的活力" />
+    <published>2026-07-11T00:00:00+08:00</published>
+  
+    <updated>2026-07-11T00:00:00+08:00</updated>
+  
+    <id>https://naffan.cn/posts/2026-07-11-1/</id>
+    <content type="text/html" src="https://naffan.cn/posts/2026-07-11-1/" />
+    <author>
+      <name>张一帆</name>
+    </author>
+
+  
+    
+    <category term="tech" />
+    
+  
+
+  <summary>用 Docker 重建 Jekyll 博客工作流，让老博客重新焕发活力</summary>
+
+  </entry>
 
   
   <entry>
@@ -111,30 +135,6 @@
   
 
   <summary>FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge. No matter if they were designed by some standards committee, the community or a corporation. It is also highly portable: FFmpeg compiles, runs, and passe...</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>借助DDD思想，实践出质量检测系统</title>
-    <link href="https://naffan.cn/posts/2021-09-12-01/" rel="alternate" type="text/html" title="借助DDD思想，实践出质量检测系统" />
-    <published>2021-09-12T00:00:00+08:00</published>
-  
-    <updated>2026-07-11T00:50:11+08:00</updated>
-  
-    <id>https://naffan.cn/posts/2021-09-12-01/</id>
-    <content type="text/html" src="https://naffan.cn/posts/2021-09-12-01/" />
-    <author>
-      <name>张一帆</name>
-    </author>
-
-  
-    
-    <category term="tech" />
-    
-  
-
-  <summary>DDD 是 Domain-Driven Design 的缩写。其主要的思想是，我们在设计软件时，先从业务出发，理解真实的业务含义，将业务中的一些概念吸收到软件建模中来，避免造出“大而无用”软件。也避免软件设计没有内在联系，否则一团散沙，无法继续演进。   前言  　　大屏项目借助链家门店中的终端设备（比如电视，pad等），构建智慧门店各场景的解决方案，助力门店业务发展。同时，协同交易签约场景打造居住服务中心智慧标杆，提供全新体验并优化签约流程。  　　我们希望借助大屏深挖签约过程中更有价值的需求点，比如在签约过程中会录音录像（经过客业双方授权）。我们借助录制的视频可以保存下来作为客业（客户业主）双方斡旋时的证据，也能联合内部AI能力借助ASR转化来检测签约经理在服务环节中的关键讲解进而提升签约经理的服务质量。于是，我们就对此需求进行了立项，立项通过后进入了开发环节。  项目背景  　...</summary>
 
   </entry>
 
