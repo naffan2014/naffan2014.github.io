@@ -96,8 +96,12 @@ bundle exec jekyll serve
 写完文章、提交到 `docs` 后,执行:
 
 ```bash
-# Docker 方式
-docker compose run --rm publish
+# Docker 方式(同时推送 GitHub master + 同步又拍云)
+docker compose run --rm \
+  -e UPYUN_BUCKET=naffanwpstorage \
+  -e UPYUN_OPERATOR=naffan \
+  -e UPYUN_PASSWORD=你的密码 \
+  publish
 
 # 或本地 Ruby 方式
 bash publish-gh-pages.sh
@@ -108,9 +112,24 @@ bash publish-gh-pages.sh
 1. `bundle exec jekyll build` 生成 `_site/`
 2. 若有未提交改动,自动 `git add -A` 并提交到 `docs`
 3. 用 `GIT_INDEX_FILE + work-tree=_site + commit-tree` 方式把 `_site/` 内容推送到 `origin/master`
-4. 清理本地 `_site/`
+4. 调用 `upx sync` 把 `_site/` 同步到又拍云对象存储(回源域名 `naffan.cn`)
+5. 清理本地 `_site/`
 
-> 注意必须用 `bash` 而不是 `sh` 执行,因为脚本用了 `set -o pipefail`。
+### 为什么要传 `-e UPYUN_*` 环境变量?
+
+`publish-gh-pages.sh` 内置了 `sync_to_upyun` 函数,在 GitHub 推送完成后会把 `_site/` 全量同步到又拍云对象存储,作为 CDN 回源源站。又拍云的 `upx` CLI 通过三个环境变量鉴权:
+
+| 环境变量 | 含义 | 示例 |
+|---|---|---|
+| `UPYUN_BUCKET` | 对象存储服务名 | `naffanwpstorage` |
+| `UPYUN_OPERATOR` | 操作员账号 | `naffan` |
+| `UPYUN_PASSWORD` | 操作员密码 | (在又拍云控制台创建) |
+
+> **为什么不写进 `.env`?** `.env` 已被 `.gitignore` 排除,适合本地保留长期凭据;但 `docker compose run` 默认不读 `.env`(只 `up` 时读),所以发布时显式 `-e` 传参更安全——密码不会留在 shell history 之外。
+
+> **为什么不用 HTTPS+osxkeychain?** 容器里没有 `credential-osxkeychain` helper,所以 GitHub 推送走 SSH remote,又拍云走环境变量,凭据不落盘。
+
+> 注意必须用 `bash` 而不是 `sh` 执行(本地 Ruby 方式),因为脚本用了 `set -o pipefail`。
 
 ## 更新 Docker 镜像
 
