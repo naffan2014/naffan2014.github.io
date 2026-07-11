@@ -82,12 +82,37 @@ sync_to_upyun() {
   upx login "$UPYUN_BUCKET" "$UPYUN_OPERATOR" "$UPYUN_PASSWORD" >/dev/null
 
   echo ">> 同步 _site 到又拍云根目录 (--delete --strong)"
-  # 关键:必须用 --delete,否则远程已存在但本地没改动的文件(如旧的 index.html)
-  # 不会被覆盖,sync 增量比对 mtime 会跳过,导致首页等内容停留在旧版本。
-  # --strong 强一致模式,绕过 upx 本地 db 缓存,避免漏判。
-  # 注意:upx sync 会尝试写 ~/.upx.db,容器权限受限环境可能报
-  # "operation not permitted" 但实际不影响上传,用 || true 兜底。
+  # 注意:upx sync --delete --strong 对已存在的远程文件会判定 SYNC_EXISTS 跳过,
+  # 不对比内容,导致内容变更但文件名不变时不会覆盖。
+  # 下面的 force_overwrite 函数会对关键资源做强制 rm+put 补丁。
   upx sync --delete --strong _site / 2>&1 | tail -20 || true
+
+  # BUG 修复 (2026-07-11):
+  # 强制覆盖易变更的关键资源(CSS/JS/HTML/feed/sitemap 等),
+  # 避免 upx sync 跳过导致 CDN 返回旧内容。
+  # 策略:遍历本地 _site 下所有 .css/.js/.html/.xml/.json/.txt/.webmanifest,
+  # 逐个 rm 远程 + put 本地,确保内容强制更新。
+  force_overwrite() {
+    local count=0
+    local failed=0
+    while IFS= read -r -d '' local_file; do
+      # 本地路径 _site/xxx -> 远程路径 /xxx
+      local rel="${local_file#_site/}"
+      local remote="/$rel"
+      upx rm "$remote" >/dev/null 2>&1 || true
+      if upx put "$local_file" "$remote" >/dev/null 2>&1; then
+        count=$((count + 1))
+      else
+        failed=$((failed + 1))
+        echo "!! 覆盖失败: $remote"
+      fi
+    done < <(find _site -type f \( -name "*.css" -o -name "*.js" -o -name "*.html" \
+      -o -name "*.xml" -o -name "*.json" -o -name "*.txt" -o -name "*.webmanifest" \) -print0)
+    echo ">> 强制覆盖完成: $count 个文件成功, $failed 个失败"
+  }
+
+  echo ">> 强制覆盖关键资源(CSS/JS/HTML/XML/JSON)"
+  force_overwrite
 
   echo ">> 又拍云同步完成"
 }
