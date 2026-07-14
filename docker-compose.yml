@@ -49,6 +49,7 @@ services:
       # 复用宿主机 SSH 私钥做 git push(SSH remote 场景)
       - ~/.ssh:/root/.ssh:ro
     environment:
+      - JEKYLL_ENV=production
       - GIT_AUTHOR_NAME=naffan2014
       - GIT_AUTHOR_EMAIL=naffan2012@icloud.com
       - GIT_COMMITTER_NAME=naffan2014
