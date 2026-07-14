@@ -361,3 +361,22 @@ code, pre, kbd, samp {
 .post-content blockquote p:last-child {
   margin-bottom: 0;
 }
+
+/* === 6. 底部备案信息(与版权同行) === */
+/* 备案号作为内联 <a> 追加到版权段落,跟随版权文本一行显示 */
+.site-beian {
+  margin-left: 0.35em;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-beian:hover {
+  color: var(--custom-accent, #7c7adf);
+  text-decoration: underline;
+}
+
+/* 隐藏 footer 第二段"本站采用 Jekyll 主题 Chirpy",只保留版权 + 备案 */
+footer[aria-label="Site Info"] p + p {
+  display: none;
+}
