@@ -253,3 +253,42 @@
     initReadingProgress();
   }
 })();
+
+/* === 底部 ICP 备案信息注入 === */
+(function () {
+  "use strict";
+
+  function injectBeian() {
+    if (document.getElementById("site-beian")) return;
+
+    var footer = document.querySelector("footer[aria-label='Site Info']") ||
+                 document.querySelector("footer");
+    if (!footer) return;
+
+    // footer 第一个 <p> 是版权段落:"© 2026 张一帆. 保留部分权利。"
+    var firstP = footer.querySelector("p");
+    if (!firstP) return;
+
+    var beianText = "京ICP备16029491号-4";
+    var beianUrl = "https://beian.miit.gov.cn";
+
+    // 用分隔符 + 链接形式 append,保持内联在同一行
+    var sep = document.createTextNode(" · ");
+    var link = document.createElement("a");
+    link.id = "site-beian";
+    link.className = "site-beian";
+    link.href = beianUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = beianText;
+
+    firstP.appendChild(sep);
+    firstP.appendChild(link);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", injectBeian);
+  } else {
+    injectBeian();
+  }
+})();
