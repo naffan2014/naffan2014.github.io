@@ -1,5 +1,4 @@
-# naffan.cn — 欢迎搜索引擎与社交预览爬虫，谢绝 AI 训练抓取
-# 以下 AI 训练类爬虫全站禁抓（CDN 层另有 UA/IP 黑名单兜底）
+# naffan.cn — AI 训练类爬虫全站禁抓（CDN 层另有 UA/IP 黑名单兜底）
 
 User-agent: *
 Disallow: /norobots/
