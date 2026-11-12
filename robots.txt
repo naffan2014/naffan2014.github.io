@@ -1,5 +1,31 @@
-User-agent: *
+# naffan.cn — 欢迎搜索引擎与社交预览爬虫，谢绝 AI 训练抓取
+# 以下 AI 训练类爬虫全站禁抓（CDN 层另有 UA/IP 黑名单兜底）
 
+User-agent: *
 Disallow: /norobots/
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
 
 Sitemap: https://naffan.cn/sitemap.xml
